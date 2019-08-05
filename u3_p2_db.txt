@@ -1,0 +1,18 @@
+// Nuestra base de datos para movimientos
+
+database: u3_p2_db
+
+tabla: movements
+id
+type
+description
+amount
+created_at
+updated_at
+
+tabla: options
+id
+option
+val
+created_at
+updated_at

@@ -1,0 +1,28 @@
+-- COMO FUNCIONARAN NUESTRAS RUTAS
+ejemplo: 
+usuarios
+usuarios/ver/123
+productos/agregar
+
+-- DESCOMPONIENDO NUESTRA RUTA
+1 -> Nombre del controlador
+2 -> Nombre del método del controlador
+3 -> Parametros a pasar
+
+-- INDEX.PHP
+Todas las peticiones http pasarán por solamente el archivo index.php
+wp-admin.php
+
+-- PARAMETRO URI EN LA URL SOLICITADA
+La URL contendrá un parametro llamado URI, será simplemente un string, no queremos ver "index.php?uri=controlador/metodo/123"
+Queremos "https://www.dominio.com/login" directamente.
+
+-- .HTACCESS
+Instrucciones en Apache para decirle al servidor como tratar a nuestro archivo y las peticiones.
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule  ^(.+)$ index.php?uri=$1 [QSA,L]
+</IfModule>
