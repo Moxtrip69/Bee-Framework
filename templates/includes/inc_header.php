@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <base href="">
+  <!-- Agregar basepath para definir a partir de donde se deben generar los enlaces y la carga de archivos -->
+  <base href="<?php echo BASEPATH; ?>">
+
   <meta charset="UTF-8">
   
   <title><?php echo isset($d->title) ? $d->title.' - '.get_sitename() : 'Bienvenido - '.get_sitename(); ?></title>

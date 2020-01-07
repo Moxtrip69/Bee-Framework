@@ -12,9 +12,9 @@
         <li><b>100%</b> personalizable y escalable</li>
       </ul>
       <div class="mt-5">
-        <a class="btn btn-warning btn-lg" href="#">Probar</a>
-        <a class="btn btn-success btn-lg" href="#"><i class="fas fa-download"></i> Descargar</a>
-        <a class="btn btn-info btn-lg" href="#"><i class="fab fa-github"></i> Github</a>
+        <a class="btn btn-warning btn-lg" href="probar/test">Probar</a>
+        <a class="btn btn-success btn-lg" href="descargar"><i class="fas fa-download"></i> Descargar</a>
+        <a class="btn btn-info btn-lg" href="https://github.com/Moxtrip69/Bee-Framework"><i class="fab fa-github"></i> Github</a>
       </div>
       <div class="mt-5">
         <p class="text-muted">Desarrollado con <i class="fas fa-heart text-danger"></i> por <a href="http://bit.ly/udemy_joystick" class="text-white">Joystick</a>.</p>

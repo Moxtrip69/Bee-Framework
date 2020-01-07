@@ -3,7 +3,7 @@
 class ajaxController extends Controller {
   
   private $accepted_actions = ['add', 'get', 'load', 'update', 'delete'];
-  private $required_params = ['hook', 'action'];
+  private $required_params  = ['hook', 'action'];
 
   function __construct()
   {

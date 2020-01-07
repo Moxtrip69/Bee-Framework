@@ -10,14 +10,14 @@ date_default_timezone_set('America/Mexico_City');
 define('LANG'       , 'es');
 
 // Ruta base de nuestro proyecto
-define('BASEPATH'   , IS_LOCAL ? '/cursos/udemy_03/proyecto02/' : '____EL BASEPATH EN PRODUCCIÓN___');
+define('BASEPATH'   , IS_LOCAL ? '/cursos/udemy_05/proyecto01/' : '____EL BASEPATH EN PRODUCCIÓN___');
 
 // Sal del sistema
 define('AUTH_SALT'  , 'BeeFramework<3');
 
 // Puerto y la URL del sitio
-define('PORT'       , '7882');
-define('URL'        , IS_LOCAL ? 'http://127.0.0.1:'.PORT.'/cursos/udemy_03/proyecto02/' : '___URL EN PRODUCCIÓN___');
+define('PORT'       , '7879');
+define('URL'        , IS_LOCAL ? 'http://127.0.0.1:'.PORT.'/cursos/udemy_05/proyecto01/' : '___URL EN PRODUCCIÓN___');
 
 // Las rutas de directorios y archivos
 define('DS'         , DIRECTORY_SEPARATOR);
@@ -49,7 +49,7 @@ define('UPLOADS'    , ASSETS.'uploads/');
 // Set para conexión local o de desarrollo
 define('LDB_ENGINE' , 'mysql');
 define('LDB_HOST'   , 'localhost');
-define('LDB_NAME'   , 'u3_p2_db');
+define('LDB_NAME'   , 'u5_p1_db');
 define('LDB_USER'   , 'root');
 define('LDB_PASS'   , '');
 define('LDB_CHARSET', 'utf8');
