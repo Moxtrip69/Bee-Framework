@@ -3,9 +3,26 @@
 class Bee {
 
   // Propiedades del framework
+  // Desarrollado por el equipo de Joystick
+  /**
+   * Sugerencias o pullrequest a:
+   * hellow@joystick.com.mx
+   * 
+   * Roberto Orozco / roborozco@joystick.com.mx
+   * Lucerito Ortega / lucortega@joystick.com.mx
+   * Yoshio Mrtz / yosmartinez@joystick.com.mx
+   * Kevin Sm / kevsamano@joystick.com.mx
+   * 
+   * Creado en el curso de udemy:
+   * https://www.udemy.com/course/master-php-crea-tu-propio-mini-framework-mvc-con-poo-html-js/?referralCode=C36DF049F62B36C9DA5B
+   * 
+   * ¡Gracias por todo su apoyo!
+   *
+   * @var string
+   */
   private $framework = 'Bee Framework';
-  private $verion = '1.0.0';
-  private $uri = [];
+  private $version   = '1.0.2';
+  private $uri       = [];
 
   // La función principal que se ejecuta al instanciar nuestra clase
   function __construct() {
@@ -107,6 +124,7 @@ class Bee {
    */
   private function init_csrf() {
     $csrf = new Csrf();
+    define('CSRF_TOKEN', $csrf->get_token()); // Versión 1.0.2 para uso en aplicaciones
   }
 
   /**
