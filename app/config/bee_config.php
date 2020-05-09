@@ -10,7 +10,7 @@ date_default_timezone_set('America/Mexico_City');
 define('LANG'       , 'es');
 
 // Ruta base de nuestro proyecto
-define('BASEPATH'   , IS_LOCAL ? '/cursos/udemy_05/proyecto01/' : '____EL BASEPATH EN PRODUCCIÓN___');
+define('BASEPATH'   , IS_LOCAL ? '/cursos/Bee-Framework/' : '____EL BASEPATH EN PRODUCCIÓN___');
 
 // Sal del sistema
 define('AUTH_SALT'  , 'BeeFramework<3');
