@@ -49,7 +49,7 @@ define('UPLOADS'    , ASSETS.'uploads/');
 // Set para conexión local o de desarrollo
 define('LDB_ENGINE' , 'mysql');
 define('LDB_HOST'   , 'localhost');
-define('LDB_NAME'   , 'u5_p1_db');
+define('LDB_NAME'   , '__LOCAL_DB__');
 define('LDB_USER'   , 'root');
 define('LDB_PASS'   , '');
 define('LDB_CHARSET', 'utf8');
