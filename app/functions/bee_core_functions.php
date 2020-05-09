@@ -1,17 +1,40 @@
 <?php
 
+/**
+ * Convierte el elemento en un objecto
+ *
+ * @param [type] $array
+ * @return void
+ */
 function to_object($array) {
   return json_decode(json_encode($array));
 }
 
+/**
+ * Regresa el nombre de nuestra aplicación
+ *
+ * @return void
+ */
 function get_sitename() {
   return 'Bee framework';
 }
 
+/**
+ * Regresa la fecha de estos momentos
+ *
+ * @return void
+ */
 function now() {
   return date('Y-m-d H:i:s');
 }
 
+/**
+ * Hace output en el body como json
+ *
+ * @param array $json
+ * @param boolean $die
+ * @return void
+ */
 function json_output($json, $die = true) {
   header('Access-Control-Allow-Origin: *');
   header('Content-type: application/json;charset=utf-8');
@@ -28,6 +51,14 @@ function json_output($json, $die = true) {
   return true;
 }
 
+/**
+ * Construye un nuevo string json
+ *
+ * @param integer $status
+ * @param array $data
+ * @param string $msg
+ * @return void
+ */
 function json_build($status = 200, $data = null, $msg = '') {
   if(empty($msg) || $msg == '') {
     switch ($status) {
@@ -76,6 +107,13 @@ function json_build($status = 200, $data = null, $msg = '') {
   return json_encode($json);
 }
 
+/**
+ * Regresa parseado un modulo
+ *
+ * @param string $view
+ * @param array $data
+ * @return void
+ */
 function get_module($view, $data = []) {
   $file_to_include = MODULES.$view.'Module.php';
 	$output = '';
@@ -94,10 +132,23 @@ function get_module($view, $data = []) {
 	return $output;
 }
 
+/**
+ * Formatea un número a divisa
+ *
+ * @param float $amount
+ * @param string $symbol
+ * @return void
+ */
 function money($amount, $symbol = '$') {
   return $symbol.number_format($amount, 2, '.', ',');
 }
 
+/**
+ * Carga una opción de configuración de la db
+ *
+ * @param mixed $option
+ * @return void
+ */
 function get_option($option) {
   return optionModel::search($option);
 }
