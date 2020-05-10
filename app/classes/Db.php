@@ -62,7 +62,6 @@ class Db
       // index 1 es el código de error
       // index 2 es el mensaje de error al usuario
       throw new Exception($error[2]);
-
     }
 
     // SELECT | INSERT | UPDATE | DELETE | ALTER TABLE
