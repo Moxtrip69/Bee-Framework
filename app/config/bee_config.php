@@ -17,7 +17,7 @@ define('AUTH_SALT'  , 'BeeFramework<3');
 
 // Puerto y la URL del sitio
 define('PORT'       , '7879');
-define('URL'        , IS_LOCAL ? 'http://127.0.0.1:'.PORT.'/cursos/udemy_05/proyecto01/' : '___URL EN PRODUCCIÓN___');
+define('URL'        , IS_LOCAL ? 'http://127.0.0.1:'.PORT.BASEPATH : '___URL EN PRODUCCIÓN___');
 
 // Las rutas de directorios y archivos
 define('DS'         , DIRECTORY_SEPARATOR);
