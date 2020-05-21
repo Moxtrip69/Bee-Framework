@@ -9,7 +9,11 @@ date_default_timezone_set('America/Mexico_City');
 // Lenguaje
 define('LANG'       , 'es');
 
+// Versión de la aplicación
+define('SITEVERSION', '1.0.0');
+
 // Ruta base de nuestro proyecto
+// Configurar según sea necesario en tu proyecto
 define('BASEPATH'   , IS_LOCAL ? '/cursos/Bee-Framework/' : '____EL BASEPATH EN PRODUCCIÓN___');
 
 // Sal del sistema
