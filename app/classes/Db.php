@@ -20,6 +20,7 @@ class Db
     $this->user    = IS_LOCAL ? LDB_USER : DB_USER;
     $this->pass    = IS_LOCAL ? LDB_PASS : DB_PASS;
     $this->charset = IS_LOCAL ? LDB_CHARSET : DB_CHARSET;
+    $this->host    = IS_LOCAL ? LDB_HOST : DB_HOST;
     return $this;    
   }
 
