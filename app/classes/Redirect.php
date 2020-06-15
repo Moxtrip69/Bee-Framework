@@ -36,4 +36,32 @@ class Redirect
     header('Location: '.URL.$self->location);
     die();
   }
+
+  /**
+   * Redirige de vuelta a la URL previa
+   *
+   * @param string $location
+   * @return void
+   */
+  public static function back($location = '')
+  {
+    if(!isset($_POST['redirect_to']) && !isset($_GET['redirect_to']) && $location == ''){
+      header('Location: '.URL.DEFAULT_CONTROLLER);
+      die();
+    }
+
+    if(isset($_POST['redirect_to'])){
+      header('Location: '.$_POST['redirect_to']);
+      die();
+    }
+
+    if(isset($_GET['redirect_to'])){
+      header('Location: '.$_GET['redirect_to']);
+      die();
+    }
+
+    if(!empty($location)){
+      self::to($location);
+    }
+  }
 }
