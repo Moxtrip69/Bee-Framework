@@ -10,7 +10,8 @@ date_default_timezone_set('America/Mexico_City');
 define('LANG'       , 'es');
 
 // Versión de la aplicación
-define('SITEVERSION', '1.0.0');
+define('SITE_NAME'  , $this->framework); // Configurado desde Bee.php
+define('SITEVERSION', $this->version); // Configurado desde Bee.php
 
 // Ruta base de nuestro proyecto
 // Configurar según sea necesario en tu proyecto
@@ -20,8 +21,12 @@ define('BASEPATH'   , IS_LOCAL ? '/cursos/Bee-Framework/' : '____EL BASEPATH EN 
 define('AUTH_SALT'  , 'BeeFramework<3');
 
 // Puerto y la URL del sitio
-define('PORT'       , '7879');
-define('URL'        , IS_LOCAL ? 'http://127.0.0.1:'.PORT.BASEPATH : '___URL EN PRODUCCIÓN___');
+define('PORT'       , '7882');
+define('PROTOCOL'   , isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http"); // Detectar si está en HTTPS o HTTP
+define('HOST'       , $_SERVER['HTTP_HOST'] === 'localhost' ? '127.0.0.1:'.PORT : $_SERVER['HTTP_HOST']); // Dominio o host localhost.com tudominio.com
+define('REQUEST_URI', $_SERVER["REQUEST_URI"]); // Parametros y ruta requerida
+define('URL'        , PROTOCOL.'://'.HOST.BASEPATH); // URL del sitio
+define('CUR_PAGE'   , PROTOCOL.'://'.HOST.REQUEST_URI); // URL actual incluyendo parametros get
 
 // Las rutas de directorios y archivos
 define('DS'         , DIRECTORY_SEPARATOR);
@@ -33,6 +38,7 @@ define('CONFIG'     , APP.'config'.DS);
 define('CONTROLLERS', APP.'controllers'.DS);
 define('FUNCTIONS'  , APP.'functions'.DS);
 define('MODELS'     , APP.'models'.DS);
+define('LOGS'       , APP.'logs'.DS);
 
 define('TEMPLATES'  , ROOT.'templates'.DS);
 define('INCLUDES'   , TEMPLATES.'includes'.DS);

@@ -41,6 +41,7 @@ class Bee {
     $this->init_load_functions();
     $this->init_autoload();
     $this->init_csrf();
+    $this->init_custom();
     $this->dispatch();
   }
 
@@ -107,13 +108,6 @@ class Bee {
   private function init_autoload() {
     require_once CLASSES.'Autoloader.php';
     Autoloader::init();
-    //require_once CLASSES.'Db.php';
-    //require_once CLASSES.'Model.php';
-    //require_once CLASSES.'View.php';
-    //require_once CLASSES.'Controller.php';
-    //require_once CONTROLLERS.DEFAULT_CONTROLLER.'Controller.php';
-    //require_once CONTROLLERS.DEFAULT_ERROR_CONTROLLER.'Controller.php';
-
     return;
   }
 
@@ -125,6 +119,17 @@ class Bee {
   private function init_csrf() {
     $csrf = new Csrf();
     define('CSRF_TOKEN', $csrf->get_token()); // Versión 1.0.2 para uso en aplicaciones
+  }
+
+  /**
+   * Usado para carga de procesos personalizados del sistema
+   * funciones, variables, set up
+   *
+   * @return void
+   */
+  private function init_custom() {
+    // Inicializar procesos personalizados del sistema o aplicación
+    // ........
   }
 
   /**

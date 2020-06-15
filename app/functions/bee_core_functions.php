@@ -59,7 +59,15 @@ function json_output($json, $die = true) {
  * @param string $msg
  * @return void
  */
-function json_build($status = 200, $data = null, $msg = '') {
+function json_build($status = 200 , $data = null , $msg = '', $error_code = null) {
+  /*
+  1 xx : Informational
+  2 xx : Success
+  3 xx : Redirection
+  4 xx : Client Error
+  5 xx : Server Error
+  */
+
   if(empty($msg) || $msg == '') {
     switch ($status) {
       case 200:
@@ -88,8 +96,6 @@ function json_build($status = 200, $data = null, $msg = '') {
     }
   }
 
-  http_response_code($status);
-
   $json =
   [
     'status' => $status,
@@ -98,10 +104,12 @@ function json_build($status = 200, $data = null, $msg = '') {
     'data'   => $data
   ];
 
-  $error_codes = [400,403,404,405,500];
-
-  if(in_array($status , $error_codes)){
+  if (in_array($status, [400,403,404,405,500])){
     $json['error'] = true;
+  }
+
+  if ($error_code !== null) {
+    $json['error'] = $error_code;
   }
 
   return json_encode($json);
@@ -151,4 +159,83 @@ function money($amount, $symbol = '$') {
  */
 function get_option($option) {
   return optionModel::search($option);
+}
+
+/**
+ * Generar un link dinámico con parametros get y token
+ * 
+ */
+function buildURL($url , $params = [] , $redirection = true, $csrf = true) {
+	
+	// Check if theres a ?
+	$query     = parse_url($url, PHP_URL_QUERY);
+	$_params[] = 'hook='.strtolower(SITE_NAME);
+	$_params[] = 'action=doing-task';
+
+	// Si requiere token csrf
+	if ($csrf) {
+		$_params[] = '_t='.CSRF_TOKEN;
+	}
+	
+	// Si requiere redirección
+	if($redirection){
+		$_params[] = 'redirect_to='.urlencode(CUR_PAGE);
+	}
+
+	// Si no es un array regresa la url original
+	if (!is_array($params)) {
+		return $url;
+	}
+
+	// Listando parametros
+	foreach ($params as $key => $value) {
+		$_params[] = sprintf('%s=%s', urlencode($key), urlencode($value));
+	}
+	
+	$url .= strpos($url, '?') ? '&' : '?';
+	$url .= implode('&', $_params);
+	return $url;
+}
+
+/**
+ * Loggea un registro en un archivo de logs del sistema, usado para debugging
+ *
+ * @param string $message
+ * @param string $type
+ * @param boolean $output
+ * @return mixed
+ */
+function logger($message , $type = 'debug' , $output = false) {
+  $types = ['debug','import','info','success','warning','error'];
+
+  if(!in_array($type , $types)){
+    $type = 'debug';
+  }
+
+  $now_time = date("d-m-Y H:i:s");
+
+  $message = "[".strtoupper($type)."] $now_time - $message";
+
+  if(!$fh = fopen(LOGS."bee_log.log", 'a')) { 
+    error_log(sprintf('Can not open this file on %s', LOGS.'bee_log.log'));
+    return false;
+  }
+
+  fwrite($fh, "$message\n");
+	fclose($fh);
+	if($output){
+		print "$message\n";
+	}
+
+  return true;
+}
+
+/**
+ * Códificar a json de forma especial para prevenir errores en UTF8
+ *
+ * @param mixed $var
+ * @return string
+ */
+function json_encode_utf8($var) {
+  return json_encode($var, JSON_UNESCAPED_UNICODE);
 }
