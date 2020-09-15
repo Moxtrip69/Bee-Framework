@@ -7,11 +7,11 @@ define('IS_LOCAL'   , in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1']));
 date_default_timezone_set('America/Mexico_City');
 
 // Lenguaje
-define('LANG'       , 'es');
+define('SITE_LANG'   , $this->lng);
 
 // Versión de la aplicación
-define('SITE_NAME'  , $this->framework); // Configurado desde Bee.php
-define('SITEVERSION', $this->version); // Configurado desde Bee.php
+define('SITE_NAME'   , $this->framework); // Configurado desde Bee.php
+define('SITE_VERSION', $this->version); // Configurado desde Bee.php
 
 // Ruta base de nuestro proyecto
 // Configurar según sea necesario en tu proyecto

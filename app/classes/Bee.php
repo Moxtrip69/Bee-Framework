@@ -22,6 +22,7 @@ class Bee {
    */
   private $framework = 'Bee Framework';
   private $version   = '1.0.2';
+  private $lng       = 'es';
   private $uri       = [];
 
   // La función principal que se ejecuta al instanciar nuestra clase
