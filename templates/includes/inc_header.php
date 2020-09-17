@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?php echo LANG; ?>">
+<html lang="<?php echo SITE_LANG; ?>">
 <head>
   <!-- Agregar basepath para definir a partir de donde se deben generar los enlaces y la carga de archivos -->
   <base href="<?php echo BASEPATH; ?>">

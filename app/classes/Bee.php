@@ -20,10 +20,11 @@ class Bee {
    *
    * @var string
    */
-  private $framework = 'Bee Framework';
-  private $version   = '1.0.2';
-  private $lng       = 'es';
-  private $uri       = [];
+  private $framework    = 'Bee Framework';
+  private $version      = '1.0.3';
+  private $lng          = 'es';
+  private $uri          = [];
+  private $use_composer = true;
 
   // La función principal que se ejecuta al instanciar nuestra clase
   function __construct() {
@@ -40,6 +41,7 @@ class Bee {
     $this->init_session();
     $this->init_load_config();
     $this->init_load_functions();
+    $this->init_load_composer();
     $this->init_autoload();
     $this->init_csrf();
     $this->init_custom();
@@ -97,6 +99,22 @@ class Bee {
 
     // Cargando el archivo de funciones custom
     require_once FUNCTIONS.$file;
+
+    return;
+  }
+
+  private function init_load_composer() {
+    if (!$this->use_composer) {
+      return;
+    }
+
+    $file = 'app/vendor/autoload.php';
+    if(!is_file($file)) {
+      die(sprintf('El archivo %s no se encuentra, es requerido para que %s funcione.', $file, $this->framework));
+    }
+
+    // Cargando el archivo de configuración
+    require_once $file;
 
     return;
   }

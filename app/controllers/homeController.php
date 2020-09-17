@@ -13,6 +13,8 @@ class homeController extends Controller {
       'bg'    => 'dark'
     ];
 
+
+
     View::render('bee', $data);
   }
 
@@ -56,15 +58,26 @@ class homeController extends Controller {
       $sql = 'ALTER TABLE tests ADD COLUMN username VARCHAR(255) NULL AFTER name';
       //print_r(Db::query($sql));
 
-
-
     } catch (Exception $e) {
       echo 'Hubo un error: '.$e->getMessage();
     }
 
     echo '</pre>';
-    die;
     View::render('test');
+  }
+
+  function email()
+  {
+    try {
+      $email   = 'jslocal2@localhost.com';
+      $subject = 'El asunto del correo';
+      $body    = 'El cuerpo del mensaje, puede ser html o texto plano.';
+      $alt     = 'El texto corto del correo, preview del contenido.';
+      send_email(get_siteemail(), $email, $subject, $body, $alt);
+      echo sprintf('Correo electrónico enviado con éxito a %s', $email);
+    } catch (Exception $e) {
+      echo $e->getMessage();
+    }
   }
 
   function flash()

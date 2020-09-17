@@ -1,5 +1,11 @@
 <?php
 
+//////////////////////////////////////////////////
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception AS EmailException;
+//////////////////////////////////////////////////
+
 /**
  * Convierte el elemento en un objecto
  *
@@ -25,7 +31,7 @@ function get_sitename() {
  * @return string
  */
 function get_siteemail() {
-  return 'json@localhost.com';
+  return 'jslocal@localhost.com';
 }
 
 /**
@@ -389,11 +395,27 @@ function random_password($length = 8, $type = 'default') {
 }
 
 /**
+ * Agregar ellipsis a un string
+ *
+ * @param string $string
+ * @param integer $lng
+ * @return void
+ */
+function add_ellipsis($string , $lng = 100) {
+	if(!is_integer($lng)) {
+		$lng = 100;
+	}
+
+  $output = strlen($string) > $lng ? mb_substr($string, 0, $lng, 'UTF-8').'...' : $string;
+	return $output;
+}
+
+/**
  * Devuelve la IP del cliente actual
  *
  * @return void
  */
-function client_ip() {
+function get_user_ip() {
 	$ipaddress = '';
 	if (getenv('HTTP_CLIENT_IP'))
 		$ipaddress = getenv('HTTP_CLIENT_IP');
@@ -410,22 +432,6 @@ function client_ip() {
 	else
 		$ipaddress = 'UNKNOWN';
 	return $ipaddress;
-}
-
-/**
- * Agregar ellipsis a un string
- *
- * @param string $string
- * @param integer $lng
- * @return void
- */
-function add_ellipsis($string , $lng = 100) {
-	if(!is_integer($lng)) {
-		$lng = 100;
-	}
-
-  $output = strlen($string) > $lng ? mb_substr($string, 0, $lng, 'UTF-8').'...' : $string;
-	return $output;
 }
 
 /**
@@ -690,4 +696,49 @@ function get_session($v = null) {
 function set_session($k, $v) {
   $_SESSION[$k] = $v;
   return true;
+}
+
+function send_email($from, $to, $subject, $body, $alt = null, $bcc = null, $reply_to = null, $attachments = []) {
+	$mail     = new PHPMailer(true);
+	$template = 'emailTemplate';
+	
+	try {
+		$mail->CharSet = 'UTF-8';
+		// Remitente
+		$mail->setFrom($from, get_sitename());
+
+		// Destinatario
+		$mail->addAddress($to);
+
+		if ($reply_to != null) {
+			$mail->addReplyTo($reply_to);
+		}
+
+		if ($bcc != null) {
+			$mail->addBCC($bcc);
+		}
+
+		// Attachments
+		if (!empty($attachments)) {
+			foreach ($attachments as $file) {
+				if (!is_file($file)) {
+					continue;
+				}
+
+				$mail->addAttachment($file);
+			}
+		}
+
+		// Content
+		$mail->isHTML(true);
+		$mail->Subject = $subject;
+		$mail->Body    = get_module($template, ['alt' => $alt, 'body' => $body, 'subject' => $subject]);
+		$mail->AltBody = $alt;
+
+		$mail->send();
+		return true;
+
+	} catch (EmailException $e) {
+		throw new Exception($e->getMessage());
+	}
 }

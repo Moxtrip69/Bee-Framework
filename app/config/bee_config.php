@@ -2,6 +2,7 @@
 
 // Saber si estamos trabajando de forma local o remota
 define('IS_LOCAL'   , in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1']));
+define('PREPROS'    , false); // Activar en caso de trabajar el desarrollo en prepros como servidor local
 
 // Definir el uso horario o timezone del sistema
 date_default_timezone_set('America/Mexico_City');
@@ -15,7 +16,7 @@ define('SITE_VERSION', $this->version); // Configurado desde Bee.php
 
 // Ruta base de nuestro proyecto
 // Configurar según sea necesario en tu proyecto
-define('BASEPATH'   , IS_LOCAL ? '/cursos/Bee-Framework/' : '____EL BASEPATH EN PRODUCCIÓN___');
+define('BASEPATH'   , IS_LOCAL ? '/Bee-Framework/' : '____EL BASEPATH EN PRODUCCIÓN___');
 
 // Sal del sistema
 define('AUTH_SALT'  , 'BeeFramework<3');
@@ -23,7 +24,7 @@ define('AUTH_SALT'  , 'BeeFramework<3');
 // Puerto y la URL del sitio
 define('PORT'       , '7882');
 define('PROTOCOL'   , isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http"); // Detectar si está en HTTPS o HTTP
-define('HOST'       , $_SERVER['HTTP_HOST'] === 'localhost' ? '127.0.0.1:'.PORT : $_SERVER['HTTP_HOST']); // Dominio o host localhost.com tudominio.com
+define('HOST'       , $_SERVER['HTTP_HOST'] === 'localhost' ? (PREPROS ? '127.0.0.1:'.PORT : 'localhost') : $_SERVER['HTTP_HOST']); // Dominio o host localhost.com tudominio.com
 define('REQUEST_URI', $_SERVER["REQUEST_URI"]); // Parametros y ruta requerida
 define('URL'        , PROTOCOL.'://'.HOST.BASEPATH); // URL del sitio
 define('CUR_PAGE'   , PROTOCOL.'://'.HOST.REQUEST_URI); // URL actual incluyendo parametros get
