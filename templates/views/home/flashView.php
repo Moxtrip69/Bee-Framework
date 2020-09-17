@@ -8,6 +8,15 @@
       <!-- contenido -->
       <?php echo Flasher::flash(); ?>
       <!-- ends -->
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <?php debug($_SESSION); ?>
+    </div>
+    <div class="col-12 text-center">
+      <a href="logout" class="btn btn-danger">Cerrar sesión</a>
     </div>
   </div>
 </div>

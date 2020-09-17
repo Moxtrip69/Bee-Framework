@@ -73,6 +73,10 @@ $(document).ready(function() {
     hook        = 'bee_hook',
     action      = 'load';
 
+    if (wrapper.length === 0) {
+      return;
+    }
+
     $.ajax({
       url: 'ajax/bee_get_movements',
       type: 'POST',
@@ -97,11 +101,6 @@ $(document).ready(function() {
     }).always(function() {
       wrapper.waitMe('hide');
     })
-  }
-
-  // Cargar un movimiento
-  function bee_get_movement() {
-
   }
 
   // Actualizar un movimiento

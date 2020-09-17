@@ -13,8 +13,6 @@ class homeController extends Controller {
       'bg'    => 'dark'
     ];
 
-
-
     View::render('bee', $data);
   }
 
@@ -82,8 +80,12 @@ class homeController extends Controller {
 
   function flash()
   {
-    Flasher::new('Te has registrado con éxito', 'success');
-    View::render('flash');
+    if (!Auth::validate()) {
+      Flasher::new('Debes iniciar sesión primero.', 'danger');
+      Redirect::to('login');
+    }
+
+    View::render('flash', ['title' => 'Flash']);
   }
 
   function gastos()

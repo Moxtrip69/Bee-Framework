@@ -698,6 +698,19 @@ function set_session($k, $v) {
   return true;
 }
 
+/**
+ * Envía un correo electrónico usando PHPMailer
+ *
+ * @param string $from
+ * @param string $to
+ * @param string $subject
+ * @param string $body
+ * @param string $alt
+ * @param string $bcc
+ * @param string $reply_to
+ * @param array $attachments
+ * @return void
+ */
 function send_email($from, $to, $subject, $body, $alt = null, $bcc = null, $reply_to = null, $attachments = []) {
 	$mail     = new PHPMailer(true);
 	$template = 'emailTemplate';
@@ -741,4 +754,20 @@ function send_email($from, $to, $subject, $body, $alt = null, $bcc = null, $repl
 	} catch (EmailException $e) {
 		throw new Exception($e->getMessage());
 	}
+}
+
+/**
+ * Muestra en pantalla los valores pasados
+ *
+ * @param mixed $data
+ * @return void
+ */
+function debug($data) {
+  echo '<pre>';
+  if(is_array($data) || is_object($data)) {
+    print_r($data);
+  } else {
+    echo $data;
+  }
+  echo '</pre>';
 }
