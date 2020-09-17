@@ -21,7 +21,7 @@ class Bee {
    * @var string
    */
   private $framework    = 'Bee Framework';
-  private $version      = '1.0.3';
+  private $version      = '1.0.4';
   private $lng          = 'es';
   private $uri          = [];
   private $use_composer = true;

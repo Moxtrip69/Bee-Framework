@@ -341,6 +341,17 @@
           <div class="content">
 
             <!-- START CENTERED WHITE CONTAINER -->
+            <table role="presentation">
+              <tr>
+                <td class="wrapper">
+                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td align="center"><img src="<?php echo IMAGES.'bee_logo.png'; ?>" alt="<?php echo get_sitename(); ?>" style="width: 150px;"></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
             <table role="presentation" class="main">
 
               <!-- START MAIN CONTENT AREA -->
