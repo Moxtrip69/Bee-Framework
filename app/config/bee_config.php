@@ -54,7 +54,7 @@ define('FONTS'      , ASSETS.'fonts/');
 define('IMAGES'     , ASSETS.'images/');
 define('JS'         , ASSETS.'js/');
 define('PLUGINS'    , ASSETS.'plugins/');
-define('UPLOADS'    , ASSETS.'uploads/');
+define('UPLOADS'    , ROOT.DS.'assets'.DS.'uploads'.DS);
 
 // Credenciales de la base de datos
 // Set para conexión local o de desarrollo
