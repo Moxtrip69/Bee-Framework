@@ -85,7 +85,7 @@ class homeController extends Controller {
       Redirect::to('login');
     }
 
-    View::render('flash', ['title' => 'Flash']);
+    View::render('flash', ['title' => 'Flash', 'user' => User::profile()]);
   }
 
   function gastos()

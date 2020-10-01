@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * Plantilla general de modelos
+ * Versión 1.0.0
+ *
+ * Modelo de [[REPLACE]]
+ */
+class [[REPLACE]]Model extends Model {
+  function __construct()
+  {
+    // Constructor general
+  }
+  
+  function all() {
+    // Todos los registros
+  }
+
+  function id($id)
+  {
+    // Un registro con $id
+  }
+}
+

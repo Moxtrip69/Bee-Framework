@@ -74,4 +74,10 @@ class Auth
     $_SESSION[$self->var] = $session;
     return true;
   }
+
+  public function __get($var)
+  {
+    if (!isset($this->{$var})) return false;
+    return $this->{$var};
+  }
 }

@@ -12,6 +12,7 @@
         <li><b>100%</b> personalizable y escalable</li>
       </ul>
       <div class="mt-5">
+        <a class="btn btn-light btn-lg" href="creator">++ Creator ++</a>
         <a class="btn btn-warning btn-lg" href="login">Ingresar</a>
         <a class="btn btn-info btn-lg" href="home/flash">Mi cuenta</a>
         <a class="btn btn-success btn-lg" href="descargar"><i class="fas fa-download"></i> Descargar</a>
