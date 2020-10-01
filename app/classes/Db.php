@@ -9,6 +9,7 @@ class Db
   private $user;
   private $pass;
   private $charset;
+  private $options;
   
   /**
    * Constructor para nuestra clase
@@ -21,18 +22,23 @@ class Db
     $this->pass    = IS_LOCAL ? LDB_PASS : DB_PASS;
     $this->charset = IS_LOCAL ? LDB_CHARSET : DB_CHARSET;
     $this->host    = IS_LOCAL ? LDB_HOST : DB_HOST;
+    $this->options = [
+			PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+			PDO::ATTR_EMULATE_PREPARES   => false,
+		];
     return $this;    
   }
 
   /**
    * Método para abrir una conexión a la base de datos
    *
-   * @return void
+   * @return mixed
    */
   private function connect() 
   {
     try {
-      $this->link = new PDO($this->engine.':host='.$this->host.';dbname='.$this->name.';charset='.$this->charset, $this->user, $this->pass);
+      $this->link = new PDO($this->engine.':host='.$this->host.';dbname='.$this->name.';charset='.$this->charset, $this->user, $this->pass, $this->options);
       return $this->link;
     } catch (PDOException $e) {
       die(sprintf('No  hay conexión a la base de datos, hubo un error: %s', $e->getMessage()));
