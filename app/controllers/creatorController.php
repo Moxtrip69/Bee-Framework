@@ -31,6 +31,7 @@ class creatorController extends Controller {
 
     // Validar nombre de archivo
     $filename = clean($_POST['filename']);
+    $filename = strtolower($filename);
     $filename = str_replace(' ', '_', $filename);
     $filename = str_replace('.php', '', $filename);
     $keyword  = 'Controller';
@@ -53,6 +54,17 @@ class creatorController extends Controller {
       Flasher::new(sprintf('Ocurrió un problema al crear el controlador %s.', $template), 'danger');
       Redirect::back();
     }
+
+    // Crear el folder en carpeta vistas
+    if (!is_dir(VIEWS.$filename)) {
+      mkdir(VIEWS.$filename);
+
+      $body = '<h1>Vista creada con éxito.</h1><br><br><img src="%s" />';
+      $body = sprintf($body, IMAGES.'bee_logo.png');
+      @file_put_contents(VIEWS.$filename.DS.'indexView.php', $body);
+    }
+
+    // Crear una vista por defecto
     Redirect::to($filename);
   }
 
@@ -65,6 +77,7 @@ class creatorController extends Controller {
 
     // Validar nombre de archivo
     $filename = clean($_POST['filename']);
+    $filename = strtolower($filename);
     $filename = str_replace(' ', '_', $filename);
     $filename = str_replace('.php', '', $filename);
     $keyword  = 'Model';

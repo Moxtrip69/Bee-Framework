@@ -7,6 +7,12 @@
  * Modelo de [[REPLACE]]
  */
 class [[REPLACE]]Model extends Model {
+  public static $t1   = '__tabla___'; // Nombre de la tabla en la base de datos;
+  
+  // Nombre de tabla 2 que talvez tenga conexión con registros
+  //public static $t2 = '__tabla 2___'; 
+  //public static $t3 = '__tabla 3___'; 
+
   function __construct()
   {
     // Constructor general
@@ -16,7 +22,7 @@ class [[REPLACE]]Model extends Model {
     // Todos los registros
   }
 
-  function id($id)
+  function by_id($id)
   {
     // Un registro con $id
   }

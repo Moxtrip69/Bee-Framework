@@ -22,20 +22,20 @@ class [[REPLACE]]Controller extends Controller {
     echo 'Bienvenido al controlador de "[[REPLACE]]", se ha creado con éxito si ves este mensaje.';
     
     // Descomentar vista si requerida
-    //View::render('index');
+    View::render('index');
   }
 
-  function ver()
+  function ver($id)
   {
     View::render('ver');
   }
 
-  function actualizar()
+  function actualizar($id)
   {
     View::render('actualizar');
   }
 
-  function borrar()
+  function borrar($id)
   {
     // Proceso de borrado
   }
