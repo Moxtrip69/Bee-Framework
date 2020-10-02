@@ -36,8 +36,6 @@ class Csrf
   {
     if (function_exists('bin2hex')) {
       $this->token = bin2hex(random_bytes($this->length)); // ASDFUHASIO32Jasdasdjf349mfjads9mfas4asdf
-    } elseif (function_exists('mcrypt_create_iv')) {
-      $this->token = bin2hex(mcrypt_create_iv($this->length, MCRYPT_DEV_URANDOM)); // asdfajs09f34829ra9sfda4f4asdfa4
     } else {
       $this->token = bin2hex(openssl_random_pseudo_bytes($this->length)); // asdfuhasi487a9s49mafmsau84
     }

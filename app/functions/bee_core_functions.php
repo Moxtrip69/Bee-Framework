@@ -782,8 +782,6 @@ function generate_token($length = 32) {
 	$token = null;
 	if (function_exists('bin2hex')) {
 		$token = bin2hex(random_bytes($length)); // ASDFUHASIO32Jasdasdjf349mfjads9mfas4asdf
-	} elseif (function_exists('mcrypt_create_iv')) {
-		$token = bin2hex(mcrypt_create_iv($length, MCRYPT_DEV_URANDOM)); // asdfajs09f34829ra9sfda4f4asdfa4
 	} else {
 		$token = bin2hex(openssl_random_pseudo_bytes($length)); // asdfuhasi487a9s49mafmsau84
 	}
