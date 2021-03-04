@@ -74,7 +74,7 @@ class PaginationHandler extends Model
 	{
 		$pagination = '<ul class="mt-5 pagination '.$this->alignment.'">';
 		$pagination .= 
-		'<li class="page-item '.($this->page === 1 ? 'disabled' : '').'">
+		'<li class="page-item '.($this->page == 1 ? 'disabled' : '').'">
 			<a class="page-link" href="'.buildURL($this->pattern, [$this->variable => $this->page - 1], false, false).'" title="Anterior">&laquo;</a>
 		</li>';
 

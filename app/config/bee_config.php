@@ -46,6 +46,9 @@ define('INCLUDES'   , TEMPLATES.'includes'.DS);
 define('MODULES'    , TEMPLATES.'modules'.DS);
 define('VIEWS'      , TEMPLATES.'views'.DS);
 
+// Rutas de recursos y assets absolutos
+define('IMAGES_PATH', ROOT.'assets'.DS.'images'.DS);
+
 // Rutas de archivos o assets con base URL
 define('ASSETS'     , URL.'assets/');
 define('CSS'        , ASSETS.'css/');
@@ -55,6 +58,7 @@ define('IMAGES'     , ASSETS.'images/');
 define('JS'         , ASSETS.'js/');
 define('PLUGINS'    , ASSETS.'plugins/');
 define('UPLOADS'    , ROOT.DS.'assets'.DS.'uploads'.DS);
+define('UPLOADED'   , ASSETS.'uploads/');
 
 // Credenciales de la base de datos
 // Set para conexión local o de desarrollo
