@@ -69,4 +69,23 @@ class Flasher
     return $output;
   }
 
+  /**
+   * Muestra un mensaje de acceso denegado
+   *
+   * @return void
+   */
+  public static function deny($type = 0)
+  {
+    $types =
+    [
+      0 => 'Acceso no autorizado.',
+      1 => 'Acción no autorizada.',
+      2 => 'Permisos denegados.',
+      3 => 'No puedes realizar esta acción.'
+    ];
+    
+
+    self::new($types[$type], 'danger');
+    return true;
+  }
 }

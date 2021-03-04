@@ -2,7 +2,7 @@
 
 /**
  * Plantilla general de controladores
- * Versión 1.0.0
+ * Versión 1.0.2
  *
  * Controlador de [[REPLACE]]
  */
@@ -18,11 +18,12 @@ class [[REPLACE]]Controller extends Controller {
     */
   }
   
-  function index() {
+  function index()
+  {
     echo 'Bienvenido al controlador de "[[REPLACE]]", se ha creado con éxito si ves este mensaje.';
     
     // Descomentar vista si requerida
-    View::render('index');
+    //View::render('index');
   }
 
   function ver($id)
@@ -30,9 +31,24 @@ class [[REPLACE]]Controller extends Controller {
     View::render('ver');
   }
 
-  function actualizar($id)
+  function agregar()
   {
-    View::render('actualizar');
+    View::render('agregar');
+  }
+
+  function post_agregar()
+  {
+
+  }
+
+  function editar($id)
+  {
+    View::render('editar');
+  }
+
+  function post_editar()
+  {
+
   }
 
   function borrar($id)
@@ -40,4 +56,3 @@ class [[REPLACE]]Controller extends Controller {
     // Proceso de borrado
   }
 }
-

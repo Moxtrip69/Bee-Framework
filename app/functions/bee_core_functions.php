@@ -328,9 +328,9 @@ function format_date($date_string, $type = 'd M, Y') {
 function clean($str, $cleanhtml = false) {
   $str = @trim(@rtrim($str));
   
-	if (get_magic_quotes_gpc()) {
-		$str = stripslashes($str);
-	}
+	// if (get_magic_quotes_gpc()) {
+	// 	$str = stripslashes($str);
+	// }
 
 	if ($cleanhtml === true) {
 		return htmlspecialchars($str);
@@ -787,4 +787,151 @@ function generate_token($length = 32) {
 	}
 
 	return $token;
+}
+
+/**
+ * Valida los parametros pasados en POST
+ *
+ * @param array $required_params
+ * @param array $posted_data
+ * @return void
+ */
+function check_posted_data($required_params = [] , $posted_data = []) {
+
+  if(empty($posted_data)) {
+    return false;
+  }
+
+  // Keys necesarios en toda petición
+  $defaults = ['hook','action'];
+  $required_params = array_merge($required_params,$defaults);
+  $required = count($required_params);
+  $found = 0;
+
+  foreach ($posted_data as $k => $v) {
+    if(in_array($k , $required_params)) {
+      $found++;
+    }
+  }
+
+  if($found !== $required) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * Valida parametros ingresados en la URL como GET
+ *
+ * @param array $required_params
+ * @param array $get_data
+ * @return void
+ */
+function check_get_data($required_params = [] , $get_data = []) {
+
+  if(empty($get_data)) {
+    return false;
+  }
+
+  // Keys necesarios en toda petición
+  $defaults = ['hook','action'];
+  $required_params = array_merge($required_params, $defaults);
+  $required = count($required_params);
+  $found = 0;
+
+  foreach ($get_data as $k => $v) {
+    if(in_array($k , $required_params)) {
+      $found++;
+    }
+  }
+
+  if($found !== $required) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * Agrega un tooltip con más información definida como string
+ *
+ * @param string $str
+ * @param string $color
+ * @param string $icon
+ * @return void
+ */
+function more_info($str , $color = 'text-info' , $icon = 'fas fa-exclamation-circle') {
+  $str = clean($str);
+  $output = '';
+  $output .= '<span class="'.$color.'" '.tooltip($str).'><i class="'.$icon.'"></i></span>';
+  return $output;
+}
+
+/**
+ * Agrega un placeholder a un campo input
+ *
+ * @param string $string
+ * @return void
+ */
+function placeholder($string = 'Lorem ipsum') {
+  return sprintf('placeholder="%s"', $string);
+}
+
+/**
+ * Agrega un tooltip en plantalla
+ *
+ * @param string $title
+ * @return void
+ */
+function tooltip($title = null) {
+	if($title == null){
+		return false;
+	}
+
+	return 'data-toggle="tooltip" title="'.$title.'"';
+}
+
+/**
+ * Genera un menú dinámico con base a los links pasados
+ *
+ * @param array $links
+ * @param string $active
+ * @return void
+ */
+function create_menu($links, $slug_active = 'home') {
+  $output = '';
+  $output .= '<ul class="nav flex-column">';
+  foreach ($links as $link) {
+    if ($slug_active === $link['slug']) {
+      $output .= 
+      sprintf(
+        '<li class="nav-item">
+        <a class="nav-link active" href="%s">
+          <span data-feather="%s"></span>
+          %s
+        </a>
+        </li>',
+        $link['url'],
+        $link['icon'],
+        $link['title']
+      );
+    } else {
+      $output .= 
+      sprintf(
+        '<li class="nav-item">
+        <a class="nav-link" href="%s">
+          <span data-feather="%s"></span>
+          %s
+        </a>
+        </li>',
+        $link['url'],
+        $link['icon'],
+        $link['title']
+      );
+    }
+  }
+  $output .= '</ul>';
+
+  return $output;
 }

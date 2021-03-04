@@ -21,7 +21,7 @@ class Bee {
    * @var string
    */
   private $framework    = 'Bee Framework';
-  private $version      = '1.0.5'; // nuevos cambios en sistemas de sesión de usuarios
+  private $version      = '1.0.7'; // nuevos cambios en la clase de Db y nuevas funciones core agregadas
   private $lng          = 'es';
   private $uri          = [];
   private $use_composer = true;
