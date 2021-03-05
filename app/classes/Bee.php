@@ -20,8 +20,8 @@ class Bee {
    *
    * @var string
    */
-  private $framework    = 'Bee Framework';
-  private $version      = '1.0.7'; // nuevos cambios en la clase de Db y nuevas funciones core agregadas
+  private $framework    = 'Bee Framework'; // Ahora este solo será el nombre idenficador del framework y no el nombre del sistema como tal
+  private $version      = '1.0.8';         // versión actual del framework y no del sistema en desarrollo, la versión del sistema deberá ser actualizada directamente en bee_config.php
   private $lng          = 'es';
   private $uri          = [];
   private $use_composer = true;

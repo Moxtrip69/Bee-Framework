@@ -26,6 +26,35 @@ function get_sitename() {
 }
 
 /**
+ * Regresa la versión de nuestro sistema actual
+ *
+ * @return string
+ */
+function get_version() {
+	return SITE_VERSION;
+}
+
+/**
+ * Regresa el nombre del framework Bee Framework
+ *
+ * @return string
+ */
+function get_bee_name()
+{
+	return BEE_NAME;
+}
+
+/**
+ * Regresa la versión del framework actual
+ *
+ * @return string
+ */
+function get_bee_version()
+{
+	return BEE_VERSION;
+}
+
+/**
  * Devuelve el email general del sistema
  *
  * @return string

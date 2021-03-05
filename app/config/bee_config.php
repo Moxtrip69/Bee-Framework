@@ -11,8 +11,10 @@ date_default_timezone_set('America/Mexico_City');
 define('SITE_LANG'   , $this->lng);
 
 // Versión de la aplicación
-define('SITE_NAME'   , $this->framework); // Configurado desde Bee.php
-define('SITE_VERSION', $this->version); // Configurado desde Bee.php
+define('BEE_NAME'    , $this->framework); // Viene desde Bee.php
+define('BEE_VERSION' , $this->version);   // Viene desde Bee.php
+define('SITE_NAME'   , 'EmpresaCool');    // Configurado desde Bee.php
+define('SITE_VERSION', '1.0.0');          // Configurado desde Bee.php
 
 // Ruta base de nuestro proyecto
 // Configurar según sea necesario en tu proyecto
