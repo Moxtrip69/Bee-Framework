@@ -964,3 +964,20 @@ function create_menu($links, $slug_active = 'home') {
 
   return $output;
 }
+
+/**
+ * Función para cargar el url de nuestro asset logotipo del sitio
+ *
+ * @return void
+ */
+function get_logo() {
+	$default_logo_name = 'logo';
+	$default_logo_size = '500';
+	$default_logo_ext  = 'png';
+	$logo              = sprintf('%s_%s.%s', $default_logo_name, $default_logo_size, $default_logo_ext); // logo_500.png
+	if (!is_file(IMAGES_PATH.$logo)) {
+		return false;
+	}
+
+	return IMAGES.$logo;
+}

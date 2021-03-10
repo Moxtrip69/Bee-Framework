@@ -24,7 +24,7 @@ define('BASEPATH'   , IS_LOCAL ? '/Bee-Framework/' : '____EL BASEPATH EN PRODUCC
 define('AUTH_SALT'  , 'BeeFramework<3');
 
 // Puerto y la URL del sitio
-define('PORT'       , '7882');
+define('PORT'       , '8848'); // Puerto por defecto de Prepros <2020
 define('PROTOCOL'   , isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http"); // Detectar si está en HTTPS o HTTP
 define('HOST'       , $_SERVER['HTTP_HOST'] === 'localhost' ? (PREPROS ? '127.0.0.1:'.PORT : 'localhost') : $_SERVER['HTTP_HOST']); // Dominio o host localhost.com tudominio.com
 define('REQUEST_URI', $_SERVER["REQUEST_URI"]); // Parametros y ruta requerida
