@@ -21,7 +21,7 @@ class Bee {
    * @var string
    */
   private $framework    = 'Bee Framework'; // Ahora este solo será el nombre idenficador del framework y no el nombre del sistema como tal
-  private $version      = '1.0.8';         // versión actual del framework y no del sistema en desarrollo, la versión del sistema deberá ser actualizada directamente en bee_config.php
+  private $version      = '1.1.0';         // versión actual del framework y no del sistema en desarrollo, la versión del sistema deberá ser actualizada directamente en bee_config.php
   private $lng          = 'es';
   private $uri          = [];
   private $use_composer = true;
@@ -67,6 +67,16 @@ class Bee {
    * @return void
    */ 
   private function init_load_config() {
+    // Carga del archivo de settings inicialmente para establecer las constantes personalizadas
+    // desde un comienzo en la ejecución del sitio
+    $file = 'settings.php';
+    if(!is_file('app/core/'.$file)) {
+      die(sprintf('El archivo %s no se encuentra, es requerido para que %s funcione.', $file, $this->framework));
+    }
+
+    // Cargando el archivo de configuración
+    require_once 'app/core/'.$file;
+    
     $file = 'bee_config.php';
     if(!is_file('app/config/'.$file)) {
       die(sprintf('El archivo %s no se encuentra, es requerido para que %s funcione.', $file, $this->framework));

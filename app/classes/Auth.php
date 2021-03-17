@@ -22,7 +22,8 @@ class Auth
       'logged' => false,
       'token'  => $this->token,
       'id'     => $this->id,
-      'ssid'   => $this->ssid
+      'ssid'   => $this->ssid,
+      'user'   => $this->user
     ];
 
     $_SESSION[$this->var] = $session;

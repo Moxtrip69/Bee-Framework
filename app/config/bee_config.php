@@ -1,11 +1,13 @@
 <?php
 
-// Saber si estamos trabajando de forma local o remota
-define('IS_LOCAL'   , in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1']));
-define('PREPROS'    , false); // Activar en caso de trabajar el desarrollo en prepros como servidor local
+//////////////////////////////// 2021
+//////////////////////////////// Joystick
+//////////////////////////////// Bee-Framework
 
 // Definir el uso horario o timezone del sistema
 date_default_timezone_set('America/Mexico_City');
+
+define('PREPROS'    , true); // Activar en caso de trabajar el desarrollo en prepros como servidor local
 
 // Lenguaje
 define('SITE_LANG'   , $this->lng);
@@ -17,8 +19,8 @@ define('SITE_NAME'   , 'EmpresaCool');    // Configurado desde Bee.php
 define('SITE_VERSION', '1.0.0');          // Configurado desde Bee.php
 
 // Ruta base de nuestro proyecto
-// Configurar según sea necesario en tu proyecto
-define('BASEPATH'   , IS_LOCAL ? '/Bee-Framework/' : '____EL BASEPATH EN PRODUCCIÓN___');
+// Esta constante ahora es configurada desde el archivo settings.php
+// define('BASEPATH'   , IS_LOCAL ? '/Bee-Framework/' : '____EL BASEPATH EN PRODUCCIÓN___');
 
 // Sal del sistema
 define('AUTH_SALT'  , 'BeeFramework<3');
@@ -26,7 +28,7 @@ define('AUTH_SALT'  , 'BeeFramework<3');
 // Puerto y la URL del sitio
 define('PORT'       , '8848'); // Puerto por defecto de Prepros <2020
 define('PROTOCOL'   , isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http"); // Detectar si está en HTTPS o HTTP
-define('HOST'       , $_SERVER['HTTP_HOST'] === 'localhost' ? (PREPROS ? '127.0.0.1:'.PORT : 'localhost') : $_SERVER['HTTP_HOST']); // Dominio o host localhost.com tudominio.com
+define('HOST'       , $_SERVER['HTTP_HOST'] === 'localhost' ? (PREPROS ? 'localhost:'.PORT : 'localhost') : $_SERVER['HTTP_HOST']); // Dominio o host localhost.com tudominio.com
 define('REQUEST_URI', $_SERVER["REQUEST_URI"]); // Parametros y ruta requerida
 define('URL'        , PROTOCOL.'://'.HOST.BASEPATH); // URL del sitio
 define('CUR_PAGE'   , PROTOCOL.'://'.HOST.REQUEST_URI); // URL actual incluyendo parametros get
@@ -71,15 +73,16 @@ define('LDB_USER'   , 'root');
 define('LDB_PASS'   , '');
 define('LDB_CHARSET', 'utf8');
 
-// Set para conexión en producción o servidor real
-define('DB_ENGINE'  , 'mysql');
-define('DB_HOST'    , 'localhost');
-define('DB_NAME'    , '___REMOTE DB___');
-define('DB_USER'    , '___REMOTE DB___');
-define('DB_PASS'    , '___REMOTE DB___');
-define('DB_CHARSET' , '___REMOTE CHARTSET___');
-
 // El controlador por defecto / el método por defecto / y el controlador de errores por defecto
 define('DEFAULT_CONTROLLER'      , 'home');
 define('DEFAULT_ERROR_CONTROLLER', 'error');
 define('DEFAULT_METHOD'          , 'index');
+
+// Migrado al archivo db_settings.php
+// define('DB_ENGINE'  , 'mysql');
+// define('DB_HOST'    , 'localhost');
+// define('DB_NAME'    , '___REMOTE DB___');
+// define('DB_USER'    , '___REMOTE DB___');
+// define('DB_PASS'    , '___REMOTE DB___');
+// define('DB_CHARSET' , '___REMOTE CHARTSET___');
+

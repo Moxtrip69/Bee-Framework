@@ -20,10 +20,14 @@ class [[REPLACE]]Controller extends Controller {
   
   function index()
   {
-    echo 'Bienvenido al controlador de "[[REPLACE]]", se ha creado con éxito si ves este mensaje.';
+    $data = 
+    [
+      'title' => 'Reemplezar título',
+      'msg'   => 'Bienvenido al controlador de "[[REPLACE]]", se ha creado con éxito si ves este mensaje.'
+    ];
     
     // Descomentar vista si requerida
-    //View::render('index');
+    View::render('index', $data);
   }
 
   function ver($id)

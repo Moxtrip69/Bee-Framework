@@ -742,6 +742,7 @@ function set_session($k, $v) {
  */
 function send_email($from, $to, $subject, $body, $alt = null, $bcc = null, $reply_to = null, $attachments = []) {
 	$mail     = new PHPMailer(true);
+	$mail->isSMTP();
 	$template = 'emailTemplate';
 	
 	try {
@@ -980,4 +981,63 @@ function get_logo() {
 	}
 
 	return IMAGES.$logo;
+}
+
+/**
+ * Carga y regresa un valor determinao de la información del usuario
+ * guardada en la variable de sesión actual
+ *
+ * @param string $key
+ * @return mixed
+ */
+function get_user($key = null)
+{
+	if (!isset($_SESSION['user_session'])) return false;
+
+	$session = $_SESSION['user_session']; // información de la sesión del usuario actual, regresará siempre falso si no hay dicha sesión
+
+	if (!isset($session['user']) || empty($session['user'])) return false;
+
+	$user = $session['user']; // información de la base de datos o directamente insertada del usuario
+
+	if ($key === null) return $user;
+
+	if (!isset($user[$key])) return false; // regresará falso en caso de no encontrar el key buscado
+
+	// Regresa la información del usuario
+	return $user[$key];
+}
+
+/**
+ * Determina si el sistema está en modo demostración o no
+ * para limitar el acceso o la interacción de los usuarios y funcionalidades
+ *
+ * @return boolean
+ */
+function is_demo()
+{
+	return IS_DEMO;
+}
+
+/**
+ * Función para validar si el sistema es una demostración
+ * y guardar una notificación flash y redirigir al usuario
+ * de así solicitarlo
+ *
+ */
+function check_if_demo($flash = true, $redirect = true)
+{
+  $demo = is_demo();
+
+  if ($demo == false) return false;
+
+  if ($flash == true) {
+    Flasher::new(sprintf('No disponible en la versión de demostración de %s.', get_sitename()), 'danger');
+  }
+
+  if ($redirect == true) {
+    Redirect::back();
+  }
+
+  return true;
 }

@@ -37,11 +37,13 @@ class creatorController extends Controller {
     $keyword  = 'Controller';
     $template = MODULES.'controllerTemplate.txt';
 
+    // Validar la existencia del controlador para prevenir remover un archivo existente
     if (is_file(CONTROLLERS.$filename.$keyword.'.php')) {
       Flasher::new(sprintf('Ya existe el controladores %s.', $filename.$keyword), 'danger');
       Redirect::back();
     }
 
+    // Validar la existencia de la plantilla .txt para crear el controlador
     if (!is_file($template)) {
       Flasher::new(sprintf('No existe la plantilla %s.', $template), 'danger');
       Redirect::back();
@@ -59,7 +61,7 @@ class creatorController extends Controller {
     if (!is_dir(VIEWS.$filename)) {
       mkdir(VIEWS.$filename);
 
-      $body = '<h1>Vista creada con éxito.</h1><br><br><img src="%s" />';
+      $body = '<h1><?php echo $d->msg; ?></h1><br><br><img src="%s" />';
       $body = sprintf($body, IMAGES.'bee_logo.png');
       @file_put_contents(VIEWS.$filename.DS.'indexView.php', $body);
     }
