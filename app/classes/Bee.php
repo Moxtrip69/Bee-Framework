@@ -69,14 +69,6 @@ class Bee {
   private function init_load_config() {
     // Carga del archivo de settings inicialmente para establecer las constantes personalizadas
     // desde un comienzo en la ejecución del sitio
-    $file = 'settings.php';
-    if(!is_file('app/core/'.$file)) {
-      die(sprintf('El archivo %s no se encuentra, es requerido para que %s funcione.', $file, $this->framework));
-    }
-
-    // Cargando el archivo de configuración
-    require_once 'app/core/'.$file;
-    
     $file = 'bee_config.php';
     if(!is_file('app/config/'.$file)) {
       die(sprintf('El archivo %s no se encuentra, es requerido para que %s funcione.', $file, $this->framework));
@@ -84,6 +76,14 @@ class Bee {
 
     // Cargando el archivo de configuración
     require_once 'app/config/'.$file;
+    
+    $file = 'settings.php';
+    if(!is_file('app/core/'.$file)) {
+      die(sprintf('El archivo %s no se encuentra, es requerido para que %s funcione.', $file, $this->framework));
+    }
+
+    // Cargando el archivo de configuración
+    require_once 'app/core/'.$file;
 
     return;
   }

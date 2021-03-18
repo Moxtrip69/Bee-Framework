@@ -4,7 +4,7 @@ Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y 
 
 ## Changelog
 ### v 1.1.0
-- Hemos cambiado algunos archivos de configuración para facilitar la escalabilidad y soporte al código, cambiando las constantes de bases de datos y basepath de **bee_config.php** a **settings.php** separandolas del resto para facilitar su encapsulamiento.
+- Hemos cambiado algunos archivos de configuración para facilitar la escalabilidad y soporte al código, separando las constantes de bases de datos y basepath a **bee_config.php** y creando **settings.php**, separando del resto para mejorar su encapsulamiento.
 - Nuevas funciones añadidas para carga de información de usuario registrada en el payload de las variables de sesión.
 - Mejoras realizadas en el creador de controladores y sus plantillas por defecto, para agilizar el flujo de trabajo.
 - Se añadieron nuevos parametros a la clase **Db.php** para regresar solo regultados como **array asociativo**.
