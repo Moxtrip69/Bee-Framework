@@ -14,7 +14,7 @@
         <div class="card-header"><h5>Opciones del sistema</h5></div>
         <div class="card-body">
           <form class="bee_save_options">
-            <div class="form-group row">
+            <div class="mb-3 row">
               <div class="col-4">
                 <label for="use_taxes">Calcular Impuestos</label>
                 <select name="use_taxes" id="use_taxes" class="form-control">
@@ -57,7 +57,7 @@
         </div>
         <div class="card-body">
           <form class="bee_add_movement" novalidate>
-            <div class="form-group row">
+            <div class="mb-3 row">
               <div class="col-xl-6">
                 <label for="country">Tipo de movimiento</label>
                 <select class="custom-select d-block w-100" id="type" name="type" required>

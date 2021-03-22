@@ -80,7 +80,7 @@
           <div class="card-header">Completa el formulario</div>
           <div class="card-body">
             <form method="post" action="process.php" enctype="multipart/form-data">
-              <div class="form-group row">
+              <div class="mb-3 row">
                 <div class="col-xl-6 col-12">
                   <label for="nombres">Nombre(s)</label>
                   <input type="text" class="form-control" name="nombres" required>
@@ -90,7 +90,7 @@
                   <input type="text" class="form-control" name="apellidos" required>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="mb-3 row">
                 <div class="col-xl-6 col-12">
                   <label for="email">Correo electrónico</label>
                   <input type="email" class="form-control" name="email" required>
@@ -100,7 +100,7 @@
                   <input type="text" class="form-control" name="telefono" required>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="mb-3 row">
                 <div class="col-xl-6 col-12">
                   <label for="sexo">Sexo</label>
                   <select name="sexo" id="sexo" class="form-control" required>
@@ -115,11 +115,11 @@
                   <input type="number" class="form-control" name="edad" min="1" max="120" required>
                 </div>
               </div>
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="notas">Describe los síntomas</label>
                 <textarea name="notas" id="notas" cols="10" rows="5" class="form-control" required></textarea>
               </div>
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="fecha">Reservar consulta</label>
                 <input type="date" class="form-control" name="fecha" required>
               </div>
@@ -264,12 +264,12 @@
             <p><strong>Notas agregadas o síntomas:</strong> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas suscipit et quod possimus laudantium rerum fugiat, deleniti facilis dignissimos perspiciatis.</p>
 
             <form action="" class="">
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="recomendaciones">Recomendaciones</label>
                 <textarea class="form-control" name="recomendaciones" reuqired></textarea>
               </div>
               
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="receta">Receta</label>
                 <input type="file" class="form-control-file" name="receta" id="receta" accept="application/pdf" required>
               </div>

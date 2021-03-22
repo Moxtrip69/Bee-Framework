@@ -22,22 +22,37 @@ class loginController extends Controller {
 
   function post_login()
   {
-    if (!Csrf::validate($_POST['csrf'])) {
+    if (!Csrf::validate($_POST['csrf']) || !check_posted_data(['usuario','csrf','password'], $_POST)) {
       Flasher::new('Acceso no autorizado.', 'danger');
       Redirect::back();
     }
 
-    $def_id       = 123;
-    $def_user     = 'bee';
-    $def_password = '123456';
+    // Data pasada del formulario
+    $usuario  = clean($_POST['usuario']);
+    $password = clean($_POST['password']);
 
-    if (clean($_POST['usuario']) !== $def_user || clean($_POST['password']) !== $def_password) {
+    // Información del usuario loggeado, simplemente se puede reemplazar aquí con un query a la base de datos
+    // para cargar la información del usuario si es existente
+    $user = 
+    [
+      'id'       => 123,
+      'name'     => 'Bee Default', 
+      'email'    => 'hellow@joystick.com.mx', 
+      'avatar'   => 'myavatar.jpg', 
+      'tel'      => '11223344', 
+      'color'    => '#112233',
+      'user'     => 'bee',
+      'password' => '$2y$10$R18ASm3k90ln7SkPPa7kLObcRCYl7SvIPCPtnKMawDhOT6wPXVxTS'
+    ];
+
+
+    if ($usuario !== $user['user'] || !password_verify($password.AUTH_SALT, $user['password'])) {
       Flasher::new('Las credenciales no son correctas.', 'danger');
       Redirect::back();
     }
 
     // Loggear al usuario
-    Auth::login($def_id, ['name' => 'Bee Joystick', 'email' => 'hellow@joystick.com.mx', 'avatar' => 'myavatar.jpg', 'tel' => '11223344', 'color' => '#112233']);
+    Auth::login($user['id'], $user);
     Redirect::to('home/flash');
   }
 }

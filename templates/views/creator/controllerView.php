@@ -16,7 +16,7 @@
           <form action="creator/post_controller" method="post" novalidate>
             <?php echo insert_inputs(); ?>
             
-            <div class="form-group">
+            <div class="mb-3">
               <label for="filename">Nombre del controlador (sin "Controller.php")</label>
               <input type="text" class="form-control" id="filename" name="filename" placeholder="reports" required>
             </div>

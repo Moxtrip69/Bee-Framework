@@ -3,9 +3,9 @@
 <div class="container">
   <div class="row">
     <div class="col-8 text-center offset-md-2">
-      <img src="<?php echo IMAGES.'bee_logo_white.png' ?>" alt="Bee framework" class="img-fluid" style="width: 200px;">
+      <a href="<?php echo URL; ?>"><img src="<?php echo IMAGES.'bee_logo_white.png' ?>" alt="Bee framework" class="img-fluid" style="width: 200px;"></a>
       <h2 class="text-white mt-5"><span class="text-warning">Bee</span> framework</h2>
-      <span class="d-block text-white mb-3"><?php echo get_bee_version(); ?></span>
+      <span class="d-block text-white mb-3"><?php echo sprintf('Versión %s', get_bee_version()); ?></span>
       <p class="text-center text-white">Un framework hecho en casa, con pasión y mucho cariño. Ligero, rápido y personalizable. Úsalo como gustes, en tus proyectos personales o profesionales.</p>
       <ul class="text-white">
         <li>Desarrollado con PHP, Javascript y HTML5</li>

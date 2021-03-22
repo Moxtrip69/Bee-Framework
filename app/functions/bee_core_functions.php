@@ -990,8 +990,7 @@ function get_logo() {
  * @param string $key
  * @return mixed
  */
-function get_user($key = null)
-{
+function get_user($key = null) {
 	if (!isset($_SESSION['user_session'])) return false;
 
 	$session = $_SESSION['user_session']; // información de la sesión del usuario actual, regresará siempre falso si no hay dicha sesión
@@ -1025,8 +1024,7 @@ function is_demo()
  * de así solicitarlo
  *
  */
-function check_if_demo($flash = true, $redirect = true)
-{
+function check_if_demo($flash = true, $redirect = true) {
   $demo = is_demo();
 
   if ($demo == false) return false;
@@ -1040,4 +1038,176 @@ function check_if_demo($flash = true, $redirect = true)
   }
 
   return true;
+}
+
+/**
+ * Para registrar una hoja de estilos de forma manual
+ *
+ * @param array $stylesheets
+ * @param string $comment
+ * @return bool
+ */
+function register_styles($stylesheets , $comment = null) {
+  global $Bee_Styles;
+
+  $Bee_Styles[] = 
+  [
+    'comment' => (!empty($comment) ? $comment : null),
+    'files'   => $stylesheets
+  ];
+
+  return true;
+}
+
+/**
+ * Para registrar uno o más scripts de forma manual
+ *
+ * @param array $scripts
+ * @param string $comment
+ * @return bool
+ */
+function register_scripts($scripts , $comment = null) {
+  global $Bee_Scripts;
+
+  $Bee_Scripts[] = 
+  [
+    'comment' => (!empty($comment) ? $comment : null),
+    'files'   => $scripts
+  ];
+
+  return true;
+}
+
+/**
+ * Carga los estilos registrados de forma manual
+ * por la función register_styles()
+ *
+ * @return string
+ */
+function load_styles() {
+  global $Bee_Styles;
+  $output = '';
+
+  if(empty($Bee_Styles)){
+    return $output;
+  }
+
+	// Iterar sobre cada elemento registrado
+  foreach (json_decode(json_encode($Bee_Styles)) as $css) {
+    if($css->comment){
+      $output .= '<!-- '.$css->comment.' -->'."\n";
+    }
+
+		// Iterar sobre cada path de archivo registrado
+    foreach ($css->files as $f) {
+      $output .= "\t".'<link rel="stylesheet" href="'.$f.'" >'."\n";
+    }
+  }
+
+  return $output;
+}
+
+/**
+ * Carga los scrips registrados de forma manual
+ * por la función register_scripts()
+ *
+ * @return string
+ */
+function load_scripts() {
+  global $Bee_Scripts;
+  $output = '';
+
+  if(empty($Bee_Scripts)){
+    return $output;
+  }
+
+	// Itera sobre todos los elementos registrados
+  foreach (json_decode(json_encode($Bee_Scripts)) as $js) {
+    if($js->comment){
+      $output .= '<!-- '.$js->comment.' -->'."\n";
+    }
+
+		// Itera sobre todos los paths registrados
+    foreach ($js->files as $f) {
+      $output .= '<script src="'.$f.'" type="text/javascript"></script>'."\n";
+    }
+  }
+
+  return $output;
+}
+
+/**
+ * Registar un nuevo valor para el objeto Bee
+ * insertado en el pie del sitio como objeto para
+ * acceder a los parámetros de forma sencilla
+ *
+ * @param string $key
+ * @param mixed $value
+ * @return bool
+ */
+function register_to_bee_obj($key, $value) {
+	global $Bee_Object;
+
+  $Bee_Scripts[$key] = clean($value);
+
+  return true;
+}
+
+/**
+ * Carga el objeto Bee registrado y todos sus valores
+ * por defecto y personalizados
+ *
+ * @return string
+ */
+function load_bee_obj() {
+	global $Bee_Object;
+	$output = '';
+
+  if(empty($Bee_Object)){
+    return $output;
+  }
+
+	$output .= '<script>';
+	$output .= 'var Bee = {'."\n";
+
+	// Iterar sobre todos los elementos registrados
+  foreach ($Bee_Object as $k => $v) {
+		$output .= sprintf('%s: "%s",'."\n", $k, $v);
+	}
+
+	$output .= '};';
+	$output .= '</script>';
+
+  return $output;
+}
+
+/**
+ * Registra los parámetro por defecto de Bee
+ *
+ * @return bool
+ */
+function bee_obj_default_config() {
+	global $Bee_Object;
+
+	$Bee_Object =
+	[
+		'sitename'     => get_sitename(),
+		'version'      => get_version(),
+		'bee_name'     => get_bee_name(),
+		'bee_version'  => get_bee_version(),
+		'csrf'         => CSRF_TOKEN,
+		'url'          => URL,
+		'cur_page'     => CUR_PAGE,
+		'is_local'     => IS_LOCAL,
+		'is_demo'      => IS_DEMO,
+		'basepath'     => BASEPATH,
+		'sandbox'      => SANDBOX,
+		'port'         => PORT,
+		'request_uri'  => REQUEST_URI,
+		'assets'       => ASSETS,
+		'images'       => IMAGES,
+		'uploaded'     => UPLOADED
+	];
+
+	return true;
 }

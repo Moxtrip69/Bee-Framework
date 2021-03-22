@@ -56,9 +56,7 @@ class Flasher
         foreach ($_SESSION[$type] as $m) {
           $output .= '<div class="alert alert-'.$type.' alert-dismissible show fade" role="alert">';
           $output .= $m;
-          $output .= '<button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
-          <span aria-hidden="true">&times;</span>
-        </button>';
+          $output .= '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>';
           $output .= '</div>';
         }
 
@@ -83,7 +81,6 @@ class Flasher
       2 => 'Permisos denegados.',
       3 => 'No puedes realizar esta acción.'
     ];
-    
 
     self::new($types[$type], 'danger');
     return true;

@@ -1,6 +1,6 @@
 <form class="bee_save_movement" novalidate>
   <input type="hidden" name="id" value="<?php echo $d->id; ?>">
-  <div class="form-group row">
+  <div class="mb-3 row">
     <div class="col-xl-6">
       <label for="country">Tipo de movimiento</label>
       <select class="custom-select d-block w-100" id="type" name="type" required>

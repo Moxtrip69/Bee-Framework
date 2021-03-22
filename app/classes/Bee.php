@@ -21,7 +21,7 @@ class Bee {
    * @var string
    */
   private $framework    = 'Bee Framework'; // Ahora este solo será el nombre idenficador del framework y no el nombre del sistema como tal
-  private $version      = '1.1.0';         // versión actual del framework y no del sistema en desarrollo, la versión del sistema deberá ser actualizada directamente en bee_config.php
+  private $version      = '1.1.1';         // versión actual del framework y no del sistema en desarrollo, la versión del sistema deberá ser actualizada directamente en bee_config.php
   private $lng          = 'es';
   private $uri          = [];
   private $use_composer = true;
@@ -44,6 +44,7 @@ class Bee {
     $this->init_load_composer();
     $this->init_autoload();
     $this->init_csrf();
+    $this->init_globals();
     $this->init_custom();
     $this->dispatch();
   }
@@ -113,6 +114,9 @@ class Bee {
     return;
   }
 
+  /**
+   * Inicializa composer
+   */
   private function init_load_composer() {
     if (!$this->use_composer) {
       return;
@@ -148,6 +152,18 @@ class Bee {
   private function init_csrf() {
     $csrf = new Csrf();
     define('CSRF_TOKEN', $csrf->get_token()); // Versión 1.0.2 para uso en aplicaciones
+  }
+
+  /**
+   * Inicializa las globales del sistema
+   *
+   * @return void
+   */
+  private function init_globals() {
+    // Objeto Bee que será insertado en el footer como script javascript dinámico para fácil acceso
+    bee_obj_default_config();
+
+    //////////////////////////////////////////////
   }
 
   /**

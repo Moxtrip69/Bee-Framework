@@ -2,7 +2,7 @@
 
 <div class="container">
   <div class="py-5 text-center">
-    <img class="d-block mx-auto mb-4" src="<?php echo IMAGES.'bee_logo.png' ?>" alt="<?php echo get_sitename() ?>" width="150">
+    <a href="<?php echo URL; ?>"><img src="<?php echo IMAGES.'bee_logo.png' ?>" alt="Bee framework" class="img-fluid" style="width: 200px;"></a>
     <h2>Ingresa a tu cuenta</h2>
     <p class="lead">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nam, ullam.</p>
   </div>
@@ -22,7 +22,7 @@
           <form action="login/post_login" method="post" novalidate>
             <?php echo insert_inputs(); ?>
             
-            <div class="form-group row">
+            <div class="mb-3 row">
               <div class="col-xl-6">
                 <label for="usuario">Usuario</label>
                 <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Walter White" required>
@@ -35,7 +35,7 @@
               </div>
             </div>
 
-            <button class="btn btn-primary btn-lg btn-block" type="submit">Ingresar</button>
+            <button class="btn btn-primary btn-block" type="submit">Ingresar</button>
           </form>
         </div>
       </div>

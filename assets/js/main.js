@@ -5,6 +5,23 @@ $(document).ready(function() {
 
   // Waitme
   //$('body').waitMe({effect : 'orbit'});
+  
+  // Alerta para confirmación de acciones
+  $('body').on('click', '.confirmar', function(e) {
+    e.preventDefault();
+
+    let url = $(this).attr('href'),
+    ok      = confirm('¿Estás seguro?');
+
+    // Redirección a la URL del enlace
+    if (ok) {
+      window.location = url;
+      return true;
+    }
+    
+    console.log('Acción cancelada.');
+    return true;
+  });
 
   // Agregar un movimiento
   $('.bee_add_movement').on('submit', bee_add_movement);

@@ -16,7 +16,7 @@
           <form action="creator/post_model" method="post" novalidate>
             <?php echo insert_inputs(); ?>
             
-            <div class="form-group">
+            <div class="mb-3">
               <label for="filename">Nombre del modelo (sin "Model.php")</label>
               <input type="text" class="form-control" id="filename" name="filename" placeholder="user" required>
             </div>

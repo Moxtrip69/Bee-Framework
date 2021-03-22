@@ -12,7 +12,7 @@
       <h6 class="my-0"><?php echo $mov->type === 'income' ? 'Ingreso' : 'Gasto'; ?></h6>
       <small class="text-muted"><?php echo $mov->description; ?></small>
     </div>
-    <button class="btn btn-sm btn-danger float-right bee_delete_movement" data-id="<?php echo $mov->id; ?>"><i class="fas fa-trash"></i></button>
+    <button class="btn btn-sm btn-danger float-end bee_delete_movement" data-id="<?php echo $mov->id; ?>"><i class="fas fa-trash"></i></button>
     <span class="<?php echo $mov->type === 'income' ? 'text-success' : 'text-danger'; ?>">
     <?php echo $mov->type === 'income' ? '' : '-'; ?>
       <?php echo money($mov->amount); ?>

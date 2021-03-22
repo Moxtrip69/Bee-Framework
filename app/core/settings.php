@@ -7,7 +7,7 @@
 // Definir el uso horario o timezone del sistema
 date_default_timezone_set('America/Mexico_City');
 
-define('PREPROS'    , true); // Activar en caso de trabajar el desarrollo en prepros como servidor local
+define('PREPROS'     , true); // Activar en caso de trabajar el desarrollo en prepros como servidor local
 
 // Lenguaje
 define('SITE_LANG'   , $this->lng);
@@ -61,7 +61,7 @@ define('FONTS'      , ASSETS.'fonts/');
 define('IMAGES'     , ASSETS.'images/');
 define('JS'         , ASSETS.'js/');
 define('PLUGINS'    , ASSETS.'plugins/');
-define('UPLOADS'    , ROOT.DS.'assets'.DS.'uploads'.DS);
+define('UPLOADS'    , ROOT.'assets'.DS.'uploads'.DS);
 define('UPLOADED'   , ASSETS.'uploads/');
 
 // Credenciales de la base de datos
