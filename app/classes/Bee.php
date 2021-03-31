@@ -21,7 +21,7 @@ class Bee {
    * @var string
    */
   private $framework    = 'Bee Framework'; // Ahora este solo será el nombre idenficador del framework y no el nombre del sistema como tal
-  private $version      = '1.1.1';         // versión actual del framework y no del sistema en desarrollo, la versión del sistema deberá ser actualizada directamente en bee_config.php
+  private $version      = '1.1.2';         // versión actual del framework y no del sistema en desarrollo, la versión del sistema deberá ser actualizada directamente en bee_config.php
   private $lng          = 'es';
   private $uri          = [];
   private $use_composer = true;

@@ -6,7 +6,9 @@ $(document).ready(function() {
   // Waitme
   //$('body').waitMe({effect : 'orbit'});
   
-  // Alerta para confirmación de acciones
+  /**
+   * Alerta para confirmar una acción establecida en un link o ruta específica
+   */
   $('body').on('click', '.confirmar', function(e) {
     e.preventDefault();
 
@@ -23,6 +25,23 @@ $(document).ready(function() {
     return true;
   });
 
+  /**
+   * Inicializa summernote el editor de texto avanzado para textareas
+   */
+  if ($('.summernote').length !== 0) {
+    $('.summernote').summernote({
+      placeholder: 'Escribe en este campo...',
+      tabsize: 2,
+      height: 300
+    });
+  }
+
+  ////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////
+  ///////// NO REQUERIDOS, SOLO PARA EL PROYECTO DEMO DE GASTOS E INGRESOS
+  ////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////
+  
   // Agregar un movimiento
   $('.bee_add_movement').on('submit', bee_add_movement);
   function bee_add_movement(event) {

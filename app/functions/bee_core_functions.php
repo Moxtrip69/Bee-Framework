@@ -1211,3 +1211,14 @@ function bee_obj_default_config() {
 
 	return true;
 }
+
+/**
+ * Registra los scripts y estilos del editor textual Summernote
+ *
+ * @return bool
+ */
+function use_summernote() {
+	register_styles(['https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-lite.css'] , 'Summernote');
+	register_scripts(['https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-lite.js'] , 'Summernote');
+	return true;
+}
