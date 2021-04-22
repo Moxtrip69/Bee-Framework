@@ -78,7 +78,7 @@ define('DEFAULT_CONTROLLER'      , 'home');
 define('DEFAULT_ERROR_CONTROLLER', 'error');
 define('DEFAULT_METHOD'          , 'index');
 
-// Migrado al archivo db_settings.php
+// Migrado al archivo bee_config.php
 // define('DB_ENGINE'  , 'mysql');
 // define('DB_HOST'    , 'localhost');
 // define('DB_NAME'    , '___REMOTE DB___');
