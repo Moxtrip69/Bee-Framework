@@ -22,7 +22,7 @@ class [[REPLACE]]Controller extends Controller {
   {
     $data = 
     [
-      'title' => 'Reemplezar título',
+      'title' => 'Reemplazar título',
       'msg'   => 'Bienvenido al controlador de "[[REPLACE]]", se ha creado con éxito si ves este mensaje.'
     ];
     
