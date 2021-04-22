@@ -15,8 +15,8 @@ define('SITE_LANG'   , $this->lng);
 // Versión de la aplicación
 define('BEE_NAME'    , $this->framework); // Viene desde Bee.php
 define('BEE_VERSION' , $this->version);   // Viene desde Bee.php
-define('SITE_NAME'   , 'EmpresaCool');    // Configurado desde Bee.php
-define('SITE_VERSION', '1.0.0');          // Configurado desde Bee.php
+define('SITE_NAME'   , 'EmpresaCool');    // Nombre del sitio
+define('SITE_VERSION', '1.0.0');          // Versión del sitio
 
 // Ruta base de nuestro proyecto
 // Esta constante ahora es configurada desde el archivo settings.php
