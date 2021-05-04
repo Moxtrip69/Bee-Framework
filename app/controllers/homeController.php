@@ -91,4 +91,9 @@ class homeController extends Controller {
   {
     View::render('gastos');
   }
+
+  function yumi()
+  {
+    View::render('yumi');
+  }
 }

@@ -2,6 +2,11 @@
 
 <div class="container">
   <div class="row">
+    <div class="col-12">
+      <?php echo Flasher::flash(); ?>
+    </div>
+  </div>
+  <div class="row">
     <div class="col-8 text-center offset-md-2">
       <a href="<?php echo URL; ?>"><img src="<?php echo IMAGES.'bee_logo_white.png' ?>" alt="Bee framework" class="img-fluid" style="width: 200px;"></a>
       <h2 class="text-white mt-5"><span class="text-warning">Bee</span> framework</h2>
