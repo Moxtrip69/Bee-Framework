@@ -984,6 +984,56 @@ function get_logo() {
 }
 
 /**
+ * Regresa el favicon del sitio con base 
+ * al archivo definido en la función
+ * por defecto el nombre de archivo es favicon.ico y se encuentra en la carpeta favicon
+ *
+ * @return mixed
+ */
+function get_favicon()
+{
+	$path        = FAVICON; // path del archivo favicon
+	$favicon     = 'favicon.ico'; // nombre del archivo favicon
+	$type        = '';
+	$href        = '';
+	$placeholder = '<link rel="icon" type="%s" href="%s">';
+
+	switch (pathinfo($path.$favicon, PATHINFO_EXTENSION)) {
+		case 'ico':
+			$type = 'image/vnd.microsoft.icon';
+			$href = $path.$favicon;
+			break;
+
+		case 'png':
+			$type = 'image/png';
+			$href = $path.$favicon;
+			break;
+
+		case 'gif':
+			$type = 'image/gif';
+			$href = $path.$favicon;
+			break;
+		
+		case 'svg':
+			$type = 'image/svg+xml';
+			$href = $path.$favicon;
+			break;
+
+		case 'jpg':
+		case 'jpeg':
+			$type = 'image/jpg';
+			$href = $path.$favicon;
+			break;
+		
+		default:
+			return false;
+			break;
+	}
+
+	return sprintf($placeholder, $type, $href);
+}
+
+/**
  * Carga y regresa un valor determinao de la información del usuario
  * guardada en la variable de sesión actual
  *
@@ -1148,7 +1198,7 @@ function load_scripts() {
 function register_to_bee_obj($key, $value) {
 	global $Bee_Object;
 
-  $Bee_Scripts[$key] = clean($value);
+  $Bee_Object[$key] = clean($value);
 
   return true;
 }
@@ -1167,18 +1217,9 @@ function load_bee_obj() {
     return $output;
   }
 
-	$output .= '<script>';
-	$output .= 'var Bee = {'."\n";
-
-	// Iterar sobre todos los elementos registrados
-  foreach ($Bee_Object as $k => $v) {
-		$output .= sprintf('%s: "%s",'."\n", $k, $v);
-	}
-
-	$output .= '};';
-	$output .= '</script>';
-
-  return $output;
+	$output = '<script>var Bee = %s </script>';
+	
+  return sprintf($output, json_encode_utf8($Bee_Object));
 }
 
 /**

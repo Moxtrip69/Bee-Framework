@@ -1,20 +1,47 @@
 <?php 
 
 class ajaxController extends Controller {
+
+  /**
+   * Valor que se deberá proporcionar como hook para
+   * aceptar una petición entrante
+   *
+   * @var string
+   */
+  private $hook_name        = 'bee_hook';
   
-  private $accepted_actions = ['get', 'post', 'put', 'delete', 'options', 'add', 'load'];
+  /**
+   * parámetros que serán requeridos en TODAS las peticiones pasadas a ajaxController
+   * si uno de estos no es proporcionado la petición fallará
+   *
+   * @var array
+   */
   private $required_params  = ['hook', 'action'];
+
+  /**
+   * Posibles verbos o acciones a pasar para nuestra petición
+   *
+   * @var array
+   */
+  private $accepted_actions = ['get', 'post', 'put', 'delete', 'options', 'headers', 'add', 'load'];
 
   function __construct()
   {
+    // Validar que hook exista y sea válido
+    if (!isset($_POST['hook']) || $_POST['hook'] !== $this->hook_name) {
+      json_output(json_build(403));
+    }
+
+    // Validar que se pase un verbo válido y aceptado
+    if(!in_array($_POST['action'], $this->accepted_actions)) {
+      json_output(json_build(403));
+    }
+    
+    // Validación de que todos los parámetros requeridos son proporcionados
     foreach ($this->required_params as $param) {
       if(!isset($_POST[$param])) {
         json_output(json_build(403));
       }
-    }
-
-    if(!in_array($_POST['action'], $this->accepted_actions)) {
-      json_output(json_build(403));
     }
   }
 
@@ -41,6 +68,9 @@ class ajaxController extends Controller {
     json_output(json_build(403));
   }
 
+  ///////////////////////////////////////////////////////
+  ///////////////////// PROYECTO DEMO ///////////////////
+  ///////////////////////////////////////////////////////
   function bee_add_movement()
   {
     try {
@@ -169,4 +199,7 @@ class ajaxController extends Controller {
     // se guardó con éxito
     json_output(json_build(200, null, 'Opciones actualizadas con éxito'));
   }
+  ///////////////////////////////////////////////////////
+  /////////////// TERMINA PROYECTO DEMO /////////////////
+  ///////////////////////////////////////////////////////
 }

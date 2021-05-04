@@ -21,7 +21,7 @@ class Bee {
    * @var string
    */
   private $framework    = 'Bee Framework'; // Ahora este solo será el nombre idenficador del framework y no el nombre del sistema como tal
-  private $version      = '1.1.2';         // versión actual del framework y no del sistema en desarrollo, la versión del sistema deberá ser actualizada directamente en bee_config.php
+  private $version      = '1.1.3';         // versión actual del framework y no del sistema en desarrollo, la versión del sistema deberá ser actualizada directamente en bee_config.php
   private $lng          = 'es';
   private $uri          = [];
   private $use_composer = true;
@@ -54,7 +54,8 @@ class Bee {
    * 
    * @return void
    */
-  private function init_session() {
+  private function init_session()
+  {
     if(session_status() == PHP_SESSION_NONE) {
       session_start();
     }
@@ -67,7 +68,8 @@ class Bee {
    *
    * @return void
    */ 
-  private function init_load_config() {
+  private function init_load_config()
+  {
     // Carga del archivo de settings inicialmente para establecer las constantes personalizadas
     // desde un comienzo en la ejecución del sitio
     $file = 'bee_config.php';
@@ -94,7 +96,8 @@ class Bee {
    *
    * @return void
    */
-  private function init_load_functions() {
+  private function init_load_functions()
+  {
     $file = 'bee_core_functions.php';
     if(!is_file(FUNCTIONS.$file)) {
       die(sprintf('El archivo %s no se encuentra, es requerido para que %s funcione.', $file, $this->framework));
@@ -117,7 +120,8 @@ class Bee {
   /**
    * Inicializa composer
    */
-  private function init_load_composer() {
+  private function init_load_composer()
+  {
     if (!$this->use_composer) {
       return;
     }
@@ -138,7 +142,8 @@ class Bee {
    *
    * @return void
    */
-  private function init_autoload() {
+  private function init_autoload()
+  {
     require_once CLASSES.'Autoloader.php';
     Autoloader::init();
     return;
@@ -149,7 +154,8 @@ class Bee {
    *
    * @return void
    */
-  private function init_csrf() {
+  private function init_csrf()
+  {
     $csrf = new Csrf();
     define('CSRF_TOKEN', $csrf->get_token()); // Versión 1.0.2 para uso en aplicaciones
   }
@@ -159,7 +165,8 @@ class Bee {
    *
    * @return void
    */
-  private function init_globals() {
+  private function init_globals()
+  {
     // Objeto Bee que será insertado en el footer como script javascript dinámico para fácil acceso
     bee_obj_default_config();
 
@@ -172,7 +179,8 @@ class Bee {
    *
    * @return void
    */
-  private function init_custom() {
+  private function init_custom()
+  {
     // Inicializar procesos personalizados del sistema o aplicación
     // ........
   }
@@ -182,7 +190,8 @@ class Bee {
    *
    * @return void
    */
-  private function filter_url() {
+  private function filter_url()
+  {
     if(isset($_GET['uri'])) {
       $this->uri = $_GET['uri'];
       $this->uri = rtrim($this->uri, '/');
@@ -198,7 +207,8 @@ class Bee {
    *
    * @return void
    */
-  private function dispatch() {
+  private function dispatch()
+  {
 
     // Filtrar la URL y separar la URI
     $this->filter_url();
@@ -267,7 +277,8 @@ class Bee {
    *
    * @return void
    */
-  public static function fly() {
+  public static function fly()
+  {
     $bee = new self();
     return;
   }

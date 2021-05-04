@@ -117,17 +117,20 @@ class Model extends Db {
   
   /**
    * Borra un registro de la base de datos
+	 * Se cambio $limite = 1 por defecto a $limite = null esto porque generaba problemas
+	 * al realizar borrado de muchos registros y se veia obligago a colocar un finito
+	 * para que más de 1 registro se borrara simultaneamente.
    *
    * @param string $table
    * @param array $params
    * @param integer $limit
    * @return void
    */
-  public static function remove($table, $params = [], $limit = 1)
+  public static function remove($table, $params = [], $limit = null)
 	{	
 		// It creates the col names and values to bind
 		$cols_values = "";
-		$limits = "";
+		$limits      = "";
 		if (!empty($params)) {
 			$cols_values .= "WHERE";
 			foreach ($params as $key => $value) {
@@ -137,7 +140,7 @@ class Model extends Db {
 		}
 
 		// If $limit is set, set a limit of data read
-		if ($limit !== null) {
+		if ($limit !== null && is_integer($limit)) {
 			$limits = " LIMIT {$limit}";
 		}
 

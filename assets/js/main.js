@@ -5,6 +5,8 @@ $(document).ready(function() {
 
   // Waitme
   //$('body').waitMe({effect : 'orbit'});
+  console.log('////////// Bienvenido a Bee Framework Versión ' + Bee.bee_version + ' //////////');
+  console.log(Bee);
   
   /**
    * Alerta para confirmar una acción establecida en un link o ruta específica

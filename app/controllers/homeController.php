@@ -13,6 +13,8 @@ class homeController extends Controller {
       'bg'    => 'dark'
     ];
 
+    register_to_bee_obj('bee_var', 'Súper Bee Var');
+
     View::render('bee', $data);
   }
 
