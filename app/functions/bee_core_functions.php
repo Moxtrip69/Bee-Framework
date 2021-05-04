@@ -206,7 +206,7 @@ function get_option($option) {
 }
 
 /**
- * Generar un link dinámico con parametros get y token
+ * Generar un link dinámico con parámetros get y token
  * 
  */
 function buildURL($url , $params = [] , $redirection = true, $csrf = true) {
@@ -231,7 +231,7 @@ function buildURL($url , $params = [] , $redirection = true, $csrf = true) {
 		return $url;
 	}
 
-	// Listando parametros
+	// Listando parámetros
 	foreach ($params as $key => $value) {
 		$_params[] = sprintf('%s=%s', urlencode($key), urlencode($value));
 	}
@@ -820,7 +820,7 @@ function generate_token($length = 32) {
 }
 
 /**
- * Valida los parametros pasados en POST
+ * Valida los parámetros pasados en POST
  *
  * @param array $required_params
  * @param array $posted_data
@@ -852,7 +852,7 @@ function check_posted_data($required_params = [] , $posted_data = []) {
 }
 
 /**
- * Valida parametros ingresados en la URL como GET
+ * Valida parámetros ingresados en la URL como GET
  *
  * @param array $required_params
  * @param array $get_data

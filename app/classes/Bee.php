@@ -203,7 +203,7 @@ class Bee {
 
   /**
    * Método para ejecutar y cargar de forma automática el controlador solicitado por el usuario
-   * su método y pasar parametros a él.
+   * su método y pasar parámetros a él.
    *
    * @return void
    */
@@ -259,7 +259,7 @@ class Bee {
     // Ejecutando controlador y método según se haga la petición
     $controller = new $controller;
 
-    // Obteniendo los parametros de la URI
+    // Obteniendo los parámetros de la URI
     $params = array_values(empty($this->uri) ? [] : $this->uri);
 
     // Llamada al método que solicita el usuario en curso

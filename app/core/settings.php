@@ -8,6 +8,7 @@
 date_default_timezone_set('America/Mexico_City');
 
 define('PREPROS'     , true); // Activar en caso de trabajar el desarrollo en prepros como servidor local
+define('PORT'       , '8848'); // Puerto por defecto de Prepros < 2020
 
 // Lenguaje
 define('SITE_LANG'   , $this->lng);
@@ -26,12 +27,11 @@ define('SITE_VERSION', '1.0.0');          // Versión del sitio
 // define('AUTH_SALT'  , 'BeeFramework<3'); // Migrado
 
 // Puerto y la URL del sitio
-define('PORT'       , '8848'); // Puerto por defecto de Prepros <2020
 define('PROTOCOL'   , isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http"); // Detectar si está en HTTPS o HTTP
 define('HOST'       , $_SERVER['HTTP_HOST'] === 'localhost' ? (PREPROS ? 'localhost:'.PORT : 'localhost') : $_SERVER['HTTP_HOST']); // Dominio o host localhost.com tudominio.com
-define('REQUEST_URI', $_SERVER["REQUEST_URI"]); // Parametros y ruta requerida
+define('REQUEST_URI', $_SERVER["REQUEST_URI"]); // Parámetros y ruta requerida
 define('URL'        , PROTOCOL.'://'.HOST.BASEPATH); // URL del sitio
-define('CUR_PAGE'   , PROTOCOL.'://'.HOST.REQUEST_URI); // URL actual incluyendo parametros get
+define('CUR_PAGE'   , PROTOCOL.'://'.HOST.REQUEST_URI); // URL actual incluyendo parámetros get
 
 // Las rutas de directorios y archivos
 define('DS'         , DIRECTORY_SEPARATOR);
@@ -73,12 +73,12 @@ define('LDB_USER'   , 'root');
 define('LDB_PASS'   , '');
 define('LDB_CHARSET', 'utf8');
 
-// El controlador por defecto / el método por defecto / y el controlador de errores por defecto
+// El controlador por defecto / el método por defecto / el controlador de errores por defecto
 define('DEFAULT_CONTROLLER'      , 'home');
 define('DEFAULT_ERROR_CONTROLLER', 'error');
 define('DEFAULT_METHOD'          , 'index');
 
-// Migrado al archivo bee_config.php
+// Se encuentra en archivo bee_config.php
 // define('DB_ENGINE'  , 'mysql');
 // define('DB_HOST'    , 'localhost');
 // define('DB_NAME'    , '___REMOTE DB___');

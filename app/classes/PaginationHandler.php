@@ -8,7 +8,7 @@
 class PaginationHandler extends Model
 {
 	/**
-	* Establecimiento de parametros necesarios
+	* Establecimiento de parámetros necesarios
 	* @param
 	*
 	**/
