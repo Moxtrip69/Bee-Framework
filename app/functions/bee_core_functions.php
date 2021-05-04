@@ -352,7 +352,7 @@ function format_date($date_string, $type = 'd M, Y') {
  *
  * @param string $str
  * @param boolean $cleanhtml
- * @return void
+ * @return string
  */
 function clean($str, $cleanhtml = false) {
   $str = @trim(@rtrim($str));
@@ -1247,7 +1247,8 @@ function bee_obj_default_config() {
 		'request_uri'  => REQUEST_URI,
 		'assets'       => ASSETS,
 		'images'       => IMAGES,
-		'uploaded'     => UPLOADED
+		'uploaded'     => UPLOADED,
+		'php_version'  => phpversion()
 	];
 
 	return true;

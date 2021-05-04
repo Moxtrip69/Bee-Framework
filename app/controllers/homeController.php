@@ -82,10 +82,7 @@ class homeController extends Controller {
 
   function flash()
   {
-    if (!Auth::validate()) {
-      Flasher::new('Debes iniciar sesión primero.', 'danger');
-      Redirect::to('login');
-    }
+    parent::auth();
 
     View::render('flash', ['title' => 'Flash', 'user' => User::profile()]);
   }
@@ -93,10 +90,5 @@ class homeController extends Controller {
   function gastos()
   {
     View::render('gastos');
-  }
-
-  function yumi()
-  {
-    View::render('yumi');
   }
 }

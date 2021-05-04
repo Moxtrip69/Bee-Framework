@@ -14,7 +14,7 @@ class optionModel extends Model
    *
    * @return integer
    */
-  public function add()
+  public function add_option()
   {
     $sql = 'INSERT INTO options (option, val, created_at) VALUES (:option, :val, :created_at)';
     $data = 
@@ -66,7 +66,7 @@ class optionModel extends Model
    *
    * @return bool
    */
-  public function update()
+  public function update_option()
   {
     $sql = 'UPDATE options SET val=:val WHERE option=:option';
     $data = 
@@ -106,11 +106,11 @@ class optionModel extends Model
 
     // Si no existe, guardar
     if(!$option = $self->one()) {
-      return ($self->id = $self->add()) ? $self->id : false;
+      return ($self->id = $self->add_option()) ? $self->id : false;
     }
 
     // Si existe, actualizar
-    return $self->update();
+    return $self->update_option();
   }
 
   /**
