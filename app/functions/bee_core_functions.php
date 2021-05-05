@@ -1264,3 +1264,35 @@ function use_summernote() {
 	register_scripts(['https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-lite.js'] , 'Summernote');
 	return true;
 }
+
+/**
+ * Carga un recurso o imagen que esté directamente
+ * en la carpeta de imágenes de bee framework
+ *
+ * @param string $filename
+ * @return string
+ */
+function get_image($filename)
+{
+	if (!is_file(IMAGES_PATH.$filename)) {
+		return IMAGES.'broken.png';
+	}
+
+	return IMAGES.$filename;
+}
+
+/**
+ * Carga un asset que ha sido subido al sistema en la carpeta
+ * de uploads definida por bee framework
+ *
+ * @param string $filename
+ * @return string
+ */
+function get_uploaded_image($filename)
+{
+	if (!is_file(UPLOADS.$filename)) {
+		return IMAGES.'broken.png';
+	}
+
+	return UPLOADED.$filename;
+}

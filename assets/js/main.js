@@ -8,6 +8,36 @@ $(document).ready(function() {
   console.log('////////// Bienvenido a Bee Framework Versión ' + Bee.bee_version + ' //////////');
   console.log('//////////////////// www.joystick.com.mx ////////////////////');
   console.log(Bee);
+
+  /**
+   * Prueba de peticiones ajax al backend en versión 1.1.3
+   */
+  test_ajax();
+  function test_ajax() {
+    var body = $('body'),
+    hook     = 'bee_hook',
+    action   = 'post',
+    csrf     = Bee.csrf;
+
+    if ($('#test_ajax').length == 0) return;
+
+    $.ajax({
+      url: 'ajax/test',
+      type: 'post',
+      dataType: 'json',
+      data : { hook , action , csrf },
+      beforeSend: function() {
+        body.waitMe();
+      }
+    }).done(function(res) {
+      toastr.success(res.msg);
+      console.log(res);
+    }).fail(function(err) {
+      toastr.error('Prueba AJAX fallida.', '¡Upss!');
+    }).always(function() {
+      body.waitMe('hide');
+    })
+  }
   
   /**
    * Alerta para confirmar una acción establecida en un link o ruta específica

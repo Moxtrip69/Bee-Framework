@@ -2,6 +2,10 @@
 
 class ajaxController extends Controller {
 
+  private $hook   = null;
+  private $action = null;
+  private $csrf   = null;
+
   /**
    * Valor que se deberá proporcionar como hook para
    * aceptar una petición entrante
@@ -27,21 +31,34 @@ class ajaxController extends Controller {
 
   function __construct()
   {
+    $this->hook   = isset($_POST['hook']) ? $_POST['hook'] : null;
+    $this->action = isset($_POST['action']) ? $_POST['action'] : null;
+    $this->csrf   = isset($_POST['csrf']) ? $_POST['csrf'] : null;
+
     // Validar que hook exista y sea válido
-    if (!isset($_POST['hook']) || $_POST['hook'] !== $this->hook_name) {
+    if ($this->hook !== $this->hook_name) {
+      http_response_code(403);
       json_output(json_build(403));
     }
 
     // Validar que se pase un verbo válido y aceptado
-    if(!in_array($_POST['action'], $this->accepted_actions)) {
+    if(!in_array($this->action, $this->accepted_actions)) {
+      http_response_code(403);
       json_output(json_build(403));
     }
     
     // Validación de que todos los parámetros requeridos son proporcionados
     foreach ($this->required_params as $param) {
       if(!isset($_POST[$param])) {
+        http_response_code(403);
         json_output(json_build(403));
       }
+    }
+
+    // Validar de la petición post / put / delete el token csrf
+    if (in_array($this->action, ['post', 'put', 'delete', 'add', 'headers']) && !Csrf::validate($this->csrf)) {
+      http_response_code(403);
+      json_output(json_build(403));
     }
   }
 
@@ -66,6 +83,15 @@ class ajaxController extends Controller {
     550 Permission denied
     */
     json_output(json_build(403));
+  }
+
+  function test()
+  {
+    try {
+      json_output(json_build(200, null, 'Prueba de AJAX realizada con éxito.'));
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
   }
 
   ///////////////////////////////////////////////////////

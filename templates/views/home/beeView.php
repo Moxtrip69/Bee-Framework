@@ -1,5 +1,7 @@
 <?php require_once INCLUDES.'inc_header.php'; ?>
 
+<div id="test_ajax"></div>
+
 <div class="container">
   <div class="row">
     <div class="col-12">
@@ -8,7 +10,7 @@
   </div>
   <div class="row">
     <div class="col-8 text-center offset-md-2">
-      <a href="<?php echo URL; ?>"><img src="<?php echo IMAGES.'bee_logo_white.png' ?>" alt="Bee framework" class="img-fluid" style="width: 200px;"></a>
+      <a href="<?php echo URL; ?>"><img src="<?php echo get_image('bee_logo_white.png') ?>" alt="Bee framework" class="img-fluid" style="width: 200px;"></a>
       <h2 class="text-white mt-5"><span class="text-warning">Bee</span> framework</h2>
       <span class="d-block text-white mb-3"><?php echo sprintf('Versión %s', get_bee_version()); ?></span>
       <p class="text-center text-white">Un framework hecho en casa, con pasión y mucho cariño. Ligero, rápido y personalizable. Úsalo como gustes, en tus proyectos personales o profesionales.</p>

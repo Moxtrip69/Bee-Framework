@@ -11,6 +11,8 @@ Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y 
 - Se mejoró el sistema de variables del sistema insertadas como objeto **Bee** en el pie del sitio para ser accesibles en **javascript**.
 - Ahora es posible registrar nuevos valores en el objeto **Bee** desde cualquier método o ruta del sistema usando la función **register_to_bee_obj()**.
 - Se mejoró la seguridad del framework y su integridad ante accesos no autorizados implementando archivos **.htaccess** colocados en las rutas principales que requieren seguridad adicional, esto impedirá que algún usuario pueda listar y visualizar los archivos de forma directa en algún directorio.
+- Nuevas funciones core para agilizar el desarrollo utilizando Bee framework.
+- Se ha hecho obligatorio el uso de token **CSRF** al realizar peticiones tipo **post | put | delete | add |headers** al controlador **ajax**.
 
 ### v 1.1.1
 - Se corrigió el error en la constante **UPLOADS**, se encontraba mal formateada y con diagonales invertidas adicionales no necesarias que producian errores al cargar archivos.
