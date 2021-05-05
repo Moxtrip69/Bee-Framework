@@ -5,6 +5,7 @@ class ajaxController extends Controller {
   private $hook   = null;
   private $action = null;
   private $csrf   = null;
+  private $data   = null;
 
   /**
    * Valor que se deberá proporcionar como hook para
@@ -31,9 +32,11 @@ class ajaxController extends Controller {
 
   function __construct()
   {
-    $this->hook   = isset($_POST['hook']) ? $_POST['hook'] : null;
-    $this->action = isset($_POST['action']) ? $_POST['action'] : null;
-    $this->csrf   = isset($_POST['csrf']) ? $_POST['csrf'] : null;
+    // Parsing del cuerpo de la petición
+    $this->data   = json_decode(file_get_contents('php://input'), true);
+    $this->hook   = isset($this->data['hook']) ? $this->data['hook'] : null;
+    $this->action = isset($this->data['action']) ? $this->data['action'] : null;
+    $this->csrf   = isset($this->data['csrf']) ? $this->data['csrf'] : null;
 
     // Validar que hook exista y sea válido
     if ($this->hook !== $this->hook_name) {
@@ -49,7 +52,7 @@ class ajaxController extends Controller {
     
     // Validación de que todos los parámetros requeridos son proporcionados
     foreach ($this->required_params as $param) {
-      if(!isset($_POST[$param])) {
+      if(!isset($this->data[$param])) {
         http_response_code(403);
         json_output(json_build(403));
       }
@@ -60,6 +63,8 @@ class ajaxController extends Controller {
       http_response_code(403);
       json_output(json_build(403));
     }
+
+
   }
 
   function index()

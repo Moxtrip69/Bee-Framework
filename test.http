@@ -1,9 +1,32 @@
-POST http://localhost:8848/Bee-Framework/ajax/bee_add_movement HTTP/1.1
+### ------------- 
+### ------------- 
+### Extensión requerida: REST Cliente para VS Code
+### ------------- 
+### ------------- 
+POST http://localhost:8848/Bee-Framework/ajax/test HTTP/1.1
 Content-Type: application/json
 
 {
-  "hook": "bee_hook",
+  "hook"  : "bee_hook",
+  "action": "get"
+}
+
+###
+
+POST http://localhost:8848/Bee-Framework/ajax/test HTTP/1.1
+Content-Type: application/json
+
+{
+  "hook"  : "bee_hook",
   "action": "post"
 }
 
-### ------------- Extensión requerida: REST Cliente para VS Code
+###
+
+POST http://localhost:8848/Bee-Framework/ajax/test HTTP/1.1
+Content-Type: application/json
+
+{
+  "hook"  : "bee_hook",
+  "action": "put"
+}
