@@ -2,10 +2,48 @@
 
 class ajaxController extends Controller {
 
+
+  /**
+   * La petición del servidor
+   *
+   * @var string
+   */
+  private $r_type = null;
+
+  /**
+   * Hook solicitado para la petición
+   *
+   * @var string
+   */
   private $hook   = null;
+
+  /**
+   * Tipo de acción a realizar en ajax
+   *
+   * @var string
+   */
   private $action = null;
+
+  /**
+   * Token csrf de la sesión del usuario que solicita la petición
+   *
+   * @var string
+   */
   private $csrf   = null;
+
+  /**
+   * Todos los parámetros recibidos de la petición
+   *
+   * @var array
+   */
   private $data   = null;
+
+  /**
+   * Parámetros parseados en caso de ser petición put | delete | headers | options
+   *
+   * @var mixed
+   */
+  private $parsed = null;
 
   /**
    * Valor que se deberá proporcionar como hook para
@@ -33,7 +71,9 @@ class ajaxController extends Controller {
   function __construct()
   {
     // Parsing del cuerpo de la petición
-    $this->data   = json_decode(file_get_contents('php://input'), true);
+    $this->r_type = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : null;
+    $this->data   = in_array($this->r_type, ['PUT','DELETE','HEADERS','OPTIONS']) ? parse_str(file_get_contents("php://input"), $this->parsed) : ($this->r_type === 'GET' ? $_GET : $_POST);
+    $this->data   = $this->parsed !== null ? $this->parsed : $this->data;
     $this->hook   = isset($this->data['hook']) ? $this->data['hook'] : null;
     $this->action = isset($this->data['action']) ? $this->data['action'] : null;
     $this->csrf   = isset($this->data['csrf']) ? $this->data['csrf'] : null;
@@ -63,8 +103,6 @@ class ajaxController extends Controller {
       http_response_code(403);
       json_output(json_build(403));
     }
-
-
   }
 
   function index()

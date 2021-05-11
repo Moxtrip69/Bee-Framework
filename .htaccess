@@ -10,14 +10,16 @@
   Header set Content-Disposition attachment
 </FilesMatch>
 
-ForceType application/octet-stream
 <FilesMatch "(?i).jpe?g$">
+  ForceType application/octet-stream
   ForceType image/jpeg
 </FilesMatch>
 <FilesMatch "(?i).gif$">
+  ForceType application/octet-stream
   ForceType image/gif
 </FilesMatch>
 <FilesMatch "(?i).png$">
+  ForceType application/octet-stream
   ForceType image/png
 </FilesMatch>
 
