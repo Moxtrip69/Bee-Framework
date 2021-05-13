@@ -20,7 +20,7 @@
         <li>Funciona utilizando el patrón <b>MVC</b></li>
         <li>Sistema de sesiones listo para usarse</li>
         <li>ORM sencillo incluido para manipulación de bases de datos</li>
-        <li><b>100%</b> personalizable y escalable</li>
+        <li><b>100%</b> personalizable y escalable <?php echo more_info('¡Hola mundo!'); ?></li>
       </ul>
       <div class="mt-5">
         <a class="btn btn-light btn-lg" href="creator"><i class="fas fa-plus"></i> Creator</a>

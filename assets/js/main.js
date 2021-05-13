@@ -12,7 +12,6 @@ $(document).ready(function() {
   /**
    * Prueba de peticiones ajax al backend en versión 1.1.3
    */
-  test_ajax();
   function test_ajax() {
     var body = $('body'),
     hook     = 'bee_hook',
@@ -61,13 +60,30 @@ $(document).ready(function() {
   /**
    * Inicializa summernote el editor de texto avanzado para textareas
    */
-  if ($('.summernote').length !== 0) {
+  function init_summernote() {
+    if ($('.summernote').length == 0) return;
+
     $('.summernote').summernote({
       placeholder: 'Escribe en este campo...',
       tabsize: 2,
       height: 300
     });
   }
+
+  /**
+   * Inicializa tooltips en todo el sitio
+   */
+  function init_tooltips() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+  }
+  
+  // Inicialización de elementos
+  init_summernote();
+  init_tooltips();
+  test_ajax();
 
   ////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////

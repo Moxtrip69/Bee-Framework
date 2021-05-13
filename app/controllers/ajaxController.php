@@ -51,7 +51,7 @@ class ajaxController extends Controller {
    *
    * @var string
    */
-  private $hook_name        = 'bee_hook';
+  private $hook_name        = 'bee_hook'; // Si es modificado, actualizar el valor en la función core insert_inputs()
   
   /**
    * parámetros que serán requeridos en TODAS las peticiones pasadas a ajaxController
