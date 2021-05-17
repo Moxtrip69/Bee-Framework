@@ -1297,3 +1297,92 @@ function get_uploaded_image($filename)
 
 	return UPLOADED.$filename;
 }
+
+/**
+ * Función para subir de forma segura al servidor un adjungo / imagen
+ *
+ * @param string $file_field
+ * @param boolean $check_image
+ * @param boolean $random_name
+ * @return mixed
+ */
+function upload_image($file_field = null, $check_image = false, $random_name = false) {
+	// Path para subir el archivo
+	$path = UPLOADS;
+
+	// Tamaño máximo en bytes
+	$max_size = 1000000;
+
+	// Lista blanca de extensiones permitidas
+	$whitelist_ext = array('jpeg','jpg','png','gif');
+
+	// Tipos de archivo permitidos en lista blanca
+	$whitelist_type = array('image/jpeg', 'image/jpg', 'image/png','image/gif');
+	
+	// Validación
+	// Para guardar cualquier error presente en el proceso
+	$out = array('error' => null);
+	
+	if (!$file_field) {
+		throw new Exception('Por favor específica un campo de archivo válido.', 1);
+	}
+	
+	if (!$path) {
+		throw new Exception('Por favor específica una ruta de guardado válida.', 1);
+	}
+	
+	// Si no se sube un archivo
+	if((!empty($_FILES[$file_field])) || ($_FILES[$file_field]['error'] !== 0)) {
+		throw new Exception('Ningún archivo seleccionado para subir.', 1);
+	}
+	
+	// Nombre del archivo
+	$file_info = pathinfo($_FILES[$file_field]['name']);
+	$name      = $file_info['filename'];
+	$ext       = $file_info['extension'];
+	
+	// Verificar extensión
+	if (!in_array($ext, $whitelist_ext)) {
+		throw new Exception('La extensión no es válida o permitida.', 1);
+	}
+	
+	// Verificar tipo de archivo
+	if (!in_array($_FILES[$file_field]["type"], $whitelist_type)) {
+		throw new Exception('El tipo de archivo no es válido o permitido.', 1);
+	}
+	
+	// Verificar tamaño
+	if ($_FILES[$file_field]["size"] > $max_size) {
+		throw new Exception('El tamaño del archivo es demasiado grande.', 1);
+	}
+	
+	// Verificar si es una imagen válida
+	if ($check_image === true) {
+		if (!getimagesize($_FILES[$file_field]['tmp_name'])) {
+			throw new Exception('El archivo seleccionado no es una imagen válida.', 1);
+		}
+	}
+	
+	// Crear nombre random de archivo
+	if ($random_name === true) {
+		$newname = generate_filename().'.'.$ext;
+	} else {
+		$newname = $name.'.'.$ext;
+	}
+	
+	// Verificar si el nombre ya existe en el servidor
+	if (file_exists($path.$newname)) {
+		throw new Exception('Un archivo con el mismo nombre ya existe en el servidor.', 1);
+	}
+	
+	// Guardando en el servidor
+	if (move_uploaded_file($_FILES[$file_field]['tmp_name'], $path.$newname) === false) {
+		throw new Exception('Hubo un error en el servidor, intenta más tarde.', 1);
+	}
+
+	// Se ha subido con éxito el archivo y se ha guardado
+	$out['filepath'] = $path;
+	$out['filename'] = $newname;
+	$out['file']     = $path.$newname;
+	return $out;
+}

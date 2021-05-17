@@ -9,7 +9,6 @@
   ForceType application/octet-stream
   Header set Content-Disposition attachment
 </FilesMatch>
-
 <FilesMatch "(?i).jpe?g$">
   ForceType application/octet-stream
   ForceType image/jpeg
@@ -22,7 +21,6 @@
   ForceType application/octet-stream
   ForceType image/png
 </FilesMatch>
-
 
 # Enable Compression
 <IfModule mod_deflate.c>
