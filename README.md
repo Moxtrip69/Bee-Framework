@@ -4,6 +4,9 @@ Mini framework desarrollado por el equipo de Joystick SA de CV en México.
 Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y fácil de implementar para proyectos tanto pequeños como aquellos que requieren escalabilidad y visión a futuro.
 
 ## Changelog
+### v 1.1.4
+- Se ha implementado el uso de Vue.js 3 con base a **CDN** y no CLI, puede ser removido retirando la etiqueda en el archivo **inc_styles.php**.
+
 ### v 1.1.3
 - Ahora es posible cargar un favicon para el sistema con una nueva función **get_favicon()**.
 - Nuevas mejoras generales en el framework.
