@@ -1386,3 +1386,14 @@ function upload_image($file_field = null, $check_image = false, $random_name = f
 	$out['file']     = $path.$newname;
 	return $out;
 }
+
+/**
+ * Validación del sistema en
+ * desarrollo local
+ *
+ * @return boolean
+ */
+function is_local()
+{
+	return IS_LOCAL === true;
+}

@@ -45,6 +45,13 @@
   }
 </style>
 
+<!-- CDN VUEJs for dev v3 -->
+<?php if (is_local()): ?>
+  <script src="https://unpkg.com/vue@next"></script>
+<?php else: ?>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.11/vue.cjs.js"></script>
+<?php endif; ?>
+
 <!-- Estilos registrados manualmente -->
 <?php echo load_styles(); ?>
 
