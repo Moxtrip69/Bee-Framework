@@ -991,8 +991,7 @@ function get_logo() {
  *
  * @return mixed
  */
-function get_favicon()
-{
+function get_favicon() {
 	$path        = FAVICON; // path del archivo favicon
 	$favicon     = 'favicon.ico'; // nombre del archivo favicon
 	$type        = '';
@@ -1064,8 +1063,7 @@ function get_user($key = null) {
  *
  * @return boolean
  */
-function is_demo()
-{
+function is_demo() {
 	return IS_DEMO;
 }
 
@@ -1273,8 +1271,7 @@ function use_summernote() {
  * @param string $filename
  * @return string
  */
-function get_image($filename)
-{
+function get_image($filename) {
 	if (!is_file(IMAGES_PATH.$filename)) {
 		return IMAGES.'broken.png';
 	}
@@ -1289,8 +1286,7 @@ function get_image($filename)
  * @param string $filename
  * @return string
  */
-function get_uploaded_image($filename)
-{
+function get_uploaded_image($filename) {
 	if (!is_file(UPLOADS.$filename)) {
 		return IMAGES.'broken.png';
 	}
@@ -1393,7 +1389,6 @@ function upload_image($file_field = null, $check_image = false, $random_name = f
  *
  * @return boolean
  */
-function is_local()
-{
+function is_local() {
 	return IS_LOCAL === true;
 }
