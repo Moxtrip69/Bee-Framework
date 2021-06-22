@@ -6,6 +6,7 @@ Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y 
 ## Changelog
 ### v 1.1.4
 - Se ha implementado el uso de Vue.js 3 con base a **CDN** y no CLI, puede ser removido retirando la etiqueda en el archivo **inc_styles.php**.
+- Nueva clase **BeePdf** implementada para la generación de forma sencilla de documentos formato **pdf** con pocas línea de código, como base se utiliza la librería **dompdf** una de las más potentes y utilizadas actualmente.
 
 ### v 1.1.3
 - Ahora es posible cargar un favicon para el sistema con una nueva función **get_favicon()**.
