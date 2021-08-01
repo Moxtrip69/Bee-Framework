@@ -12,6 +12,13 @@
 <!-- Lightbox -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css"/>
 
+<!-- CDN VUEJs for dev v3 -->
+<?php if (is_local()): ?>
+  <script src="https://unpkg.com/vue@next"></script>
+<?php else: ?>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.11/vue.runtime.global.prod.js"></script>
+<?php endif; ?>
+
 <!-- Estilos en header deben ir debajo de esta línea -->
 <style>
   .btn {

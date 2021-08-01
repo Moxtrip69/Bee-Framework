@@ -12,13 +12,6 @@
 <!-- Lightbox js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 
-<!-- CDN VUEJs for dev v3 -->
-<?php if (is_local()): ?>
-  <script src="https://unpkg.com/vue@next"></script>
-<?php else: ?>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.11/vue.cjs.js"></script>
-<?php endif; ?>
-
 <!-- Objeto Bee Javascript registrado -->
 <?php echo load_bee_obj(); ?>
 
