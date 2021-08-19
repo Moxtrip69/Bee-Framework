@@ -25,40 +25,11 @@
       </ul>
 
       <div class="mt-5">
-        <a class="btn btn-light btn-lg" href="creator"><i class="fas fa-plus"></i> Creator</a>
-        <a class="btn btn-warning btn-lg" href="login">Ingresar</a>
-        <a class="btn btn-info btn-lg" href="home/flash">Mi cuenta</a>
-        <a class="btn btn-success btn-lg" href="https://github.com/Moxtrip69/Bee-Framework"><i class="fab fa-github"></i> Github</a>
-      </div>
-
-      <div class="my-5 bg-light p-3">
-        <div id="todo-list-example" >
-          <form v-on:submit.prevent="addNewTodo">
-            <div class="mb-2">
-              <label for="new-todo">Lista de Tareas Vue.js 3</label>
-              <input
-                v-model="newTodoText"
-                id="new-todo"
-                placeholder="Alimentar al gato asesino..."
-                class="form-control"
-              />
-              <button class="btn btn-success mt-2" type="submit">Agregar tarea</button>
-            </div>
-          </form>
-          <div v-if="todos.length > 0">
-            <ul class="list-group">
-              <todo-item
-                v-for="(todo, index) in todos"
-                :key="todo.id"
-                :title="todo.title"
-                @remove="todos.splice(index, 1)"
-              ></todo-item>
-            </ul>
-          </div>
-          <div class="py-5" v-else>
-            No hay tareas en la lista.
-          </div>
-        </div>
+        <a class="btn btn-success btn-sm" href="home/vue"><i class="fab fa-vuejs fa-fw"></i> Vue JS</a>
+        <a class="btn btn-light btn-sm" href="creator"><i class="fas fa-plus fa-fw"></i> Creator</a>
+        <a class="btn btn-warning btn-sm" href="login">Ingresar</a>
+        <a class="btn btn-info btn-sm" href="home/flash">Mi cuenta</a>
+        <a class="btn btn-success btn-sm" href="https://github.com/Moxtrip69/Bee-Framework"><i class="fab fa-github fa-fw"></i> Github</a>
       </div>
 
       <div class="mt-5">
