@@ -260,6 +260,10 @@ function logger($message , $type = 'debug' , $output = false) {
 
   $message = "[".strtoupper($type)."] $now_time - $message";
 
+	if (!is_dir(LOGS)) {
+		mkdir(LOGS);
+	}
+
   if(!$fh = fopen(LOGS."bee_log.log", 'a')) { 
     error_log(sprintf('Can not open this file on %s', LOGS.'bee_log.log'));
     return false;
