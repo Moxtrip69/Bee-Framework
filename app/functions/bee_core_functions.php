@@ -1396,3 +1396,86 @@ function upload_image($file_field = null, $check_image = false, $random_name = f
 function is_local() {
 	return IS_LOCAL === true;
 }
+
+/**
+ * Carga las hojas de estilos con CDN del framework css a utilizar
+ * definido en settings.php
+ *
+ * @return string
+ */
+function get_css_framework()
+{
+	if (!defined('CSS_FRAMEWORK')) {
+		return false;
+	}
+
+	$framework   = CSS_FRAMEWORK;
+	$placeholder = '<link rel="stylesheet" href="%s">';
+	$cdn         = null;
+
+	switch ($framework) {
+		
+		case 'bl':
+			$cdn = 'https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css';
+			break;
+			
+		case 'fn':
+			$cdn = 'https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/css/foundation.min.css';
+			break;
+				
+		case 'bs':
+		case 'bs5':
+		default:
+			$cdn = 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css';
+			break;
+	}
+
+	return sprintf($placeholder, $cdn);
+}
+
+/**
+ * Carga los scripts requeridos para el framework css a utilizar
+ * definido en settings.php
+ * @return string
+ */
+function get_css_framework_scripts()
+{
+	if (!defined('CSS_FRAMEWORK')) {
+		return false;
+	}
+
+	$framework   = CSS_FRAMEWORK;
+	$placeholder = '<script src="%s"></script>';
+	$cdn         = null;
+
+	switch ($framework) {
+		
+		case 'fn':
+			$cdn = 'https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/js/foundation.min.js';
+			break;
+			
+		case 'bl':
+			return ''; // Bulma no cuenta con scripts
+			break;
+
+		case 'bs':
+		case 'bs5':
+		default:
+			$cdn = 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js';
+			break;
+	}
+
+	return sprintf($placeholder, $cdn);
+}
+
+function get_jquery()
+{
+	if (!defined('JQUERY')) {
+		return false;
+	}
+
+	$placeholder = '<script src="%s"></script>';
+	$cdn         = 'https://code.jquery.com/jquery-3.6.0.min.js';
+
+	return JQUERY ? sprintf($placeholder, $cdn) : false;
+}

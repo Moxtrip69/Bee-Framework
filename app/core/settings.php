@@ -7,11 +7,19 @@
 // Definir el uso horario o timezone del sistema
 date_default_timezone_set('America/Mexico_City');
 
-define('PREPROS'     , true); // Activar en caso de trabajar el desarrollo en prepros como servidor local
-define('PORT'       , '8848'); // Puerto por defecto de Prepros < 2020
+// Prepros 2021
+define('PREPROS'      , true); // Activar en caso de trabajar el desarrollo en prepros como servidor local
+define('PORT'         , '8848'); // Puerto por defecto de Prepros < 2020
+
+// CSS Framework a utilizar
+define('CSS_FRAMEWORK', 'bs5'); // opciones disponibles: bs o bs5 = Bootstrap 5 | bl = Bulma | fn = Foundation
+define('JQUERY'       , true);  // define si es requerido jquery para el sitio
 
 // Lenguaje
 define('SITE_LANG'   , $this->lng);
+
+// Charset
+define('SITE_CHARSET', 'UTF-8');
 
 // Versión de la aplicación
 define('BEE_NAME'    , $this->framework); // Viene desde Bee.php

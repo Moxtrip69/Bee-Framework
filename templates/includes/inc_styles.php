@@ -1,5 +1,7 @@
-<!-- Bootstrap core CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css">
+<!-- CSS Framework | Configurado en settings.php | defecto = Bootstrap 5 -->
+<?php echo get_css_framework(); ?>
+
+<!-- Font awesome 5 -->
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 
 <!-- Todo plugin debe ir debajo de está línea -->

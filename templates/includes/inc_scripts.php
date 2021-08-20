@@ -1,9 +1,10 @@
-<!-- scripts necessarios -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js"></script>
+<!-- jQuery -->
+<?php echo get_jquery(); ?>
 
-<!-- toastr js -->
+<!-- CSS Framework scripts | Por defecto Bootstrap 5 | settings.php -->
+<?php echo get_css_framework_scripts(); ?>
+
+<!-- Toastr js -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 <!-- waitme js -->
