@@ -1401,7 +1401,7 @@ function is_local() {
  * Carga las hojas de estilos con CDN del framework css a utilizar
  * definido en settings.php
  *
- * @return string
+ * @return mixed
  */
 function get_css_framework()
 {
@@ -1414,7 +1414,6 @@ function get_css_framework()
 	$cdn         = null;
 
 	switch ($framework) {
-		
 		case 'bl':
 			$cdn = 'https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css';
 			break;
@@ -1436,7 +1435,7 @@ function get_css_framework()
 /**
  * Carga los scripts requeridos para el framework css a utilizar
  * definido en settings.php
- * @return string
+ * @return mixed
  */
 function get_css_framework_scripts()
 {
@@ -1468,6 +1467,12 @@ function get_css_framework_scripts()
 	return sprintf($placeholder, $cdn);
 }
 
+/**
+ * Carga de jQuery solo de ser necesario
+ * definido en settings.php
+ *
+ * @return mixed
+ */
 function get_jquery()
 {
 	if (!defined('JQUERY')) {
@@ -1477,5 +1482,95 @@ function get_jquery()
 	$placeholder = '<script src="%s"></script>';
 	$cdn         = 'https://code.jquery.com/jquery-3.6.0.min.js';
 
-	return JQUERY ? sprintf($placeholder, $cdn) : false;
+	return JQUERY === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
+}
+
+/**
+ * Carga de Vuejs 3 solo de ser necesario
+ * definido en settings.php
+ *
+ * @return mixed
+ */
+function get_vuejs()
+{
+	if (!defined('VUEJS')) {
+		return false;
+	}
+
+	$placeholder = '<script src="%s"></script>';
+	$cdn         = is_local() ? 'https://unpkg.com/vue@next' : 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.11/vue.runtime.global.prod.js';
+
+	return VUEJS === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
+}
+
+/**
+ * Carga de Axios solo de ser necesario
+ * definido en settings.php
+ *
+ * @return mixed
+ */
+function get_axios()
+{
+	if (!defined('AXIOS')) {
+		return false;
+	}
+
+	$placeholder = '<script src="%s"></script>';
+	$cdn         = 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js';
+
+	return AXIOS === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
+}
+
+/**
+ * Carga de Toastr solo de ser necesario
+ * definido en settings.php
+ *
+ * @return mixed
+ */
+function get_toastr()
+{
+	if (!defined('TOASTR')) {
+		return false;
+	}
+
+	$placeholder = '<script src="%s"></script>';
+	$cdn         = '//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js';
+
+	return TOASTR === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
+}
+
+/**
+ * Carga de WaitMe solo de ser necesario
+ * definido en settings.php
+ *
+ * @return mixed
+ */
+function get_waitMe()
+{
+	if (!defined('WAITME')) {
+		return false;
+	}
+
+	$placeholder = '<script src="%s"></script>';
+	$cdn         = PLUGINS.'waitme/waitMe.min.js';
+
+	return WAITME === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
+}
+
+/**
+ * Carga de Lightbox solo de ser necesario
+ * definido en settings.php
+ *
+ * @return mixed
+ */
+function get_lightbox()
+{
+	if (!defined('LIGHTBOX')) {
+		return false;
+	}
+
+	$placeholder = '<script src="%s"></script>';
+	$cdn         = 'https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js';
+
+	return LIGHTBOX === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
 }

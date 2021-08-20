@@ -1,17 +1,20 @@
-<!-- jQuery -->
+<!-- jQuery | definido en settings.php -->
 <?php echo get_jquery(); ?>
 
-<!-- CSS Framework scripts | Por defecto Bootstrap 5 | settings.php -->
+<!-- CSS Framework scripts | Por defecto Bootstrap 5 | definido en settings.php -->
 <?php echo get_css_framework_scripts(); ?>
 
+<!-- Axios | definido en settings.php -->
+<?php echo get_axios(); ?>
+
 <!-- Toastr js -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<?php echo get_toastr(); ?>
 
 <!-- waitme js -->
-<script src="<?php echo PLUGINS.'waitme/waitMe.min.js'; ?>"></script>
+<?php echo get_waitMe(); ?>
 
 <!-- Lightbox js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+<?php echo get_lightbox(); ?>
 
 <!-- Objeto Bee Javascript registrado -->
 <?php echo load_bee_obj(); ?>

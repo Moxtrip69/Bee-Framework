@@ -11,9 +11,14 @@ date_default_timezone_set('America/Mexico_City');
 define('PREPROS'      , true); // Activar en caso de trabajar el desarrollo en prepros como servidor local
 define('PORT'         , '8848'); // Puerto por defecto de Prepros < 2020
 
-// CSS Framework a utilizar
+// Utilidades
 define('CSS_FRAMEWORK', 'bs5'); // opciones disponibles: bs o bs5 = Bootstrap 5 | bl = Bulma | fn = Foundation
 define('JQUERY'       , true);  // define si es requerido jquery para el sitio
+define('VUEJS'        , true);  // define si es requerido Vue js 3 para el sitio | CDN
+define('AXIOS'        , false);  // define si es requerido Axios para peticiones HTTP
+define('TOASTR'       , true);  // define si es requerido Toastr para notificaciones con Javascript
+define('WAITME'       , true);  // define si es requerido WaitMe
+define('LIGHTBOX'     , false);  // define si es requerido Lightbox
 
 // Lenguaje
 define('SITE_LANG'   , $this->lng);
