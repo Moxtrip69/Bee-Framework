@@ -1201,7 +1201,11 @@ function load_scripts() {
 function register_to_bee_obj($key, $value) {
 	global $Bee_Object;
 
-  $Bee_Object[$key] = clean($value);
+	if (is_array($value) || is_object($value)) {
+		$Bee_Object[$key] = $value;
+	} else {
+		$Bee_Object[$key] = clean($value);
+	}
 
   return true;
 }

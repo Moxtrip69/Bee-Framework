@@ -2,7 +2,7 @@
 
 class Db
 {
-  private $link;
+  private $link = null;
   private $engine;
   private $host;
   private $name;
@@ -25,8 +25,9 @@ class Db
     $this->options = [
 			PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
 			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-			PDO::ATTR_EMULATE_PREPARES   => false,
+			PDO::ATTR_EMULATE_PREPARES   => false
 		];
+
     return $this;    
   }
 
@@ -35,11 +36,13 @@ class Db
    *
    * @return mixed
    */
-  private function connect() 
+  private static function connect() 
   {
     try {
-      $this->link = new PDO($this->engine.':host='.$this->host.';dbname='.$this->name.';charset='.$this->charset, $this->user, $this->pass, $this->options);
-      return $this->link;
+      $self       = new self();
+      if ($self->link !== null) return $self->link;
+      $self->link = new PDO($self->engine.':host='.$self->host.';dbname='.$self->name.';charset='.$self->charset, $self->user, $self->pass, $self->options);
+      return $self->link;
     } catch (PDOException $e) {
       die(sprintf('No  hay conexión a la base de datos, hubo un error: %s', $e->getMessage()));
     }
@@ -50,61 +53,64 @@ class Db
    *
    * @param string $sql
    * @param array $params
-   * @return void
+   * @param integer $transaction
+   * @return mixed
    */
-  public static function query($sql, $params = [])
+  public static function query($sql, $params = [], $options = [])
   {
-    $db = new self();
-    $link = $db->connect(); // nuestra conexión a la db
-    $link->beginTransaction(); // por cualquier error, checkpoint
-    $query = $link->prepare($sql);
+    $id          = null;
+    $last_id     = false;
+    $debug       = isset($options['debug']) ? ($options['debug'] === true ? true : false) : false;
+    $transaction = isset($options['transaction']) ? ($options['transaction'] === true ? true : false) : true;
+    $start       = isset($options['start']) ? ($options['start'] === true ? true : false) : false;
+    $commit      = isset($options['commit']) ? ($options['commit'] === true ? true : false) : false;
+    $rollback    = isset($options['rollback']) ? ($options['rollback'] === true ? true : false) : false;
 
-    // Manejando errores en el query o la petición
-    // SELECT * FROM usuarios WHERE id=:cualquier AND name = :name;
-    if(!$query->execute($params)) {
+    // Inicia conexión PDO
+    $link  = self::connect();
 
-      $link->rollBack();
-      $error = $query->errorInfo();
-      // index 0 es el tipo de error
-      // index 1 es el código de error
-      // index 2 es el mensaje de error al usuario
-      throw new Exception($error[2]);
+    // Inicio de la transacción
+    if ($transaction === true || $start === true) {
+      $link->beginTransaction();
     }
 
-    // SELECT | INSERT | UPDATE | DELETE | ALTER TABLE
-    // Manejando el tipo de query
-    // SELECT * FROM usuarios;
-    if(strpos($sql, 'SELECT') !== false) {
-      
-      return $query->rowCount() > 0 ? $query->fetchAll() : false; // no hay resultados
-
-    } elseif(strpos($sql, 'INSERT') !== false) {
-
-      $id = $link->lastInsertId();
-      $link->commit();
-      return $id;
-
-    } elseif(strpos($sql, 'UPDATE') !== false) {
-
-      $link->commit();
-      return true;
-
-    } elseif(strpos($sql, 'DELETE') !== false) {
-
-      if($query->rowCount() > 0) {
-        $link->commit();
-        return true;
+    try {
+      $query = $link->prepare($sql);
+      $res   = $query->execute($params);
+  
+      // Manejando el tipo de query
+      // SELECT | INSERT
+      // SELECT * FROM usuarios;
+      if(strpos($sql, 'SELECT') !== false) {
+        
+        return $query->rowCount() > 0 ? $query->fetchAll() : false; // no hay resultados
+  
+      } elseif(strpos($sql, 'INSERT') !== false) {
+  
+        $id      = $link->lastInsertId();
+        $last_id = true;
+  
       }
-      
-      $link->rollBack();
-      return false; // Nada ha sido borrado
 
-    } else {
+      // UPDATE | DELETE | ALTER TABLE | DROP TABLE | TRUNCATE | etc
 
-      // ALTER TABLE | DROP TABLE 
-      $link->commit();
-      return true;
-      
+      if ($transaction === true || $commit === true) {
+        $link->commit();
+      }
+
+      return $id !== null && $last_id === true ? $id : true;
+        
+    } catch (Exception $e) {
+      if ($debug === true) {
+        logger(sprintf('DB Error: %s', $e->getMessage()));
+      }
+
+      // Manejando errores en el query o la petición
+      if ($transaction === true || $rollback === true) {
+        $link->rollBack();
+      }
+
+      throw new PDOException($e->getMessage());
     }
   }
 }
