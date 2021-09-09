@@ -23,5 +23,5 @@
   <?php require_once INCLUDES.'inc_styles.php'; ?>
 </head>
 
-<body class="<?php echo isset($d->bg) && $d->bg === 'dark' ? 'bg-dark' : 'bg-light' ?>" style="<?php echo 'padding: '.(isset($d->padding) ? $d->padding : '50px 0px'); ?>">
+<body>
 <!-- ends inc_header.php -->

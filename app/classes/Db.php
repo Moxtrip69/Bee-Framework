@@ -60,8 +60,8 @@ class Db
   {
     $id          = null;
     $last_id     = false;
-    $debug       = isset($options['debug']) ? ($options['debug'] === true ? true : false) : false;
     $transaction = isset($options['transaction']) ? ($options['transaction'] === true ? true : false) : true;
+    $debug       = isset($options['debug']) ? ($options['debug'] === true ? true : false) : false;
     $start       = isset($options['start']) ? ($options['start'] === true ? true : false) : false;
     $commit      = isset($options['commit']) ? ($options['commit'] === true ? true : false) : false;
     $rollback    = isset($options['rollback']) ? ($options['rollback'] === true ? true : false) : false;

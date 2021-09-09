@@ -7,6 +7,16 @@ Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y 
 ### v 1.1.4
 - Se ha implementado el uso de Vue.js 3 con base a **CDN** y no CLI, puede ser removido retirando la etiqueda en el archivo **inc_styles.php**.
 - Nueva clase **BeePdf** implementada para la generación de forma sencilla de documentos formato **pdf** con pocas línea de código, como base se utiliza la librería **dompdf** una de las más potentes y utilizadas actualmente.
+- Hemos mejorado el sistema **ORM** para manipulación de bases de datos con nuevos métodos y opciones de configuración.
+- Nuevos elementos de configuración agregados al framework para controlar que elementos pueden ser incluidos sin tener que editar el código, para mejorar el tiempo de prototipado o pruebas de concepto, puedes encontrar todas las nuevas variables de configuración en **settings.php**.
+- Hemos incluido de forma práctica los *CDN* para los frameworks **CSS** más utilizados en el mercado, **Bootstrap 5, Bulma y Foundation**, puedes configurar cuál incluir desde **settings.php**.
+- La clase **Flasher** ha recibido una actualización para trabajar con los 3 principales frameworks **CSS** también en sus estilos para las notificaciones flash.
+- Nuevos métodos rápidos para el módelo principal, entre ellos:
+-- class::drop($table);
+-- class::truncate($table);
+-- class::create($table_name, $schema, $drop = false);
+-- class::count($table, $label, $column);
+
 
 ### v 1.1.3
 - Ahora es posible cargar un favicon para el sistema con una nueva función **get_favicon()**.

@@ -32,13 +32,6 @@ define('BEE_VERSION' , $this->version);   // Viene desde Bee.php
 define('SITE_NAME'   , 'EmpresaCool');    // Nombre del sitio
 define('SITE_VERSION', '1.0.0');          // Versión del sitio
 
-// Ruta base de nuestro proyecto
-// Esta constante ahora es configurada desde el archivo settings.php
-// define('BASEPATH'   , IS_LOCAL ? '/Bee-Framework/' : '____EL BASEPATH EN PRODUCCIÓN___');
-
-// Sal del sistema
-// define('AUTH_SALT'  , 'BeeFramework<3'); // Migrado
-
 // Puerto y la URL del sitio
 define('PROTOCOL'   , isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http"); // Detectar si está en HTTPS o HTTP
 define('HOST'       , $_SERVER['HTTP_HOST'] === 'localhost' ? (PREPROS ? 'localhost:'.PORT : 'localhost') : $_SERVER['HTTP_HOST']); // Dominio o host localhost.com tudominio.com
