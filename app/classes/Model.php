@@ -148,10 +148,15 @@ class Model extends Db {
 		$stmt = "DELETE FROM $table {$cols_values}{$limits}";
 
 		// Calling DB and querying
-		if (!$row = parent::query($stmt , $params)) {
+		if (!parent::query($stmt , $params)) {
       return false;
 		}
     
-    return $row;
+    return true;
+	}
+
+	public static function drop($table)
+	{
+		$sql = 'DROP TABLE IF EXISTS :table';
 	}
 }

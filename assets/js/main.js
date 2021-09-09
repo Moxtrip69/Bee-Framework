@@ -74,10 +74,20 @@ $(document).ready(function() {
    * Inicializa tooltips en todo el sitio
    */
   function init_tooltips() {
+    if (Bee.css_framework != 'bs5') return;
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
       return new bootstrap.Tooltip(tooltipTriggerEl)
     });
+  }
+
+  /**
+   * Dismiss notificaciones para Bulma framework
+   */
+  $('body').on('click', '.delete-bulma-notification', delete_bulma_notification);
+  function delete_bulma_notification(e) {
+    var notification = $(this).closest('.notification');
+    notification.remove();
   }
   
   // Inicialización de elementos

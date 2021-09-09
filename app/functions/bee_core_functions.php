@@ -1239,23 +1239,24 @@ function bee_obj_default_config() {
 
 	$Bee_Object =
 	[
-		'sitename'     => get_sitename(),
-		'version'      => get_version(),
-		'bee_name'     => get_bee_name(),
-		'bee_version'  => get_bee_version(),
-		'csrf'         => CSRF_TOKEN,
-		'url'          => URL,
-		'cur_page'     => CUR_PAGE,
-		'is_local'     => IS_LOCAL,
-		'is_demo'      => IS_DEMO,
-		'basepath'     => BASEPATH,
-		'sandbox'      => SANDBOX,
-		'port'         => PORT,
-		'request_uri'  => REQUEST_URI,
-		'assets'       => ASSETS,
-		'images'       => IMAGES,
-		'uploaded'     => UPLOADED,
-		'php_version'  => phpversion()
+		'sitename'      => get_sitename(),
+		'version'       => get_version(),
+		'bee_name'      => get_bee_name(),
+		'bee_version'   => get_bee_version(),
+		'csrf'          => CSRF_TOKEN,
+		'url'           => URL,
+		'cur_page'      => CUR_PAGE,
+		'is_local'      => IS_LOCAL,
+		'is_demo'       => IS_DEMO,
+		'basepath'      => BASEPATH,
+		'sandbox'       => SANDBOX,
+		'port'          => PORT,
+		'request_uri'   => REQUEST_URI,
+		'assets'        => ASSETS,
+		'images'        => IMAGES,
+		'uploaded'      => UPLOADED,
+		'php_version'   => phpversion(),
+		'css_framework' => CSS_FRAMEWORK
 	];
 
 	return true;
