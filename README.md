@@ -12,10 +12,10 @@ Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y 
 - Hemos incluido de forma práctica los *CDN* para los frameworks **CSS** más utilizados en el mercado, **Bootstrap 5, Bulma y Foundation**, puedes configurar cuál incluir desde **settings.php**.
 - La clase **Flasher** ha recibido una actualización para trabajar con los 3 principales frameworks **CSS** también en sus estilos para las notificaciones flash.
 - Nuevos métodos rápidos para el módelo principal, entre ellos:
--- class::drop($table);
--- class::truncate($table);
--- class::create($table_name, $schema, $drop = false);
--- class::count($table, $label, $column);
+  - class::drop($table);
+  - class::truncate($table);
+  - class::create($table_name, $schema, $drop = false);
+  - class::count($table, $label, $column);
 
 
 ### v 1.1.3
