@@ -155,8 +155,31 @@ class Model extends Db {
     return true;
 	}
 
-	public static function drop($table)
+	/**
+	 * Elimina o hace drop de una tabla
+	 * pasando el segundo parámetro en false podrá regresar una excepción si no existe la tabla
+	 * de lo contrario siempre será true la respuesta
+	 *
+	 * @param string $table
+	 * @param boolean $if_exists
+	 * @return bool
+	 */
+	public static function drop($table, $if_exists = true)
 	{
-		$sql = 'DROP TABLE IF EXISTS :table';
+		$sql = sprintf('DROP TABLE %s %s', $if_exists === true ? 'IF EXISTS' : null, clean($table, true));
+		return parent::query($sql);
+	}
+
+	/**
+	 * Remueve todos los registros de una tabla
+	 * reiniciando su esquema a 0
+	 *
+	 * @param string $table
+	 * @return bool
+	 */
+	public static function truncate($table)
+	{
+		$sql = sprintf('TRUNCATE TABLE %s', clean($table, true));
+		return parent::query($sql);
 	}
 }

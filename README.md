@@ -15,7 +15,6 @@ Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y 
   - class::drop($table);
   - class::truncate($table);
   - class::create($table_name, $schema, $drop = false);
-  - class::count($table, $label, $column);
 
 
 ### v 1.1.3
