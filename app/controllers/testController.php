@@ -20,21 +20,24 @@ class testController extends Controller {
   
   function index()
   {
+    debug(metaphone('Caballero'));
+    debug(metaphone('Caballo'));
+    debug(metaphone('Roberto'));
+    die;
     try {
-      //$res = Model::truncate('movements');
-      $sql = 'CREATE TABLE pruebas2 (
-        id int(10) NOT NULL AUTO_INCREMENT,
-        type varchar(30) DEFAULT NULL,
-        description varchar(255) DEFAULT NULL,
-        amount float(10,2) DEFAULT NULL,
-        created_at datetime DEFAULT NULL,
-        updated_at timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        PRIMARY KEY (id)
-      ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8';
-      $res = Model::query($sql);
 
-      debug($res);
-      var_dump($res);
+      $table_name = 'usuarios';
+      //Model::drop($table_name);
+      $table = new TableSchema($table_name);
+      $table->add_column('id', 'int', 5, false, false, true, true);
+      $table->add_column('nombre', 'varchar');
+      $table->add_column('email', 'varchar');
+      debug($table->get_sql());
+      
+      $res = Model::create($table);
+      // debug($res);
+      // var_dump($res);
+
     } catch (PDOException $e) {
       echo $e->getMessage();
     } catch (Exception $e) {

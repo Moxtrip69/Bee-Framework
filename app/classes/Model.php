@@ -182,4 +182,10 @@ class Model extends Db {
 		$sql = sprintf('TRUNCATE TABLE %s', clean($table, true));
 		return parent::query($sql);
 	}
+
+	public static function create(TableSchema $schema)
+	{
+		$sql = $schema->get_sql();
+		return parent::query($sql);
+	}
 }
