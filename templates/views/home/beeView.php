@@ -1,5 +1,5 @@
 <?php require_once INCLUDES.'inc_header.php'; ?>
-<?php require_once INCLUDES.'inc_navbar.php'; ?>
+<?php require_once INCLUDES.'inc_bee_navbar.php'; ?>
 
 <div id="test_ajax"></div>
 
@@ -42,4 +42,4 @@
   </div>
 </div>
 
-<?php require_once INCLUDES.'inc_footer.php'; ?>
+<?php require_once INCLUDES.'inc_bee_footer.php'; ?>

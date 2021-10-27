@@ -9,4 +9,4 @@
   </div>
 </div>
 
-<?php require_once INCLUDES.'inc_footer.php'; ?>
+<?php require_once INCLUDES.'inc_bee_footer.php'; ?>

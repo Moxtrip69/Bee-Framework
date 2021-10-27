@@ -106,5 +106,5 @@
   </div>
 </div>
 
-<?php require_once INCLUDES.'inc_footer_v2.php'; ?>
+<?php require_once INCLUDES.'inc_bee_footer.php'; ?>
 

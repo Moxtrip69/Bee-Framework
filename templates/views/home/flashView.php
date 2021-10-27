@@ -1,6 +1,7 @@
 <?php require_once INCLUDES.'inc_header.php'; ?>
+<?php require_once INCLUDES.'inc_bee_navbar.php'; ?>
 
-<div class="container">
+<div class="container py-5">
   <div class="row">
     <div class="col-6 text-center offset-xl-3">
       <a href="<?php echo URL; ?>"><img src="<?php echo get_image('bee_logo.png') ?>" alt="Bee framework" class="img-fluid" style="width: 150px;"></a>
@@ -28,4 +29,4 @@
   </div>
 </div>
 
-<?php require_once INCLUDES.'inc_footer.php'; ?>
+<?php require_once INCLUDES.'inc_bee_footer.php'; ?>

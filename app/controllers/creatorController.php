@@ -75,7 +75,7 @@ class creatorController extends Controller {
         </div>
       </div>
       
-      <?php require_once INCLUDES.\'inc_footer.php\'; ?>';
+      <?php require_once INCLUDES.\'inc_bee_footer.php\'; ?>';
       
       @file_put_contents(VIEWS.$filename.DS.'indexView.php', $body);
     }

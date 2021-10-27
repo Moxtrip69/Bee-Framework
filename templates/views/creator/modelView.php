@@ -1,5 +1,5 @@
 <?php require_once INCLUDES.'inc_header.php'; ?>
-<?php require_once INCLUDES.'inc_navbar.php'; ?>
+<?php require_once INCLUDES.'inc_bee_navbar.php'; ?>
 
 <div class="container">
   <div class="py-5 text-center">
@@ -39,4 +39,4 @@
   </div>
 </div>
 
-<?php require_once INCLUDES.'inc_footer_v2.php'; ?>
+<?php require_once INCLUDES.'inc_bee_footer.php'; ?>

@@ -382,15 +382,15 @@ $(document).ready(function() {
         todos: [
           {
             id: 1,
-            title: 'Do the dishes'
+            title: 'Crear un framework cool'
           },
           {
             id: 2,
-            title: 'Take out the trash'
+            title: 'Tomar cursos gratuitos de la Academia'
           },
           {
             id: 3,
-            title: 'Mow the lawn'
+            title: 'Suscribirse a nuestro Youtube'
           }
         ],
         nextTodoId: 4
