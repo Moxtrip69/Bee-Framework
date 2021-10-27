@@ -7,6 +7,9 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="home">Inicio</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" aria-current="page" href="https://www.academy.joystick.com.mx/bundles/noobie" target="_blank">Documentación</a>
         </li>
         <li class="nav-item">

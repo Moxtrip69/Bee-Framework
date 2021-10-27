@@ -1,4 +1,5 @@
 <?php require_once INCLUDES.'inc_header.php'; ?>
+<?php require_once INCLUDES.'inc_navbar.php'; ?>
 
 <div class="container">
   <div class="py-5 text-center">
