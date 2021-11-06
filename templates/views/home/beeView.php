@@ -11,7 +11,7 @@
   </div>
   <div class="row">
     <div class="col-xl-6 col-md-6 col-lg-6 col-12">
-      <h2><a href="<?php echo URL; ?>"><img src="<?php echo get_image('bee_logo.png') ?>" alt="Bee framework" class="img-fluid" style="width: 100px;"></a></h2>
+      <h2><a href="<?php echo URL; ?>"><img src="<?php echo get_bee_logo(); ?>" alt="Bee framework" class="img-fluid" style="width: 100px;"></a></h2>
       
       <small class="d-block text-muted mb-3"><?php echo sprintf('Versión %s', get_bee_version()); ?></small>
       <p>Un framework hecho en casa, con pasión y mucho cariño.</p>
@@ -24,7 +24,7 @@
         <li class="list-group-item">Sistema de sesiones de usuario listas para usarse</li>
         <li class="list-group-item"><b>ORM</b> sencillo incluido para manipulación de bases de datos</li>
         <li class="list-group-item"><b>100%</b> personalizable y escalable <?php echo more_info('¡Hola mundo!'); ?></li>
-        <li class="list-group-item">Aprende como se hizo el framework <span class="badge bg-success"><a class="text-decoration-none text-white" href="https://www.academy.joystick.com.mx/courses/crea-tu-propio-framework-profesional-mvc-con-php-poo-mysql?coupon=hotsale2021" target="_blank"><i class="fas fa-link fa-fw"></i> aquí</a></span></li>
+        <li class="list-group-item">Aprende como se hizo el framework <span class="badge bg-success"><a class="text-decoration-none text-white" href="https://www.academy.joystick.com.mx/courses/crea-tu-propio-framework-profesional-mvc-con-php-poo-mysql" target="_blank"><i class="fas fa-link fa-fw"></i> aquí</a></span></li>
       </ul>
 
       <div class="mt-5">
@@ -33,7 +33,7 @@
         <a class="btn btn-info btn-sm text-white mt-1" href="home/flash"><i class="fas fa-user fa-fw"></i> Mi cuenta</a>
         <a class="btn btn-success btn-sm mt-1" href="home/vue"><i class="fab fa-vuejs fa-fw"></i> Vue JS</a>
         <a class="btn btn-success btn-sm mt-1" href="https://github.com/Moxtrip69/Bee-Framework"><i class="fab fa-github fa-fw"></i> Github</a>
-        <a class="btn btn-success btn-sm mt-1" href="https://www.academy.joystick.com.mx/courses/crea-tu-propio-framework-profesional-mvc-con-php-poo-mysql?coupon=hotsale2021" target="_blank"><i class="fas fa-book fa-fw"></i> ¿Buscas el curso?</a>
+        <a class="btn btn-success btn-sm mt-1" href="https://www.academy.joystick.com.mx/courses/crea-tu-propio-framework-profesional-mvc-con-php-poo-mysql" target="_blank"><i class="fas fa-book fa-fw"></i> ¿Buscas el curso?</a>
       </div>
     </div>
     <div class="col-xl-6 col-lg-6 col-md-6 col-12 text-center">

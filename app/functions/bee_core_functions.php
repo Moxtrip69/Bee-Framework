@@ -746,12 +746,30 @@ function set_session($k, $v) {
  * @return void
  */
 function send_email($from, $to, $subject, $body, $alt = null, $bcc = null, $reply_to = null, $attachments = []) {
-	$mail     = new PHPMailer(true);
-	$mail->isSMTP();
-	$template = 'emailTemplate';
-	
 	try {
+		$mail     = new PHPMailer(PHPMAILER_EXCEPTIONS); // Para desactivar Excepciones pasar false al constructor
+		$template = PHPMAILER_TEMPLATE;
+
+		// Conexión SMTP y settings del servidor -- configurable en settings.php
+		if (defined('PHPMAILER_SMTP') && PHPMAILER_SMTP === true) {
+			$mail->isSMTP();
+			if (PHPMAILER_DEBUG === true) {
+				$mail->SMTPDebug  = SMTP::DEBUG_SERVER;        //Enable verbose debug output
+			}
+				
+			$mail->SMTPAuth   = is_bool(PHPMAILER_AUTH) ? PHPMAILER_AUTH : true;  //Enable SMTP authentication
+			$mail->Host       = PHPMAILER_HOST;                                   //Set the SMTP server to send through
+			$mail->Username   = PHPMAILER_USERNAME;                               //SMTP username
+			$mail->Password   = PHPMAILER_PASSWORD;                               //SMTP password
+			$mail->SMTPSecure = PHPMAILER_SECURITY === 'ssl' ? 
+			PHPMailer::ENCRYPTION_SMTPS :
+			PHPMailer::ENCRYPTION_STARTTLS;                                       //Enable implicit TLS encryption
+			$mail->Port       = PHPMAILER_PORT;                                   // Puerto de conexión
+		}
+
+		// Charset del contenido
 		$mail->CharSet = 'UTF-8';
+
 		// Remitente
 		$mail->setFrom($from, get_sitename());
 
@@ -777,12 +795,13 @@ function send_email($from, $to, $subject, $body, $alt = null, $bcc = null, $repl
 			}
 		}
 
-		// Content
+		// Contenido
 		$mail->isHTML(true);
 		$mail->Subject = $subject;
 		$mail->Body    = get_module($template, ['alt' => $alt, 'body' => $body, 'subject' => $subject]);
 		$mail->AltBody = $alt;
 
+		// Enviar el correo electrónico
 		$mail->send();
 		return true;
 
@@ -972,20 +991,35 @@ function create_menu($links, $slug_active = 'home') {
 }
 
 /**
+ * Función para cargar el url de nuestro asset logotipo de bee framework
+ *
+ * @return void
+ */
+function get_bee_logo() {
+	$default_logo = BEE_LOGO;
+	$dummy_logo   = 'https://via.placeholder.com/150x60';
+
+	if (!is_file(IMAGES_PATH.$default_logo)) {
+		return $dummy_logo;
+	}
+
+	return IMAGES.$default_logo;
+}
+
+/**
  * Función para cargar el url de nuestro asset logotipo del sitio
  *
  * @return void
  */
 function get_logo() {
-	$default_logo_name = 'logo';
-	$default_logo_size = '500';
-	$default_logo_ext  = 'png';
-	$logo              = sprintf('%s_%s.%s', $default_logo_name, $default_logo_size, $default_logo_ext); // logo_500.png
-	if (!is_file(IMAGES_PATH.$logo)) {
-		return false;
+	$default_logo = SITE_LOGO;
+	$dummy_logo   = 'https://via.placeholder.com/150x60';
+
+	if (!is_file(IMAGES_PATH.$default_logo)) {
+		return $dummy_logo;
 	}
 
-	return IMAGES.$logo;
+	return IMAGES.$default_logo;
 }
 
 /**
@@ -997,7 +1031,7 @@ function get_logo() {
  */
 function get_favicon() {
 	$path        = FAVICON; // path del archivo favicon
-	$favicon     = 'favicon.ico'; // nombre del archivo favicon
+	$favicon     = SITE_FAVICON; // nombre del archivo favicon
 	$type        = '';
 	$href        = '';
 	$placeholder = '<link rel="icon" type="%s" href="%s">';

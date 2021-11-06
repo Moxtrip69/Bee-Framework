@@ -4,7 +4,7 @@
 <div class="container py-5">
   <div class="row">
     <div class="col-6 text-center offset-xl-3">
-      <a href="<?php echo URL; ?>"><img src="<?php echo get_image('bee_logo.png') ?>" alt="Bee framework" class="img-fluid" style="width: 150px;"></a>
+      <a href="<?php echo URL; ?>"><img src="<?php echo get_bee_logo() ?>" alt="Bee framework" class="img-fluid" style="width: 150px;"></a>
       <h2 class="mt-5 mb-3"><span class="text-warning">Bee</span> framework</h2>
     </div>
   </div>

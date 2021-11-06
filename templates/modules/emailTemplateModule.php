@@ -343,7 +343,7 @@
                 <td class="wrapper">
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
-                      <td align="center"><img src="<?php echo IMAGES.'bee_logo.png'; ?>" alt="<?php echo get_sitename(); ?>" style="width: 150px;"></td>
+                      <td align="center"><img src="<?php echo get_logo(); ?>" alt="<?php echo get_sitename(); ?>" style="width: 150px;"></td>
                     </tr>
                   </table>
                 </td>

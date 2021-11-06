@@ -53,7 +53,7 @@ class homeController extends Controller {
   
       </body>
       </html>';
-      $content = sprintf($content, get_image('bee_logo.png'), get_bee_name(), get_bee_name(), get_bee_version());
+      $content = sprintf($content, get_bee_logo(), get_bee_name(), get_bee_name(), get_bee_version());
   
       // Método 1
       $pdf = new BeePdf($content); // Se muestra directo en navegador, para descargar pasar en parámetro 2 true y para guardar en parámetro 3 true
@@ -126,6 +126,16 @@ class homeController extends Controller {
       $alt     = 'El texto corto del correo, preview del contenido.';
       send_email(get_siteemail(), $email, $subject, $body, $alt);
       echo sprintf('Correo electrónico enviado con éxito a %s', $email);
+    } catch (Exception $e) {
+      echo $e->getMessage();
+    }
+  }
+
+  function smtp()
+  {
+    try {
+      send_email('tuemail@hotmail.com', 'tuemail@hotmail.com', 'Probando smtp', '¡Hola mundo!', 'Correo de prueba.');
+      echo 'Mensaje enviado con éxito.';
     } catch (Exception $e) {
       echo $e->getMessage();
     }

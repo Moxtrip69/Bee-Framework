@@ -7,6 +7,12 @@
 // Definir el uso horario o timezone del sistema
 date_default_timezone_set('America/Mexico_City');
 
+// Lenguaje
+define('SITE_LANG'   , $this->lng);
+
+// Charset
+define('SITE_CHARSET', 'UTF-8');
+
 // Prepros 2021
 define('PREPROS'      , true); // Activar en caso de trabajar el desarrollo en prepros como servidor local
 define('PORT'         , '8848'); // Puerto por defecto de Prepros < 2020
@@ -20,17 +26,28 @@ define('TOASTR'       , true);  // define si es requerido Toastr para notificaci
 define('WAITME'       , true);  // define si es requerido WaitMe
 define('LIGHTBOX'     , false);  // define si es requerido Lightbox
 
-// Lenguaje
-define('SITE_LANG'   , $this->lng);
-
-// Charset
-define('SITE_CHARSET', 'UTF-8');
-
 // Versión de la aplicación
 define('BEE_NAME'    , $this->framework); // Viene desde Bee.php
 define('BEE_VERSION' , $this->version);   // Viene desde Bee.php
+define('BEE_LOGO'    , 'bee_logo.png');   // Nombre del archivo del logotipo de Bee Framework
+
+// Datos de la empresa / negocio / sistema
 define('SITE_NAME'   , 'EmpresaCool');    // Nombre del sitio
 define('SITE_VERSION', '1.0.0');          // Versión del sitio
+define('SITE_LOGO'   , 'logo.png');       // Nombre del archivo del logotipo base
+define('SITE_FAVICON', 'favicon.ico');    // Nombre del archivo del favicon base
+
+// Configuración de correos electrónicos
+define('PHPMAILER_EXCEPTIONS', true);                // Mantener activo para recibir excepciones en errores de Phpmailer
+define('PHPMAILER_SMTP'      , false);               // Activar uso de cuenta SMTP para envío de correos true o false
+define('PHPMAILER_DEBUG'     , false);               // Solo activar si es necesario el log verboso para debug
+define('PHPMAILER_HOST'      , 'smtp.example.com');  // Dominio o servidor SMTP
+define('PHPMAILER_AUTH'      , true);                // Autenticar con SMTP true o false
+define('PHPMAILER_USERNAME'  , 'user@example.com');  // Usuario de la cuenta
+define('PHPMAILER_PASSWORD'  , '123secret');         // Password de la cuenta
+define('PHPMAILER_SECURITY'  , 'tls');               // Tipo de seguridad, opciones tls o ssl
+define('PHPMAILER_PORT'      , '465');               // Puerto de conexión SMTP -- 587 hotmail -- 465 gmail
+define('PHPMAILER_TEMPLATE'  , 'emailTemplate');     // Plantilla por defecto de correo electrónico
 
 // Puerto y la URL del sitio
 define('PROTOCOL'   , isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http"); // Detectar si está en HTTPS o HTTP

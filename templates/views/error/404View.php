@@ -9,7 +9,7 @@
   </div>
   <div class="row">
     <div class="col-xl-6 col-12 text-center offset-xl-3 py-5">
-      <a href="<?php echo URL; ?>"><img src="<?php echo get_image('bee_logo.png') ?>" alt="Bee framework" class="img-fluid" style="width: 150px;"></a>
+      <a href="<?php echo URL; ?>"><img src="<?php echo get_bee_logo() ?>" alt="Bee framework" class="img-fluid" style="width: 150px;"></a>
       <h1 class="mt-5 mb-3">
         <span class="text-warning d-block"><b>404</b></span>
         <b>Página no encontrada</b>
