@@ -17,8 +17,13 @@ class testController extends Controller {
     }
     */
   }
+
+  public function index()
+  {
+    echo get_bee_info();
+  }
   
-  function index()
+  function test1()
   {
     debug(metaphone('Caballero'));
     debug(metaphone('Caballo'));
@@ -55,35 +60,5 @@ class testController extends Controller {
     
     // Descomentar vista si requerida
     View::render('index', $data);
-  }
-
-  function ver($id)
-  {
-    View::render('ver');
-  }
-
-  function agregar()
-  {
-    View::render('agregar');
-  }
-
-  function post_agregar()
-  {
-
-  }
-
-  function editar($id)
-  {
-    View::render('editar');
-  }
-
-  function post_editar()
-  {
-
-  }
-
-  function borrar($id)
-  {
-    // Proceso de borrado
   }
 }

@@ -1613,3 +1613,80 @@ function get_lightbox()
 
 	return LIGHTBOX === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
 }
+
+/**
+ * Muestra toda la información actual de Bee y su configuración
+ *
+ * @return mixed
+ */
+function get_bee_info()
+{
+	$db   = Db::connect();
+	$data =
+	[
+		'Título'               => sprintf('Bee framework %s', get_bee_version()),
+		'Versión Bee'          => get_bee_version(),
+		'Versión PHP'          => phpversion(),
+		'Versión MySQL'        => $db->getAttribute(PDO::ATTR_SERVER_VERSION),
+		'Charset'              => SITE_CHARSET,
+		'Lenguaje'             => SITE_LANG,
+		'Entorno local'        => IS_LOCAL === true ? 'Si' : 'No',
+		'Demostración'         => IS_DEMO === true ? 'Si' : 'No',
+		'Sandbox'              => SANDBOX === true ? 'Si' : 'No',
+		'URL del sitio'        => URL,
+		'URL actual'           => CUR_PAGE,
+		'Path base'            => BASEPATH,
+		'Raíz'                 => ROOT,
+		'App'                  => APP,
+		'Templates'            => TEMPLATES,
+		'Configuración'        => CONFIG,
+		'Controladores'        => CONTROLLERS,
+		'Modelos'              => MODELS,
+		'Clases'               => CLASSES,
+		'Funciones'            => FUNCTIONS,
+		'Logs'                 => LOGS,
+		'Includes'             => INCLUDES,
+		'Módulos'              => MODULES,
+		'Vistas'               => VIEWS,
+		'Imágenes'             => IMAGES_PATH,
+		'Subidas'              => UPLOADS,
+		'Usando Prepros'       => PREPROS === true ? 'Si' : 'No',
+		'Puerto Prepros'       => PORT,
+		'URL de recursos'      => ASSETS,
+		'URL de subidas'       => UPLOADED,
+		'URL de imágenes'      => IMAGES,
+		'Sal de seguridad'     => AUTH_SALT,
+		'DB Engine (local)'    => LDB_ENGINE,
+		'DB Host (local)'      => LDB_HOST,
+		'DB Nombre (local)'    => LDB_NAME,
+		'DB Usuario (local)'   => LDB_USER,
+		'DB Charset (local)'   => LDB_CHARSET,
+		'DB Engine'            => DB_ENGINE,
+		'DB Host'              => DB_HOST,
+		'DB Nombre'            => DB_NAME,
+		'DB Usuario'           => DB_USER,
+		'DB Charset'           => DB_CHARSET,
+		'Plantilla de correos' => PHPMAILER_TEMPLATE,
+		'Nombre del sitio'     => SITE_NAME,
+		'Versión del sitio'    => SITE_VERSION,
+		'Favicon del sitio'    => SITE_FAVICON,
+		'Logotipo del sitio'   => SITE_LOGO,
+		'Key Google Maps'      => GMAPS,
+	];
+
+	return get_module('bee/info', $data);
+}
+
+/**
+ * Crear una nueva contraseña random o 
+ * definida para usuario
+ *
+ * @param string $password
+ * @return string
+ */
+function get_new_password($password = null)
+{
+	$password = $password === null ? random_password() : $password;
+
+	return password_hash($password.AUTH_SALT, PASSWORD_BCRYPT);
+}

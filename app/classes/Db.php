@@ -36,7 +36,7 @@ class Db
    *
    * @return mixed
    */
-  private static function connect() 
+  public static function connect() 
   {
     try {
       $self       = new self();
