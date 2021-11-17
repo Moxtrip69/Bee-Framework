@@ -1,4 +1,4 @@
-<?php require_once INCLUDES.'inc_header.php'; ?>
+<?php require_once INCLUDES.'inc_bee_header.php'; ?>
 <?php require_once INCLUDES.'inc_bee_navbar.php'; ?>
 
 <div id="test_ajax"></div>
@@ -30,7 +30,7 @@
       <div class="mt-5">
         <a class="btn btn-dark btn-sm mt-1" href="creator"><i class="fas fa-file fa-fw"></i> Creator</a>
         <a class="btn btn-warning btn-sm mt-1" href="login"><i class="fas fa-fingerprint fa-fw"></i> Ingresar</a>
-        <a class="btn btn-info btn-sm text-white mt-1" href="home/flash"><i class="fas fa-user fa-fw"></i> Mi cuenta</a>
+        <a class="btn btn-info btn-sm text-white mt-1" href="home/perfil"><i class="fas fa-user fa-fw"></i> Mi cuenta</a>
         <a class="btn btn-success btn-sm mt-1" href="home/vue"><i class="fab fa-vuejs fa-fw"></i> Vue JS</a>
         <a class="btn btn-success btn-sm mt-1" href="https://github.com/Moxtrip69/Bee-Framework"><i class="fab fa-github fa-fw"></i> Github</a>
         <a class="btn btn-success btn-sm mt-1" href="https://www.academy.joystick.com.mx/courses/crea-tu-propio-framework-profesional-mvc-con-php-poo-mysql" target="_blank"><i class="fas fa-book fa-fw"></i> ¿Buscas el curso?</a>

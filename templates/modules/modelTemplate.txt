@@ -2,16 +2,19 @@
 
 /**
  * Plantilla general de modelos
- * Versión 1.0.1
+ * Versión 1.1.0
  *
  * Modelo de [[REPLACE]]
  */
 class [[REPLACE]]Model extends Model {
-  public static $t1   = '[[REPLACE]]'; // Nombre de la tabla en la base de datos;
+  public static $t1 = '[[REPLACE_TABLE]]'; // Nombre de la tabla en la base de datos;
   
   // Nombre de tabla 2 que talvez tenga conexión con registros
   //public static $t2 = '__tabla 2___'; 
   //public static $t3 = '__tabla 3___'; 
+
+  // Esquema del Modelo
+  [[REPLACE_SCHEME]]
 
   function __construct()
   {

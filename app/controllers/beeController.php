@@ -22,4 +22,15 @@ class beeController extends Controller {
   {
     echo get_bee_info();
   }
+
+  function password($password = null)
+  {
+    $data =
+    [
+      'title' => 'Password Generado',
+      'pw'    => get_new_password($password)
+    ];
+
+    echo get_module('bee/password', $data);
+  }
 }

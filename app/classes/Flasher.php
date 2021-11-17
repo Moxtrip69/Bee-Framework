@@ -68,6 +68,42 @@ class Flasher
   }
 
   /**
+   * Crear un flash de tipo error shorthand
+   *
+   * @param string $msg
+   * @return void
+   */
+  static function error(String $msg)
+  {
+    self::new($msg, 'danger');
+    return true;
+  }
+
+  /**
+   * Crear un flash de tipo info shorthand
+   *
+   * @param string $msg
+   * @return void
+   */
+  static function info(String $msg)
+  {
+    self::new($msg, 'info');
+    return true;
+  }
+
+  /**
+   * Crear un flash de tipo success shorthand
+   *
+   * @param string $msg
+   * @return void
+   */
+  static function success(String $msg)
+  {
+    self::new($msg, 'success');
+    return true;
+  }
+
+  /**
    * Renderiza las notificaciones a nuestro usuario
    *
    * @return void

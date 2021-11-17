@@ -10,7 +10,14 @@ Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y 
 - Hemos mejorado el sistema **ORM** para manipulación de bases de datos con nuevos métodos y opciones de configuración.
 - Nuevos elementos de configuración agregados al framework para controlar que elementos pueden ser incluidos sin tener que editar el código, para mejorar el tiempo de prototipado o pruebas de concepto, puedes encontrar todas las nuevas variables de configuración en **settings.php**.
 - Hemos incluido de forma práctica los *CDN* para los frameworks **CSS** más utilizados en el mercado, **Bootstrap 5, Bulma y Foundation**, puedes configurar cuál incluir desde **settings.php**.
+- Se han agregado nuevas funciones que facilitan la personalización de Bee framework al implementarse desde 0.
+- Hemos creado una nueva sección especial para mostrar la información actual de Bee framework y todas las configuraciones aplicadas, similar a phpinfo().
+- La creación de conexiones a la base de datos ahora es accesible de forma pública para poder conectarse sin necesidad de tener que hacer un query directamente.
+- Nuevos archivos **includes** creados para evitar problemas de visualización para rutas específicas del framework como lo es **creator** o **bee**.
 - La clase **Flasher** ha recibido una actualización para trabajar con los 3 principales frameworks **CSS** también en sus estilos para las notificaciones flash.
+- Nuevo sistema sencillo para generar contraseñas de reemplazo en **bee/password/$password** en caso de querer actualizar de forma sencilla la contraseña por defecto que es **123456** y usuario **bee**, se reemplaza en **loginController/post_login**.
+- Hemos mejorado la herramienta **Creator** para prevenir el borrado de archivos ya existentes y alertar al usuario.
+- Nuevas mejoras a la creación de modelos, ahora es posible determinar el nombre de la tabla directamente desde **Creator** y también un esquema sencillo de la tabla para ahorrarnos tiempo al trabajar.
 - Nuevos métodos rápidos para el módelo principal, entre ellos:
   - class::drop($table);
   - class::truncate($table);

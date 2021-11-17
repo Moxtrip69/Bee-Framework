@@ -8,14 +8,16 @@
     </div>
 
     <div class="col-12">
-      <p>Todos los parámetros mostrados a continuación son la configuración actual de tu instancia de Bee framework, puedes encontrar más información en <code>beeController.php</code></p>
-      <table class="table table-striped table-hover table-bordered">
-        <?php foreach ($d as $k => $v): ?>
-          <tr>
-            <th class="bg-light"><?php echo $k; ?></th>
-            <td><?php echo $v; ?></td>
-          </tr>
-        <?php endforeach; ?>
+      <p>La contraseña ha sido generado con éxito, debes editarla dentro de <code>loginController.php</code> en el método <code>post_login()</code>.</p>
+      <table class="table table-striped table-bordered">
+        <tr>
+          <th class="bg-light">Password</th>
+          <td><?php echo $d->pw->password; ?></td>
+        </tr>
+        <tr>
+          <th class="bg-light">Hash</th>
+          <td><?php echo $d->pw->hash; ?></td>
+        </tr>
       </table>
     </div>
   </div>

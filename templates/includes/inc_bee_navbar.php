@@ -18,6 +18,9 @@
         <li class="nav-item">
           <a class="nav-link" href="bee">Bee info</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="bee/password">Password</a>
+        </li>
       </ul>
     </div>
   </div>

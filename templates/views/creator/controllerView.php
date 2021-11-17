@@ -1,4 +1,4 @@
-<?php require_once INCLUDES.'inc_header.php'; ?>
+<?php require_once INCLUDES.'inc_bee_header.php'; ?>
 <?php require_once INCLUDES.'inc_bee_navbar.php'; ?>
 
 <div class="container">
@@ -24,8 +24,8 @@
             <?php echo insert_inputs(); ?>
             
             <div class="mb-3">
-              <label for="filename">Nombre del controlador (sin "Controller.php")</label>
-              <input type="text" class="form-control" id="filename" name="filename" placeholder="reports" required>
+              <label for="filename" class="form-label">Nombre del controlador (sin "Controller.php") *</label>
+              <input type="text" class="form-control" id="filename" name="filename" placeholder="reportes" required>
             </div>
 
             <button class="btn btn-primary btn-lg btn-block" type="submit">Crear ahora</button>

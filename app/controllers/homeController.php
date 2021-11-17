@@ -141,21 +141,17 @@ class homeController extends Controller {
     }
   }
 
-  function flash()
+  function perfil()
   {
     parent::auth();
 
-    View::render('flash', ['title' => 'Flash', 'user' => User::profile()]);
-  }
+    $data =
+    [
+      'title' => 'Perfil de usuario',
+      'user'  => User::profile()
+    ];
 
-  function gastos()
-  {
-    View::render('gastos');
-  }
-
-  function yumi()
-  {
-    View::render('yumi');
+    View::render('perfil', $data);
   }
 
   function vue()

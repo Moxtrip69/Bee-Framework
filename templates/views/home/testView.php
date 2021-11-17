@@ -1,4 +1,4 @@
-<?php require_once INCLUDES.'inc_header.php'; ?>
+<?php require_once INCLUDES.'inc_bee_header.php'; ?>
 
 <div class="container">
   <div class="row">

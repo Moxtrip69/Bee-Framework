@@ -5,7 +5,7 @@ class loginController extends Controller {
   {
     if (Auth::validate()) {
       Flasher::new('Ya hay una sesión abierta.');
-      Redirect::to('home/flash');
+      Redirect::to('home/perfil');
     }
   }
 
@@ -41,8 +41,8 @@ class loginController extends Controller {
       'avatar'   => 'myavatar.jpg', 
       'tel'      => '11223344', 
       'color'    => '#112233',
-      'user'     => 'bee',
-      'password' => '$2y$10$R18ASm3k90ln7SkPPa7kLObcRCYl7SvIPCPtnKMawDhOT6wPXVxTS'
+      'user'     => 'bee', // puedes cambiar este dato a lo que gustes si usarás este sistema de login (es relativamente seguro dependiendo el tipo de sistema)
+      'password' => '$2y$10$tV0XLhk.v8JBcqIjPhkFcemUjASG8Bt3ggDTnzV5VYkluoAc5.sAC' // puedes generar una nueva en bee/password
     ];
 
 
@@ -53,6 +53,6 @@ class loginController extends Controller {
 
     // Loggear al usuario
     Auth::login($user['id'], $user);
-    Redirect::to('home/flash');
+    Redirect::to('home/perfil');
   }
 }

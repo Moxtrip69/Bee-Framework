@@ -1671,7 +1671,7 @@ function get_bee_info()
 		'Versión del sitio'    => SITE_VERSION,
 		'Favicon del sitio'    => SITE_FAVICON,
 		'Logotipo del sitio'   => SITE_LOGO,
-		'Key Google Maps'      => GMAPS,
+		'Google Maps'          => GMAPS,
 	];
 
 	return get_module('bee/info', $data);
@@ -1688,5 +1688,9 @@ function get_new_password($password = null)
 {
 	$password = $password === null ? random_password() : $password;
 
-	return password_hash($password.AUTH_SALT, PASSWORD_BCRYPT);
+	return 
+	[
+		'password' => $password,
+		'hash'     => password_hash($password.AUTH_SALT, PASSWORD_BCRYPT)
+	];
 }
