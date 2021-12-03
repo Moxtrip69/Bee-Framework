@@ -37,6 +37,14 @@ define('SITE_VERSION', '1.0.0');          // Versión del sitio
 define('SITE_LOGO'   , 'logo.png');       // Nombre del archivo del logotipo base
 define('SITE_FAVICON', 'favicon.ico');    // Nombre del archivo del favicon base
 
+// Sesiones de usuario persistentes
+define('BEE_USERS_TABLE'     , 'bee_users');         // Nombre de la tabla para autenticación de usuarios
+define('BEE_COOKIES'         , false);               // Es utilizada para determinar si se usarán sesiones persistentes con cookies en el sistema
+define('BEE_COOKIE_TOKEN'    , 'bee__cookie_tkn');   // Nombre del cookie para el token generado para usuario
+define('BEE_COOKIE_ID'       , 'bee__cookie_id');    // Nombre del cookie para el identificador de usuario
+define('BEE_COOKIE_LIFETIME' , 60 * 60 * 24 * 7);    // Duración o vida de un cookie para cada usuario, por defecto 1 semana
+define('BEE_COOKIE_DOMAIN'   , '/');
+
 // Configuración de correos electrónicos
 define('PHPMAILER_EXCEPTIONS', true);                // Mantener activo para recibir excepciones en errores de Phpmailer
 define('PHPMAILER_SMTP'      , false);               // Activar uso de cuenta SMTP para envío de correos true o false

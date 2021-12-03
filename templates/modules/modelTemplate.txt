@@ -2,7 +2,7 @@
 
 /**
  * Plantilla general de modelos
- * Versión 1.1.0
+ * Versión 1.1.2
  *
  * Modelo de [[REPLACE]]
  */
@@ -24,14 +24,14 @@ class [[REPLACE]]Model extends Model {
   static function all()
   {
     // Todos los registros
-    $sql = 'SELECT * FROM [[REPLACE]] ORDER BY id DESC';
+    $sql = 'SELECT * FROM [[REPLACE_TABLE]] ORDER BY id DESC';
     return ($rows = parent::query($sql)) ? $rows : [];
   }
 
   static function by_id($id)
   {
     // Un registro con $id
-    $sql = 'SELECT * FROM [[REPLACE]] WHERE id = :id LIMIT 1';
+    $sql = 'SELECT * FROM [[REPLACE_TABLE]] WHERE id = :id LIMIT 1';
     return ($rows = parent::query($sql, ['id' => $id])) ? $rows[0] : [];
   }
 }

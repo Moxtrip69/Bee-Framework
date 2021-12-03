@@ -816,14 +816,18 @@ function send_email($from, $to, $subject, $body, $alt = null, $bcc = null, $repl
  * @param mixed $data
  * @return void
  */
-function debug($data) {
-  echo '<pre>';
-  if(is_array($data) || is_object($data)) {
-    print_r($data);
-  } else {
-    echo $data;
-  }
-  echo '</pre>';
+function debug($data, $var_dump_mode = false) {
+	if ($var_dump_mode === false) {
+		echo '<pre>';
+		if(is_array($data) || is_object($data)) {
+			print_r($data);
+		} else {
+			echo $data;
+		}
+		echo '</pre>';
+	} else {
+		var_dump($data);
+	}
 }
 
 /**

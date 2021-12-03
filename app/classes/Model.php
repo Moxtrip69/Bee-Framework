@@ -183,9 +183,77 @@ class Model extends Db {
 		return parent::query($sql);
 	}
 
+	/**
+	 * jstodo: Aún pendiente por terminar esta funcionalidad
+	 * Crea una nueva tabla de la base de datos actualmente
+	 * conectada.
+	 *
+	 * @param TableSchema $schema
+	 * @return bool
+	 */
 	public static function create(TableSchema $schema)
 	{
 		$sql = $schema->get_sql();
 		return parent::query($sql);
+	}
+
+	/**
+	 * Regresa el listado de tablas
+	 * existentes en nuestra base de datos
+	 * actualmente conectada
+	 *
+	 * @return array
+	 */
+	public static function list_tables()
+	{
+		try {
+			// Incializamos nuestra conexión a la base de datos
+			$tables = [];
+			$sql    = 'SHOW TABLES';
+			$db     = Db::connect();
+			
+			// Preparando nuestra petición
+			$statement = $db->prepare($sql);
+	
+			// Ejecutando nuestra petición
+			$statement->execute();
+	
+			// Listamos las filas encontradas (tablas)
+			$res = $statement->fetchAll(PDO::FETCH_NUM);
+
+			if (empty($res)) {
+				return []; // No existen tablas en la base de datos
+			}
+	
+			// Vamos a formar nuestro array de tablas
+			foreach($res as $table){
+				$tables[] = $table[0];
+			}
+
+			// Regresamos el listado de nuestras tablas
+			return $tables;
+
+		} catch (PDOException $e) {
+			throw new Exception($e->getMessage());
+		}
+
+	}
+
+	/**
+	 * Verificamos si existe una tabla en específico
+	 * dentro del modelo de nuestra base de datos
+	 *
+	 * @param string $table
+	 * @return bool
+	 */
+	public static function table_exists($table)
+	{
+		$tables = self::list_tables();
+
+		if (empty($tables)) return false;
+
+		// Vemos si existe la tabla que buscamos dentro del array de tablas que nos regresa
+		// nuestra base de datos
+		return in_array($table, $tables);
 	}
 }

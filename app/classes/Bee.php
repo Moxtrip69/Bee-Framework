@@ -167,10 +167,27 @@ class Bee {
    */
   private function init_globals()
   {
+    //////////////////////////////////////////////
+    // Globales generales usadas en el framework
+    //////////////////////////////////////////////
+
+		// Define si un usuario está loggeado o no
+    // y su información actual
+    $GLOBALS['Bee_CurrentUser'] = [];
+		$GLOBALS['Bee_isLogged']    = false;
+
+    // Del sistema
+		$GLOBALS['Bee_Settings']    = [];
+
     // Objeto Bee que será insertado en el footer como script javascript dinámico para fácil acceso
     bee_obj_default_config();
 
     //////////////////////////////////////////////
+    // Globales personales
+    //////////////////////////////////////////////
+
+    // jstodo: Generar la funcionalidad para hacer queu y registro de variables globales y cargarlas al inicializar el framework.
+    //bee_load_custom_globals();
   }
 
   /**
