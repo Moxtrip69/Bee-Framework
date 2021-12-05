@@ -7,9 +7,6 @@ class homeController extends Controller {
 
   function index()
   {
-    debug(Model::list_tables());
-    debug(Model::table_exists('pruebas2'), true);
-    die;
     $data =
     [
       'title' => 'Home'

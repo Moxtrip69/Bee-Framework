@@ -1698,3 +1698,27 @@ function get_new_password($password = null)
 		'hash'     => password_hash($password.AUTH_SALT, PASSWORD_BCRYPT)
 	];
 }
+
+function bee_die( $message, $headers = [] )
+{
+	if (!is_string($message)) {
+		throw new Exception('El parámetro $message debe ser un string válido.');
+	}
+
+	if (empty($headers)) {
+		header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+		header("Cache-Control: post-check=0, pre-check=0", false);
+		header("Pragma: no-cache");
+	}
+
+	die($message);
+}
+
+function persistent_session()
+{
+	if (defined('BEE_COOKIES') && BEE_COOKIES === true) {
+		return true;
+	}
+
+	return false;
+}

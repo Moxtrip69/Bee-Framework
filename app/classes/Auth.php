@@ -37,7 +37,7 @@ class Auth
     $session =
     [
       'logged' => true,
-      'token'  => random_password(32),
+      'token'  => generate_token(),
       'id'     => $user_id,
       'ssid'   => session_id(),
       'user'   => $user_data
@@ -51,6 +51,8 @@ class Auth
   public static function validate()
   {
     $self = new self();
+
+    // Si no existe siquiera la variable de sesión en el sistema
     if (!isset($_SESSION[$self->var])) {
       return false;
     }

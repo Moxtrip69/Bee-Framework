@@ -9,7 +9,7 @@ class Model extends Db {
    * @param string $table
    * @param array $params
    * @param integer $limit
-   * @return void
+   * @return mixed
    */
 	public static function list($table, $params = [], $limit = null)
 	{	

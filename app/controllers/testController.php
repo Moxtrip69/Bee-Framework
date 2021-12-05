@@ -20,7 +20,9 @@ class testController extends Controller {
 
   public function index()
   {
-    echo get_bee_info();
+    global $Bee_User;
+    
+    debug($Bee_User);
   }
   
   function test1()

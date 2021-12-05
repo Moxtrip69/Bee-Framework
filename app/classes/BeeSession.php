@@ -7,42 +7,60 @@ class BeeSession {
 
   private $bee_users_table     = BEE_USERS_TABLE;
   private $bee_cookies         = BEE_COOKIES;
-	private $bee_cookie_token    = BEE_COOKIE_TOKEN;
 	private $bee_cookie_id       = BEE_COOKIE_ID;
+	private $bee_cookie_token    = BEE_COOKIE_TOKEN;
 	private $bee_cookie_lifetime = BEE_COOKIE_LIFETIME;
-  private $bee_cookie_domain   = BEE_COOKIE_DOMAIN;
+  private $bee_cookie_path     = BEE_COOKIE_PATH;
+	private $bee_cookie_domain   = BEE_COOKIE_DOMAIN;
 	private $current_user        = null;
 
 
 	function __construct()
 	{
-    // El tipo de sistema a utilizar para trabajar las sesiones de usuarios
-    // jstodo: si no están activas las cookies, se trabaja un login o sesiones no persistentes con solamente
-    // variables de sesión regualres.
-    if ($this->bee_cookies === false) {
-      
-    } 
+		// Validar que todo esté en orden configurado
+		$this->check_if_ready();
+	}
+	
+	/**
+	 * Verificamos que las configuraciones
+	 * sean correctas para poder trabajar
+	 * con sesiones persistentes
+	 *
+	 * @return bool
+	 */
+	public function check_if_ready()
+	{
+		// Se verifica la existencia correcta de las constantes requeridas y variables
+		try {
+			if ($this->bee_cookies === false || !defined('BEE_COOKIES')) {
+				bee_die(sprintf('Es requerida la constante %s para poder trabajar con sesiones persistentes de %s', 'BEE_COOKIES', get_bee_name()));
+			} 
 
-    try {
-      // Verificar que haya una conexión con la base de datos
-      $tables = Model::list_tables();
-      if (empty($tables)) {
-        throw new Exception('No hay tablas en la base de datos.');
-      }
-      
-      // Verificar que exista la tabla de usuarios en la base de datos
-      if (!Model::table_exists($this->bee_users_table)) {
-        throw new Exception(sprintf('No existe la tabla %s en la base de datos.', $this->bee_users_table));
-      }
-
-      // Proceder solo si todo está en orden
-      return true;
-      
-    } catch (Exception $e) {
-      die($e->getMessage());
-    }
+			// Verificar que haya una conexión con la base de datos
+			$tables = Model::list_tables();
+			if (empty($tables)) {
+				throw new Exception('No hay tablas en la base de datos.');
+			}
+			
+			// Verificar que exista la tabla de usuarios en la base de datos
+			if (!Model::table_exists($this->bee_users_table)) {
+				throw new Exception(sprintf('No existe la tabla %s en la base de datos.', $this->bee_users_table));
+			}
+	
+			// Proceder solo si todo está en orden
+			return true;
+			
+		} catch (Exception $e) {
+			throw new Exception($e->getMessage());
+		}
 	}
 
+	/**
+	 * Regresa el nombre de alguno de nuestros 2 cookies utilizados en autenticación
+	 *
+	 * @param string $cookie
+	 * @return bool
+	 */
 	public function get_cookie_name($cookie)
 	{
 		switch ($cookie) {
@@ -65,41 +83,46 @@ class BeeSession {
 	**/
 	public static function authenticate()
 	{
-		/** We make an instance to use class properties */
+		// Instancia de nuestra BeeSession
 		$auth = new self();
 
-		## If the cookies exists
-		if (!self::cookie_exists($auth->get_cookie_name('id')) || !self::cookie_exists($auth->get_cookie_name('token'))) {
-			self::destroy_cookie([ $auth->get_cookie_name('id'), $auth->get_cookie_name('token') ]);
-			return false;
-		}
-
-		## Obtenemos la información del usuario
-		$usuario = new usuariosModel();
-		//$res = $usuario->validar_usuario_y_token(self::get_cookie($auth->get_cookie_name('id')) , hash($auth->hash, self::get_cookie($auth->get_cookie_name('token'))));
-		$res = usuariosModel::validate_user_session(self::get_cookie($auth->get_cookie_name('id')) , hash($auth->hash, self::get_cookie($auth->get_cookie_name('token'))));
-
-		## Verificamos si coincide
-		if (!$res) {
-			## Si no coinciden, destruimos cookies
+		// Validar la existencia de los cookies en el sistema
+		if (!self::cookie_exists($auth->bee_cookie_id) || !self::cookie_exists($auth->bee_cookie_token)) {
+			// Si no existe la coincidencia vamos a borrar los cookies por seguridad
 			self::destroy_cookie([
-				$auth->get_cookie_name('id') => NULL, 
-				$auth->get_cookie_name('token') => NULL
+				$auth->bee_cookie_id    => null, 
+				$auth->bee_cookie_token => null
 			]);
 
-			## Regresamos false para redirección
 			return false;
 		}
 
-		if (!$user = $usuario->cargar_informacion_usuario(self::get_cookie($auth->get_cookie_name('id')) , hash($auth->hash, self::get_cookie($auth->get_cookie_name('token'))))) {
+		// Verificamos que exista el usuario con base a la información de nuestro cookie
+		if (!$auth->current_user = Model::list($auth->bee_users_table, ['id' => self::get_cookie($auth->bee_cookie_id)], 1)) {
+			return false;
+		}
+
+		// Información del usuario
+		$user       = $auth->current_user;
+		$auth_token = $user['auth_token'];
+		$token      = self::get_cookie($auth->bee_cookie_token);
+
+		// Verificamos si coincide la información
+		if (!password_verify($token, $auth_token)) {
+			// Si no existe la coincidencia vamos a borrar los cookies por seguridad
+			self::destroy_cookie([
+				$auth->bee_cookie_id    => null, 
+				$auth->bee_cookie_token => null
+			]);
+
 			return false;
 		}
 		
-		return true; // return $user si se presentan errores
+		return $user; // return $user si todo es correcto
 	}
 
 	/**
-	* Starts the session of the user
+	* Inicia la sesión persistente del usuario en curso
 	* @access public
 	* @var array
 	* @return bool
@@ -107,46 +130,37 @@ class BeeSession {
 	public static function new_session($id) 
 	{
 		// Nueva instancia para usar las propiedades de la clase
-		$auth = new self();
+		$auth  = new self();
 
-		## Creates a new token
-		$token   = self::generar_token();
-		$usuario = new usuariosModel();
+		// Creamos un nuevo token
+		$token = generate_token();
 
-		## Verificamos si existen los cookies
-		if (self::cookie_exists($auth->get_cookie_name('id')) && self::cookie_exists($auth->get_cookie_name('token'))) {
+		// Cargamos la información del usuario
+		$user  = Model::list($auth->bee_users_table, ['id' => $id], 1);
 
-			## Si existen los borramos y creamos nuevos y agregamos a DB
-			self::destroy_cookie([
-				$auth->get_cookie_name('id') => NULL, 
-				$auth->get_cookie_name('token') => NULL
-			]);
-			
-			self::new_cookie([
-				$auth->get_cookie_name('id') => $id , 
-				$auth->get_cookie_name('token') => $token
-			]);
-
-			## Update table with new token
-			//$usuario->actualizar_token($id , hash($auth->hash, $token));
-			$id = usuariosModel::add_user_session($id , hash($auth->hash, $token));
-
-		} else {
-
-			## Create cookies if they dont exist
-			self::new_cookie([
-				$auth->get_cookie_name('id') => $id , 
-				$auth->get_cookie_name('token') => $token
-			]);
-
-			## Update table with new token
-			//$usuario->actualizar_token($id , hash($auth->hash, $token));
-			$id = usuariosModel::add_user_session($id , hash($auth->hash, $token));
-
+		if (empty($user)) {
+			return false; // no existe el usuario en curso
 		}
 
-		## All good, return true
-		return ($id) ? true : false;
+		// Verificamos si existen los cookies para borrarlos y generar nuevos
+		if (self::cookie_exists($auth->bee_cookie_id) || self::cookie_exists($auth->bee_cookie_token)) {
+			// Si existen los borramos
+			self::destroy_cookie([
+				$auth->bee_cookie_id    => null, 
+				$auth->bee_cookie_token => null
+			]);
+		}
+
+		// Creamos nuevos cookies
+		self::new_cookie([
+			$auth->bee_cookie_id    => $id, 
+			$auth->bee_cookie_token => $token
+		]);
+
+		// Actualizamos el token en la base de datos
+		Model::update($auth->bee_users_table, ['id' => $id], ['auth_token' => password_hash($token, PASSWORD_BCRYPT)]);
+
+		return true;
 	}
 
 	 /**
@@ -172,8 +186,8 @@ class BeeSession {
 	{
 		$auth = new self();
 
-		foreach ($cookies as $key => $value) {
-			setcookie($key , $value , time() + $auth->bee_cookie_lifetime , $auth->bee_cookie_domain);
+		foreach ($cookies as $cookie_name => $cookie_value) {
+			setcookie($cookie_name , $cookie_value , time() + $auth->bee_cookie_lifetime , $auth->bee_cookie_path, $auth->bee_cookie_domain);
 		}
 
 		return true;
@@ -190,10 +204,9 @@ class BeeSession {
 	{
     $auth = new self();
 
-		foreach ($cookies as $key => $value) {
-			if (isset($_COOKIE[$key])) {
-				setcookie($key , null , time() - 1000 , $auth->bee_cookie_domain);
-				return true;
+		foreach ($cookies as $cookie_name => $cookie_value) {
+			if (isset($_COOKIE[$cookie_name])) {
+				setcookie($cookie_name , null , time() - 1000 , $auth->bee_cookie_path, $auth->bee_cookie_domain);
 			}
 		}
 
@@ -211,23 +224,19 @@ class BeeSession {
 		$auth = new self();
 
 		// Se destruyen todos los tokens generados para que sea imposible el ingreso con ese mismo token después
-    $sql = sprintf('DELETE u FROM %s u WHERE id = :id AND auth_token = :token', $auth->bee_users_table);
-    if (!Model::query($sql, ['id' => self::get_cookie($auth->get_cookie_name('id')), 'auth_token' => hash($auth->hash, self::get_cookie($auth->get_cookie_name('token')))])) {
+    if (!Model::update($auth->bee_users_table, ['id' => self::get_cookie($auth->bee_cookie_id)], ['auth_token' => ''])) {
       return false;
     }
 		
     // Se destruyen todos los cookies existentes
 		self::destroy_cookie(
       [
-			  $auth->get_cookie_name('id')    => null, 
-			  $auth->get_cookie_name('token') => null
+			  $auth->bee_cookie_id    => null, 
+			  $auth->bee_cookie_token => null
       ]
     );
-			
-		// Se destruyen todas las posibles variables de sesión para limpiarlas del disco duro
-		unset($_SESSION);
-		session_destroy();
-		
+	
+		// Se regresa true si se borra todo con éxito
 		return true;
 	}
 

@@ -173,11 +173,27 @@ class Bee {
 
 		// Define si un usuario está loggeado o no
     // y su información actual
-    $GLOBALS['Bee_CurrentUser'] = [];
-		$GLOBALS['Bee_isLogged']    = false;
+    $GLOBALS['Bee_User'] = [];
+
+    // Para mantener abierta una sesión de usuario al ser persistente
+    if (persistent_session()) {
+      try {
+        $user                = BeeSession::authenticate();
+        $GLOBALS['Bee_User'] = !empty($user) ? $user : [];
+
+        if (!empty($user)) {
+          Auth::login($user['id'], $user);
+        } else {
+          Auth::logout();
+        }
+        
+      } catch (Exception $e) {
+        bee_die($e->getMessage());
+      }
+    }
 
     // Del sistema
-		$GLOBALS['Bee_Settings']    = [];
+		$GLOBALS['Bee_Settings'] = [];
 
     // Objeto Bee que será insertado en el footer como script javascript dinámico para fácil acceso
     bee_obj_default_config();
