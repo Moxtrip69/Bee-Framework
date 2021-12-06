@@ -28,7 +28,7 @@ define('GMAPS'        , '__TOKEN__');
 // el valor puede ser cambiado en caso de utilizar
 // multiples instancias de Bee para proyectos diferentes y los cookies no representen un problema por el nombre repetido
 define('AUTH_TKN_NAME', 'bee__cookie_tkn'); // deprecado en versión 1.1.4
-define('AUTH_ID_NAME' , 'bee__cookie_id'); // deprecado en versión 1.1.4
+define('AUTH_ID_NAME' , 'bee__cookie_id');  // deprecado en versión 1.1.4
 
 // Salt utilizada para agregar seguridad al hash de contraseñas o similar dependiendo el uso requerido
 define('AUTH_SALT'    , 'BeeFramework<3');

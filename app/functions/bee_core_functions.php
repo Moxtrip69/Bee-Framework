@@ -1619,7 +1619,8 @@ function get_lightbox()
 }
 
 /**
- * Muestra toda la información actual de Bee y su configuración
+ * Muestra toda la información actual de Bee
+ * y sus variables de configuración
  *
  * @return mixed
  */
@@ -1699,6 +1700,15 @@ function get_new_password($password = null)
 	];
 }
 
+/**
+ * Función estándar para realizar
+ * un die de sitio con bee framework
+ * muestra contenido html5 de forma más estética
+ *
+ * @param string $message
+ * @param array $headers
+ * @return mixed
+ */
 function bee_die( $message, $headers = [] )
 {
 	if (!is_string($message)) {
@@ -1716,9 +1726,124 @@ function bee_die( $message, $headers = [] )
 
 function persistent_session()
 {
-	if (defined('BEE_COOKIES') && BEE_COOKIES === true) {
+	if (!defined('BEE_COOKIES') || BEE_COOKIES !== true) {
+		return false;
+	}
+
+	return true;
+}
+
+/**
+ * Cargar y regresa todos los cookies del sitio
+ *
+ * @return array
+ */
+function get_all_cookies()
+{
+	$cookies = [];
+
+	if (!isset($_COOKIE) || empty($_COOKIE)) {
+		return $cookies;
+	}
+
+	// Iteramos entre todos los cookies guardados del sitio
+	// para almacenarlos en una nueva variable
+	foreach ($_COOKIE as $name => $value) {
+		$cookies[$name] = $value;
+	}
+
+	return $cookies;
+}
+
+/**
+ * Para volver a buscar y asignar los cookies
+ * a nuestra global de cookies en caso de que
+ * sea necesario
+ *
+ * @return bool
+ */
+function load_all_cookies()
+{
+	global $Bee_Cookies;
+
+	$Bee_Cookies = get_all_cookies();
+
+	return true;
+}
+
+/**
+   * Creamos un cookie directamente
+   * con base a los parámetros pasados
+   *
+   * @param array $cookies
+   * @return void
+   */
+	function new_cookie($name, $value, $lifetime = null, $path = '', $domain = '')
+	{
+		// Para prevenir cualquier error de ejecución
+		// al ser enviadas ya las cabeceras del sitio
+		if (headers_sent()) {
+			return false;
+		}
+		
+		// Valor por defecto de la duración del cookie
+		$default  = 60 * 60 * 24; // 1 día por defecto si no existe la constante
+		$lifetime = defined('BEE_COOKIE_LIFETIME') && $lifetime === null ? BEE_COOKIE_LIFETIME : (!is_integer($lifetime) ? $default : $lifetime); 
+		
+		// Creamos el nuevo cookie
+		setcookie($name , $value , time() + $lifetime , $path, $domain);
+
 		return true;
 	}
 
-	return false;
-}
+	/**
+	 * Carga la información de un cookie en caso de existir
+	 *
+	 * @param string $cookie
+	 * @return bool | true si existe | false si no
+	 */
+	function cookie_exists($cookie)
+	{
+    return isset($_COOKIE[$cookie]);
+	}
+
+	/**
+   * Borrar cookies en caso de existir,
+   * se pasa el nombre de cada cookie como parámetro array
+   *
+   * @param array $cookies
+   * @return bool
+   */
+	function destroy_cookie($cookie)
+	{
+		global $Bee_Cookies;
+
+		// Para prevenir cualquier error de ejecución
+		// al ser enviadas ya las cabeceras del sitio
+		if (headers_sent()) {
+			return false;
+		}
+
+		// Verificamos que exista el cookie dentro de nuestra
+		// global, si no existe entonces no existe el cookie en sí
+		if (!isset($_COOKIE[$cookie])) {
+			return false;
+		}
+
+		// Seteamos el cookie con un valor null y tiempo negativo para destruirlo
+		setcookie($cookie , null , time() - 1000);
+		unset($Bee_Cookies[$cookie]);
+		
+		return true;
+	}
+
+	/**
+   * Verifica si existe un determinado cookie creado
+   *
+   * @param string $cookie_name
+   * @return mixed
+   */
+	function get_cookie($cookie)
+	{
+		return isset($_COOKIE[$cookie]) ? $_COOKIE[$cookie] : false;
+	}

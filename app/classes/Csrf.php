@@ -70,7 +70,7 @@ class Csrf
   /**
    * Método para obtener el token
    *
-   * @return void
+   * @return string
    */
   public function get_token()
   {

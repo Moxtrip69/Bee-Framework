@@ -16,7 +16,7 @@
       <small class="d-block text-muted mb-3"><?php echo sprintf('Versión %s', get_bee_version()); ?></small>
       <p>Un framework hecho en casa, con pasión y mucho cariño.</p>
       <p>Ligero, rápido y personalizable. Úsalo como gustes, en tus proyectos personales o comerciales.</p>
-      
+
       <ul class="list-group">
         <li class="list-group-item">Desarrollado con <b>PHP, Javascript</b> y <b>HTML5</b></li>
         <li class="list-group-item">Listo para <code>Bootstrap 5 | Bulma | Foundation</code></li>

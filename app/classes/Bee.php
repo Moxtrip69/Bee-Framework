@@ -171,6 +171,9 @@ class Bee {
     // Globales generales usadas en el framework
     //////////////////////////////////////////////
 
+    // Cookies del sitio
+    $GLOBALS['Bee_Cookies'] = get_all_cookies();
+
 		// Define si un usuario está loggeado o no
     // y su información actual
     $GLOBALS['Bee_User'] = [];
@@ -178,9 +181,19 @@ class Bee {
     // Para mantener abierta una sesión de usuario al ser persistente
     if (persistent_session()) {
       try {
+        // Autenticamos al usuario en caso de existir los cookies
+        // y de que sean válidos
         $user                = BeeSession::authenticate();
         $GLOBALS['Bee_User'] = !empty($user) ? $user : [];
 
+        // En esta parte se puede cargar información diferente o adicional del usuario
+        // ya que sabemos que su autenticación es válida
+        ////////////////////////////////////
+
+        // ---> $user = usuarioModel::by_id($id);
+
+        ////////////////////////////////////
+        // Se agrega la información del usuario a sesión
         if (!empty($user)) {
           Auth::login($user['id'], $user);
         } else {
