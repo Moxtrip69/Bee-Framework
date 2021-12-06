@@ -1,0 +1,22 @@
+.toast {
+  border: none;
+  padding: 10px;
+  background: #00a8ff;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+.toast .toast-message {
+  font-weight: normal;
+}
+.toast:hover {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.toast-success {
+  background: #4cd137;
+}
+
+.toast-error {
+  background: #e84118;
+}
