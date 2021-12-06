@@ -18,6 +18,10 @@ Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y 
 - Nuevo sistema sencillo para generar contraseñas de reemplazo en **bee/password/$password** en caso de querer actualizar de forma sencilla la contraseña por defecto que es **123456** y usuario **bee**, se reemplaza en **loginController/post_login**.
 - Hemos mejorado la herramienta **Creator** para prevenir el borrado de archivos ya existentes y alertar al usuario.
 - Nuevas mejoras a la creación de modelos, ahora es posible determinar el nombre de la tabla directamente desde **Creator** y también un esquema sencillo de la tabla para ahorrarnos tiempo al trabajar.
+- Nuevo sistema de sesiones persistentes para mantener con **cookies** la sesión del usuario en curso abierta, funciona actualmente para solo un dispositivo a la vez, es decir si se inicia sesión en otro dispositivo se cerrará en el anterior y se conservará persistente en el dispositivo en curso, para activarlas es necesario editar las nuevas constantes en *settings.php*.
+- Nuevas mejoras en el sistema para enviar correos electrónicos, ahora es posible configurar de forma directa credenciales para hacer uso de servidor con SMTP.
+- Nuevos métodos agregados a nuestra clase **Flasher** para agilizar el desarrollo con accesos rápidos a **success, danger, warning, info** entre otros, más información en **Flasher.php**.
+- Nuevos mensajes por defecto para ser reutilizados de forma estándar en todo el sistema, usando la función *get_bee_message($codigo);* y se pueden registrar nuevos mensajes para estar disponibles en todo el sistema con *register_bee_custom_message($codigo, $mensaje);*.
 - Nuevos métodos rápidos para el módelo principal, entre ellos:
   - class::drop($table);
   - class::truncate($table);

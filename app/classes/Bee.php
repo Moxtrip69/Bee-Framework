@@ -45,6 +45,8 @@ class Bee {
     $this->init_autoload();
     $this->init_csrf();
     $this->init_globals();
+    $this->init_authentication();
+    $this->init_set_globals();
     $this->init_custom();
     $this->dispatch();
   }
@@ -172,24 +174,50 @@ class Bee {
     //////////////////////////////////////////////
 
     // Cookies del sitio
-    $GLOBALS['Bee_Cookies'] = get_all_cookies();
+    $GLOBALS['Bee_Cookies']  = [];
 
-		// Define si un usuario está loggeado o no
-    // y su información actual
-    $GLOBALS['Bee_User'] = [];
+		// Define si un usuario está loggeado o no y su información actual
+    $GLOBALS['Bee_User']     = [];
+
+    // Del sistema
+		$GLOBALS['Bee_Settings'] = [];
+
+    // Objeto Bee que será insertado en el footer como script javascript dinámico para fácil acceso
+    $GLOBALS['Bee_Object']   = [];
+
+    // Define los mensajes por defecto para usar en notificaciones o errores
+    $GLOBALS['Bee_Messages'] = [];    
+
+    //////////////////////////////////////////////
+    // Globales personales
+    //////////////////////////////////////////////
+
+    // jstodo: Generar la funcionalidad para hacer queu y registro de variables globales y cargarlas al inicializar el framework.
+    //bee_load_custom_globals();
+  }
+
+  /**
+   * Inicia la validación de sesión en caso de existir 
+   * sesiones persistentes de Bee framework
+   *
+   * @return void
+   */
+  private function init_authentication()
+  {
+    global $Bee_User;
 
     // Para mantener abierta una sesión de usuario al ser persistente
     if (persistent_session()) {
       try {
         // Autenticamos al usuario en caso de existir los cookies
         // y de que sean válidos
-        $user                = BeeSession::authenticate();
-        $GLOBALS['Bee_User'] = !empty($user) ? $user : [];
-
+        $user     = BeeSession::authenticate();
+        
         // En esta parte se puede cargar información diferente o adicional del usuario
         // ya que sabemos que su autenticación es válida
         ////////////////////////////////////
-
+        
+        $Bee_User = !empty($user) ? $user : [];
         // ---> $user = usuarioModel::by_id($id);
 
         ////////////////////////////////////
@@ -204,19 +232,26 @@ class Bee {
         bee_die($e->getMessage());
       }
     }
+  }
 
-    // Del sistema
-		$GLOBALS['Bee_Settings'] = [];
+  /**
+   * Set up inicial de todas las variables globales requeridas
+   * en el sistema
+   *
+   * @return void
+   */
+  private function init_set_globals()
+  {
+    global $Bee_Cookies, $Bee_Messages;
 
-    // Objeto Bee que será insertado en el footer como script javascript dinámico para fácil acceso
+    // Inicializa y carga todas las cookies existentes del sitio
+    $Bee_Cookies   = get_all_cookies();
+
+    // Inicializa el objeto javascript para el pie de página
     bee_obj_default_config();
 
-    //////////////////////////////////////////////
-    // Globales personales
-    //////////////////////////////////////////////
-
-    // jstodo: Generar la funcionalidad para hacer queu y registro de variables globales y cargarlas al inicializar el framework.
-    //bee_load_custom_globals();
+    // Inicializa y carga todos los mensajes por defecto de Bee framework
+    $Bee_Messages = get_bee_default_messages();
   }
 
   /**

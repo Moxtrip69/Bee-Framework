@@ -1847,3 +1847,119 @@ function load_all_cookies()
 	{
 		return isset($_COOKIE[$cookie]) ? $_COOKIE[$cookie] : false;
 	}
+
+	/**
+	 * Carga todos los mensajes configurados por defecto para
+	 * su uso en el sistema de Bee framework
+	 *
+	 * @return array
+	 */
+	function get_bee_default_messages()
+	{
+		$messages =
+		[
+			'0'           => 'Acceso no autorizado al sistema.',
+			'1'           => 'Acción no autorizada.',
+			'2'           => 'Ocurrió un error, intenta más tarde.',
+			'3'           => 'No pudimos procesar tu solicitud.',
+			'added'       => 'Nuevo registro agregado con éxito.',
+			'not_added'   => 'Hubo un problema al agregar el registro.',
+			'updated'     => 'Registro actualizado con éxito.',
+			'not_updated' => 'Hubo un problema al actualizar el registro.',
+			'found'       => 'Registro encontrado con éxito.',
+			'not_found'   => 'El registro no existe o ha sido borrado.',
+			'deleted'     => 'Registro borrado con éxito.',
+			'not_deleted' => 'Hubo un problema al borrar el registro.',
+			'sent'        => 'Mensaje enviado con éxito.',
+			'not_sent'    => 'Hubo un problema al enviar el mensaje.',
+			'sent_to'     => 'Mensaje enviado con éxito a %s.',
+			'not_sent_to' => 'Hubo un problema al enviar el mensaje a %s.',
+			'auth'        => 'Debes iniciar sesión para continuar.',
+			'expired'     => 'La sesión ha expirado, vuelve a ingresar por favor.',
+			'm_params'    => 'Parámetros incompletos, acceso no autorizado.',
+			'm_form'      => 'Campos incompletos, completa el formulario por favor.',
+			'm_token'     => 'Token no encontrado o no válido, acceso no autorizado.'
+		];
+		
+		return $messages;
+	}
+
+	/**
+	 * Carga todos los mensajes registrados en el
+	 * array de Bee_Messages del sistema bee framework
+	 *
+	 * @return array
+	 */
+	function get_all_bee_messages()
+	{
+		global $Bee_Messages;
+
+		return $Bee_Messages;
+	}
+
+	/**
+	 * Registra un nuevo mensaje al array
+	 * de mensajes para su uso en bee framework
+	 *
+	 * @param string $code
+	 * @param string $message
+	 * @return bool
+	 */
+	function register_bee_custom_message($code, $message)
+	{
+		global $Bee_Messages;
+
+		try {
+			if (isset($Bee_Messages[$code])) {
+				throw new Exception(sprintf('Ya existe el código de mensaje %s.', $code));
+			}
+
+			$Bee_Messages[$code] = $message;
+
+			return true;
+
+		} catch (Exception $e) {
+			bee_die($e->getMessage());
+		}
+	}
+
+	/**
+	 * Carga un mensaje de bee framework existente
+	 * en el array de la global Bee_Messages
+	 * 
+	 * OPCIONES ACTUALES
+	 * 
+	 * 
+	 * '0'           => 'Acceso no autorizado al sistema.'
+	 * '1'           => 'Acción no autorizada.'
+	 * '2'           => 'Ocurrió un error, intenta más tarde.'
+	 * '3'           => 'No pudimos procesar tu solicitud.'
+	 * 'added'       => 'Nuevo registro agregado con éxito.'
+	 * 'not_added'   => 'Hubo un problema al agregar el registro.'
+	 * 'updated'     => 'Registro actualizado con éxito.'
+	 * 'not_updated' => 'Hubo un problema al actualizar el registro.'
+	 * 'found'       => 'Registro encontrado con éxito.'
+	 * 'not_found'   => 'El registro no existe o ha sido borrado.'
+	 * 'deleted'     => 'Registro borrado con éxito.'
+	 * 'not_deleted' => 'Hubo un problema al borrar el registro.'
+	 * 'sent'        => 'Mensaje enviado con éxito.'
+	 * 'not_sent'    => 'Hubo un problema al enviar el mensaje.'
+	 * 'sent_to'     => 'Mensaje enviado con éxito a %s.'
+	 * 'not_sent_to' => 'Hubo un problema al enviar el mensaje a %s.'
+	 * 'auth'        => 'Debes iniciar sesión para continuar.'
+	 * 'expired'     => 'La sesión ha expirado, vuelve a ingresar por favor.'
+	 * 'm_params'    => 'Parámetros incompletos, acceso no autorizado.'
+	 * 'm_form'      => 'Campos incompletos, completa el formulario por favor.'
+	 * 'm_token'     => 'Token no encontrado o no válido, acceso no autorizado.' 
+	 * 
+	 * @param string $code
+	 * @return mixed
+	 */
+	function get_bee_message($code)
+	{
+		global $Bee_Messages;
+
+		$code = (string) $code;
+
+		return isset($Bee_Messages[$code]) ? $Bee_Messages[$code] : '';
+	}
