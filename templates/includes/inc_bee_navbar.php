@@ -25,3 +25,5 @@
     </div>
   </div>
 </nav>
+
+<div class="main_wrapper" style="min-height: 95vh;">

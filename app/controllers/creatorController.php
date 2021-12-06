@@ -135,7 +135,7 @@ class creatorController extends Controller {
     // Cargar contenido del archivo
     $php = @file_get_contents($template);
     $php = str_replace('[[REPLACE]]', $filename, $php);
-    $php = str_replace('[[REPLACE_TABLE]]', empty($tabla) ? $filename : $table, $php);
+    $php = str_replace('[[REPLACE_TABLE]]', (empty($table) ? $filename : $table), $php);
 
     // Validar si es necesario procesar el esquema de Modelo
     if (!empty($scheme)) {
