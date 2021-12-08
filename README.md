@@ -26,6 +26,7 @@ Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y 
   - class::drop($table);
   - class::truncate($table);
   - class::create($table_name, $schema, $drop = false);
+- Nuevos estilos para plugin Toastr y configuraciones adicionales por defecto, todo esto puede ser sobre-escrito en **main.js**
 
 
 ### v 1.1.3

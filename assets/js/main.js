@@ -29,7 +29,11 @@ $(document).ready(function() {
         body.waitMe();
       }
     }).done(function(res) {
-      toastr.success(res.msg);
+      toastr.success(res.msg, '¡Bien!');
+      toastr.error(res.msg, '¡Error!');
+      toastr.info(res.msg, '¡Tip!');
+      toastr.warning(res.msg, '¡Aviso!');
+      
       console.log(res);
     }).fail(function(err) {
       toastr.error('Prueba AJAX fallida.', '¡Upss!');
@@ -75,6 +79,7 @@ $(document).ready(function() {
    */
   function init_tooltips() {
     if (Bee.css_framework != 'bs5') return;
+    
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
       return new bootstrap.Tooltip(tooltipTriggerEl)
@@ -89,10 +94,36 @@ $(document).ready(function() {
     var notification = $(this).closest('.notification');
     notification.remove();
   }
-  
+
+  /** 
+   * Configuración inicial de Toastr js | si es necesario se puede retirar o quitar 
+   * */
+  function init_toastr_setup() {
+    if (Bee.toastr === false) return;
+
+    toastr.options = {
+      "closeButton": true,
+      "debug": false,
+      "newestOnTop": true,
+      "progressBar": true,
+      "positionClass": "toast-top-right",
+      "preventDuplicates": false,
+      "onclick": null,
+      "showDuration": "300",
+      "hideDuration": "1000",
+      "timeOut": "5000",
+      "extendedTimeOut": "1000",
+      "showEasing": "swing",
+      "hideEasing": "linear",
+      "showMethod": "fadeIn",
+      "hideMethod": "fadeOut"
+    }
+  }
+
   // Inicialización de elementos
   init_summernote();
   init_tooltips();
+  init_toastr_setup();
   test_ajax();
 
   ////////////////////////////////////////////////////////////////////////

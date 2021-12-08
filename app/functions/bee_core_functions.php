@@ -1294,7 +1294,13 @@ function bee_obj_default_config() {
 		'images'        => IMAGES,
 		'uploaded'      => UPLOADED,
 		'php_version'   => phpversion(),
-		'css_framework' => CSS_FRAMEWORK
+		'css_framework' => CSS_FRAMEWORK,
+		'toastr'        => TOASTR,
+		'axios'         => AXIOS,
+		'sweetalert2'   => SWEETALERT2,
+		'waitme'        => WAITME,
+		'lightbox'      => LIGHTBOX,
+		'vuejs'         => VUEJS
 	];
 
 	return true;
@@ -1580,6 +1586,24 @@ function get_toastr()
 	$cdn         = '//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js';
 
 	return TOASTR === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
+}
+
+/**
+ * Carga de SweetAlert2 solo de ser necesario
+ * definido en settings.php
+ *
+ * @return mixed
+ */
+function get_sweetalert2()
+{
+	if (!defined('SWEETALERT2')) {
+		return false;
+	}
+
+	$placeholder = '<script src="%s"></script>';
+	$cdn         = '//cdn.jsdelivr.net/npm/sweetalert2@11';
+
+	return SWEETALERT2 === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
 }
 
 /**

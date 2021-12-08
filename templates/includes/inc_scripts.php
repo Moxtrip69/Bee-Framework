@@ -7,6 +7,9 @@
 <!-- Axios | definido en settings.php -->
 <?php echo get_axios(); ?>
 
+<!-- SweetAlert2 -->
+<?php echo get_sweetalert2(); ?>
+
 <!-- Toastr js -->
 <?php echo get_toastr(); ?>
 

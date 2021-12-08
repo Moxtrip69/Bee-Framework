@@ -1,19 +1,22 @@
-// Custom styles para Toastr
-$success: #4cd137
-$danger: #e84118
-$primary: #00a8ff
+// Importando variables y elementos generales de bee framework
+@import 'variables'
 
 #toast-container
-.toast
-  border: none
-  padding: 10px
-  background: $primary
-  box-shadow: none
-  .toast-message
-    font-weight: normal
-  &:hover
-    box-shadow: none
-.toast-success
-  background: $success
-.toast-error
-  background: $danger
+  .toast
+    border: none
+    background-color: $primary
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px
+    opacity: 0.9
+    transition: 0.25s all ease-in-out
+    .toast-message
+      font-weight: normal
+    &:hover
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 5px 8px
+      opacity: 1
+  .toast-success
+    background-color: $success
+  .toast-error
+    background-color: $danger
+  .toast-warning
+    background-color: $warning
+

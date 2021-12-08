@@ -7,6 +7,7 @@
 <!-- Todo plugin debe ir debajo de está línea -->
 <!-- Toastr css -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<link rel="stylesheet" href="<?php echo CSS.'custom.toastr.css?v='.get_version(); ?>">
 
 <!-- Waitme css -->
 <link rel="stylesheet" href="<?php echo PLUGINS.'waitme/waitMe.min.css'; ?>">

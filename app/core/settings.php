@@ -21,10 +21,11 @@ define('PORT'         , '8848'); // Puerto por defecto de Prepros < 2020
 define('CSS_FRAMEWORK', 'bs5'); // opciones disponibles: bs o bs5 = Bootstrap 5 | bl = Bulma | fn = Foundation
 define('JQUERY'       , true);  // define si es requerido jquery para el sitio
 define('VUEJS'        , true);  // define si es requerido Vue js 3 para el sitio | CDN
-define('AXIOS'        , false);  // define si es requerido Axios para peticiones HTTP
+define('AXIOS'        , false); // define si es requerido Axios para peticiones HTTP
+define('SWEETALERT2'  , true);  // define si es requerido sweetalert2 por defecto
 define('TOASTR'       , true);  // define si es requerido Toastr para notificaciones con Javascript
 define('WAITME'       , true);  // define si es requerido WaitMe
-define('LIGHTBOX'     , false);  // define si es requerido Lightbox
+define('LIGHTBOX'     , false); // define si es requerido Lightbox
 
 // Versión de la aplicación
 define('BEE_NAME'    , $this->framework); // Viene desde Bee.php
