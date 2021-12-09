@@ -1,4 +1,5 @@
 <?php 
+
 /**
  * Contiene información de usuario
  */ 
@@ -17,6 +18,7 @@ class User extends Auth
     // para prevenir errores
     $auth            = new parent();
     $this->is_logged = parent::validate();
+
     if ($this->is_logged === false) {
       return false;
     }
@@ -26,6 +28,7 @@ class User extends Auth
     if (!isset($_SESSION[$auth->__get('var')]['user'])) return false;
 
     $this->user = $_SESSION[$auth->__get('var')]['user'];
+    
     return true;
   }
 
@@ -44,6 +47,7 @@ class User extends Auth
 
     // Valida la existencia de la columna
     if (!isset($_SESSION[$auth->__get('var')]['user'][$column])) return false;
+
     return $_SESSION[$auth->__get('var')]['user'][$column];
   }
 
@@ -55,7 +59,6 @@ class User extends Auth
   public static function profile()
   {
     $user = new self();
-    $auth = new parent();
     if (!$user) return false;
 
     return $user->user;

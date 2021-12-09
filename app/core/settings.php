@@ -1,6 +1,6 @@
 <?php
 
-//////////////////////////////// 2021
+//////////////////////////////// 2022
 //////////////////////////////// Joystick
 //////////////////////////////// Bee-Framework
 
@@ -10,12 +10,9 @@ date_default_timezone_set('America/Mexico_City');
 // Lenguaje
 define('SITE_LANG'    , $this->lng);
 
-// Charset
-define('SITE_CHARSET' , 'UTF-8');
-
 // Prepros 2021
-define('PREPROS'      , true); // Activar en caso de trabajar el desarrollo en prepros como servidor local
-define('PORT'         , '8848'); // Puerto por defecto de Prepros < 2020
+define('PREPROS'      , true);   // Activar en caso de trabajar el desarrollo en prepros como servidor local
+define('PORT'         , '8848'); // Puerto por defecto de Prepros 2020 >
 
 // Utilidades
 define('CSS_FRAMEWORK', 'bs5'); // opciones disponibles: bs o bs5 = Bootstrap 5 | bl = Bulma | fn = Foundation
@@ -33,10 +30,12 @@ define('BEE_VERSION' , $this->version);   // Viene desde Bee.php
 define('BEE_LOGO'    , 'bee_logo.png');   // Nombre del archivo del logotipo de Bee Framework
 
 // Datos de la empresa / negocio / sistema
+define('SITE_CHARSET' , 'UTF-8');
 define('SITE_NAME'   , 'EmpresaCool');    // Nombre del sitio
 define('SITE_VERSION', '1.0.0');          // Versión del sitio
 define('SITE_LOGO'   , 'logo.png');       // Nombre del archivo del logotipo base
 define('SITE_FAVICON', 'favicon.ico');    // Nombre del archivo del favicon base
+define('SITE_DESC'   , 'Bee framework.'); // Descripción meta del sitio
 
 // Sesiones de usuario persistentes
 define('BEE_USERS_TABLE'     , 'bee_users');         // Nombre de la tabla para autenticación de usuarios
@@ -93,6 +92,7 @@ define('FAVICON'    , ASSETS.'favicon/');
 define('FONTS'      , ASSETS.'fonts/');
 define('IMAGES'     , ASSETS.'images/');
 define('JS'         , ASSETS.'js/');
+define('COMPONENTS' , JS.'components/');
 define('PLUGINS'    , ASSETS.'plugins/');
 define('UPLOADS'    , ROOT.'assets'.DS.'uploads'.DS);
 define('UPLOADED'   , ASSETS.'uploads/');
@@ -111,6 +111,9 @@ define('DEFAULT_CONTROLLER'      , 'home');
 define('DEFAULT_ERROR_CONTROLLER', 'error');
 define('DEFAULT_METHOD'          , 'index');
 
+/**
+ * @deprecated 1.1.4
+ */
 // Se encuentra en archivo bee_config.php
 // define('DB_ENGINE'  , 'mysql');
 // define('DB_HOST'    , 'localhost');

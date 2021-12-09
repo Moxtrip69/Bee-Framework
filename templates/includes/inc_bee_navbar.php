@@ -10,7 +10,7 @@
           <a class="nav-link" aria-current="page" href="home">Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="https://www.academy.joystick.com.mx/bundles/noobie" target="_blank">Documentación</a>
+          <a class="nav-link" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.1.4-Dev#v-114" target="_blank">Documentación</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.1.4-Dev#v-114" target="_blank">Changelog</a>

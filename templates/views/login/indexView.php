@@ -8,12 +8,8 @@
   </div>
 
   <div class="row">
-    <div class="col-12">
-      <?php echo Flasher::flash(); ?>
-    </div>
-
     <!-- formulario -->
-    <div class="col-xl-12">
+    <div class="col-12 col-md-4 offset-md-4">
       <div class="card">
         <div class="card-header">
           <h4>Ingresa a tu cuenta</h4>
@@ -23,19 +19,26 @@
             <?php echo insert_inputs(); ?>
             
             <div class="mb-3 row">
-              <div class="col-xl-6">
-                <label for="usuario">Usuario</label>
-                <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Walter White" required>
-                <small class="text-muted">Ingresa bee</small>
+              <div class="col-12">
+                <?php echo Flasher::flash(); ?>
               </div>
-              <div class="col-xl-6">
-                <label for="password">Contraseña</label>
+              <div class="col-12 mb-3">
+                <label class="form-label" for="usuario">Usuario</label>
+                <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Walter White" required>
+                <?php if (is_demo() || is_local()): ?>
+                  <small class="text-muted">Ingresa bee</small>
+                <?php endif; ?>
+              </div>
+              <div class="col-12">
+                <label class="form-label" for="password">Contraseña</label>
                 <input type="password" class="form-control" id="password" name="password" required>
-                <small class="text-muted">Ingresa 123456</small>
+                <?php if (is_demo() || is_local()): ?>
+                  <small class="text-muted">Ingresa 123456</small>
+                <?php endif; ?>
               </div>
             </div>
 
-            <button class="btn btn-primary btn-block" type="submit">Ingresar</button>
+            <button class="btn btn-primary" type="submit"><i class="fas fa-fingerprint fa-fw"></i> Ingresar</button>
           </form>
         </div>
       </div>

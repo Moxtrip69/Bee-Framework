@@ -1,2 +1,13 @@
 // Estilos personalizados para Bee framework
 @import 'variables'
+
+.bee_fly
+  animation: bee_fly 5s ease-in-out 0s infinite
+ 
+@keyframes bee_fly
+  0% 
+    transform: translate(20px, 0px) rotate(-5deg)
+  50%
+    transform: translate(-20px, 0px) rotate(5deg)
+  100%
+    transform: translate(20px, 0px) rotate(-5deg)

@@ -30,4 +30,4 @@ CREATE TABLE `bee_users` (
 -- ----------------------------
 -- Records of bee_users
 -- ----------------------------
-INSERT INTO `bee_users` VALUES ('1', null, 'bee', '$2y$10$Y/o.lD8SFIdsDkzcHlbw5eXcJaJAsbjMcl4byue60VU0Ja5IVpDHi', 'jslocal@localhost.com', '2021-12-05 15:52:17');
+INSERT INTO `bee_users` VALUES ('1', null, 'bee', '$2y$10$xHEI5cJ3q7rBJaL.M9qBRe909ahHvIZVTfRRxlLqfnWwAYwWQE/Wu', 'jslocal@localhost.com', '2021-12-05 15:52:17');

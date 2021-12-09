@@ -45,12 +45,12 @@ class loginController extends Controller {
           'avatar'   => 'myavatar.jpg', 
           'tel'      => '11223344', 
           'color'    => '#112233',
-          'user'     => 'bee', // puedes cambiar este dato a lo que gustes si usarás este sistema de login (es relativamente seguro dependiendo el tipo de sistema)
-          'password' => '$2y$10$tV0XLhk.v8JBcqIjPhkFcemUjASG8Bt3ggDTnzV5VYkluoAc5.sAC' // 123456 por defecto, puedes generar una nueva en bee/password
+          'username' => 'bee', // puedes cambiar este dato a lo que gustes si usarás este sistema de login (es relativamente seguro dependiendo el tipo de sistema)
+          'password' => '$2y$10$xHEI5cJ3q7rBJaL.M9qBRe909ahHvIZVTfRRxlLqfnWwAYwWQE/Wu' // 123456 por defecto, puedes generar una nueva en bee/password
         ];
     
         // Verificar información del usuario
-        if ($usuario !== $user['user'] || !password_verify($password.AUTH_SALT, $user['password'])) {
+        if ($usuario !== $user['username'] || !password_verify($password.AUTH_SALT, $user['password'])) {
           throw new Exception('Las credenciales no son correctas.');
         }
   
@@ -73,7 +73,7 @@ class loginController extends Controller {
         // Recargar información de usuario
         $user = Model::list(BEE_USERS_TABLE, ['id' => $user['id']], 1);
 
-        // Iniciar sesión del usuario
+        // Registrar la información en sesión
         Auth::login($user['id'], $user);
       }
       

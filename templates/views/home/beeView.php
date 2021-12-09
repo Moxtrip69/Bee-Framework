@@ -37,7 +37,7 @@
       </div>
     </div>
     <div class="col-xl-6 col-lg-6 col-md-6 col-12 text-center">
-      <img src="<?php echo get_image('bee.png'); ?>" alt="<?php echo get_bee_name(); ?>" class="img-fluid mt-5" style="width: 70%; margin: auto auto;">
+      <img src="<?php echo get_image('bee.png'); ?>" alt="<?php echo get_bee_name(); ?>" class="img-fluid mt-5 bee_fly" style="width: 70%; margin: auto auto;">
     </div>
   </div>
 </div>

@@ -248,7 +248,7 @@ class Bee {
     global $Bee_User;
 
     // Para mantener abierta una sesión de usuario al ser persistente
-    if (persistent_session() && !defined('DOING_AJAX')) {
+    if (persistent_session()) {
       try {
         // Autenticamos al usuario en caso de existir los cookies
         // y de que sean válidos
