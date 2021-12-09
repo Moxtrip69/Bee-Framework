@@ -18,6 +18,7 @@ class Csrf
         'token'      => $this->token,
         'expiration' => $this->token_expiration
       ];
+      
       return $this;
     }
 

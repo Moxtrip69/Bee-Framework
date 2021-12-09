@@ -279,6 +279,24 @@ function logger($message , $type = 'debug' , $output = false) {
 }
 
 /**
+ * Loggea el archivo, línea, clase o función de donde se ejecuta
+ * dicha función
+ *
+ * @return bool
+ */
+function backtrace()
+{
+	// Para seguir errores o ejecuciones de código
+	$bt     = debug_backtrace();
+	$caller = array_shift($bt);
+	logger('BACKTRACE STARTS ----------------');
+	logger(print_r($caller, true));
+	logger('BACKTRACE ENDS -------------------');
+
+	return true;
+}
+
+/**
  * Códificar a json de forma especial para prevenir errores en UTF8
  *
  * @param mixed $var

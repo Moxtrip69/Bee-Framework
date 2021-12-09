@@ -14,12 +14,12 @@ class Auth
   public function __construct()
   {
     if (isset($_SESSION[$this->var])) {
-      return;
+      return $this;
     }
 
     $session =
     [
-      'logged' => false,
+      'logged' => $this->logged,
       'token'  => $this->token,
       'id'     => $this->id,
       'ssid'   => $this->ssid,
@@ -27,16 +27,17 @@ class Auth
     ];
 
     $_SESSION[$this->var] = $session;
-    return;
+    return $this;
   }
 
   // Crear sesión de usuario
   public static function login($user_id, $user_data = [])
   {
-    $self    = new self();
+    $self         = new self();
+    $self->logged = true;
     $session =
     [
-      'logged' => true,
+      'logged' => $self->logged,
       'token'  => generate_token(),
       'id'     => $user_id,
       'ssid'   => session_id(),
@@ -74,7 +75,16 @@ class Auth
       'user'   => $self->user
     ];
 
+    /**
+     * Por seguridad
+     * se destruye todo lo contenido en
+     * la sesión actual del usuario
+     * @since 1.1.4
+     */
     $_SESSION[$self->var] = $session;
+    unset($_SESSION[$self->var]);
+    session_destroy();
+
     return true;
   }
 

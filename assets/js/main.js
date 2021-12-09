@@ -29,12 +29,12 @@ $(document).ready(function() {
         body.waitMe();
       }
     }).done(function(res) {
-      toastr.success(res.msg, '¡Bien!');
-      toastr.error(res.msg, '¡Error!');
-      toastr.info(res.msg, '¡Tip!');
-      toastr.warning(res.msg, '¡Aviso!');
-      
-      console.log(res);
+      if (res.status === 200) {
+        toastr.success(res.msg, '¡Bien!');
+      } else {
+        toastr.error(res.msg, '¡Error!');
+      }
+     
     }).fail(function(err) {
       toastr.error('Prueba AJAX fallida.', '¡Upss!');
     }).always(function() {

@@ -222,12 +222,15 @@ class Bee {
 
         ////////////////////////////////////
         // Se agrega la información del usuario a sesión
-        if (!empty($user)) {
-          Auth::login($user['id'], $user);
-        } else {
-          Auth::logout();
+        if (!empty($Bee_User)) {
+          /**
+           * Para prevenir la regeneración del token e id de sesión
+           * en caso de que ya haya ocurrido un inicio de sesión previo
+           */
+          if (!Auth::validate()) {
+            Auth::login($Bee_User['id'], $Bee_User);
+          }
         }
-        
       } catch (Exception $e) {
         bee_die($e->getMessage());
       }

@@ -69,6 +69,11 @@ class loginController extends Controller {
   
         // Sesiones totalmente persistentes con base a Cookies
         BeeSession::new_session($user['id']);
+
+        // Recargar información de usuario
+        $user = Model::list(BEE_USERS_TABLE, ['id' => $user['id']]);
+
+        // Iniciar sesión del usuario
         Auth::login($user['id'], $user);
       }
       
