@@ -4,11 +4,6 @@ class Controller {
 
   function __construct()
   {
-
-  }
-
-  function probando() {
-    echo 'Estamos probando el Controller...';
   }
 
   /**

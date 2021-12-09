@@ -1856,7 +1856,7 @@ function load_all_cookies()
    * @param array $cookies
    * @return bool
    */
-	function destroy_cookie($cookie)
+	function destroy_cookie($cookie, $path = '', $domain = '')
 	{
 		global $Bee_Cookies;
 
@@ -1873,7 +1873,7 @@ function load_all_cookies()
 		}
 
 		// Seteamos el cookie con un valor null y tiempo negativo para destruirlo
-		setcookie($cookie , null , time() - 1000);
+		setcookie($cookie , null , time() - 1000, $path, $domain);
 		unset($Bee_Cookies[$cookie]);
 		
 		return true;

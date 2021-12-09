@@ -71,7 +71,7 @@ class loginController extends Controller {
         BeeSession::new_session($user['id']);
 
         // Recargar información de usuario
-        $user = Model::list(BEE_USERS_TABLE, ['id' => $user['id']]);
+        $user = Model::list(BEE_USERS_TABLE, ['id' => $user['id']], 1);
 
         // Iniciar sesión del usuario
         Auth::login($user['id'], $user);

@@ -2,7 +2,6 @@
 
 class ajaxController extends Controller {
 
-
   /**
    * La petición del servidor
    *
@@ -70,6 +69,9 @@ class ajaxController extends Controller {
 
   function __construct()
   {
+    // Prevenir el acceso no autorizado
+    if (!defined('DOING_AJAX')) bee_die(get_bee_message(0));
+    
     // Parsing del cuerpo de la petición
     $this->r_type = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : null;
     $this->data   = in_array($this->r_type, ['PUT','DELETE','HEADERS','OPTIONS']) ? parse_str(file_get_contents("php://input"), $this->parsed) : ($this->r_type === 'GET' ? $_GET : $_POST);

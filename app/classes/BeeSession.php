@@ -69,8 +69,8 @@ class BeeSession {
 		// Validar la existencia de los cookies en el sistema
 		if (!cookie_exists($auth->bee_cookie_id) || !cookie_exists($auth->bee_cookie_token)) {
 			// Si no existe la coincidencia vamos a borrar los cookies por seguridad
-			destroy_cookie($auth->bee_cookie_id);
-			destroy_cookie($auth->bee_cookie_token);
+			destroy_cookie($auth->bee_cookie_id, $auth->bee_cookie_path, $auth->bee_cookie_domain);
+			destroy_cookie($auth->bee_cookie_token, $auth->bee_cookie_path, $auth->bee_cookie_domain);
 
 			return false;
 		}
@@ -88,8 +88,8 @@ class BeeSession {
 		// Verificamos si coincide la información
 		if (!password_verify($auth->token, $auth_token)) {
 			// Si no existe la coincidencia vamos a borrar los cookies por seguridad
-			destroy_cookie($auth->bee_cookie_id);
-			destroy_cookie($auth->bee_cookie_token);
+			destroy_cookie($auth->bee_cookie_id, $auth->bee_cookie_path, $auth->bee_cookie_domain);
+			destroy_cookie($auth->bee_cookie_token, $auth->bee_cookie_path, $auth->bee_cookie_domain);
 
 			return false;
 		}
@@ -121,8 +121,8 @@ class BeeSession {
 		// Verificamos si existen los cookies para borrarlos y generar nuevos
 		if (cookie_exists($auth->bee_cookie_id) || cookie_exists($auth->bee_cookie_token)) {
 			// Si existen los borramos
-			destroy_cookie($auth->bee_cookie_id);
-			destroy_cookie($auth->bee_cookie_token);
+			destroy_cookie($auth->bee_cookie_id, $auth->bee_cookie_path, $auth->bee_cookie_domain);
+			destroy_cookie($auth->bee_cookie_token, $auth->bee_cookie_path, $auth->bee_cookie_domain);
 		}
 
 		// Creamos nuevos cookies
@@ -151,8 +151,8 @@ class BeeSession {
     }
 		
     // Se destruyen todos los cookies existentes
-		destroy_cookie($auth->bee_cookie_id);
-		destroy_cookie($auth->bee_cookie_token);
+		destroy_cookie($auth->bee_cookie_id, $auth->bee_cookie_path, $auth->bee_cookie_domain);
+		destroy_cookie($auth->bee_cookie_token, $auth->bee_cookie_path, $auth->bee_cookie_domain);
 	
 		// Se regresa true si se borra todo con éxito
 		return true;
