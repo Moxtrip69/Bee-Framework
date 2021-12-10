@@ -49,6 +49,7 @@ class ajaxController extends Controller {
    * aceptar una petición entrante
    *
    * @var string
+   * @deprecated 1.1.4
    */
   private $hook_name        = 'bee_hook'; // Si es modificado, actualizar el valor en la función core insert_inputs()
   
@@ -57,6 +58,7 @@ class ajaxController extends Controller {
    * si uno de estos no es proporcionado la petición fallará
    *
    * @var array
+   * @deprecated 1.1.4
    */
   private $required_params  = ['hook', 'action'];
 
@@ -65,12 +67,12 @@ class ajaxController extends Controller {
    *
    * @var array
    */
-  private $accepted_actions = ['get', 'post', 'put', 'delete', 'options', 'headers', 'add', 'load'];
+  private $accepted_actions = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEADERS'];
 
   function __construct()
   {
     // Prevenir el acceso no autorizado
-    if (!defined('DOING_AJAX')) bee_die(get_bee_message(0));
+    if (!defined('DOING_AJAX')) die();
     
     // Parsing del cuerpo de la petición
     $this->r_type = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : null;
@@ -80,30 +82,39 @@ class ajaxController extends Controller {
     $this->action = isset($this->data['action']) ? $this->data['action'] : null;
     $this->csrf   = isset($this->data['csrf']) ? $this->data['csrf'] : null;
 
-    // Validar que hook exista y sea válido
-    if ($this->hook !== $this->hook_name) {
-      http_response_code(403);
-      json_output(json_build(403));
-    }
+    /**
+     * @deprecated 1.1.4
+     */
+    // // Validar que hook exista y sea válido
+    // if ($this->hook !== $this->hook_name) {
+    //   http_response_code(403);
+    //   json_output(json_build(403, null, 'Hook no autorizado.'));
+    // }
 
+    /**
+     * @since 1.1.4
+     */
     // Validar que se pase un verbo válido y aceptado
-    if(!in_array($this->action, $this->accepted_actions)) {
+    if(!in_array(strtoupper($this->r_type), $this->accepted_actions)) {
       http_response_code(403);
-      json_output(json_build(403));
+      json_output(json_build(403, null, 'Acción no autorizada.'));
     }
     
+    /**
+     * @deprecated 1.1.4
+     */
     // Validación de que todos los parámetros requeridos son proporcionados
-    foreach ($this->required_params as $param) {
-      if(!isset($this->data[$param])) {
-        http_response_code(403);
-        json_output(json_build(403));
-      }
-    }
+    // foreach ($this->required_params as $param) {
+    //   if(!isset($this->data[$param])) {
+    //     http_response_code(403);
+    //     json_output(json_build(403, null, 'Parámetros incompletos.'));
+    //   }
+    // }
 
     // Validar de la petición post / put / delete el token csrf
-    if (in_array($this->action, ['post', 'put', 'delete', 'add', 'headers']) && !Csrf::validate($this->csrf)) {
-      http_response_code(403);
-      json_output(json_build(403));
+    if (in_array(strtolower($this->r_type), ['post', 'put', 'delete', 'headers', 'options']) && !Csrf::validate($this->csrf)) {
+      http_response_code(401);
+      json_output(json_build(401, null, 'Autorización no válida.'));
     }
   }
 
@@ -127,13 +138,37 @@ class ajaxController extends Controller {
     503 Service Unavailable
     550 Permission denied
     */
-    json_output(json_build(403));
+    http_response_code(404);
+    json_output(json_build(404, null, 'Ruta no encontrada.'));
   }
 
+  /**
+   * Función de pruebas bee framework
+   * @since 1.1.4
+   *
+   * @return void
+   */
   function test()
   {
     try {
       json_output(json_build(200, null, 'Prueba de AJAX realizada con éxito.'));
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  /**
+   * Función de pruebas para vuejs
+   * @since 1.1.4
+   *
+   * @return void
+   */
+  function test_posts()
+  {
+    try {
+      $posts = Model::list('pruebas');
+      json_output(json_build(200, $posts));
+
     } catch (Exception $e) {
       json_output(json_build(400, null, $e->getMessage()));
     }

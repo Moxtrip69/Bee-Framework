@@ -27,6 +27,7 @@ Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y 
   - class::truncate($table);
   - class::create($table_name, $schema, $drop = false);
 - Nuevos estilos para plugin Toastr y configuraciones adicionales por defecto, todo esto puede ser sobre-escrito en **main.js**
+- Se han deprecado los parámetros *hook* y *action* en peticiones **AJAX**, solo es requerido el verbo de la petición, y si el tipo de petición así lo requiere, el token **CSRF** para evitar ataques cross-domain.
 
 
 ### v 1.1.3

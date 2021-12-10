@@ -151,15 +151,4 @@ class homeController extends Controller {
 
     View::render('perfil', $data);
   }
-
-  function vue()
-  {
-    $data =
-    [
-      'title'   => 'Administrador de tareas',
-      'padding' => '0px'
-    ];
-
-    View::render('vue', $data);
-  }
 }

@@ -88,7 +88,8 @@ function json_output($json, $die = true) {
   }
 
   echo $json;
-  if($die) {
+
+  if($die === true) {
     die;
   }
   

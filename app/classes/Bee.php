@@ -53,6 +53,10 @@ class Bee {
   private $current_method     = null;
   private $method             = null;
   private $params             = [];
+  private $cont_not_found     = false;
+  private $method_not_found   = false;
+  private $missing_params     = false;
+  private $is_ajax            = false;
 
   // La función principal que se ejecuta al instanciar nuestra clase
   function __construct() {
@@ -81,7 +85,6 @@ class Bee {
      */
     $this->init_filter_url();
     $this->init_set_defaults();
-    $this->init_check_request_type();
 
     $this->init_csrf();
     $this->init_globals();
@@ -89,6 +92,9 @@ class Bee {
     $this->init_set_globals();
     $this->init_custom();
 
+    /**
+     * Se hace ejecución de todo nuestro framework
+     */
     $this->init_dispatch();
   }
 
@@ -361,6 +367,11 @@ class Bee {
       $this->current_controller = DEFAULT_CONTROLLER; // home Controler.php establecido en settings.php
     }
 
+    // Validando si la petición entrante original es ajax
+    if (in_array($this->current_controller, ['ajax'])) {
+      $this->is_ajax            = true; // Lo usaremos para filtrar más adelante nuestro tipo de respuesta al usuario
+    }
+
     // Definiendo el nombre del archivo del controlador
     $this->controller           = $this->current_controller.'Controller'; // homeController
 
@@ -368,6 +379,7 @@ class Bee {
     if(!class_exists($this->controller)) {
       $this->current_controller = DEFAULT_ERROR_CONTROLLER; // Para que el CONTROLLER sea error
       $this->controller         = DEFAULT_ERROR_CONTROLLER.'Controller'; // errorController
+      $this->cont_not_found     = true; // No se ha encontrado la clase o controlador en el sistema
     }
 
     /////////////////////////////////////////////////////////////////////////////////
@@ -377,20 +389,27 @@ class Bee {
       
       // Existe o no el método dentro de la clase a ejecutar (controllador)
       if(!method_exists($this->controller, $this->method)) {
+        $this->current_controller = DEFAULT_ERROR_CONTROLLER; // controlador de errores por defecto
         $this->controller         = DEFAULT_ERROR_CONTROLLER.'Controller'; // errorController
-        $this->current_method     = DEFAULT_METHOD; // index
-        $this->current_controller = DEFAULT_ERROR_CONTROLLER;
+        $this->current_method     = DEFAULT_METHOD; // método index por defecto
+        $this->method_not_found   = true; // el método de la clase no existe
       } else {
         $this->current_method     = $this->method;
       }
 
       unset($this->uri[1]);
     } else {
-      $this->current_method = DEFAULT_METHOD; // index
+      $this->current_method       = DEFAULT_METHOD; // index
     }
 
     // Obteniendo los parámetros de la URI
-    $this->params           = array_values(empty($this->uri) ? [] : $this->uri);
+    $this->params                 = array_values(empty($this->uri) ? [] : $this->uri);
+
+    /**
+     * Verifica el tipo de petición que se está solicitando
+     * @since 1.1.4
+     */
+    $this->init_check_request_type();
 
     /////////////////////////////////////////////////////////////////////////////////
     // Creando constantes para utilizar más adelante
@@ -407,9 +426,22 @@ class Bee {
    */
   private function init_check_request_type()
   {
+    /**
+     * Recontruye los valores por defecto si es una petición ajax
+     * @since 1.1.4
+     */
+    if ($this->is_ajax === true) {
+      $this->current_controller = 'ajax';
+      $this->controller         = 'ajaxController';
+    }
+
     switch ($this->current_controller) {
       case 'ajax':
         define('DOING_AJAX', true);
+
+        if ($this->method_not_found === true) {
+          $this->current_method = DEFAULT_METHOD;
+        }
         break;
 
       case 'cronjob':
@@ -437,6 +469,8 @@ class Bee {
    */
   private function init_dispatch()
   {
+    
+
     /////////////////////////////////////////////////////////////////////////////////
     // Ejecutando controlador y método según se haga la petición
     $this->controller = new $this->controller;
