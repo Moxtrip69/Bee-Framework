@@ -259,6 +259,7 @@ function logger($message , $type = 'debug' , $output = false) {
 
   $now_time = date("d-m-Y H:i:s");
 
+	$message = is_array($message) || is_object($message) ? print_r($message, true) : $message;
   $message = "[".strtoupper($type)."] $now_time - $message";
 
 	if (!is_dir(LOGS)) {
@@ -875,15 +876,20 @@ function generate_token($length = 32) {
  */
 function check_posted_data($required_params = [] , $posted_data = []) {
 
-  if(empty($posted_data)) {
+	if (!is_array($required_params)) {
+		return false;
+	}
+
+  if(empty($required_params) || empty($posted_data)) {
     return false;
   }
 
   // Keys necesarios en toda petición
-  $defaults = ['hook','action'];
-  $required_params = array_merge($required_params,$defaults);
+	/**
+	 * @deprecated 1.1.4
+	 */
   $required = count($required_params);
-  $found = 0;
+  $found    = 0;
 
   foreach ($posted_data as $k => $v) {
     if(in_array($k , $required_params)) {
@@ -907,15 +913,20 @@ function check_posted_data($required_params = [] , $posted_data = []) {
  */
 function check_get_data($required_params = [] , $get_data = []) {
 
-  if(empty($get_data)) {
+	if (!is_array($required_params)) {
+		return false;
+	}
+
+  if(empty($required_params) || empty($posted_data)) {
     return false;
   }
 
   // Keys necesarios en toda petición
-  $defaults = ['hook','action'];
-  $required_params = array_merge($required_params, $defaults);
+	/**
+	 * @deprecated 1.1.4
+	 */
   $required = count($required_params);
-  $found = 0;
+  $found    = 0;
 
   foreach ($get_data as $k => $v) {
     if(in_array($k , $required_params)) {

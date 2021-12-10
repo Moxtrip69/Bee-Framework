@@ -38,11 +38,27 @@ class ajaxController extends Controller {
   private $data   = null;
 
   /**
+   * @since 1.1.4
+   *
+   * @var mixed
+   */
+  private $body   = null;
+
+  /**
    * Parámetros parseados en caso de ser petición put | delete | headers | options
    *
    * @var mixed
    */
   private $parsed = null;
+
+  /**
+   * Array de archivos binarios pasados
+   * 
+   * @since 1.1.4
+   *
+   * @var array
+   */
+  private $files  = [];
 
   /**
    * Valor que se deberá proporcionar como hook para
@@ -73,14 +89,9 @@ class ajaxController extends Controller {
   {
     // Prevenir el acceso no autorizado
     if (!defined('DOING_AJAX')) die();
-    
-    // Parsing del cuerpo de la petición
+
+    // Tipo de petición solicitada
     $this->r_type = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : null;
-    $this->data   = in_array($this->r_type, ['PUT','DELETE','HEADERS','OPTIONS']) ? parse_str(file_get_contents("php://input"), $this->parsed) : ($this->r_type === 'GET' ? $_GET : $_POST);
-    $this->data   = $this->parsed !== null ? $this->parsed : $this->data;
-    $this->hook   = isset($this->data['hook']) ? $this->data['hook'] : null;
-    $this->action = isset($this->data['action']) ? $this->data['action'] : null;
-    $this->csrf   = isset($this->data['csrf']) ? $this->data['csrf'] : null;
 
     /**
      * @deprecated 1.1.4
@@ -99,7 +110,22 @@ class ajaxController extends Controller {
       http_response_code(403);
       json_output(json_build(403, null, 'Acción no autorizada.'));
     }
-    
+
+    // Parsing del cuerpo de la petición
+    $this->parse_data();
+
+    // Parámetros adicionales
+    /**
+     * @deprecated 1.1.4
+     */
+    $this->hook   = isset($this->data['hook']) ? $this->data['hook'] : null;
+
+    /**
+     * @deprecated 1.1.4
+     */
+    $this->action = isset($this->data['action']) ? $this->data['action'] : null;
+    $this->csrf   = isset($this->data['csrf']) ? $this->data['csrf'] : null;
+   
     /**
      * @deprecated 1.1.4
      */
@@ -142,6 +168,30 @@ class ajaxController extends Controller {
     json_output(json_build(404, null, 'Ruta no encontrada.'));
   }
 
+  private function parse_data()
+  {
+    // Leer el ouput del cuerpo dependiendo el verbo o petición
+    switch (strtolower($this->r_type)) {
+      case 'get':
+        $this->body = $_GET;
+        $this->data = $this->body;
+        break;
+      case 'post':
+        $this->body  = $_POST;
+        $this->data  = $this->body;
+        $this->files = !isset($_FILES) && !empty($_FILES) ? $_FILES : [];
+        break;
+      case 'put':
+      case 'delete':
+      case 'headers':
+      case 'options':
+        $this->body = file_get_contents('php://input');
+        parse_str($this->body, $this->parsed);
+        $this->data = $this->parsed;
+        break;
+    }
+  }
+
   /**
    * Función de pruebas bee framework
    * @since 1.1.4
@@ -168,6 +218,140 @@ class ajaxController extends Controller {
     try {
       $posts = Model::list('pruebas');
       json_output(json_build(200, $posts));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  /**
+   * Función de pruebas para cargar un post de la base de datos
+   *
+   * @return void
+   */
+  function test_get_post()
+  {
+    try {
+      if (!check_posted_data(['id'], $this->data)) {
+        throw new Exception('Parámetros faltantes.');
+      }
+
+      if (!$post = Model::list('pruebas', ['id' => $this->data['id']], 1)) {
+        throw new Exception(get_bee_message('not_found'));
+      }
+
+      json_output(json_build(200, $post));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  /**
+   * Función de pruebas para agregar un post a la base de datos
+   *
+   * @return void
+   */
+  function test_add_post()
+  {
+    try {
+      if (!check_posted_data(['titulo','contenido','nombre'], $this->data)) {
+        throw new Exception('Parámetros faltantes.');
+      }
+
+      if (!Auth::validate()) {
+        throw new Exception(get_bee_message('auth'));
+      }
+
+      $id        = null;
+      $nombre    = clean($this->data['nombre']);
+      $titulo    = clean($this->data['titulo']);
+      $contenido = clean($this->data['contenido']);
+
+      $data =
+      [
+        'nombre'    => $nombre,
+        'titulo'    => $titulo,
+        'contenido' => $contenido,
+        'creado'    => now()
+      ];
+
+      if (!$id = Model::add('pruebas', $data)) {
+        throw new Exception(get_bee_message('not_added'));
+      }
+
+      $post = Model::list('pruebas', ['id' => $id], 1);
+      
+      json_output(json_build(201, $post, get_bee_message('added')));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  /**
+   * Función de pruebas para actualizar un post de la base de datos
+   *
+   * @return void
+   */
+  function test_update_post()
+  {
+    try {
+      if (!check_posted_data(['id','titulo','contenido','nombre'], $this->data)) {
+        throw new Exception('Parámetros faltantes.');
+      }
+
+      $id        = clean($this->data['id']);
+      $nombre    = clean($this->data['nombre']);
+      $titulo    = clean($this->data['titulo']);
+      $contenido = clean($this->data['contenido']);
+
+      if (!$post = Model::list('pruebas', ['id' => $id], 1)) {
+        throw new Exception(get_bee_message('not_found'));
+      }
+
+      $data =
+      [
+        'nombre'    => $nombre,
+        'titulo'    => $titulo,
+        'contenido' => $contenido
+      ];
+
+      if (!Model::update('pruebas', ['id' => $id], $data)) {
+        throw new Exception(get_bee_message('not_updated'));
+      }
+
+      $post = Model::list('pruebas', ['id' => $id], 1);
+      
+      json_output(json_build(200, $post, get_bee_message('updated')));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  /**
+   * Función de pruebas para borrar un post de la base de datos
+   * @since 1.1.4
+   *
+   * @return void
+   */
+  function test_delete_post()
+  {
+    try {
+      if (!check_posted_data(['id'], $this->data)) {
+        throw new Exception('Parámetros faltantes.');
+      }
+
+      if (!$post = Model::list('pruebas', ['id' => $this->data['id']], 1)) {
+        throw new Exception(get_bee_message('not_found'));
+      }
+
+      if (!Model::remove('pruebas', ['id' => $post['id']])) {
+        throw new Exception(get_bee_message('not_deleted'));
+      }
+      
+      json_output(json_build(200, $post, 'Post borrado con éxito.'));
 
     } catch (Exception $e) {
       json_output(json_build(400, null, $e->getMessage()));

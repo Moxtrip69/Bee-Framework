@@ -357,6 +357,7 @@ class Bee {
    */
   private function init_set_defaults()
   {
+    
     /////////////////////////////////////////////////////////////////////////////////
     // Necesitamos saber si se está pasando el nombre de un controlador en nuestro URI
     // $this->uri[0] es el controlador en cuestión
@@ -402,8 +403,17 @@ class Bee {
       $this->current_method       = DEFAULT_METHOD; // index
     }
 
+    // Verificar que el método solicitado sea público de lo contrario no se da acceso
+    $reflection = new ReflectionMethod($this->controller, $this->current_method);
+    if (!$reflection->isPublic()) {
+      // Si el método solicitado no es público, se manda a ruta de error
+      $this->current_controller = DEFAULT_ERROR_CONTROLLER; // controlador de errores por defecto
+      $this->controller         = DEFAULT_ERROR_CONTROLLER.'Controller'; // errorController
+      $this->current_method     = DEFAULT_METHOD; // método index por defecto
+    }
+
     // Obteniendo los parámetros de la URI
-    $this->params                 = array_values(empty($this->uri) ? [] : $this->uri);
+    $this->params               = array_values(empty($this->uri) ? [] : $this->uri);
 
     /**
      * Verifica el tipo de petición que se está solicitando
@@ -460,7 +470,7 @@ class Bee {
         break;
     }
   }
-
+  
   /**
    * Método para ejecutar y cargar de forma automática el controlador solicitado por el usuario
    * su método y pasar parámetros a él.
@@ -469,8 +479,6 @@ class Bee {
    */
   private function init_dispatch()
   {
-    
-
     /////////////////////////////////////////////////////////////////////////////////
     // Ejecutando controlador y método según se haga la petición
     $this->controller = new $this->controller;

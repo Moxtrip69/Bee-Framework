@@ -45,7 +45,7 @@
             <h4>Lista de posts</h4>
           </div>
           <div class="card-body">
-            <posts-list :posts="posts"></posts-list>
+            <posts-list :posts="posts" @fetch-data="fetchData"></posts-list>
           </div>
         </div>
       </div>

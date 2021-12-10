@@ -67,3 +67,30 @@ CREATE TABLE `usuarios` (
 -- ----------------------------
 -- Records of usuarios
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for movements
+-- ----------------------------
+DROP TABLE IF EXISTS `movements`;
+CREATE TABLE `movements` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `type` varchar(30) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `amount` float(10,2) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for options
+-- ----------------------------
+DROP TABLE IF EXISTS `options`;
+CREATE TABLE `options` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `option` varchar(255) DEFAULT NULL,
+  `val` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
