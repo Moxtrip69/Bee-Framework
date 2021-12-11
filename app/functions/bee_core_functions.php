@@ -1269,6 +1269,13 @@ function load_scripts() {
 function register_to_bee_obj($key, $value) {
 	global $Bee_Object;
 
+	/**
+	 * Formateo del key en caso de no ser válido para
+	 * javascript
+	 * @since 1.1.4
+	 */
+	$key = str_replace([' ','-'], '_', $key);
+
 	if (is_array($value) || is_object($value)) {
 		$Bee_Object[$key] = $value;
 	} else {
@@ -1303,9 +1310,7 @@ function load_bee_obj() {
  * @return bool
  */
 function bee_obj_default_config() {
-	global $Bee_Object;
-
-	$Bee_Object =
+	$options =
 	[
 		'sitename'      => get_sitename(),
 		'version'       => get_version(),
@@ -1333,7 +1338,7 @@ function bee_obj_default_config() {
 		'vuejs'         => VUEJS
 	];
 
-	return true;
+	return $options;
 }
 
 /**

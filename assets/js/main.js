@@ -1,13 +1,16 @@
 $(document).ready(function() {
 
-  // Toast para notificaciones
-  //toastr.warning('My name is Inigo Montoya. You killed my father, prepare to die!');
-
-  // Waitme
-  //$('body').waitMe({effect : 'orbit'});
-  console.log('////////// Bienvenido a Bee Framework Versión ' + Bee.bee_version + ' //////////');
-  console.log('//////////////////// www.joystick.com.mx ////////////////////');
-  console.log(Bee);
+  /**
+   * @since 1.1.4
+   */
+  init_bee_greeting();
+  function init_bee_greeting() {
+    console.log('////////// Bienvenido a Bee Framework Versión ' + Bee.bee_version + ' //////////');
+    console.log('//////////////////// www.joystick.com.mx ////////////////////');
+    if (Bee.is_local == true) {
+      console.log(Bee);
+    }
+  }
 
   /**
    * Prueba de peticiones ajax al backend en versión 1.1.3

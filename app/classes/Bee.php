@@ -303,16 +303,16 @@ class Bee {
    */
   private function init_set_globals()
   {
-    global $Bee_Cookies, $Bee_Messages;
+    global $Bee_Cookies, $Bee_Messages, $Bee_Object;
 
     // Inicializa y carga todas las cookies existentes del sitio
     $Bee_Cookies   = get_all_cookies();
 
     // Inicializa el objeto javascript para el pie de página
-    bee_obj_default_config();
+    $Bee_Object    = bee_obj_default_config();
 
     // Inicializa y carga todos los mensajes por defecto de Bee framework
-    $Bee_Messages = get_bee_default_messages();
+    $Bee_Messages  = get_bee_default_messages();
   }
 
   /**
@@ -323,6 +323,17 @@ class Bee {
    */
   private function init_custom()
   {
+    /**
+     * No son necesarios pero es recomendados tenerlos de forma
+     * global registrados aquí, para poder acceder desde todo el sistema
+     * dentro de Javascript
+     * @since 1.1.4
+     */
+    register_to_bee_obj('current_controller', $this->current_controller);
+    register_to_bee_obj('current_method'    , $this->current_method);
+    register_to_bee_obj('current_params'    , $this->params);
+
+
     // Inicializar procesos personalizados del sistema o aplicación
     // ........
   }
@@ -357,7 +368,6 @@ class Bee {
    */
   private function init_set_defaults()
   {
-    
     /////////////////////////////////////////////////////////////////////////////////
     // Necesitamos saber si se está pasando el nombre de un controlador en nuestro URI
     // $this->uri[0] es el controlador en cuestión
@@ -475,7 +485,7 @@ class Bee {
    * Método para ejecutar y cargar de forma automática el controlador solicitado por el usuario
    * su método y pasar parámetros a él.
    *
-   * @return void
+   * @return bool
    */
   private function init_dispatch()
   {
@@ -490,7 +500,7 @@ class Bee {
       call_user_func_array([$this->controller, $this->current_method], $this->params);
     }
 
-    return; // Línea final todo sucede entre esta línea y el comienzo
+    return true; // Línea final todo sucede entre esta línea y el comienzo
   }
 
   /**

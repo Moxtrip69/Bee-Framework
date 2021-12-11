@@ -20,16 +20,31 @@ class vuejsController extends Controller {
   
   function index()
   {
-    $data =
-    [
-      'title'   => 'Ejemplo administrador de tareas'
-    ];
-
     /**
      * Registro de scripts para solo está ruta
      */
     register_scripts([JS.'vueApp.min.js'], 'Bee framework vuejs 3');
 
+    $data =
+    [
+      'title'   => 'Ejemplo administrador de tareas'
+    ];
+
     View::render('index', $data);
+  }
+
+  function test()
+  {
+    /**
+     * Registro de scripts para solo está ruta
+     */
+    register_scripts([JS.'vueApp.min.js'], 'Bee framework vuejs 3');
+
+    $data =
+    [
+      'title' => 'Componente de prueba'
+    ];
+
+    View::render('test', $data);
   }
 }

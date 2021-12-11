@@ -7,6 +7,13 @@ class homeController extends Controller {
 
   function index()
   {
+    /**
+     * No es necesaria esta variable
+     * pero así puedes registrar elementos al objeto
+     * de javascript en el scope de la ruta actual
+     */
+    register_to_bee_obj('nuevaVariable', '123');
+
     $data =
     [
       'title' => 'Home'
