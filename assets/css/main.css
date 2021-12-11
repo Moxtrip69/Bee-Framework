@@ -32,3 +32,6 @@
             transform: translate(20px, 0px) rotate(-5deg);
   }
 }
+.nl2br {
+  white-space: pre-line;
+}
