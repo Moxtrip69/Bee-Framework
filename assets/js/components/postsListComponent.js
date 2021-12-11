@@ -191,6 +191,10 @@ export const postsListComponent = {
         contenido: '',
         nombre: ''
       };
+    },
+    cancelUpdate() {
+      this.resetPost();
+      this.isEditing = false;
     }
   },
   computed: {
@@ -226,6 +230,7 @@ export const postsListComponent = {
       <label htmlFor="contenido" className="form-label">Contenido</label>
       <textarea class="form-control" name="contenido" id="contenido" cols="30" rows="10" v-model="post.contenido"></textarea>
     </div>
+
     <button className="btn btn-success" :disabled="!canAdd"><i className="fas fa-save fa-fw"></i> Guardar</button>
   </form>
 
@@ -244,7 +249,9 @@ export const postsListComponent = {
       <label htmlFor="contenido" className="form-label">Contenido</label>
       <textarea class="form-control" name="contenido" id="contenido" cols="30" rows="10" v-model="postEdit.contenido"></textarea>
     </div>
-    <button className="btn btn-success" :disabled="!canUpdate"><i className="fas fa-save fa-fw"></i> Actualizar</button>
+
+    <button className="btn btn-success me-1" :disabled="!canUpdate" type="submit"><i className="fas fa-save fa-fw"></i> Actualizar</button>
+    <button className="btn btn-warning" @click="cancelUpdate" type="button">Cancelar</button>
   </form>
 
   <div v-if="hasPosts">
