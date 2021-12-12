@@ -208,9 +208,19 @@ function get_option($option) {
 
 /**
  * Generar un link dinámico con parámetros get y token
+ * Actualizada por build_url
+ * @since 1.1.4
  * 
  */
 function buildURL($url , $params = [] , $redirection = true, $csrf = true) {
+	return build_url($url, $params, $redirection, $csrf);
+}
+
+/**
+ * Generar un link dinámico con parámetros get y token
+ * @since 1.1.4
+ */
+function build_url($url , $params = [] , $redirection = true, $csrf = true) {
 	
 	// Check if theres a ?
 	$query     = parse_url($url, PHP_URL_QUERY);
@@ -868,6 +878,21 @@ function generate_token($length = 32) {
 }
 
 /**
+ * Genera una key alfanúmerica con has md5
+ * con longitud de 30 caracteres
+ * ejemplo:
+ * 8042a4-a3bcd4-08d1e1-9596d6-24ae57
+ *
+ * @return string
+ */
+function generate_key()
+{
+	$key = implode('-', str_split(substr(strtolower(md5(microtime().rand(1000, 9999))), 0, 30), 6));
+
+	return $key;
+}
+
+/**
  * Valida los parámetros pasados en POST
  *
  * @param array $required_params
@@ -1335,7 +1360,8 @@ function bee_obj_default_config() {
 		'sweetalert2'   => SWEETALERT2,
 		'waitme'        => WAITME,
 		'lightbox'      => LIGHTBOX,
-		'vuejs'         => VUEJS
+		'vuejs'         => VUEJS,
+		'public_key'    => API_KEY_PUBLIC
 	];
 
 	return $options;
@@ -2022,3 +2048,5 @@ function load_all_cookies()
 
 		return isset($Bee_Messages[$code]) ? $Bee_Messages[$code] : '';
 	}
+
+	

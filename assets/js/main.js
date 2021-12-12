@@ -13,6 +13,45 @@ $(document).ready(function() {
   }
 
   /**
+   * Prueba la conexión a la base de datos
+   * @since 1.1.4
+   * 
+   * @returns 
+   */
+  function init_db_test() {
+    var wrapper = $('.wrapper_db_test'),
+    alert       = $('.alert', wrapper);
+
+    if (wrapper.length == 0) return;
+
+    $.ajax({
+      url: 'ajax/db_test',
+      type: 'get',
+      dataType: 'json',
+      cache: false,
+      headers: {
+        'auth_public_key' : Bee.public_key,
+        'auth_private_key': 'Esta es otra prueba 2'
+      },
+      beforeSend() {
+        alert.removeClass('alert-success').addClass('alert-danger');
+        alert.html('Probando conexión a la base de datos...');
+        wrapper.fadeIn();
+      }
+    }).done(res => {
+      if (res.status === 200) {
+        alert.removeClass('alert-danger').addClass('alert-success');
+        alert.html(res.msg);
+      } else {
+        alert.html(res.msg);
+      }
+    }).fail(err => {
+      alert.html(err.responseJSON.msg);
+    }).always(() => {
+    });
+  }
+
+  /**
    * Prueba de peticiones ajax al backend en versión 1.1.3
    */
   function test_ajax() {
@@ -127,6 +166,7 @@ $(document).ready(function() {
   init_summernote();
   init_tooltips();
   init_toastr_setup();
+  init_db_test();
   test_ajax();
 
   ////////////////////////////////////////////////////////////////////////

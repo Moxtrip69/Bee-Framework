@@ -21,6 +21,9 @@
         <li class="nav-item">
           <a class="nav-link" href="bee/password">Password</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo build_url('bee/regenerate'); ?>">Regenerar API keys</a>
+        </li>
       </ul>
     </div>
   </div>

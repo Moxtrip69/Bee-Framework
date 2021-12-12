@@ -33,10 +33,11 @@ class Db
 
   /**
    * Método para abrir una conexión a la base de datos
+   * @param bool $throw_exception | para evitar die en error, en caso de no existe la conexión lanza excepción
    *
    * @return mixed
    */
-  public static function connect() 
+  public static function connect($throw_exception = false) 
   {
     try {
       $self       = new self();
@@ -44,6 +45,10 @@ class Db
       $self->link = new PDO($self->engine.':host='.$self->host.';dbname='.$self->name.';charset='.$self->charset, $self->user, $self->pass, $self->options);
       return $self->link;
     } catch (PDOException $e) {
+      if ($throw_exception === true) {
+        throw new Exception($e->getMessage());
+      }
+
       die(sprintf('No  hay conexión a la base de datos, hubo un error: %s', $e->getMessage()));
     }
   }

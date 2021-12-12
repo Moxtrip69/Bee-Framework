@@ -85,10 +85,26 @@ class ajaxController extends Controller {
    */
   private $accepted_actions = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEADERS'];
 
+  /**
+   * Cabeceras de la petición entrante
+   *
+   * @var array
+   */
+  private $headers          = [];
+
+  /**
+   * API Keys recibidas para consumir ciertos recursos
+   * solo en caso de ser necesarias
+   *
+   * @var string
+   */
+  private $public_key       = null;
+  private $private_key      = null;
+
   function __construct()
   {
     // Prevenir el acceso no autorizado
-    if (!defined('DOING_AJAX')) die();
+    if (!defined('DOING_AJAX') && !defined('DOING_API')) die();
 
     // Tipo de petición solicitada
     $this->r_type = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : null;
@@ -110,6 +126,9 @@ class ajaxController extends Controller {
       http_response_code(403);
       json_output(json_build(403, null, 'Acción no autorizada.'));
     }
+
+    // Almacenando y determinando las cabeceras recibidas
+    $this->get_headers();
 
     // Parsing del cuerpo de la petición
     $this->parse_data();
@@ -168,6 +187,34 @@ class ajaxController extends Controller {
     json_output(json_build(404, null, 'Ruta no encontrada.'));
   }
 
+  private function get_headers()
+  {
+    $apache_request = false;
+
+    if (function_exists('apache_request_headers')) {
+      $apache_request = true;
+      $this->headers  = apache_request_headers();
+    } else {
+      $this->headers = isset($_SERVER) ? $_SERVER : [];
+    }
+
+    // En caso de existir custom headers para autenticación o consumo
+    if ($apache_request === true) {
+      $this->public_key  = isset($this->headers['auth_public_key']) ? $this->headers['auth_public_key'] : null;
+      $this->private_key = isset($this->headers['auth_private_key']) ? $this->headers['auth_private_key'] : null;
+    } else {
+      $this->public_key  = isset($this->headers['HTTP_AUTH_PUBLIC_KEY']) ? $this->headers['HTTP_AUTH_PUBLIC_KEY'] : null;
+      $this->private_key = isset($this->headers['HTTP_AUTH_PRIVATE_KEY']) ? $this->headers['HTTP_AUTH_PRIVATE_KEY'] : null;
+    }
+  }
+
+  /**
+   * Parsea el contenido del cuerpo de la petición con
+   * base al verbo o tipo de petición realizada
+   * @since 1.1.4
+   *
+   * @return void
+   */
   private function parse_data()
   {
     // Leer el ouput del cuerpo dependiendo el verbo o petición
@@ -189,6 +236,22 @@ class ajaxController extends Controller {
         parse_str($this->body, $this->parsed);
         $this->data = $this->parsed;
         break;
+    }
+  }
+
+  /**
+   * Realiza una prueba de conexióna la base de datos
+   * @since 1.1.4
+   *
+   * @return void
+   */
+  function db_test()
+  {
+    try {
+      $db = Db::connect(true);
+      json_output(json_build(200, null, sprintf('Conexión realizada con éxito a la base de datos <b>%s</b>.', is_local() ? LDB_NAME : DB_NAME)));
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
     }
   }
 

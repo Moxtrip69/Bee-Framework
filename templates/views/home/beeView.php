@@ -27,6 +27,10 @@
         <li class="list-group-item">Aprende como se hizo el framework <span class="badge bg-success"><a class="text-decoration-none text-white" href="https://www.academy.joystick.com.mx/courses/crea-tu-propio-framework-profesional-mvc-con-php-poo-mysql" target="_blank"><i class="fas fa-link fa-fw"></i> aquí</a></span></li>
       </ul>
 
+      <div class="mt-3 wrapper_db_test" style="display: none;">
+        <div class="alert"></div>
+      </div>
+
       <div class="mt-5">
         <a class="btn btn-dark btn-sm mt-1" href="creator"><i class="fas fa-file fa-fw"></i> Creator</a>
         <a class="btn btn-warning btn-sm mt-1" href="login"><i class="fas fa-fingerprint fa-fw"></i> Ingresar</a>
