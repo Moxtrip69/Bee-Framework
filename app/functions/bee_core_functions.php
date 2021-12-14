@@ -98,6 +98,22 @@ function json_output($json, $die = true) {
 
 /**
  * Construye un nuevo string json
+ * 200 OK
+	201 Created
+	300 Multiple Choices
+	301 Moved Permanently
+	302 Found
+	304 Not Modified
+	307 Temporary Redirect
+	400 Bad Request
+	401 Unauthorized
+	403 Forbidden
+	404 Not Found
+	410 Gone
+	500 Internal Server Error
+	501 Not Implemented
+	503 Service Unavailable
+	550 Permission denied
  *
  * @param integer $status
  * @param array $data
@@ -105,14 +121,6 @@ function json_output($json, $die = true) {
  * @return void
  */
 function json_build($status = 200 , $data = null , $msg = '', $error_code = null) {
-  /*
-  1 xx : Informational
-  2 xx : Success
-  3 xx : Redirection
-  4 xx : Client Error
-  5 xx : Server Error
-  */
-
   if(empty($msg) || $msg == '') {
     switch ($status) {
       case 200:
@@ -121,6 +129,15 @@ function json_build($status = 200 , $data = null , $msg = '', $error_code = null
       case 201:
         $msg = 'Created';
         break;
+			case 300:
+				$msg = 'Multiple Choices';
+				break;
+			case 301:
+				$msg = 'Moved Permanently';
+				break;
+			case 302:
+				$msg = 'Found';
+				break;
       case 400:
         $msg = 'Invalid request';
         break;
@@ -1943,7 +1960,7 @@ function load_all_cookies()
 	{
 		$messages =
 		[
-			'0'           => 'Acceso no autorizado al sistema.',
+			'0'           => 'Acceso no autorizado.',
 			'1'           => 'Acción no autorizada.',
 			'2'           => 'Ocurrió un error, intenta más tarde.',
 			'3'           => 'No pudimos procesar tu solicitud.',
@@ -2015,7 +2032,7 @@ function load_all_cookies()
 	 * OPCIONES ACTUALES
 	 * 
 	 * 
-	 * '0'           => 'Acceso no autorizado al sistema.'
+	 * '0'           => 'Acceso no autorizado.'
 	 * '1'           => 'Acción no autorizada.'
 	 * '2'           => 'Ocurrió un error, intenta más tarde.'
 	 * '3'           => 'No pudimos procesar tu solicitud.'

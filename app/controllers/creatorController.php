@@ -37,8 +37,14 @@ class creatorController extends Controller {
     $keyword  = 'Controller';
     $template = MODULES.'controllerTemplate.txt';
 
+    // Validar que sea un string válido
+    if (!is_string($name)) {
+      Flasher::error(sprintf('Ingresa un nombre de controlador válido por favor.', $name));
+      Redirect::back();
+    }
+
     // Validar longitud del nombre
-    if (strlen($name) < 5) {
+    if (strlen($name) == 0) {
       Flasher::error(sprintf('Ingresa un nombre de controlador válido por favor, <b>%s</b> es demasiado corto.', $name));
       Redirect::back();
     }

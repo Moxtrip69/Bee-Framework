@@ -57,6 +57,7 @@ class Bee {
   private $method_not_found   = false;
   private $missing_params     = false;
   private $is_ajax            = false;
+  private $is_api             = false;
 
   // La función principal que se ejecuta al instanciar nuestra clase
   function __construct() {
@@ -383,6 +384,11 @@ class Bee {
       $this->is_ajax            = true; // Lo usaremos para filtrar más adelante nuestro tipo de respuesta al usuario
     }
 
+    // Validando si la petición entrante original es de consumo de la API
+    if (in_array($this->current_controller, ['api', 'v1', 'v2', 'v3'])) {
+      $this->is_api            = true; // Lo usaremos para filtrar más adelante nuestro tipo de respuesta al usuario
+    }
+
     // Definiendo el nombre del archivo del controlador
     $this->controller           = $this->current_controller.'Controller'; // homeController
 
@@ -447,21 +453,32 @@ class Bee {
   private function init_check_request_type()
   {
     /**
-     * Recontruye los valores por defecto si es una petición ajax
+     * Recontruye los valores por defecto si es una petición ajax o a la API
      * @since 1.1.4
      */
     if ($this->is_ajax === true) {
       $this->current_controller = 'ajax';
-      $this->controller         = 'ajaxController';
+      $this->controller         = sprintf('%sController', $this->current_controller);
+    } elseif ($this->is_api === true) {
+      $this->current_controller = 'api';
+      $this->controller         = sprintf('%sController', $this->current_controller);
     }
 
     switch ($this->current_controller) {
       case 'ajax':
-        define('DOING_AJAX', true);
+      case 'api':
 
+        if ($this->current_controller === 'ajax') {
+          define('DOING_AJAX', true);
+        } else {
+          define('DOING_API', true);
+        }
+
+        // En caso de que no exista la ruta solicitada
         if ($this->method_not_found === true) {
           $this->current_method = DEFAULT_METHOD;
         }
+        
         break;
 
       case 'cronjob':
@@ -470,10 +487,6 @@ class Bee {
 
       case 'xml':
         define('DOING_XML', true);
-        break;
-      
-      case 'api':
-        define('DOING_API', true);
         break;
       
       default:
