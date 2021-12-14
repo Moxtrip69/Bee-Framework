@@ -12,8 +12,8 @@ date_default_timezone_set('America/Mexico_City');
  * puedes regenerarlas en bee/generate
  * @since 1.1.4
  */
-define('API_KEY_PUBLIC' , '03d427-c4034c-d2dc71-373b10-36da67');
-define('API_KEY_PRIVATE', '51362e-0cb1b9-f9c183-17b0a3-1a002e');
+define('API_PUBLIC_KEY' , '03d427-c4034c-d2dc71-373b10-36da67');
+define('API_PRIVATE_KEY', '51362e-0cb1b9-f9c183-17b0a3-1a002e');
 
 // Lenguaje
 define('SITE_LANG'    , $this->lng);

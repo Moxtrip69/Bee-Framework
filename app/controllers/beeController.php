@@ -72,8 +72,8 @@ class beeController extends Controller {
         throw new Exception(sprintf('Hubo un problema y no pudimos generatas las API keys para esta instancia de %s.', get_bee_name()));
       }
 
-      $php = str_replace('[[REPLACE_KEY_PUBLIC]]' , $key1, $php, $ok1);
-      $php = str_replace('[[REPLACE_KEY_PRIVATE]]', $key2, $php, $ok2);
+      $php = str_replace('[[REPLACE_PUBLIC_KEY]]' , $key1, $php, $ok1);
+      $php = str_replace('[[REPLACE_PRIVATE_KEY]]', $key2, $php, $ok2);
 
       // Validar que se hayan reemplazado con éxito ambas
       if ($ok1 == 0 && $ok2 == 0) {

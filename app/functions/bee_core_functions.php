@@ -1361,7 +1361,7 @@ function bee_obj_default_config() {
 		'waitme'        => WAITME,
 		'lightbox'      => LIGHTBOX,
 		'vuejs'         => VUEJS,
-		'public_key'    => API_KEY_PUBLIC
+		'public_key'    => get_bee_api_public_key()
 	];
 
 	return $options;
@@ -2047,6 +2047,38 @@ function load_all_cookies()
 		$code = (string) $code;
 
 		return isset($Bee_Messages[$code]) ? $Bee_Messages[$code] : '';
+	}
+
+	/**
+	 * Regresa la api key pública para consumir las rutas de la API
+	 *
+	 * @return string
+	 */
+	function get_bee_api_public_key()
+	{
+		$name = 'API_PUBLIC_KEY';
+		if (!defined($name)) {
+			throw new Exception(sprintf('La constante %s no existe o no se ha definido en el sistema y es requerida para esta función.', $name));
+		}
+
+		$key = API_PUBLIC_KEY;
+		return $key;
+	}
+
+	/**
+	 * Regresa la api key privada para consumir las rutas de la API
+	 *
+	 * @return string
+	 */
+	function get_bee_api_private_key()
+	{
+		$name = 'API_PRIVATE_KEY';
+		if (!defined($name)) {
+			throw new Exception(sprintf('La constante %s no existe o no se ha definido en el sistema y es requerida para esta función.', $name));
+		}
+
+		$key = API_PRIVATE_KEY;
+		return $key;
 	}
 
 	

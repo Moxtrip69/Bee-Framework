@@ -3,7 +3,8 @@
 class ajaxController extends Controller {
 
   /**
-   * La petición del servidor
+   * El tipo de petición realizada
+   * al servidor en curso
    *
    * @var string
    */
@@ -13,6 +14,8 @@ class ajaxController extends Controller {
    * Hook solicitado para la petición
    *
    * @var string
+   * 
+   * @deprecated 1.1.4
    */
   private $hook   = null;
 
@@ -20,6 +23,8 @@ class ajaxController extends Controller {
    * Tipo de acción a realizar en ajax
    *
    * @var string
+   * 
+   * @deprecated 1.1.4
    */
   private $action = null;
 
@@ -53,6 +58,7 @@ class ajaxController extends Controller {
 
   /**
    * Array de archivos binarios pasados
+   * en petición POST al servidor
    * 
    * @since 1.1.4
    *
@@ -79,7 +85,10 @@ class ajaxController extends Controller {
   private $required_params  = ['hook', 'action'];
 
   /**
-   * Posibles verbos o acciones a pasar para nuestra petición
+   * Posibles verbos o acciones disponibles para nuestra petición
+   * 
+   * Actualizados
+   * @since 1.1.4
    *
    * @var array
    */
@@ -87,6 +96,8 @@ class ajaxController extends Controller {
 
   /**
    * Cabeceras de la petición entrante
+   * 
+   * @since 1.1.4
    *
    * @var array
    */
@@ -95,6 +106,8 @@ class ajaxController extends Controller {
   /**
    * API Keys recibidas para consumir ciertos recursos
    * solo en caso de ser necesarias
+   * 
+   * @since 1.1.4
    *
    * @var string
    */
