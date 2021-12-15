@@ -81,7 +81,7 @@ function now() {
  */
 function json_output($json, $die = true) {
   header('Access-Control-Allow-Origin: *');
-  header('Content-type: application/json;charset=utf-8');
+  header('Content-Type: application/json;charset=utf-8');
 
   if(is_array($json)){
     $json = json_encode($json);
@@ -120,7 +120,7 @@ function json_output($json, $die = true) {
  * @param string $msg
  * @return void
  */
-function json_build($status = 200 , $data = null , $msg = '', $error_code = null) {
+function json_build($status = 200 , $data = [] , $msg = '', $error_code = null) {
   if(empty($msg) || $msg == '') {
     switch ($status) {
       case 200:
@@ -160,18 +160,19 @@ function json_build($status = 200 , $data = null , $msg = '', $error_code = null
 
   $json =
   [
-    'status' => $status,
-    'error'  => false,
-    'msg'    => $msg,
-    'data'   => $data
+    'status'     => $status,
+    'error'      => false,
+		'error_code' => $error_code,
+    'msg'        => $msg,
+    'data'       => $data
   ];
 
   if (in_array($status, [400,403,404,405,500])){
-    $json['error'] = true;
+    $json['error']      = true;
   }
 
   if ($error_code !== null) {
-    $json['error'] = $error_code;
+    $json['error_code'] = $error_code;
   }
 
   return json_encode($json);

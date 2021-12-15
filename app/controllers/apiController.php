@@ -59,13 +59,73 @@ class apiController extends Controller {
   function posts()
   {
     try {
-      $this->http->accept(['get','post','put','delete']);
-      $posts = Model::list('pruebas');
-      json_output(json_build(200, $posts));
+      $this->http->accept(['get','post']);
+
+      switch ($this->req['type']) {
+        case 'GET':
+          $this->get_posts();
+          break;
+        case 'POST':
+          $this->post_posts();
+          break;
+        
+        default:
+          $this->index();
+          break;
+      }
+      
+      json_output(json_build(200, $this->req));
     } catch (BeeHttpException $e) {
       json_output(json_build($e->getStatusCode(), null, $e->getMessage()));
+    } catch (BeeJsonException $e) {
+      json_output(json_build($e->getStatusCode(), null, $e->getMessage(), $e->getErrorCode()));
     } catch (Exception $e) {
-      json_output(json_build($e->getCode(), null, $e->getMessage()));
+      json_output(json_build(400, null, $e->getMessage()));
     }
+  }
+
+  private function get_posts()
+  {
+    $posts = Model::list('pruebas');
+    json_output(json_build(200, $posts));
+  }
+
+  private function post_posts()
+  {
+    if (!check_posted_data(['nombre','titulo','contenido'], $this->data)) {
+      throw new BeeJsonException('Parámetros faltantes en la petición.', 400, 'missing_params');
+    }
+
+    // Validar el tipo de parámetro solicitado
+    if (!is_string($this->data['nombre'])) {
+      throw new BeeJsonException('Parámetro nombre debe ser string.', 400, 'param_error');
+    }
+
+    if (strlen($this->data['nombre']) < 5) {
+      throw new BeeJsonException('Parámetro nombre debe ser mayor a 5 caracteres.', 400, 'param_error');
+    }
+
+    if (!is_string($this->data['nombre'])) {
+      throw new BeeJsonException('Parámetro nombre debe ser string.', 400, 'param_error');
+    }
+
+    $nombre    = clean($this->data['nombre'], true);
+    $titulo    = clean($this->data['titulo'], true);
+    $contenido = clean($this->data['contenido'], true);
+    $data      =
+    [
+      'nombre'    => $nombre,
+      'titulo'    => $titulo,
+      'contenido' => $contenido,
+      'creado'    => now()
+    ];
+
+    if (!$id = Model::add('pruebas', $data)) {
+      throw new BeeJsonException(get_bee_message('not_added'), 400, 'db_error');
+    }
+
+    $post = Model::list('pruebas', ['id' => $id], 1);
+
+    json_output(json_build(201, $post, 'Nuevo post agregado con éxito.'));
   }
 }

@@ -79,7 +79,24 @@ class BeeHttp
    *
    * @var array
    */
-  private $accepted_actions = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEADERS'];
+  private $accepted_verbs = 
+  [
+    'GET', 
+    'POST', 
+    'PUT', 
+    'PATCH',
+    'DELETE', 
+    'COPY',
+    'HEAD',
+    'OPTIONS', 
+    'LINK',
+    'UNLINK',
+    'PURGE',
+    'LOCK',
+    'UNLOCK',
+    'PROPFIND',
+    'VIEW'
+  ];
 
   /**
    * Cabeceras de la petición entrante
@@ -130,7 +147,7 @@ class BeeHttp
      * @since 1.1.4
      */
     // Validar que se pase un verbo válido y aceptado
-    if(!in_array(strtoupper($this->r_type), $this->accepted_actions)) {
+    if(!in_array(strtoupper($this->r_type), $this->accepted_verbs)) {
       throw new BeeHttpException(get_bee_message(1), 403); // 403
     }
 
@@ -229,13 +246,13 @@ class BeeHttp
     // Leer el ouput del cuerpo dependiendo el verbo o petición
     switch (strtolower($this->r_type)) {
       case 'get':
-        $this->body = $_GET;
-        $this->data = $this->body;
+        $this->body  = $_GET;
+        $this->data  = $this->body;
         break;
       case 'post':
         $this->body  = $_POST;
         $this->data  = $this->body;
-        $this->files = !isset($_FILES) && !empty($_FILES) ? $_FILES : [];
+        $this->files = isset($_FILES) ? $_FILES : [];
         break;
       case 'put':
       case 'delete':
@@ -248,13 +265,19 @@ class BeeHttp
     }
   }
 
+  /**
+   * Contruye un array con toda la información de la petición
+   *
+   * @since 1.1.4
+   * 
+   * @return array
+   */
   private function build_request()
   {
     return
     [
       'headers' => $this->headers,
       'type'    => $this->r_type,
-      'body'    => $this->body,
       'data'    => $this->data,
       'files'   => $this->files
     ];
