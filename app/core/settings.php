@@ -15,6 +15,17 @@ date_default_timezone_set('America/Mexico_City');
 define('API_PUBLIC_KEY' , '03d427-c4034c-d2dc71-373b10-36da67');
 define('API_PRIVATE_KEY', '51362e-0cb1b9-f9c183-17b0a3-1a002e');
 
+/**
+ * Define si es requerida autenticación para consumir los recursos de la API
+ * programaticamente se define que recursos son accesibles sin autenticación
+ * 
+ * Por defecto true | false para consumir la API sin autenticación o seguridad
+ * 
+ * @since 1.1.4
+ * 
+ */
+define('API_AUTH'      , true);
+
 // Lenguaje
 define('SITE_LANG'    , $this->lng);
 
@@ -121,7 +132,7 @@ define('DEFAULT_ERROR_CONTROLLER', 'error');
 define('DEFAULT_METHOD'          , 'index');
 
 /**
- * @deprecated 1.1.4
+ * @deprecated 1.1.3
  */
 // Se encuentra en archivo bee_config.php
 // define('DB_ENGINE'  , 'mysql');

@@ -129,11 +129,25 @@ class BeeHttp
    */
   private $apache_request   = false;
 
+  /**
+   * Determina si es requerido validar que exista una key de
+   * autorización en las cabeceras de la petición
+   * 
+   * Solo es utilizado si es una petición http de consumo de la API
+   * para peticiones ajax no es requerido ni válido
+   * 
+   * @since 1.1.4
+   *
+   * @var boolean
+   */
+  private $authenticate     = false;
+
   function __construct($class)
   {
     // Validar el contexto de la petición
     if ($class === 'apiController' && defined('DOING_API')) {
-      $this->call = 'api';
+      $this->call         = 'api';
+      $this->authenticate = bee_api_authentication();
     } elseif ($class === 'ajaxController' && defined('DOING_AJAX')) {
       $this->call = 'ajax';
     } else {
@@ -156,7 +170,7 @@ class BeeHttp
 
     // Establece las API keys en caso de estar presentes en la petición
     $this->set_api_keys();
-
+    
     // Parsing del cuerpo de la petición
     $this->parse_body();
 
@@ -208,6 +222,25 @@ class BeeHttp
       $this->public_key  = isset($this->headers['HTTP_AUTH_PUBLIC_KEY']) ? $this->headers['HTTP_AUTH_PUBLIC_KEY'] : null;
       $this->private_key = isset($this->headers['HTTP_AUTH_PRIVATE_KEY']) ? $this->headers['HTTP_AUTH_PRIVATE_KEY'] : null;
     }
+  }
+
+  /**
+   * Compara la api key privada de esta instancia de bee framework
+   * con la enviada en las cabeceras de la petición http para autorizar el acceso
+   *
+   * @return true si es correcto | excepción si no lo es
+   */
+  public function authenticate_request()
+  {
+    if ($this->authenticate === false) return true; // no es necesaria la autenticación
+    
+    $api_key = get_bee_api_private_key();
+    
+    if (strcmp($api_key, $this->private_key) !== 0) {
+      throw new BeeHttpException(get_bee_message(0), 403);
+    }
+
+    return true;
   }
 
   /**
@@ -291,7 +324,7 @@ class BeeHttp
    */
   public function accept(Array $verbs)
   {
-    if (!in_array(strtolower($this->r_type), array_map('strtolower', $verbs))) {
+    if (!in_array(strtoupper($this->r_type), array_map('strtoupper', $verbs))) {
       throw new BeeHttpException('El verbo HTTP utilizado en esta ruta no está autorizado.', 403);
     }
     

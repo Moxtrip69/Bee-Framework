@@ -2099,4 +2099,20 @@ function load_all_cookies()
 		return $key;
 	}
 
+	/**
+	 * Regresa true si es requerida autenticación con api keys para consumir los
+	 * recursos de la API de bee framework y la instancia actual
+	 *
+	 * @return bool
+	 */
+	function bee_api_authentication()
+	{
+		$name = 'API_AUTH';
+		if (!defined($name)) {
+			throw new Exception(sprintf('La constante %s no existe o no se ha definido en el sistema y es requerida para esta función.', $name));
+		}
+
+		return (API_AUTH === true);
+	}
+
 	

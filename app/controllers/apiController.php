@@ -56,6 +56,9 @@ class apiController extends Controller {
     json_output(json_build(404, null, 'Ruta no encontrada.'));
   }
 
+  ///////////////////////////////////////////////////////
+  ////////////// EJEMPLO BÁSICO DE USO //////////////////
+  ///////////////////////////////////////////////////////
   function posts()
   {
     try {
@@ -65,16 +68,13 @@ class apiController extends Controller {
         case 'GET':
           $this->get_posts();
           break;
+          
         case 'POST':
+          $this->http->authenticate_request();
           $this->post_posts();
-          break;
-        
-        default:
-          $this->index();
           break;
       }
       
-      json_output(json_build(200, $this->req));
     } catch (BeeHttpException $e) {
       json_output(json_build($e->getStatusCode(), null, $e->getMessage()));
     } catch (BeeJsonException $e) {
@@ -108,6 +108,9 @@ class apiController extends Controller {
     if (!is_string($this->data['nombre'])) {
       throw new BeeJsonException('Parámetro nombre debe ser string.', 400, 'param_error');
     }
+
+    // Más validaciones y sanitizaciones de input debe ser realizada
+    // solo es un ejemplo general de como utilizar el área de la API
 
     $nombre    = clean($this->data['nombre'], true);
     $titulo    = clean($this->data['titulo'], true);
