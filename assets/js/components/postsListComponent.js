@@ -121,21 +121,16 @@ export const postsListComponent = {
 
       if (!confirm('¿Estás seguro?')) return;
 
-      var csrf = Bee.csrf,
-      body     = { 
-        "csrf": csrf, 
-        "id": this.postId
-      };
-
       // Petición de borrado
       $.ajax({
-        url: 'ajax/test_delete_post',
+        url: 'api/posts/'+this.postId,
         type: 'delete',
         dataType: 'json',
+        headers: {
+          auth_private_key: '51362e-0cb1b9-f9c183-17b0a3-1a002e'
+        },
         cache: false,
-        data: body,
         beforeSend() {
-          this.prueba = 'Mensaje de prueba.';
         }
       }).done(res => {
         if (res.status === 200) {

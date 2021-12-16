@@ -8,7 +8,6 @@
  */
 class apiController extends Controller {
 
-
   /**
    * Instancia de la clase BeeHttp
    *
@@ -59,10 +58,10 @@ class apiController extends Controller {
   ///////////////////////////////////////////////////////
   ////////////// EJEMPLO BÁSICO DE USO //////////////////
   ///////////////////////////////////////////////////////
-  function posts()
+  function posts($id = null)
   {
     try {
-      $this->http->accept(['get','post']);
+      $this->http->accept(['get','post','delete']);
 
       switch ($this->req['type']) {
         case 'GET':
@@ -72,6 +71,11 @@ class apiController extends Controller {
         case 'POST':
           $this->http->authenticate_request();
           $this->post_posts();
+          break;
+
+        case 'DELETE':
+          $this->http->authenticate_request();
+          $this->delete_posts($id);
           break;
       }
       
@@ -130,5 +134,18 @@ class apiController extends Controller {
     $post = Model::list('pruebas', ['id' => $id], 1);
 
     json_output(json_build(201, $post, 'Nuevo post agregado con éxito.'));
+  }
+
+  private function delete_posts($id = null)
+  {
+    if (!$post = Model::list('pruebas', ['id' => $id], 1)) {
+      throw new BeeJsonException(get_bee_message('not_found'), 400, 'not_found');
+    }
+
+    if (!Model::remove('pruebas', ['id' => $id])) {
+      throw new BeeJsonException(get_bee_message('not_deleted'), 400, 'not_deleted');
+    }
+    
+    json_output(json_build(200, $post, 'Post borrado con éxito.'));
   }
 }
