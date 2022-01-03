@@ -17,9 +17,9 @@ define('API_PRIVATE_KEY', '51362e-0cb1b9-f9c183-17b0a3-1a002e');
 
 /**
  * Define si es requerida autenticación para consumir los recursos de la API
- * programaticamente se define que recursos son accesibles sin autenticación
+ * programáticamente se define que recursos son accesibles sin autenticación
  * 
- * Por defecto true | false para consumir la API sin autenticación o seguridad
+ * Por defecto true | false para consumir la API sin autenticación | no recomendado
  * 
  * @since 1.1.4
  * 

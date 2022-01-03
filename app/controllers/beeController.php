@@ -77,7 +77,7 @@ class beeController extends Controller {
 
       // Validar que se hayan reemplazado con éxito ambas
       if ($ok1 == 0 && $ok2 == 0) {
-        throw new Exception(sprintf('No pudimos reemplazar las API keys en tu archivo %s, es probable que debas reemplazar el contenido de %s con el de %s.',
+        throw new Exception(sprintf('No pudimos reemplazar las API keys en tu archivo <b>%s</b>, es probable que debas sustituir el contenido de <b>%s</b> con el de <b>%s</b>.',
           $filename,
           $filename,
           $backup
