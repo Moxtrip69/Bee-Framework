@@ -26,7 +26,7 @@ class Bee {
    *
    * @var string
    */
-  private $version      = '1.1.4';         // versión actual del framework y no del sistema en desarrollo, la versión del sistema deberá ser actualizada directamente en bee_config.php
+  private $version      = '1.5.0';         // versión actual del framework y no del sistema en desarrollo, la versión del sistema deberá ser actualizada directamente en bee_config.php
 
   /**
    * @deprecated 1.1.4

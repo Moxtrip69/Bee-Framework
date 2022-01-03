@@ -4,7 +4,7 @@ Mini framework desarrollado por el equipo de Joystick SA de CV en México.
 Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y fácil de implementar para proyectos tanto pequeños como aquellos que requieren escalabilidad y visión a futuro.
 
 ## Changelog
-### v 1.1.4
+### v 1.5.0
 - Se ha implementado el uso de Vue.js 3 con base a **CDN** y no CLI, puede ser removido retirando la etiqueda en el archivo **inc_styles.php**.
 - Nueva clase **BeePdf** implementada para la generación de forma sencilla de documentos formato **pdf** con pocas línea de código, como base se utiliza la librería **dompdf** una de las más potentes y utilizadas actualmente.
 - Hemos mejorado el sistema **ORM** para manipulación de bases de datos con nuevos métodos y opciones de configuración.

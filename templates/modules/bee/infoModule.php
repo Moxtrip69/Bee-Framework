@@ -3,6 +3,11 @@
 
 <div class="container py-5">
   <div class="row">
+    <div class="col-12">
+      <?php echo Flasher::flash(); ?>
+    </div>
+  </div>
+  <div class="row">
     <div class="col-12 text-center mb-5">
       <h2><a href="<?php echo URL; ?>"><img src="<?php echo get_bee_logo(); ?>" alt="Bee framework" class="img-fluid" style="width: 100px;"></a></h2>
     </div>
