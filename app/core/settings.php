@@ -127,7 +127,7 @@ define('LDB_PASS'   , '');
 define('LDB_CHARSET', 'utf8');
 
 // El controlador por defecto / el método por defecto / el controlador de errores por defecto
-define('DEFAULT_CONTROLLER'      , 'home');
+define('DEFAULT_CONTROLLER'      , 'bee');
 define('DEFAULT_ERROR_CONTROLLER', 'error');
 define('DEFAULT_METHOD'          , 'index');
 

@@ -5,7 +5,7 @@ class loginController extends Controller {
   {
     if (Auth::validate()) {
       Flasher::new('Ya hay una sesión abierta.');
-      Redirect::to('home/perfil');
+      Redirect::to('bee/perfil');
     }
   }
 
@@ -24,7 +24,7 @@ class loginController extends Controller {
   {
     try {
       if (!Csrf::validate($_POST['csrf']) || !check_posted_data(['usuario','csrf','password'], $_POST)) {
-        throw new Exception('Acceso no autorizado.');
+        throw new Exception(get_bee_message(0));
       }
   
       // Data pasada del formulario
@@ -63,6 +63,7 @@ class loginController extends Controller {
           throw new Exception('Las credenciales no son correctas.');
         }
 
+        // Verifica el password del usuario con base al ingresado y el de la db
         if (!password_verify($password.AUTH_SALT, $user['password'])) {
           throw new Exception('Las credenciales no son correctas.');
         }
@@ -78,7 +79,7 @@ class loginController extends Controller {
       }
       
       // Redirección a la página inicial después de log in
-      Redirect::to('home/perfil');
+      Redirect::to('bee/perfil');
 
     } catch (Exception $e) {
       Flasher::error($e->getMessage());

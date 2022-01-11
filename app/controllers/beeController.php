@@ -17,12 +17,44 @@ class beeController extends Controller {
     }
     */
   }
-  
+
   function index()
+  {
+    /**
+     * No es necesaria esta variable
+     * pero así puedes registrar elementos al objeto
+     * de javascript en el scope de la ruta actual
+     */
+    register_to_bee_obj('nuevaVariable', '123');
+
+    $data =
+    [
+      'title' => 'Bienvenido'
+    ];
+
+    View::render('bee', $data);
+  }
+  
+  /**
+   * @since 1.5.0
+   * 
+   * Carga toda la información de bee framework en la versión actual
+   *
+   * @return void
+   */
+  function info()
   {
     echo get_bee_info();
   }
 
+  /**
+   * @since 1.5.0
+   * 
+   * Genera una nueva contraseña de seguridad media - alta para su uso
+   *
+   * @param string $password
+   * @return void
+   */
   function password($password = null)
   {
     $data =
@@ -34,6 +66,13 @@ class beeController extends Controller {
     echo get_module('bee/password', $data);
   }
 
+  /**
+   * @since 1.5.0
+   * 
+   * Genera nuevas credenciales de acceso a la API de bee framework
+   *
+   * @return void
+   */
   function regenerate()
   {
     try {
@@ -96,5 +135,120 @@ class beeController extends Controller {
       Flasher::error($e->getMessage());
       Redirect::back();
     }
+  }
+
+  /**
+   * @since 1.1.3
+   * 
+   * Genera un PDF de forma sencilla y dinámica
+   *
+   * @return void
+   */
+  function pdf()
+  {
+    try {
+      $content = '<!DOCTYPE html>
+      <html>
+      <head>
+      <style>
+      code {
+        font-family: Consolas,"courier new";
+        color: crimson;
+        background-color: #f1f1f1;
+        padding: 2px;
+        font-size: 80%%;
+        border-radius: 5px;
+      }
+      </style>
+      </head>
+      <body>
+  
+      <img src="%s" alt="%s" style="width: 100px;"><br>
+  
+      <h1>Bienvenido de nuevo a %s</h1>
+      <p>Versión <b>%s</b></p>
+      
+      <code>
+      // Método 1
+      $content = "Contenido del documento PDF, puedes usar cualquier tipo de HTML e incluso la mayoría de estilos CSS3";
+      $pdf     = new BeePdf($content); // Se muestra directo en navegador, para descargar pasar en parámetro 2 true y para guardar en parámetro 3 true
+  
+      // Método 2
+      $pdf = new BeePdf();
+      $pdf->create("bee_pdfs", $content);
+      </code>
+  
+      </body>
+      </html>';
+      $content = sprintf($content, get_bee_logo(), get_bee_name(), get_bee_name(), get_bee_version());
+  
+      // Método 1
+      $pdf = new BeePdf($content); // Se muestra directo en navegador, para descargar pasar en parámetro 2 true y para guardar en parámetro 3 true
+  
+      // Método 2
+      //$pdf = new BeePdf();
+      //$pdf->create('bee_pdfs', $content);
+
+    } catch (Exception $e) {
+      Flasher::new($e->getMessage(), 'danger');
+      Redirect::to('home');
+    }
+
+  }
+
+  /**
+   * Prueba para enviar correos electrónicos regulares
+   *
+   * @return void
+   */
+  function email()
+  {
+    try {
+      $email   = 'jslocal2@localhost.com';
+      $subject = 'El asunto del correo';
+      $body    = 'El cuerpo del mensaje, puede ser html o texto plano.';
+      $alt     = 'El texto corto del correo, preview del contenido.';
+      send_email(get_siteemail(), $email, $subject, $body, $alt);
+      echo sprintf('Correo electrónico enviado con éxito a %s', $email);
+    } catch (Exception $e) {
+      echo $e->getMessage();
+    }
+  }
+
+  /**
+   * @since 1.5.0
+   * 
+   * Prueba de envío de correos electrónicos usando SMTP
+   *
+   * @return void
+   */
+  function smtp()
+  {
+    try {
+      send_email('tuemail@hotmail.com', 'tuemail@hotmail.com', 'Probando smtp', '¡Hola mundo!', 'Correo de prueba.');
+      echo 'Mensaje enviado con éxito.';
+    } catch (Exception $e) {
+      echo $e->getMessage();
+    }
+  }
+
+  /**
+   * @since 1.5.0
+   * 
+   * Perfil de usuario loggeado por defecto
+   *
+   * @return void
+   */
+  function perfil()
+  {
+    parent::auth();
+
+    $data =
+    [
+      'title' => 'Perfil de usuario',
+      'user'  => User::profile()
+    ];
+
+    View::render('perfil', $data);
   }
 }

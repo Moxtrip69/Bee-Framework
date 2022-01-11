@@ -3,9 +3,8 @@
 
 <div class="container py-5">
   <div class="row">
-    <div class="col-12 col-md-4 text-center offset-md-4">
-      <a href="<?php echo URL; ?>"><img src="<?php echo get_logo() ?>" alt="<?php echo get_sitename(); ?>" class="img-fluid" style="width: 150px;"></a>
-      <h2 class="mt-5 mb-3"><span class="text-warning">Bee</span> framework</h2>
+    <div class="col-12 col-md-4 text-center offset-md-4 mb-5">
+      <a href="<?php echo URL; ?>"><img src="<?php echo get_bee_logo() ?>" alt="<?php echo get_sitename(); ?>" class="img-fluid" style="width: 150px;"></a>
     </div>
   </div>
   <div class="row">
@@ -31,7 +30,7 @@
           </div>
         </div>
         <div class="card-footer clearfix">
-          <a href="home" class="btn btn-success float-start"><i class="fas fa-home fa-fw"></i> Inicio</a>
+          <a href="bee" class="btn btn-outline-success float-start"><i class="fas fa-home fa-fw"></i> Inicio</a>
           <a href="logout" class="btn btn-danger float-end confirmar">Cerrar sesión</a>
         </div>
       </div>
