@@ -1619,14 +1619,15 @@ function get_jquery()
  *
  * @return mixed
  */
-function get_vuejs()
+function get_vuejs($runtime = false)
 {
 	if (!defined('VUEJS')) {
 		return false;
 	}
 
 	$placeholder = '<script src="%s"></script>';
-	$cdn         = is_local() ? 'https://unpkg.com/vue@next' : 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.11/vue.runtime.global.prod.js';
+	$cdn         = is_local() ? 'https://unpkg.com/vue@next' : 
+	($runtime === true ? 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.11/vue.runtime.global.prod.js' : 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.11/vue.global.prod.js');
 
 	return VUEJS === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
 }
