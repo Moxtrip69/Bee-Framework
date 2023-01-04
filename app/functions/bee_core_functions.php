@@ -417,7 +417,7 @@ function clean($str, $cleanhtml = false) {
 		return htmlspecialchars($str);
   }
   
-	return filter_var($str, FILTER_SANITIZE_STRING);
+	return filter_var($str, FILTER_UNSAFE_RAW);
 }
 
 /**
@@ -960,7 +960,7 @@ function check_get_data($required_params = [] , $get_data = []) {
 		return false;
 	}
 
-  if(empty($required_params) || empty($posted_data)) {
+  if(empty($required_params) || empty($get_data)) {
     return false;
   }
 
