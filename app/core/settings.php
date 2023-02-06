@@ -1,8 +1,7 @@
 <?php
-
-//////////////////////////////// 2022
 //////////////////////////////// Joystick
 //////////////////////////////// Bee-Framework
+//////////////////////////////// 2023
 
 // Definir el uso horario o timezone del sistema
 date_default_timezone_set('America/Mexico_City');
@@ -27,9 +26,9 @@ define('API_PRIVATE_KEY', '51362e-0cb1b9-f9c183-17b0a3-1a002e');
 define('API_AUTH'      , true);
 
 // Lenguaje
-define('SITE_LANG'    , $this->lng);
+define('SITE_LANG'    , 'es');
 
-// Prepros 2021
+// Prepros 2023
 define('PREPROS'      , true);   // Activar en caso de trabajar el desarrollo en prepros como servidor local
 define('PORT'         , '8848'); // Puerto por defecto de Prepros 2020 >
 
@@ -44,8 +43,8 @@ define('WAITME'       , true);  // define si es requerido WaitMe
 define('LIGHTBOX'     , false); // define si es requerido Lightbox
 
 // Versión de la aplicación
-define('BEE_NAME'    , $this->framework); // Viene desde Bee.php
-define('BEE_VERSION' , $this->version);   // Viene desde Bee.php
+define('BEE_NAME'    , 'Bee Framework');  // Nombre del framework
+define('BEE_VERSION' , '1.5.5');          // Versión del framework
 define('BEE_LOGO'    , 'bee_logo.png');   // Nombre del archivo del logotipo de Bee Framework
 
 // Datos de la empresa / negocio / sistema

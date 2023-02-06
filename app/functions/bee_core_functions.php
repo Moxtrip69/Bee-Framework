@@ -9,8 +9,8 @@ use PHPMailer\PHPMailer\Exception AS EmailException;
 /**
  * Convierte el elemento en un objecto
  *
- * @param [type] $array
- * @return void
+ * @param array $array
+ * @return object
  */
 function to_object($array) {
   return json_decode(json_encode($array));
@@ -77,7 +77,7 @@ function now() {
  *
  * @param array $json
  * @param boolean $die
- * @return void
+ * @return string|bool
  */
 function json_output($json, $die = true) {
   header('Access-Control-Allow-Origin: *');
@@ -98,7 +98,7 @@ function json_output($json, $die = true) {
 
 /**
  * Construye un nuevo string json
- * 200 OK
+ 	200 OK
 	201 Created
 	300 Multiple Choices
 	301 Moved Permanently
@@ -118,7 +118,7 @@ function json_output($json, $die = true) {
  * @param integer $status
  * @param array $data
  * @param string $msg
- * @return void
+ * @return string
  */
 function json_build($status = 200 , $data = [] , $msg = '', $error_code = null) {
   if(empty($msg) || $msg == '') {
@@ -183,7 +183,7 @@ function json_build($status = 200 , $data = [] , $msg = '', $error_code = null) 
  *
  * @param string $view
  * @param array $data
- * @return void
+ * @return bool|string
  */
 function get_module($view, $data = []) {
   $file_to_include = MODULES.$view.'Module.php';
@@ -208,7 +208,7 @@ function get_module($view, $data = []) {
  *
  * @param float $amount
  * @param string $symbol
- * @return void
+ * @return string
  */
 function money($amount, $symbol = '$') {
   return $symbol.number_format($amount, 2, '.', ',');
@@ -218,7 +218,7 @@ function money($amount, $symbol = '$') {
  * Carga una opción de configuración de la db
  *
  * @param mixed $option
- * @return void
+ * @return mixed
  */
 function get_option($option) {
   return optionModel::search($option);
@@ -337,65 +337,76 @@ function json_encode_utf8($var) {
 }
 
 /**
-Formateo de la hora en tres variantes
-d M, Y,
-m Y,
-d m Y,
-mY,
-d M, Y time
-**/
+ * Formateo de la hora en diferentes variantes
+ * d M, Y
+ * m Y
+ * d m Y
+ * mY
+ * d M, Y time
+ * @param string $date_string
+ * @param string $type
+ * @return string
+ */
 function format_date($date_string, $type = 'd M, Y') {
-  setlocale(LC_ALL, "es_MX.UTF-8", "es_MX", "esp");
-  
-	$diasemana = strftime("%A", strtotime($date_string));
-	$diames    = strftime("%d", strtotime($date_string));
-	$dia       = strftime("%e", strtotime($date_string));
-	$mes       = strftime("%B", strtotime($date_string));
-	$anio      = strftime("%Y", strtotime($date_string));
-	$hora      = strftime("%H", strtotime($date_string));
-	$minutos   = strftime("%M", strtotime($date_string));
-	$date = [
-		'año'        => $anio,
-		'mes'        => ucfirst($mes),
-		'mes_corto'  => substr($mes, 0, 3),
-		'dia'        => $dia,
-		'dia_mes'    => $diames,
-		'dia_semana' => ucfirst($diasemana),
-		'hora'       => $hora,
-		'minutos'    => $minutos,
-		'tiempo'     => $hora . ':' . $minutos
-	];
-	switch ($type) {
-		case 'd M, Y':
-			return $date['dia'] . ' de ' . $date['mes'] . ', ' . $date['año'];
-			break;
-		case 'm Y':
-			return sprintf('%s %s', $date['mes'], $date['año']);
-			break;
-		case 'd m Y':
-			return $date['dia'] . ' ' . $date['mes_corto'] . ' ' . $date['año'];
-			break;
-		case 'mY':
-			return ucfirst($date['mes_corto']).', '.$date['año'];
-			break;
-		case 'MY':
-			return ucfirst($date['mes']).', '.$date['año'];
-			break;
-		case 'd M, Y time':
-			return $date['dia'].' de '.$date['mes'].', '.$date['año'].' a las '.date('H:i A', strtotime($date_string));
-			break;
-		case 'time':
-			return $date['tiempo'].' '.date('A', strtotime($date_string));
-			break;
-		case 'date time':
-			return $date['dia'].'/'.$date['mes_corto'].'/'.$date['año'].' '.$date['tiempo'].' '.date('A', strtotime($date_string));
-			break;
-		case 'short': //01/Nov/2019
-			return sprintf('%s/%s/%s', $date['dia_mes'], ucfirst($date['mes_corto']), $date['año']);
-			break;
-		default:
-			return $date['dia'] . ' de ' . $date['mes'] . ', ' . $date['año'];
-			break;
+	// Para versiones de PHP inferiores a 8.1.0 cuando se vuelve deprecada
+	// la función strftime()
+	if (version_compare(phpversion(), '8.1.0', "<")) {
+		setlocale(LC_ALL, "es_MX.UTF-8", "es_MX", "esp");
+
+		// Fragmentos para fechas
+		$anio      = strftime("%Y", strtotime($date_string));
+		$mes       = strftime("%B", strtotime($date_string));
+		$diames    = strftime("%d", strtotime($date_string));
+		$diasemana = strftime("%A", strtotime($date_string));
+		$dia       = strftime("%e", strtotime($date_string));
+		$hora      = strftime("%H", strtotime($date_string));
+		$minutos   = strftime("%M", strtotime($date_string));
+	
+		// Variantes para formar nuestra fecha
+		$date = [
+			'año'        => $anio,
+			'mes'        => ucfirst($mes),
+			'mes_corto'  => substr($mes, 0, 3),
+			'dia'        => $dia,
+			'dia_mes'    => $diames,
+			'dia_semana' => ucfirst($diasemana),
+			'hora'       => $hora,
+			'minutos'    => $minutos,
+			'tiempo'     => $hora . ':' . $minutos
+		];
+		
+		switch ($type) {
+			case 'd M, Y':
+				return sprintf('%s de %s, %s', $date['dia'], $date['mes'], $date['año']);
+			case 'm Y':
+				return sprintf('%s %s', $date['mes'], $date['año']);
+			case 'd m Y':
+				return sprintf('%s %s %s', $date['dia'], $date['mes_corto'], $date['año']);
+			case 'mY':
+				return sprintf('%s, %s', ucfirst($date['mes_corto']), $date['año']);
+			case 'MY':
+				return sprintf('%s, %s', ucfirst($date['mes']), $date['año']);
+			case 'd M, Y time':
+				return $date['dia'].' de '.$date['mes'].', '.$date['año'].' a las '.date('H:i A', strtotime($date_string));
+			case 'time':
+				return $date['tiempo'].' '.date('A', strtotime($date_string));
+			case 'date time':
+				return $date['dia'].'/'.$date['mes_corto'].'/'.$date['año'].' '.$date['tiempo'].' '.date('A', strtotime($date_string));
+			case 'short': //01/Nov/2019
+				return sprintf('%s/%s/%s', $date['dia_mes'], ucfirst($date['mes_corto']), $date['año']);
+			default:
+				return sprintf('%s de %s, %s', $date['dia'], $date['mes'], $date['año']);
+		}
+	} else {
+		$fmt = datefmt_create(
+			'es_MX',
+			IntlDateFormatter::FULL,
+			IntlDateFormatter::FULL,
+			'America/Mexico_City',
+			IntlDateFormatter::GREGORIAN
+		);
+		
+		return datefmt_format($fmt, $date_string);
 	}
 }
 
@@ -424,7 +435,7 @@ function clean($str, $cleanhtml = false) {
  * Reconstruye un array de archivos posteados
  *
  * @param array $files
- * @return void
+ * @return array|bool
  */
 function arrenge_posted_files($files) {
 	if(empty($files)) {
@@ -455,7 +466,7 @@ function arrenge_posted_files($files) {
  *
  * @param integer $tamano
  * @param string $type
- * @return void
+ * @return string
  */
 function random_password($length = 8, $type = 'default') {
 	$alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
@@ -480,7 +491,7 @@ function random_password($length = 8, $type = 'default') {
  *
  * @param string $string
  * @param integer $lng
- * @return void
+ * @return string
  */
 function add_ellipsis($string , $lng = 100) {
 	if(!is_integer($lng)) {
@@ -494,7 +505,7 @@ function add_ellipsis($string , $lng = 100) {
 /**
  * Devuelve la IP del cliente actual
  *
- * @return void
+ * @return string
  */
 function get_user_ip() {
 	$ipaddress = '';
@@ -518,7 +529,7 @@ function get_user_ip() {
 /**
  * Devuelve el sistema operativo del cliente
  *
- * @return void
+ * @return string
  */
 function get_user_os() {
 	if (isset( $_SERVER ) ) {
@@ -623,13 +634,13 @@ function get_user_os() {
 			break;
 		}
 	}
-	return trim ( $os );
+	return trim($os);
 }
 
 /**
  * Devuelve el navegador del cliente
  *
- * @return void
+ * @return string
  */
 function get_user_browser() {
 	$user_agent = (isset($_SERVER) ? $_SERVER['HTTP_USER_AGENT'] : NULL);
@@ -791,7 +802,7 @@ function set_session($k, $v) {
  * @param string $bcc
  * @param string $reply_to
  * @param array $attachments
- * @return void
+ * @return mixed
  */
 function send_email($from, $to, $subject, $body, $alt = null, $bcc = null, $reply_to = null, $attachments = []) {
 	try {
@@ -915,7 +926,7 @@ function generate_key()
  *
  * @param array $required_params
  * @param array $posted_data
- * @return void
+ * @return bool
  */
 function check_posted_data($required_params = [] , $posted_data = []) {
 
@@ -952,7 +963,7 @@ function check_posted_data($required_params = [] , $posted_data = []) {
  *
  * @param array $required_params
  * @param array $get_data
- * @return void
+ * @return bool
  */
 function check_get_data($required_params = [] , $get_data = []) {
 
@@ -990,7 +1001,7 @@ function check_get_data($required_params = [] , $get_data = []) {
  * @param string $str
  * @param string $color
  * @param string $icon
- * @return void
+ * @return string
  */
 function more_info($str , $color = 'text-info' , $icon = 'fas fa-exclamation-circle') {
   $str = clean($str);
@@ -1003,7 +1014,7 @@ function more_info($str , $color = 'text-info' , $icon = 'fas fa-exclamation-cir
  * Agrega un placeholder a un campo input
  *
  * @param string $string
- * @return void
+ * @return string
  */
 function placeholder($string = 'Lorem ipsum') {
   return sprintf('placeholder="%s"', $string);
@@ -1013,7 +1024,7 @@ function placeholder($string = 'Lorem ipsum') {
  * Agrega un tooltip en plantalla
  *
  * @param string $title
- * @return void
+ * @return string|bool
  */
 function tooltip($title = null) {
 	if($title == null){
@@ -1028,7 +1039,7 @@ function tooltip($title = null) {
  *
  * @param array $links
  * @param string $active
- * @return void
+ * @return string
  */
 function create_menu($links, $slug_active = 'home') {
   $output = '';
@@ -1070,7 +1081,7 @@ function create_menu($links, $slug_active = 'home') {
 /**
  * Función para cargar el url de nuestro asset logotipo de bee framework
  *
- * @return void
+ * @return string
  */
 function get_bee_logo() {
 	$default_logo = BEE_LOGO;
@@ -1086,7 +1097,7 @@ function get_bee_logo() {
 /**
  * Función para cargar el url de nuestro asset logotipo del sitio
  *
- * @return void
+ * @return string
  */
 function get_logo() {
 	$default_logo = SITE_LOGO;
@@ -1142,7 +1153,6 @@ function get_favicon() {
 		
 		default:
 			return false;
-			break;
 	}
 
 	return sprintf($placeholder, $type, $href);
@@ -1186,7 +1196,7 @@ function is_demo() {
  * Función para validar si el sistema es una demostración
  * y guardar una notificación flash y redirigir al usuario
  * de así solicitarlo
- *
+ * @return bool
  */
 function check_if_demo($flash = true, $redirect = true) {
   $demo = is_demo();
@@ -1350,7 +1360,7 @@ function load_bee_obj() {
 /**
  * Registra los parámetro por defecto de Bee
  *
- * @return bool
+ * @return array
  */
 function bee_obj_default_config() {
 	$options =
@@ -1583,7 +1593,6 @@ function get_css_framework_scripts()
 			
 		case 'bl':
 			return ''; // Bulma no cuenta con scripts
-			break;
 
 		case 'bs':
 		case 'bs5':
@@ -1880,7 +1889,7 @@ function load_all_cookies()
    * con base a los parámetros pasados
    *
    * @param array $cookies
-   * @return void
+   * @return bool
    */
 	function new_cookie($name, $value, $lifetime = null, $path = '', $domain = '')
 	{

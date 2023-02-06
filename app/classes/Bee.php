@@ -2,50 +2,55 @@
 
 class Bee {
 
-  // Propiedades del framework
-  // Desarrollado por el equipo de Joystick
   /**
+   * Propiedades del framework
+   * Desarrollado por el equipo de Joystick
    * Sugerencias o pullrequest a:
    * hellow@joystick.com.mx
    * 
    * Roberto Orozco / roborozco@joystick.com.mx
-   * Lucerito Ortega / lucortega@joystick.com.mx
    * Yoshio Mrtz / yosmartinez@joystick.com.mx
-   * Kevin Sm / kevsamano@joystick.com.mx
+   * Jorge Maldonado / jormaldonado@joystick.com.mx
    * 
    * Creado en el curso de udemy:
-   * https://www.udemy.com/course/master-php-crea-tu-propio-mini-framework-mvc-con-poo-html-js/?referralCode=C36DF049F62B36C9DA5B
+   * https://www.academy.joystick.com.mx/bundles/pack-desarrollo-web-full-stack
    * 
    * ¡Gracias por todo su apoyo!
    *
-   * @var string
    */
-  private $framework    = 'Bee Framework'; // Ahora este solo será el nombre idenficador del framework y no el nombre del sistema como tal
-  /**
-   * @deprecated 1.1.4
-   *
-   * @var string
-   */
-  private $version      = '1.5.0';         // versión actual del framework y no del sistema en desarrollo, la versión del sistema deberá ser actualizada directamente en bee_config.php
 
   /**
-   * @deprecated 1.1.4
+   * Nombre del framework
+   * @var string
+   */
+  private $framework;
+
+  /**
    *
    * @var string
    */
-  private $lng          = 'es';
+  private $version;
+
+  /**
+   *
+   * @var string
+   */
+  private $lng;
+
+  /**
+   * La URL completa que se recibe para procesar las peticiones
+   * @var array
+   */
   private $uri          = [];
 
   /**
    * Define si es requerido el uso de librerías externas en el proyecto
-   *
    * @var boolean
    */
   private $use_composer = true;
 
   /**
    * @since 1.1.4
-   *
    * @var string
    */
   private $current_controller = null;
@@ -73,6 +78,7 @@ class Bee {
     // Todos los métodos que queremos ejecutar consecutivamente
     $this->init_session();
     $this->init_load_config();
+    $this->init_framework_properties();
     $this->init_load_functions();
     $this->init_load_composer();
     $this->init_autoload();
@@ -124,7 +130,7 @@ class Bee {
     // desde un comienzo en la ejecución del sitio
     $file = 'bee_config.php';
     if(!is_file('app/config/'.$file)) {
-      die(sprintf('El archivo %s no se encuentra, es requerido para que %s funcione.', $file, $this->framework));
+      die(sprintf('El archivo %s no se encuentra, es requerido para que el sitio funcione.', $file));
     }
 
     // Cargando el archivo de configuración
@@ -132,11 +138,26 @@ class Bee {
     
     $file = 'settings.php';
     if(!is_file('app/core/'.$file)) {
-      die(sprintf('El archivo %s no se encuentra, es requerido para que %s funcione.', $file, $this->framework));
+      die(sprintf('El archivo %s no se encuentra, es requerido para que el sitio funcione.', $file));
     }
 
     // Cargando el archivo de configuración
     require_once 'app/core/'.$file;
+
+    return;
+  }
+
+  /**
+   * Setea los valores del nombre del framework
+   * La versión del framework y el lenguaje
+   * Requiere que se hayan cargado bee_config.php y settings.php
+   * @return void
+   */
+  private function init_framework_properties()
+  {
+    $this->framework = BEE_NAME;
+    $this->version   = BEE_VERSION;
+    $this->lng       = SITE_LANG;
 
     return;
   }
@@ -150,7 +171,7 @@ class Bee {
   {
     $file = 'bee_core_functions.php';
     if(!is_file(FUNCTIONS.$file)) {
-      die(sprintf('El archivo %s no se encuentra, es requerido para que %s funcione.', $file, $this->framework));
+      die(sprintf('El archivo %s no se encuentra, es requerido para que el sitio funcione.', $file));
     }
 
     // Cargando el archivo de funciones core
@@ -158,7 +179,7 @@ class Bee {
 
     $file = 'bee_custom_functions.php';
     if(!is_file(FUNCTIONS.$file)) {
-      die(sprintf('El archivo %s no se encuentra, es requerido para que %s funcione.', $file, $this->framework));
+      die(sprintf('El archivo %s no se encuentra, es requerido para que el sitio funcione.', $file));
     }
 
     // Cargando el archivo de funciones custom
@@ -178,7 +199,7 @@ class Bee {
 
     $file = 'app/vendor/autoload.php';
     if(!is_file($file)) {
-      die(sprintf('El archivo %s no se encuentra, es requerido para que %s funcione.', $file, $this->framework));
+      die(sprintf('El archivo %s no se encuentra, es requerido para que el sitio funcione.', $file));
     }
 
     // Cargando el archivo de configuración
@@ -248,7 +269,7 @@ class Bee {
    * Inicia la validación de sesión en caso de existir 
    * sesiones persistentes de Bee framework
    *
-   * @return void
+   * @return mixed
    */
   private function init_authentication()
   {
