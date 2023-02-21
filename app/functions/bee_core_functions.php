@@ -225,10 +225,15 @@ function get_option($option) {
 }
 
 /**
- * Generar un link dinámico con parámetros get y token
+  * Generar un link dinámico con parámetros get y token
+ * @param string $url
+ * @param array $params
+ * @param bool $redirection
+ * @param bool $csrf
  * Actualizada por build_url
  * @since 1.1.4
  * 
+ * @return string
  */
 function buildURL($url , $params = [] , $redirection = true, $csrf = true) {
 	return build_url($url, $params, $redirection, $csrf);
@@ -236,14 +241,19 @@ function buildURL($url , $params = [] , $redirection = true, $csrf = true) {
 
 /**
  * Generar un link dinámico con parámetros get y token
- * @since 1.1.4
+ * @param string $url
+ * @param array $params
+ * @param bool $redirection
+ * @param bool $csrf
+ * @since 1.5.5
+ * 
+ * @return string
  */
 function build_url($url , $params = [] , $redirection = true, $csrf = true) {
 	
 	// Check if theres a ?
-	$query     = parse_url($url, PHP_URL_QUERY);
-	$_params[] = 'hook='.strtolower(SITE_NAME);
-	$_params[] = 'action=doing-task';
+	$query   = parse_url($url, PHP_URL_QUERY);
+	$_params = [];
 
 	// Si requiere token csrf
 	if ($csrf) {
@@ -261,12 +271,17 @@ function build_url($url , $params = [] , $redirection = true, $csrf = true) {
 	}
 
 	// Listando parámetros
-	foreach ($params as $key => $value) {
-		$_params[] = sprintf('%s=%s', urlencode($key), urlencode($value));
+	if (!empty($params)) {
+		foreach ($params as $key => $value) {
+			$_params[] = sprintf('%s=%s', urlencode($key), urlencode($value));
+		}
+	}
+
+	if (!empty($_params)) {
+		$url .= strpos($url, '?') ? '&' : '?';
+		$url .= implode('&', $_params);
 	}
 	
-	$url .= strpos($url, '?') ? '&' : '?';
-	$url .= implode('&', $_params);
 	return $url;
 }
 
