@@ -10,16 +10,19 @@
           <a class="nav-link" aria-current="page" href="bee">Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.5.0" target="_blank">Documentación</a>
+          <a class="nav-link" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.5.5" target="_blank">Documentación</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.5.0#v-150" target="_blank">Changelog</a>
+          <a class="nav-link" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.5.5#v-155" target="_blank">Changelog</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="bee/info">Bee info</a>
+          <a class="nav-link" href="bee/info">Bee Info</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="bee/password">Password</a>
+          <a class="nav-link" href="bee/password">Generar Password</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo build_url('bee/generate-user'); ?>">Generar Usuario</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="<?php echo build_url('bee/regenerate'); ?>">Regenerar API keys</a>

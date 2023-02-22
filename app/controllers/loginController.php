@@ -79,7 +79,7 @@ class loginController extends Controller {
       }
       
       // Redirección a la página inicial después de log in
-      Redirect::to('bee/perfil');
+      Redirect::to(DEFAULT_CONTROLLER);
 
     } catch (Exception $e) {
       Flasher::error($e->getMessage());

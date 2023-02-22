@@ -120,10 +120,10 @@ $(document).ready(function() {
    * Inicializa tooltips en todo el sitio
    */
   function init_tooltips() {
-    if (Bee.css_framework != 'bs5') return;
+    if (['bs','bs5','bs_lumen','bs_lux','bs_litera','bs_vapor','bs_zephyr'].includes(Bee.css_framework) != true) return;
     
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    var tooltipList        = tooltipTriggerList.map(function (tooltipTriggerEl) {
       return new bootstrap.Tooltip(tooltipTriggerEl)
     });
   }
@@ -161,6 +161,28 @@ $(document).ready(function() {
       "hideMethod": "fadeOut"
     }
   }
+
+  /**
+   * Interactua con la API de Bee framework función de prueba y demostración
+   * @param {string} method El tipo de petición a ejecutar
+   * @param {mixed} data Información del cuerpo de la petición
+   * @returns mixed
+   */
+  function posts(method = 'get', data = null) {
+    return $.ajax({
+      url        : Bee.url + 'api/posts',
+      headers    : { 'auth_private_key': Bee.private_key },
+      type       : method,
+      dataType   : 'json',
+      contentType: false,
+      processData: false,
+      cache      : false,
+      data       : data
+    });
+  }
+
+  // Es posible borrar la siguiente línea de código
+  posts('get').done(res => toastr.success(`Fueron cargados <b>${res.data.length}</b> posts registrados desde la API.`));
 
   // Inicialización de elementos
   init_summernote();

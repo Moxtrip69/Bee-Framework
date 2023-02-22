@@ -11,7 +11,7 @@ define('IS_LOCAL'     , in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1']))
 define('BASEPATH'     , IS_LOCAL ? '/Bee-Framework/' : '____EL BASEPATH EN PRODUCCIÓN___'); // Debe ser cambiada a la ruta de tu proyecto en producción y desarrollo
 define('IS_DEMO'      , false);
 
-// En caso de implementación de pagos en línea para definir si se está trabajando con pasarelas en modo sanbox / prueba o producción
+// En caso de implementación de pagos en línea para definir si se está trabajando con pasarelas en modo sandbox / prueba o producción
 define('SANDBOX'      , true); // live or sandbox
 
 // Set para conexión en producción o servidor real

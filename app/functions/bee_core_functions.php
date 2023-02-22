@@ -277,6 +277,7 @@ function build_url($url , $params = [] , $redirection = true, $csrf = true) {
 		}
 	}
 
+	// Solo si no está vacía la lista de parámetros para URL
 	if (!empty($_params)) {
 		$url .= strpos($url, '?') ? '&' : '?';
 		$url .= implode('&', $_params);
@@ -434,16 +435,13 @@ function format_date($date_string, $type = 'd M, Y') {
  */
 function clean($str, $cleanhtml = false) {
   $str = @trim(@rtrim($str));
-  
-	// if (get_magic_quotes_gpc()) {
-	// 	$str = stripslashes($str);
-	// }
+	$str = filter_var($str, FILTER_UNSAFE_RAW);
 
 	if ($cleanhtml === true) {
 		return htmlspecialchars($str);
   }
   
-	return filter_var($str, FILTER_UNSAFE_RAW);
+	return $str;
 }
 
 /**
@@ -660,7 +658,7 @@ function get_user_os() {
 function get_user_browser() {
 	$user_agent = (isset($_SERVER) ? $_SERVER['HTTP_USER_AGENT'] : NULL);
 
-	$browser        = "Unknown Browser";
+	$browser       = "Unknown Browser";
 
 	$browser_array = array(
 		'/msie/i'      => 'Internet Explorer',
@@ -703,8 +701,6 @@ function insert_inputs() {
 	$output .= '<input type="hidden" name="redirect_to" value="'.$location.'">';
 	$output .= '<input type="hidden" name="timecheck" value="'.time().'">';
 	$output .= '<input type="hidden" name="csrf" value="'.CSRF_TOKEN.'">';
-	$output .= '<input type="hidden" name="hook" value="bee_hook">';
-	$output .= '<input type="hidden" name="action" value="post">';
 
 	return $output;
 }
@@ -761,37 +757,28 @@ function fix_url($url) {
 /**
  * Regresa el valor de sesión o un index en especial
  *
- * @param string $v
- * @return mixed
+ * @param string $key
+ * @return mixed|false
  */
-function get_session($v = null) {
-  if($v === null){
+function get_session($key = null) {
+  if($key === null){
     return $_SESSION;
   }
 
-  /** If it's an array of data must be dot separated */
-  if(strpos($v , ".") !== false) {
-    $array = explode('.',$v);
-    $lvls = count($array);
+  // Si es un array, deberá ir separado con punto: ejemplo usuario.reportes
+  if ( strpos($key , ".") !== false ) {
+    $array = explode('.', $key);
+    $lvls  = count($array);
 
     for ($i=0; $i < $lvls; $i++) { 
       if(!isset($_SESSION[$array[$i]])){
         return false;
       }
     }
-
   }
 
-  if(!isset($_SESSION[$v])){
-    return false;
-  }
-
-  if(empty($_SESSION[$v])){
-    unset($_SESSION[$v]);
-    return false;
-  }
-
-  return $_SESSION[$v];
+	// Si es una clave directa sin subniveles
+  return isset($_SESSION[$key]) ? $_SESSION[$key] : false;
 }
 
 /**
@@ -801,8 +788,8 @@ function get_session($v = null) {
  * @param mixed $v
  * @return bool
  */
-function set_session($k, $v) {
-  $_SESSION[$k] = $v;
+function set_session($key, $value) {
+  $_SESSION[$key] = $value;
   return true;
 }
 
@@ -922,7 +909,7 @@ function generate_token($length = 32) {
 }
 
 /**
- * Genera una key alfanúmerica con has md5
+ * Genera una key alfanúmerica con hash md5
  * con longitud de 30 caracteres
  * ejemplo:
  * 8042a4-a3bcd4-08d1e1-9596d6-24ae57
@@ -1011,18 +998,17 @@ function check_get_data($required_params = [] , $get_data = []) {
 }
 
 /**
- * Agrega un tooltip con más información definida como string
+ * Agrega un tooltip con más información definida como string de Bootstrap 5
  *
- * @param string $str
- * @param string $color
- * @param string $icon
+ * @param string $content El contenido de texto del tooltip
+ * @param string $color El color del icono del tooltip
+ * @param string $icon La clase para el icono de fontawesome 5
  * @return string
  */
-function more_info($str , $color = 'text-info' , $icon = 'fas fa-exclamation-circle') {
-  $str = clean($str);
-  $output = '';
-  $output .= '<span class="'.$color.'" '.tooltip($str).'><i class="'.$icon.'"></i></span>';
-  return $output;
+function more_info($content , $color = 'text-info' , $icon = 'fas fa-exclamation-circle') {
+  $str    = clean($content);
+  $output = '<span class="%s" %s><i class="%s"></i></span>';
+  return sprintf($output, $color, tooltip($content), $icon);
 }
 
 /**
@@ -1036,7 +1022,7 @@ function placeholder($string = 'Lorem ipsum') {
 }
 
 /**
- * Agrega un tooltip en plantalla
+ * Agrega un tooltip en plantalla de Bootstrap 5
  *
  * @param string $title
  * @return string|bool
@@ -1176,25 +1162,32 @@ function get_favicon() {
 /**
  * Carga y regresa un valor determinao de la información del usuario
  * guardada en la variable de sesión actual
+ * @version 1.5.5
  *
- * @param string $key
- * @return mixed
+ * @param string $key Es el nombre de la columna en la base de datos
+ * @return array|false
  */
 function get_user($key = null) {
+	global $Bee_User; // Información persistente del usuario
+
 	if (!isset($_SESSION['user_session'])) return false;
 
 	$session = $_SESSION['user_session']; // información de la sesión del usuario actual, regresará siempre falso si no hay dicha sesión
 
 	if (!isset($session['user']) || empty($session['user'])) return false;
 
-	$user = $session['user']; // información de la base de datos o directamente insertada del usuario
+	/**
+	 * Se insertaba la información en sesión lo cual generaba un problema ya que solo se recargaba dicha información
+	 * al volver iniciar la sesión, es decir aunque se actualizara información del usuario en la base de datos
+	 * la información actual registrada en su sesión, seguiría siendo igual hasta que cerrara sesión y volviera a ingresar
+	 * con este ajuste usando el objeto global Bee_User, cargamos la información que es registrada cada que carga la página.
+	 * @version 1.5.5
+	 */
+	// $user = $session['user']; // información de la base de datos o directamente insertada del usuario
+	$user = $Bee_User;
 
-	if ($key === null) return $user;
-
-	if (!isset($user[$key])) return false; // regresará falso en caso de no encontrar el key buscado
-
-	// Regresa la información del usuario
-	return $user[$key];
+	// Regresa la información del usuario o de la clave pasada
+	return $key === null ? $user : (isset($user[$key]) ? $user[$key] : false);
 }
 
 /**
@@ -1404,7 +1397,8 @@ function bee_obj_default_config() {
 		'waitme'        => WAITME,
 		'lightbox'      => LIGHTBOX,
 		'vuejs'         => VUEJS,
-		'public_key'    => get_bee_api_public_key()
+		'public_key'    => get_bee_api_public_key(),
+		'private_key'   => get_bee_api_private_key()
 	];
 
 	return $options;
@@ -1547,7 +1541,7 @@ function upload_image($file_field = null, $check_image = false, $random_name = f
  * @return boolean
  */
 function is_local() {
-	return IS_LOCAL === true;
+	return (IS_LOCAL === true);
 }
 
 /**
@@ -1564,6 +1558,7 @@ function get_css_framework()
 
 	$framework   = CSS_FRAMEWORK;
 	$placeholder = '<link rel="stylesheet" href="%s">';
+	$bs_themes   = CSS . 'bs_themes/';
 	$cdn         = null;
 
 	switch ($framework) {
@@ -1573,6 +1568,26 @@ function get_css_framework()
 			
 		case 'fn':
 			$cdn = 'https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/css/foundation.min.css';
+			break;
+
+		case 'bs_lux':
+			$cdn = $bs_themes . 'lux.min.css';
+			break;
+
+		case 'bs_lumen':
+			$cdn = $bs_themes . 'lumen.min.css';
+			break;
+
+		case 'bs_litera':
+			$cdn = $bs_themes . 'litera.min.css';
+			break;
+
+		case 'bs_vapor':
+			$cdn = $bs_themes . 'vapor.min.css';
+			break;
+
+		case 'bs_zephyr':
+			$cdn = $bs_themes . 'zephyr.min.css';
 			break;
 				
 		case 'bs':
@@ -1609,6 +1624,11 @@ function get_css_framework_scripts()
 		case 'bl':
 			return ''; // Bulma no cuenta con scripts
 
+		case 'bs_litera':
+		case 'bs_lumen':
+		case 'bs_lux':
+		case 'bs_vapor':
+		case 'bs_zephyr':
 		case 'bs':
 		case 'bs5':
 		default:
@@ -1680,16 +1700,31 @@ function get_axios()
  *
  * @return mixed
  */
-function get_toastr()
+function get_toastr($type = 'script')
 {
 	if (!defined('TOASTR')) {
 		return false;
 	}
 
-	$placeholder = '<script src="%s"></script>';
-	$cdn         = '//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js';
+	$disabled = '<!-- Desactivado en settings.php -->';
 
-	return TOASTR === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
+	if (TOASTR !== true) return $disabled;
+
+	// Cabecera del sitio
+	switch ($type) {
+		case 'styles':
+			$placeholder = '<link rel="stylesheet" href="%s"/>';
+			$cdn         = 'https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css';
+			break;
+		
+		case 'script':
+		default:
+			$placeholder = '<script src="%s"></script>';
+			$cdn         = '//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js';
+			break;
+	}
+
+	return sprintf($placeholder, $cdn);
 }
 
 /**
@@ -1716,34 +1751,77 @@ function get_sweetalert2()
  *
  * @return mixed
  */
-function get_waitMe()
+function get_waitMe($type = 'script')
 {
 	if (!defined('WAITME')) {
 		return false;
 	}
 
-	$placeholder = '<script src="%s"></script>';
-	$cdn         = PLUGINS.'waitme/waitMe.min.js';
+	$disabled = '<!-- Desactivado en settings.php -->';
 
-	return WAITME === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
+	if (WAITME !== true) return $disabled;
+
+	// Cabecera del sitio
+	switch ($type) {
+		case 'styles':
+			$placeholder = '<link rel="stylesheet" href="%s"/>';
+			$cdn         = PLUGINS.'waitme/waitMe.min.css';
+			break;
+		
+		case 'script':
+		default:
+			$placeholder = '<script src="%s"></script>';
+			$cdn         = PLUGINS . 'waitme/waitMe.min.js';
+			break;
+	}
+
+	return sprintf($placeholder, $cdn);
 }
 
 /**
  * Carga de Lightbox solo de ser necesario
  * definido en settings.php
  *
- * @return mixed
+ * @return string
  */
-function get_lightbox()
+function get_lightbox($type = 'script')
 {
 	if (!defined('LIGHTBOX')) {
 		return false;
 	}
 
-	$placeholder = '<script src="%s"></script>';
-	$cdn         = 'https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js';
+	$disabled = '<!-- Desactivado en settings.php -->';
 
-	return LIGHTBOX === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
+	if (LIGHTBOX !== true) return $disabled;
+
+	// Cabecera del sitio
+	switch ($type) {
+		case 'styles':
+			$placeholder = '<link rel="stylesheet" href="%s"/>';
+			$cdn         = 'https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css';
+			break;
+		
+		case 'script':
+		default:
+			$placeholder = '<script src="%s"></script>';
+			$cdn         = 'https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js';
+			break;
+	}
+
+	return sprintf($placeholder, $cdn);
+}
+
+/**
+ * Regresa el CDN de fontawesome CSS versión 5
+ *
+ * @return string
+ */
+function get_fontawesome()
+{
+	$placeholder = '<link rel="stylesheet" href="%s"/>';
+	$cdn         = 'https://use.fontawesome.com/releases/v5.8.2/css/all.css';
+
+	return sprintf($placeholder, $cdn);
 }
 
 /**
@@ -1852,6 +1930,12 @@ function bee_die( $message, $headers = [] )
 	die($message);
 }
 
+/**
+ * Determina si el framework va a trabajar o no con sesiones persistentes
+ * basadas en Cookies en el exploral del usuario
+ *
+ * @return bool
+ */
 function persistent_session()
 {
 	if (!defined('BEE_COOKIES') || BEE_COOKIES !== true) {
@@ -2056,8 +2140,6 @@ function load_all_cookies()
 	 * en el array de la global Bee_Messages
 	 * 
 	 * OPCIONES ACTUALES
-	 * 
-	 * 
 	 * '0'           => 'Acceso no autorizado.'
 	 * '1'           => 'Acción no autorizada.'
 	 * '2'           => 'Ocurrió un error, intenta más tarde.'
@@ -2081,7 +2163,7 @@ function load_all_cookies()
 	 * 'm_token'     => 'Token no encontrado o no válido, acceso no autorizado.' 
 	 * 
 	 * @param string $code
-	 * @return mixed
+	 * @return string
 	 */
 	function get_bee_message($code)
 	{
@@ -2138,6 +2220,32 @@ function load_all_cookies()
 		}
 
 		return (API_AUTH === true);
+	}	
+
+	/**
+	 * Regresa una versión de un asset si estamos en desarrollo generará
+	 * una versión random para evitar el cache y cargar el archivo más reciente,
+	 * en producción cargará la versión cacheada
+	 *
+	 * @return string
+	 */
+	function get_asset_version()
+	{
+		return is_local() ? time() : get_version();
 	}
 
-	
+	/**
+	 * Valida si el string o texto es alfanumérico, puede o no tener espacios incluidos
+	 *
+	 * @param string $string
+	 * @param boolean $spaces
+	 * @return boolean
+	 */
+	function is_alphanumeric($string, $spaces = false)
+	{
+		if ($spaces === true) {
+			return preg_match("/^[\p{L} ]+$/u", clean($string)) === 1;
+		}
+
+		return preg_match("/^[a-zA-Z0-9]+$/", clean($string)) === 1;
+	}

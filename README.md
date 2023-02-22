@@ -4,6 +4,15 @@ Mini framework desarrollado por el equipo de Joystick SA de CV en México.
 Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y fácil de implementar para proyectos tanto pequeños como aquellos que requieren escalabilidad y visión a futuro.
 
 ## Changelog
+### v 1.5.5
+- Ahora es posible escoger dentro de 5 temas de **Bootstrap 5**, solo deberás actualizar la constante **CSS_FRAMEWORK** a alguno de los siguientes valores:
+  - Zephyr (bs_zephyr)
+  - Litera (bs_litera)
+  - Lumen (bs_lumen)
+  - Vapor (bs_vapor)
+  - Lux (bs_lux)
+- Hemos corregido diversos bugs y funciones que ya se encontraban deprecadas para las últimas versiones de **PHP**.
+- Nuevo sistema sencillo para generar usuarios de prueba.
 ### v 1.5.0
 - Se ha sustituido el controlador por defecto de **homeController** a **beeController** esto para facilitar el actualizado del core a nuevas versiones una vez en producción, facilitando el trabajo de los desarrolladores que lo utilizan.
 - Se ha implementado el uso de Vue.js 3 con base a **CDN** y no CLI, puede ser removido retirando la etiqueda en el archivo **inc_styles.php**.

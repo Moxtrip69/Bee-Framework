@@ -33,7 +33,7 @@ define('PREPROS'      , true);   // Activar en caso de trabajar el desarrollo en
 define('PORT'         , '8848'); // Puerto por defecto de Prepros 2020 >
 
 // Utilidades
-define('CSS_FRAMEWORK', 'bs5'); // opciones disponibles: bs o bs5 = Bootstrap 5 | bl = Bulma | fn = Foundation
+define('CSS_FRAMEWORK', 'bs_lumen'); // opciones disponibles: bs o bs5 = Bootstrap 5 | bl = Bulma | fn = Foundation
 define('JQUERY'       , true);  // define si es requerido jquery para el sitio
 define('VUEJS'        , true);  // define si es requerido Vue js 3 para el sitio | CDN
 define('AXIOS'        , false); // define si es requerido Axios para peticiones HTTP

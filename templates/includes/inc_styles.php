@@ -2,18 +2,18 @@
 <?php echo get_css_framework(); ?>
 
 <!-- Font awesome 5 -->
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<?php echo get_fontawesome(); ?>
 
-<!-- Todo plugin debe ir debajo de está línea -->
+<!-- Todo plugin adicional debe ir debajo de está línea -->
+
 <!-- Toastr css -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-<link rel="stylesheet" href="<?php echo CSS.'custom.toastr.css?v='.get_version(); ?>">
+<?php echo get_toastr('styles'); ?>
 
 <!-- Waitme css -->
-<link rel="stylesheet" href="<?php echo PLUGINS.'waitme/waitMe.min.css'; ?>">
+<?php echo get_waitMe('styles'); ?>
 
 <!-- Lightbox -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css"/>
+<?php echo get_lightbox('styles'); ?>
 
 <!-- CDN Vue js 3 | definido en settings.php -->
 <?php echo get_vuejs(); ?>
@@ -22,4 +22,4 @@
 <?php echo load_styles(); ?>
 
 <!-- Estilos personalizados deben ir en main.css o abajo de esta línea -->
-<link rel="stylesheet" href="<?php echo CSS.'main.css?v='.get_version(); ?>">
+<link rel="stylesheet" href="<?php echo CSS . 'main.css?v='.get_asset_version(); ?>">

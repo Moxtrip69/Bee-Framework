@@ -149,7 +149,7 @@ class BeeHttp
       $this->call         = 'api';
       $this->authenticate = bee_api_authentication();
     } elseif ($class === 'ajaxController' && defined('DOING_AJAX')) {
-      $this->call = 'ajax';
+      $this->call         = 'ajax';
     } else {
       throw new BeeHttpException(get_bee_message(0), 403); // 403
     }

@@ -35,9 +35,12 @@ class apiController extends Controller {
   function __construct()
   {
     // Prevenir el acceso no autorizado
-    if (!defined('DOING_AJAX') && !defined('DOING_API')) die();
+    if (!defined('DOING_AJAX') && !defined('DOING_API')) {
+      http_response_code(403);
+      json_output(json_build(403));
+    }
 
-    // Procesamos la petición que está siendo mandanda al servidor
+    // Procesamos la petición que está siendo mandada al servidor
     try {
       $this->http = new BeeHttp(__CLASS__);
       $this->req  = $this->http->get_request();
@@ -65,6 +68,7 @@ class apiController extends Controller {
 
       switch ($this->req['type']) {
         case 'GET':
+          $this->http->authenticate_request();
           $this->get_posts();
           break;
           

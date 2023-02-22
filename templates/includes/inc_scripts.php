@@ -13,7 +13,7 @@
 <!-- Toastr js -->
 <?php echo get_toastr(); ?>
 
-<!-- waitme js -->
+<!-- waitMe js -->
 <?php echo get_waitMe(); ?>
 
 <!-- Lightbox js -->
@@ -26,4 +26,4 @@
 <?php echo load_scripts(); ?>
 
 <!-- Scripts personalizados Bee Framework -->
-<script src="<?php echo JS.'main.min.js?v='.get_version(); ?>"></script>
+<script src="<?php echo JS.'main.min.js?v=' . get_asset_version(); ?>"></script>

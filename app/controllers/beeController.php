@@ -55,15 +55,32 @@ class beeController extends Controller {
    * @param string $password
    * @return void
    */
-  function password($password = null)
+  function password()
   {
+    $password = null;
+    $errors   = 0;
+
+    // Si el formulario fue enviado
+    if (isset($_POST["password"])) {
+      $password = clean($_POST["password"]);
+
+      if (strlen($password) < 8) {
+        Flasher::error('La contraseña es demasiado corta, debe contar con mínimo 8 caracteres.');
+        $errors++;
+      }
+
+      if ($errors > 0) {
+        $password = null;
+      }
+    }
+
     $data =
     [
       'title' => 'Password Generado',
       'pw'    => get_new_password($password)
     ];
 
-    echo get_module('bee/password', $data);
+    View::render('password', $data);
   }
 
   /**
@@ -204,7 +221,7 @@ class beeController extends Controller {
   function email()
   {
     try {
-      $email   = 'jslocal2@localhost.com';
+      $email   = 'jslocal@localhost.com';
       $subject = 'El asunto del correo';
       $body    = 'El cuerpo del mensaje, puede ser html o texto plano.';
       $alt     = 'El texto corto del correo, preview del contenido.';
@@ -250,5 +267,45 @@ class beeController extends Controller {
     ];
 
     View::render('perfil', $data);
+  }
+
+  /**
+   * @since 1.5.5
+   * 
+   * Genera un usuario y lo registra en la base de datos
+   *
+   * @return void
+   */
+  function generate_user()
+  {
+    try {
+      if (!Model::table_exists(BEE_USERS_TABLE)) {
+        throw new Exception(sprintf('Es necesaria la tabla <b>%s</b> en la base de datos.', BEE_USERS_TABLE));
+      }
+
+      // Nuevo usuario
+      $username = sprintf('bee%s', random_password(4, 'numeric'));
+      $password = get_new_password();
+      $email    = sprintf('%s@localhost.com', $username);
+      $user     =
+      [
+        'username'   => $username,
+        'password'   => $password['hash'],
+        'email'      => $email,
+        'created_at' => now()
+      ];
+
+      // Insertando el registro en la base de datos
+      if (!$id = Model::add(BEE_USERS_TABLE, $user)) {
+        throw new Exception('Hubo un problema al generar el usuario.');
+      }
+
+      Flasher::success(sprintf('Nuevo usuario generado con éxito:<br>Usuario: <b>%s</b><br>Contraseña: <b>%s</b>', $user['username'], $password['password']));
+      Redirect::back();
+      
+    } catch (Exception $e) {
+      Flasher::error($e->getMessage());
+      Redirect::back();
+    }
   }
 }
