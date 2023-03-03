@@ -12,6 +12,7 @@
 
       <!-- contenido -->
       <h1><?php echo $d->msg; ?></h1>
+      <p class="text-muted">Plantilla versión 1.0.0</p>
       <!-- ends -->
 
     </div>

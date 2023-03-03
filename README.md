@@ -13,6 +13,9 @@ Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y 
   - Lux (bs_lux)
 - Hemos corregido diversos bugs y funciones que ya se encontraban deprecadas para las últimas versiones de **PHP**.
 - Nuevo sistema sencillo para generar usuarios de prueba.
+- Los controladores y elementos de Bee Framework ya no serán accesibles si el sitio no se encuentra en desarrollo o servidor local.
+- Se actualizó la forma en que se carga la información del usuario al estar loggeado, antes se cargaba la información solo al iniciar sesión o ingresar, ahora la información del usuario es actualizada cada vez que se hace una nueva petición, haciendo que está se encuentre siempre actualizada.
+- Se re-estructuraron las carpetas para plantillas de **Creator**, ahora se encuentran dentro de *views/modules/bee/*.
 ### v 1.5.0
 - Se ha sustituido el controlador por defecto de **homeController** a **beeController** esto para facilitar el actualizado del core a nuevas versiones una vez en producción, facilitando el trabajo de los desarrolladores que lo utilizan.
 - Se ha implementado el uso de Vue.js 3 con base a **CDN** y no CLI, puede ser removido retirando la etiqueda en el archivo **inc_styles.php**.

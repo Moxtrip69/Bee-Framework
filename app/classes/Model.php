@@ -117,7 +117,7 @@ class Model extends Db {
   
   /**
    * Borra un registro de la base de datos
-	 * Se cambio $limite = 1 por defecto a $limite = null esto porque generaba problemas
+	 * Se cambió $limite = 1 por defecto a $limite = null esto porque generaba problemas
 	 * al realizar borrado de muchos registros y se veia obligago a colocar un finito
 	 * para que más de 1 registro se borrara simultaneamente.
    *
@@ -131,6 +131,7 @@ class Model extends Db {
 		// It creates the col names and values to bind
 		$cols_values = "";
 		$limits      = "";
+
 		if (!empty($params)) {
 			$cols_values .= "WHERE";
 			foreach ($params as $key => $value) {
@@ -184,7 +185,7 @@ class Model extends Db {
 	}
 
 	/**
-	 * jstodo: Aún pendiente por terminar esta funcionalidad
+	 * TODO: Aún pendiente por terminar esta funcionalidad
 	 * Crea una nueva tabla de la base de datos actualmente
 	 * conectada.
 	 *
@@ -210,16 +211,16 @@ class Model extends Db {
 			// Incializamos nuestra conexión a la base de datos
 			$tables = [];
 			$sql    = 'SHOW TABLES';
-			$db     = Db::connect();
+			$db     = parent::connect();
 			
 			// Preparando nuestra petición
-			$statement = $db->prepare($sql);
+			$stm = $db->prepare($sql);
 	
 			// Ejecutando nuestra petición
-			$statement->execute();
+			$stm->execute();
 	
 			// Listamos las filas encontradas (tablas)
-			$res = $statement->fetchAll(PDO::FETCH_NUM);
+			$res = $stm->fetchAll(PDO::FETCH_NUM);
 
 			if (empty($res)) {
 				return []; // No existen tablas en la base de datos
@@ -236,7 +237,6 @@ class Model extends Db {
 		} catch (PDOException $e) {
 			throw new Exception($e->getMessage());
 		}
-
 	}
 
 	/**

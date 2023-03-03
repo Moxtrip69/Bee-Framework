@@ -1,7 +1,7 @@
 <?php
 /**
  * Plantilla general de controladores
- * @version 1.0.3
+ * @version 1.0.5
  *
  * Controlador de [[REPLACE]]
  */
@@ -31,11 +31,21 @@ class [[REPLACE]]Controller extends Controller {
 
   function ver($id)
   {
+    $data = 
+    [
+      'title' => 'Reemplazar título'
+    ];
+
     View::render('ver', $data);
   }
 
   function agregar()
   {
+    $data = 
+    [
+      'title' => 'Reemplazar título'
+    ];
+
     View::render('agregar', $data);
   }
 
@@ -46,12 +56,17 @@ class [[REPLACE]]Controller extends Controller {
 
   function editar($id)
   {
+    $data = 
+    [
+      'title' => 'Reemplazar título'
+    ];
+
     View::render('editar', $data);
   }
 
   function post_editar()
   {
-
+    // Proceso de actualizado
   }
 
   function borrar($id)

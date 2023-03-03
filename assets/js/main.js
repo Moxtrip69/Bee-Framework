@@ -72,7 +72,7 @@ $(document).ready(function() {
       }
     }).done(function(res) {
       if (res.status === 200) {
-        toastr.success(res.msg, '¡Bien!');
+        toastr.success(res.msg, 'Prueba AJAX');
       } else {
         toastr.error(res.msg, '¡Error!');
       }
@@ -181,8 +181,14 @@ $(document).ready(function() {
     });
   }
 
-  // Es posible borrar la siguiente línea de código
-  posts('get').done(res => toastr.success(`Fueron cargados <b>${res.data.length}</b> posts registrados desde la API.`));
+  /**
+   * Prueba de peticiones a la API en versión 1.5.5
+   */
+  function test_api() {
+    if ($('#test_api').length == 0) return;
+
+    posts('get').done(res => toastr.success(`API funcional, fueron cargados <b>${res.data.length}</b> registros.`, 'Prueba de la API'));
+  }
 
   // Inicialización de elementos
   init_summernote();
@@ -190,6 +196,7 @@ $(document).ready(function() {
   init_toastr_setup();
   init_db_test();
   test_ajax();
+  test_api();
 
   ////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////
@@ -203,11 +210,7 @@ $(document).ready(function() {
     event.preventDefault();
 
     var form = $('.bee_save_options'),
-    data     = new FormData(form.get(0)),
-    hook     = 'bee_hook',
-    action   = 'add';
-    data.append('hook', hook);
-    data.append('action', action);
+    data     = new FormData(form.get(0));
 
     // AJAX
     $.ajax({

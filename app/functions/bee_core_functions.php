@@ -64,6 +64,16 @@ function get_siteemail() {
 }
 
 /**
+ * Devuelve la URL del sitio configurada en la constante URL
+ *
+ * @return string
+ */
+function get_base_url()
+{
+	return URL;
+}
+
+/**
  * Regresa la fecha de estos momentos
  *
  * @return string
@@ -168,7 +178,7 @@ function json_build($status = 200 , $data = [] , $msg = '', $error_code = null) 
   ];
 
   if (in_array($status, [400,403,404,405,500])){
-    $json['error']      = true;
+    $json['error'] = true;
   }
 
   if ($error_code !== null) {
@@ -186,7 +196,7 @@ function json_build($status = 200 , $data = [] , $msg = '', $error_code = null) 
  * @return bool|string
  */
 function get_module($view, $data = []) {
-  $file_to_include = MODULES.$view.'Module.php';
+  $file_to_include = MODULES . $view . 'Module.php';
 	$output = '';
 	
 	// Por si queremos trabajar con objeto
@@ -2241,11 +2251,29 @@ function load_all_cookies()
 	 * @param boolean $spaces
 	 * @return boolean
 	 */
-	function is_alphanumeric($string, $spaces = false)
+	function is_alphanumeric($string, $accept_spaces = false)
 	{
-		if ($spaces === true) {
+		if ($accept_spaces === true) {
 			return preg_match("/^[\p{L} ]+$/u", clean($string)) === 1;
 		}
 
 		return preg_match("/^[a-zA-Z0-9]+$/", clean($string)) === 1;
+	}
+
+	/**
+	 * Valida si una variable es null o vacía, de ser así
+	 * regresa un em dash para sustituir su espacio, denotando que no hay
+	 * información en dicho lugar
+	 *
+	 * @param mixed $value
+	 * @param string $placeholder
+	 * @return string
+	 */
+	function _e($value, string $placeholder = "—")
+	{
+		if (empty($value) || !isset($value)) {
+			return $placeholder;
+		}
+
+		return $value;
 	}

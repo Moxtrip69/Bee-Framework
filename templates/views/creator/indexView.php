@@ -14,7 +14,7 @@
     </div>
 
     <!-- formulario -->
-    <div class="col-xl-12">
+    <div class="col-12 col-md-4 offset-md-4">
       <div class="card">
         <div class="card-header">
           <h4><?php echo $d->title; ?></h4>

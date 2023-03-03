@@ -1,5 +1,5 @@
-<?php require_once INCLUDES.'inc_bee_header.php'; ?>
-<?php require_once INCLUDES.'inc_bee_navbar.php'; ?>
+<?php require_once INCLUDES . 'inc_bee_header.php'; ?>
+<?php require_once INCLUDES . 'inc_bee_navbar.php'; ?>
 
 <div class="container">
   <div class="py-5 text-center">
@@ -9,12 +9,9 @@
   </div>
 
   <div class="row">
-    <div class="col-12">
-      <?php echo Flasher::flash(); ?>
-    </div>
-
     <!-- formulario -->
-    <div class="col-xl-12">
+    <div class="col-12 col-md-4 offset-md-4">
+      <?php echo Flasher::flash(); ?>
       <div class="card">
         <div class="card-header">
           <h4><?php echo $d->title; ?></h4>
@@ -22,10 +19,18 @@
         <div class="card-body">
           <form action="creator/post_controller" method="post" novalidate>
             <?php echo insert_inputs(); ?>
-            
+
             <div class="mb-3">
               <label for="filename" class="form-label">Nombre del controlador (sin "Controller.php") *</label>
               <input type="text" class="form-control" id="filename" name="filename" placeholder="reportes" required>
+            </div>
+
+            <div class="mb-3">
+              <p class="mb-1">Decide que archivos generaremos</p>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="generar-vista" name="generar-vista">
+                <label class="form-check-label" for="generar-vista">Crear carpeta y vista inicial</label>
+              </div>
             </div>
 
             <button class="btn btn-primary btn-lg btn-block" type="submit">Crear ahora</button>
@@ -39,5 +44,4 @@
   </div>
 </div>
 
-<?php require_once INCLUDES.'inc_bee_footer.php'; ?>
-
+<?php require_once INCLUDES . 'inc_bee_footer.php'; ?>

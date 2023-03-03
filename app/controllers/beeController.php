@@ -9,6 +9,11 @@
 class beeController extends Controller {
   function __construct()
   {
+    // Prevenir el ingreso en Producción
+    if (!is_local()) {
+      Redirect::to(DEFAULT_CONTROLLER);
+    }
+    
     // Validación de sesión de usuario, descomentar si requerida
     /**
     if (!Auth::validate()) {

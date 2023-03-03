@@ -3,12 +3,13 @@
 class Db
 {
   private $link = null;
+  private $dsn;
   private $engine;
   private $host;
   private $name;
+  private $charset;
   private $user;
   private $pass;
-  private $charset;
   private $options;
   
   /**
@@ -17,11 +18,14 @@ class Db
   public function __construct()
   {
     $this->engine  = IS_LOCAL ? LDB_ENGINE : DB_ENGINE;
+    $this->host    = IS_LOCAL ? LDB_HOST : DB_HOST;
     $this->name    = IS_LOCAL ? LDB_NAME : DB_NAME;
+    $this->charset = IS_LOCAL ? LDB_CHARSET : DB_CHARSET;
+    $this->dsn     = sprintf('%s:host=%s;dbname=%s;charset=%s', $this->engine, $this->host, $this->name, $this->charset);
+
     $this->user    = IS_LOCAL ? LDB_USER : DB_USER;
     $this->pass    = IS_LOCAL ? LDB_PASS : DB_PASS;
-    $this->charset = IS_LOCAL ? LDB_CHARSET : DB_CHARSET;
-    $this->host    = IS_LOCAL ? LDB_HOST : DB_HOST;
+
     $this->options = [
 			PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
 			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -33,7 +37,7 @@ class Db
 
   /**
    * Método para abrir una conexión a la base de datos
-   * @param bool $throw_exception | para evitar die en error, en caso de no existe la conexión lanza excepción
+   * @param bool $throw_exception | para evitar die en error, en caso de no realizarse la conexión lanza excepción
    *
    * @return mixed
    */
@@ -42,8 +46,11 @@ class Db
     try {
       $self       = new self();
       if ($self->link !== null) return $self->link;
-      $self->link = new PDO($self->engine.':host='.$self->host.';dbname='.$self->name.';charset='.$self->charset, $self->user, $self->pass, $self->options);
+
+      $self->link = new PDO($self->dsn, $self->user, $self->pass, $self->options);
+
       return $self->link;
+
     } catch (PDOException $e) {
       if ($throw_exception === true) {
         throw new Exception($e->getMessage());
@@ -116,5 +123,15 @@ class Db
 
       throw new PDOException($e->getMessage());
     }
+  }
+
+  /**
+   * Regresa la conexión a la base de datos
+   *
+   * @return PDO
+   */
+  public function link()
+  {
+    return self::connect();
   }
 }

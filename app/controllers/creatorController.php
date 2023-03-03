@@ -6,6 +6,10 @@
 class creatorController extends Controller {
   function __construct()
   {
+    // Prevenir el ingreso en Producción
+    if (!is_local()) {
+      Redirect::to(DEFAULT_CONTROLLER);
+    }
   }
   
   function index() {
@@ -35,7 +39,8 @@ class creatorController extends Controller {
     $filename = str_replace(' ', '_', $filename);
     $filename = str_replace('.php', '', $filename);
     $keyword  = 'Controller';
-    $template = MODULES.'controllerTemplate.txt';
+    $g_vista  = isset($_POST["generar-vista"]) ? true : false;
+    $template = MODULES . 'bee' . DS . 'controllerTemplate.txt';
 
     // Validar que sea un string válido
     if (!is_string($name)) {
@@ -44,7 +49,7 @@ class creatorController extends Controller {
     }
 
     // Validar longitud del nombre
-    if (strlen($name) == 0) {
+    if (strlen($name) < 5) {
       Flasher::error(sprintf('Ingresa un nombre de controlador válido por favor, <b>%s</b> es demasiado corto.', $name));
       Redirect::back();
     }
@@ -64,32 +69,42 @@ class creatorController extends Controller {
     // Cargar contenido del archivo
     $php = @file_get_contents($template);
     $php = str_replace('[[REPLACE]]', $filename, $php);
-    if (file_put_contents(CONTROLLERS.$filename.$keyword.'.php', $php) === false)  {
+
+    // Generar el archivo del controlador
+    if (file_put_contents(CONTROLLERS . $filename . $keyword . '.php', $php) === false)  {
       Flasher::new(sprintf('Ocurrió un problema al crear el controlador %s.', $template), 'danger');
       Redirect::back();
     }
 
-    // Crear el folder en carpeta vistas
-    if (!is_dir(VIEWS.$filename)) {
-      mkdir(VIEWS.$filename);
+    // Crear el folder en carpeta vistas solo si es requerido
+    if (!is_dir(VIEWS . $filename) && $g_vista === true) {
+      mkdir(VIEWS . $filename);
+    }
 
-      $body = 
-      '<?php require_once INCLUDES.\'inc_header.php\'; ?>
-      <div class="container">
-        <div class="row">
-          <div class="col-6 text-center offset-xl-3">
-            <a href="<?php echo URL; ?>"><img src="<?php echo IMAGES.\'bee_logo.png\' ?>" alt="Bee framework" class="img-fluid" style="width: 200px;"></a>
-            <h2 class="mt-5 mb-3"><span class="text-warning">Bee</span> framework</h2>
-            <!-- contenido -->
-            <h1><?php echo $d->msg; ?></h1>
-            <!-- ends -->
+    // Generar la vista solo si así se solicita
+    if ($g_vista === true) {
+      $html_template = MODULES . 'bee' . DS . 'viewTemplate.txt';
+
+      if (is_file($html_template)) {
+        $html = @file_get_contents($html_template);
+      } else {
+        $html =
+        '<?php require_once INCLUDES.\'inc_header.php\'; ?>
+        <div class="container">
+          <div class="row">
+            <div class="col-6 text-center offset-xl-3">
+              <a href="<?php echo URL; ?>"><img src="<?php echo IMAGES.\'bee_logo.png\' ?>" alt="Bee framework" class="img-fluid" style="width: 200px;"></a>
+              <h2 class="mt-5 mb-3"><span class="text-warning">Bee</span> framework</h2>
+              <!-- contenido -->
+              <h1><?php echo $d->msg; ?></h1>
+              <!-- ends -->
+            </div>
           </div>
         </div>
-      </div>
-      
-      <?php require_once INCLUDES.\'inc_bee_footer.php\'; ?>';
-      
-      @file_put_contents(VIEWS.$filename.DS.'indexView.php', $body);
+        <?php require_once INCLUDES.\'inc_bee_footer.php\'; ?>';
+      }
+
+      @file_put_contents(VIEWS . $filename . DS . 'indexView.php', $html);
     }
 
     // Crear una vista por defecto
@@ -112,7 +127,7 @@ class creatorController extends Controller {
     $filename = str_replace(' ', '_', $filename);
     $filename = str_replace('.php', '', $filename);
     $keyword  = 'Model';
-    $template = MODULES.'modelTemplate.txt';
+    $template = MODULES . 'bee' . DS . 'modelTemplate.txt';
 
     // Validar longitud del nombre
     if (strlen($name) < 4) {
