@@ -3,14 +3,16 @@
 class errorController extends Controller {
   function __construct()
   {
+    http_response_code(404);
   }
   
   function index() {
     $data =
     [
       'title' => 'Página no encontrada',
-      'bg'    => 'dark'
+      'code'  => 404
     ];
-    View::render('404', $data);
+
+    View::render('error', $data);
   }
 }

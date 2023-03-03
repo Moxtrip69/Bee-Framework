@@ -41,7 +41,7 @@ class Flasher
    * @param string $type
    * @return void
    */
-  public static function new($msg, $type = null)
+  public static function new(String $msg, String $type = null, String $heading = null, Bool $icon = true)
   {
     $self = new self();
 
@@ -52,17 +52,18 @@ class Flasher
 
     $self->type = in_array($type, $self->valid_types) ? $type : $self->default;
 
-    // Guardar la notificación en un array de sesión
-    if(is_array($msg)) {
-      foreach ($msg as $m) {
-        $_SESSION[$self->type][] = $m;
-      }
+    // $_SESSION['primary']['notificaciones'];
+    // Nuevos atributos añadidos
+    // @since 1.5.5
+    $flash = 
+    [
+      'type'    => $type,
+      'heading' => $heading,
+      'msg'     => $msg,
+      'icon'    => $icon
+    ];
 
-      return true;
-    }
-
-    //$_SESSION['primary']['notificaciones'];
-    $_SESSION[$self->type][] = $msg;
+    $_SESSION[$self->type][] = $flash;
 
     return true;
   }
@@ -71,11 +72,12 @@ class Flasher
    * Crear un flash de tipo error shorthand
    *
    * @param string $msg
+   * @param string $heading
    * @return void
    */
-  static function error(String $msg)
+  static function error(String $msg, String $heading = null)
   {
-    self::new($msg, 'danger');
+    self::new($msg, 'danger', $heading);
     return true;
   }
 
@@ -83,11 +85,12 @@ class Flasher
    * Crear un flash de tipo info shorthand
    *
    * @param string $msg
+   * @param string $heading
    * @return void
    */
-  static function info(String $msg)
+  static function info(String $msg, String $heading = null)
   {
-    self::new($msg, 'info');
+    self::new($msg, 'info', $heading);
     return true;
   }
 
@@ -95,11 +98,51 @@ class Flasher
    * Crear un flash de tipo success shorthand
    *
    * @param string $msg
+   * @param string $heading
    * @return void
    */
-  static function success(String $msg)
+  static function success(String $msg, String $heading = null)
   {
-    self::new($msg, 'success');
+    self::new($msg, 'success', $heading);
+    return true;
+  }
+
+  /**
+   * Crear un flash de tipo warning shorthand
+   *
+   * @param string $msg
+   * @param string $heading
+   * @return void
+   */
+  static function warn(String $msg, String $heading = null)
+  {
+    self::new($msg, 'warning', $heading);
+    return true;
+  }
+
+  /**
+   * Crear un flash de tipo primary shorthand
+   *
+   * @param string $msg
+   * @param string $heading
+   * @return void
+   */
+  static function primary(String $msg, String $heading = null)
+  {
+    self::new($msg, 'primary', $heading);
+    return true;
+  }
+
+  /**
+   * Crear un flash de tipo dark shorthand
+   *
+   * @param string $msg
+   * @param string $heading
+   * @return void
+   */
+  static function dark(String $msg, String $heading = null)
+  {
+    self::new($msg, 'dark', $heading);
     return true;
   }
 
@@ -116,7 +159,7 @@ class Flasher
 
     foreach ($self->valid_types as $type) {
       if(isset($_SESSION[$type]) && !empty($_SESSION[$type])) {
-        foreach ($_SESSION[$type] as $m) {
+        foreach ($_SESSION[$type] as $f) {
 
           switch ($self->framework) {
             case 'bl':
@@ -125,7 +168,7 @@ class Flasher
                 <button class="delete delete-bulma-notification"></button>
                 %s
               </div>';
-              $output .= sprintf($placeholder, $type, $m);
+              $output .= sprintf($placeholder, $type, $f["msg"]);
               break;
 
             case 'fn':
@@ -133,22 +176,63 @@ class Flasher
               '<div class="callout %s" data-closable="slide-out-right">
                 <h5>Notificación.</h5>
                 <p>%s</p>
+
                 <button class="close-button" aria-label="Cerrar" type="button" data-close>
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>';
-              $output .= sprintf($placeholder, $self->format_type($type), $m);
+              $output .= sprintf($placeholder, $self->format_type($type), $f["msg"]);
               break;
             
             case 'bs5':
             case 'bs':
             default:
-              $placeholder =
-              '<div class="alert alert-%s alert-dismissible show fade" role="alert">
-                %s 
+              $placeholder = '<div class="alert alert-%s alert-dismissible show fade" role="alert">';
+
+              if (!empty($f["heading"])) {
+                $placeholder .= sprintf('<h5 class="alert-heading fw-bold">%s</h5>', $f["heading"]);
+              }
+
+              // Mostrar icono de Fontawesome 6
+              if ($f["icon"] === true) {
+                switch ($f["type"]) {
+                  case 'primary':
+                    $icon = "fas fa-bell";
+                    break;
+
+                  case "success":
+                    $icon = "fas fa-check";
+                    break;
+
+                  case 'warning':
+                    $icon = "fas fa-triangle-exclamation";
+                    break;
+
+                  case "danger":
+                    $icon = "fas fa-xmark";
+                    break;
+
+                  case "info":
+                    $icon = "fas fa-bookmark";
+                    break;
+
+                  case "dark":
+                    $icon = "fas fa-bullseye";
+                    break;
+                  
+                  default:
+                    $icon = "fas fa-bell";
+                    break;
+                }
+
+                $placeholder .= sprintf('<i class="%s flex-shrink-0 me-2"></i>', $icon);
+              }
+              
+              $placeholder .= '%s
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
               </div>';
-              $output .= sprintf($placeholder, $type, $m);
+
+              $output .= sprintf($placeholder, $type, $f["msg"]);
               break;
           }
         }

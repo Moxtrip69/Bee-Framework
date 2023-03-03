@@ -6,17 +6,13 @@
 
 <div class="container py-5">
   <div class="row">
-    <div class="col-12">
-      <?php echo Flasher::flash(); ?>
-    </div>
-  </div>
-  <div class="row">
     <div class="col-12 col-md-6">
-      <a href="<?php echo URL; ?>"><img src="<?php echo get_bee_logo(); ?>" alt="Bee framework" class="img-fluid" style="width: 100px;"></a>
       <small class="d-block text-muted mb-3"><?php echo sprintf('Versión %s', get_bee_version()); ?></small>
 
       <h1>Un framework hecho en casa, con pasión y mucho cariño</h1>
       <h5>Ligero, rápido y personalizable, úsalo como gustes, en tus proyectos personales o comerciales.</h5>
+
+      <?php echo Flasher::flash(); ?>
 
       <ul class="list-group mt-5">
         <li class="list-group-item">Desarrollado con <b>PHP, Javascript</b> y <b>HTML5</b></li>

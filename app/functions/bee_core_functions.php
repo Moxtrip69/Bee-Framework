@@ -74,6 +74,16 @@ function get_base_url()
 }
 
 /**
+ * Devuelve el valor del controlador por defecto de la constante DEFAULT_CONTROLLER
+ *
+ * @return string
+ */
+function get_default_controller()
+{
+	return DEFAULT_CONTROLLER;
+}
+
+/**
  * Regresa la fecha de estos momentos
  *
  * @return string
@@ -1829,7 +1839,7 @@ function get_lightbox($type = 'script')
 function get_fontawesome()
 {
 	$placeholder = '<link rel="stylesheet" href="%s"/>';
-	$cdn         = 'https://use.fontawesome.com/releases/v5.8.2/css/all.css';
+	$cdn         = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css';
 
 	return sprintf($placeholder, $cdn);
 }

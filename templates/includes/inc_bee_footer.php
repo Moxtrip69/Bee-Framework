@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="col-12">
-          <p class="text-muted m-0">Desarrollado con <i class="fas fa-heart text-danger"></i> por <a href="https://www.academy.joystick.com.mx">Joystick</a>.</p>
+          <p class="text-muted m-0"><?php echo sprintf("%s v%s &copy;", get_bee_name(), get_bee_version()); ?> Desarrollado con <i class="fas fa-heart text-danger"></i> por <a href="https://www.academy.joystick.com.mx">Joystick</a>.</p>
         </div>
       </div>
     </div>
