@@ -1,7 +1,7 @@
 <?php
 /**
  * Plantilla general de modelos
- * @version 1.1.4
+ * @version 1.1.5
  *
  * Modelo de [[REPLACE]]
  */
@@ -12,8 +12,8 @@ class [[REPLACE]]Model extends Model {
   public static $t1 = '[[REPLACE_TABLE]]';
   
   // Nombre de tablas secundarias
-  //public static $t2 = '__tabla 2___'; 
-  //public static $t3 = '__tabla 3___'; 
+  //public static $t2 = '__tabla 2__'; 
+  //public static $t3 = '__tabla 3__'; 
 
   // Esquema del Modelo
   [[REPLACE_SCHEME]]
@@ -26,21 +26,21 @@ class [[REPLACE]]Model extends Model {
   static function all()
   {
     // Todos los registros
-    $sql = 'SELECT * FROM [[REPLACE_TABLE]] ORDER BY id DESC';
+    $sql = sprintf('SELECT * FROM %s ORDER BY id DESC', self::$t1);
     return ($rows = parent::query($sql)) ? $rows : [];
   }
 
   static function all_paginated()
   {
     // Todos los registros
-    $sql = 'SELECT * FROM [[REPLACE_TABLE]] ORDER BY id DESC';
+    $sql = sprintf('SELECT * FROM %s ORDER BY id DESC', self::$t1);
     return PaginationHandler($sql);
   }
 
   static function by_id($id)
   {
     // Un registro con $id
-    $sql = 'SELECT * FROM [[REPLACE_TABLE]] WHERE id = :id LIMIT 1';
+    $sql = sprintf('SELECT * FROM %s WHERE id = :id LIMIT 1', self::$t1);
     return ($rows = parent::query($sql, ['id' => $id])) ? $rows[0] : [];
   }
 

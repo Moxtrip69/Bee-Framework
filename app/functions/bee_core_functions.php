@@ -2271,8 +2271,8 @@ function load_all_cookies()
 	}
 
 	/**
-	 * Valida si una variable es null o vacía, de ser así
-	 * regresa un em dash para sustituir su espacio, denotando que no hay
+	 * Valida si una variable es nula o está vacía, de ser así
+	 * regresa un em-dash para sustituir su espacio, denotando que no hay
 	 * información en dicho lugar
 	 *
 	 * @param mixed $value
