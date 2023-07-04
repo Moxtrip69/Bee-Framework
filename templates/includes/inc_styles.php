@@ -1,7 +1,7 @@
 <!-- CSS Framework | Configurado en settings.php | defecto = Bootstrap 5 -->
 <?php echo get_css_framework(); ?>
 
-<!-- Font awesome 5 -->
+<!-- Font awesome 6 -->
 <?php echo get_fontawesome(); ?>
 
 <!-- Todo plugin adicional debe ir debajo de está línea -->

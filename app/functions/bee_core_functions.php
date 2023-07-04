@@ -217,7 +217,7 @@ function get_module($view, $data = []) {
 	}
 
 	ob_start();
-	require_once $file_to_include;
+	require $file_to_include;
 	$output = ob_get_clean();
 
 	return $output;
@@ -272,17 +272,18 @@ function buildURL($url , $params = [] , $redirection = true, $csrf = true) {
 function build_url($url , $params = [] , $redirection = true, $csrf = true) {
 	
 	// Check if theres a ?
-	$query   = parse_url($url, PHP_URL_QUERY);
-	$_params = [];
+	$raw_url = parse_url($url, PHP_URL_PATH);
+	$query   = parse_url($url, PHP_URL_QUERY); // extraer parámetros existentes
+	parse_str($query, $query_array); // convertir en array los parámetros
 
 	// Si requiere token csrf
 	if ($csrf) {
-		$_params[] = '_t='.CSRF_TOKEN;
+		$query_array["_t"]          = CSRF_TOKEN;
 	}
 	
 	// Si requiere redirección
-	if($redirection){
-		$_params[] = 'redirect_to='.urlencode(CUR_PAGE);
+	if ($redirection){
+		$query_array["redirect_to"] = CUR_PAGE;
 	}
 
 	// Si no es un array regresa la url original
@@ -293,14 +294,14 @@ function build_url($url , $params = [] , $redirection = true, $csrf = true) {
 	// Listando parámetros
 	if (!empty($params)) {
 		foreach ($params as $key => $value) {
-			$_params[] = sprintf('%s=%s', urlencode($key), urlencode($value));
+			$query_array[$key] = $value;
 		}
 	}
 
-	// Solo si no está vacía la lista de parámetros para URL
-	if (!empty($_params)) {
-		$url .= strpos($url, '?') ? '&' : '?';
-		$url .= implode('&', $_params);
+	// Sólo si no está vacía la lista de parámetros para URL
+	if (!empty($query_array)) {
+		$args = http_build_query($query_array);
+		$url  = sprintf("%s?%s", $raw_url, $args);
 	}
 	
 	return $url;
@@ -1681,7 +1682,7 @@ function get_jquery()
  * Carga de Vuejs 3 solo de ser necesario
  * definido en settings.php
  *
- * @return mixed
+ * @return string
  */
 function get_vuejs($runtime = false)
 {
@@ -1690,7 +1691,7 @@ function get_vuejs($runtime = false)
 	}
 
 	$placeholder = '<script src="%s"></script>';
-	$cdn         = is_local() ? 'https://unpkg.com/vue@next' : 
+	$cdn         = is_local() ? 'https://unpkg.com/vue@3/dist/vue.global.js' : 
 	($runtime === true ? 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.11/vue.runtime.global.prod.js' : 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.11/vue.global.prod.js');
 
 	return VUEJS === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
@@ -1832,7 +1833,7 @@ function get_lightbox($type = 'script')
 }
 
 /**
- * Regresa el CDN de fontawesome CSS versión 5
+ * Regresa el CDN de fontawesome CSS versión 6
  *
  * @return string
  */

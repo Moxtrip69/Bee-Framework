@@ -24,31 +24,25 @@ $(document).ready(function() {
 
     if (wrapper.length == 0) return;
 
-    $.ajax({
-      url: 'ajax/db_test',
-      type: 'get',
-      dataType: 'json',
-      cache: false,
-      headers: {
-        'auth_public_key' : Bee.public_key,
-        'auth_private_key': 'Esta es otra prueba 2'
-      },
-      beforeSend() {
-        alert.removeClass('alert-success').addClass('alert-danger');
-        alert.html('Probando conexión a la base de datos...');
-        wrapper.fadeIn();
-      }
-    }).done(res => {
-      if (res.status === 200) {
-        alert.removeClass('alert-danger').addClass('alert-success');
-        alert.html(res.msg);
-      } else {
-        alert.html(res.msg);
-      }
-    }).fail(err => {
-      alert.html(err.responseJSON.msg);
-    }).always(() => {
-    });
+    alert.removeClass('alert-success').addClass('alert-danger');
+    alert.html('<i class="fas fa-spinner fa-spin"></i> Probando conexión a la base de datos...');
+    wrapper.fadeIn();
+
+    setTimeout(() => {
+      fetch('ajax/db_test')
+      .then(response => response.json())
+      .then(res => {
+        if (res.status === 200) {
+          alert.removeClass('alert-danger').addClass('alert-success');
+          alert.html(res.msg);
+        } else {
+          alert.html(res.msg);
+        }
+      })
+      .catch(err => {
+        alert.html('Hubo un error en la petición, vuelve a intentarlo.');
+      });
+    }, 1000);
   }
 
   /**
@@ -56,32 +50,32 @@ $(document).ready(function() {
    */
   function test_ajax() {
     var body = $('body'),
-    hook     = 'bee_hook',
-    action   = 'post',
-    csrf     = Bee.csrf;
+    csrf     = Bee.csrf,
+    data     = new FormData;
+
+    data.append('csrf', csrf);
 
     if ($('#test_ajax').length == 0) return;
 
-    $.ajax({
-      url: 'ajax/test',
-      type: 'post',
-      dataType: 'json',
-      data : { hook , action , csrf },
-      beforeSend: function() {
-        body.waitMe();
-      }
-    }).done(function(res) {
+    body.waitMe();
+
+    fetch('ajax/test', {
+      method: "POST",
+      body: data
+    })
+    .then(response => response.json())
+    .then(res => {
       if (res.status === 200) {
         toastr.success(res.msg, 'Prueba AJAX');
       } else {
         toastr.error(res.msg, '¡Error!');
       }
-     
-    }).fail(function(err) {
-      toastr.error('Prueba AJAX fallida.', '¡Upss!');
-    }).always(function() {
+
       body.waitMe('hide');
     })
+    .catch(err => {
+      toastr.error('Prueba AJAX fallida.', '¡Upss!');
+    });
   }
   
   /**
@@ -169,16 +163,12 @@ $(document).ready(function() {
    * @returns mixed
    */
   function posts(method = 'get', data = null) {
-    return $.ajax({
-      url        : Bee.url + 'api/posts',
+    return fetch(Bee.url + 'api/posts', {
       headers    : { 'auth_private_key': Bee.private_key },
       type       : method,
-      dataType   : 'json',
-      contentType: false,
-      processData: false,
-      cache      : false,
       data       : data
-    });
+    })
+    .then(response => response.json());
   }
 
   /**
@@ -187,7 +177,7 @@ $(document).ready(function() {
   function test_api() {
     if ($('#test_api').length == 0) return;
 
-    posts('get').done(res => toastr.success(`API funcional, fueron cargados <b>${res.data.length}</b> registros.`, 'Prueba de la API'));
+    posts('get').then(res => toastr.success(`API funcional, fueron cargados <b>${res.data.length}</b> registros.`, 'Prueba de la API'));
   }
 
   // Inicialización de elementos

@@ -23,6 +23,7 @@ class PaginationHandler extends Model
 	private $start      = 0;
 	private $end        = 0;
 	private $pagination = '';
+	private $total      = 0;
 
 	private $alignment  = '';
 	private $styles     = '';
@@ -32,7 +33,8 @@ class PaginationHandler extends Model
 
 	public function __construct()
 	{
-		$this->pattern = strtok(CUR_PAGE, '?');
+		//$this->pattern = strtok(CUR_PAGE, '?');
+		$this->pattern = CUR_PAGE;
 	}
 	
 	public function get_total_rows()
