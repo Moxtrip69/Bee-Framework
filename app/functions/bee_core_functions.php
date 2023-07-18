@@ -272,9 +272,14 @@ function buildURL($url , $params = [] , $redirection = true, $csrf = true) {
 function build_url($url , $params = [] , $redirection = true, $csrf = true) {
 	
 	// Check if theres a ?
-	$raw_url = parse_url($url, PHP_URL_PATH);
-	$query   = parse_url($url, PHP_URL_QUERY); // extraer parámetros existentes
-	parse_str($query, $query_array); // convertir en array los parámetros
+	$raw_url     = parse_url($url, PHP_URL_PATH);
+	$query       = parse_url($url, PHP_URL_QUERY); // extraer parámetros existentes
+	$query_array = [];
+	
+	// Sólo si ya hay parámetros existentes en la URL
+	if (!empty($query)) {
+		parse_str($query, $query_array); // convertir en array los parámetros
+	}
 
 	// Si requiere token csrf
 	if ($csrf) {
@@ -282,7 +287,7 @@ function build_url($url , $params = [] , $redirection = true, $csrf = true) {
 	}
 	
 	// Si requiere redirección
-	if ($redirection){
+	if ($redirection) {
 		$query_array["redirect_to"] = CUR_PAGE;
 	}
 
