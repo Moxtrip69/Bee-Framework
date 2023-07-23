@@ -125,8 +125,9 @@ class optionModel extends Model
     // #ebebeb
     // optionModel::search('color') -> #ebebeb;
     // optionModel::search('sidebar_alignment') -> right;
-    $self = new self();
+    $self         = new self();
     $self->option = $option;
+    
     return ($res = $self->one()) ? $res['val'] : false;
   }
 }

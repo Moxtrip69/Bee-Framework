@@ -42,6 +42,9 @@ define('TOASTR'       , true);  // define si es requerido Toastr para notificaci
 define('WAITME'       , true);  // define si es requerido WaitMe
 define('LIGHTBOX'     , false); // define si es requerido Lightbox
 
+// Motor de templates o plantillas con Twig 3.6
+define('USE_TWIG'     , true); // define si será usado Twig para renderizar las vistas
+
 // Versión de la aplicación
 define('BEE_NAME'    , 'Bee Framework');  // Nombre del framework
 define('BEE_VERSION' , '1.5.5');          // Versión del framework
@@ -131,9 +134,9 @@ define('DEFAULT_ERROR_CONTROLLER', 'error');
 define('DEFAULT_METHOD'          , 'index');
 
 /**
+ * Se migraron estas constantes a config/bee_config.php
  * @deprecated 1.1.3
  */
-// Se encuentra en archivo bee_config.php
 // define('DB_ENGINE'  , 'mysql');
 // define('DB_HOST'    , 'localhost');
 // define('DB_NAME'    , '___REMOTE DB___');

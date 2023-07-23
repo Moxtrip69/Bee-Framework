@@ -5,12 +5,15 @@ Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y 
 
 ## Changelog
 ### v 1.5.5
+- Hemos implementado **Twig** como motor de plantillas para simplificar la lógica de presentación y mejorar la reutilización de código en nuestras vistas. Esto permitirá una separación más clara entre la lógica de negocio y la presentación, lo que a su vez mejorará la mantenibilidad de nuestro código. Twig ofrece una sintaxis clara y fácil de entender, lo que agilizará el proceso de desarrollo y reducirá la posibilidad de errores en nuestras plantillas. Gracias a su sistema de almacenamiento en caché, Twig mejorará el rendimiento general de nuestras vistas, asegurando una experiencia más fluida para nuestros usuarios, es importante entender que aún está en desarrollo la implementación de la forma más flexible posible.
+- Se están creando dos nuevas tablas en la base de datos: **posts** y **posts_meta**. Estas tablas están diseñadas para almacenar información genérica de cualquier tipo, lo que las hace muy versátiles y adecuadas para diversos proyectos. En la tabla **posts**, se pueden almacenar diferentes tipos de registros, como visitas, comentarios, vistas, entradas de blog, noticias, productos, servicios, mensajes y cualquier otro tipo de dato relevante. La idea detrás de esta tabla es que sea lo suficientemente flexible para adaptarse a cualquier requerimiento sin necesidad de crear tablas específicas para cada tipo de dato. Por otro lado, se tiene la tabla **posts_meta**, que se utilizará para almacenar metadatos relacionados con los registros guardados en la tabla **posts**. Los metadatos son datos adicionales que proporcionan información sobre los registros, como etiquetas, categorías, fechas, autor, o cualquier otro atributo relevante que pueda variar según el tipo de contenido almacenado.
+- Se han corregido errores muy importantes dentro de funciones core del sistema, sobre todo en el generador de enlaces dinámicos, ya que tenia problemas si se repetían parámetros y se generaban de forma incorrecta.
 - Ahora es posible escoger dentro de 5 temas de **Bootstrap 5**, solo deberás actualizar la constante **CSS_FRAMEWORK** a alguno de los siguientes valores:
-  - Zephyr (bs_zephyr)
-  - Litera (bs_litera)
-  - Lumen (bs_lumen)
-  - Vapor (bs_vapor)
-  - Lux (bs_lux)
+  - Zephyr (*bs_zephyr*)
+  - Litera (*bs_litera*)
+  - Lumen (*bs_lumen*)
+  - Vapor (*bs_vapor*)
+  - Lux (*bs_lux*)
 - Hemos corregido diversos bugs y funciones que ya se encontraban deprecadas para las últimas versiones de **PHP**.
 - Nuevo sistema sencillo para generar usuarios de prueba.
 - Los controladores y elementos de Bee Framework ya no serán accesibles si el sitio no se encuentra en desarrollo o servidor local.

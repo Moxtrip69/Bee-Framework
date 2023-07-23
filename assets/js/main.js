@@ -1,83 +1,4 @@
 $(document).ready(function() {
-
-  /**
-   * @since 1.1.4
-   */
-  init_bee_greeting();
-  function init_bee_greeting() {
-    console.log('////////// Bienvenido a Bee Framework Versión ' + Bee.bee_version + ' //////////');
-    console.log('//////////////////// www.joystick.com.mx ////////////////////');
-    if (Bee.is_local == true) {
-      console.log(Bee);
-    }
-  }
-
-  /**
-   * Prueba la conexión a la base de datos
-   * @since 1.1.4
-   * 
-   * @returns 
-   */
-  function init_db_test() {
-    var wrapper = $('.wrapper_db_test'),
-    alert       = $('.alert', wrapper);
-
-    if (wrapper.length == 0) return;
-
-    alert.removeClass('alert-success').addClass('alert-danger');
-    alert.html('<i class="fas fa-spinner fa-spin"></i> Probando conexión a la base de datos...');
-    wrapper.fadeIn();
-
-    setTimeout(() => {
-      fetch('ajax/db_test')
-      .then(response => response.json())
-      .then(res => {
-        if (res.status === 200) {
-          alert.removeClass('alert-danger').addClass('alert-success');
-          alert.html(res.msg);
-        } else {
-          alert.html(res.msg);
-        }
-      })
-      .catch(err => {
-        alert.html('Hubo un error en la petición, vuelve a intentarlo.');
-      });
-    }, 1000);
-  }
-
-  /**
-   * Prueba de peticiones ajax al backend en versión 1.1.3
-   */
-  function test_ajax() {
-    var body = $('body'),
-    csrf     = Bee.csrf,
-    data     = new FormData;
-
-    data.append('csrf', csrf);
-
-    if ($('#test_ajax').length == 0) return;
-
-    body.waitMe();
-
-    fetch('ajax/test', {
-      method: "POST",
-      body: data
-    })
-    .then(response => response.json())
-    .then(res => {
-      if (res.status === 200) {
-        toastr.success(res.msg, 'Prueba AJAX');
-      } else {
-        toastr.error(res.msg, '¡Error!');
-      }
-
-      body.waitMe('hide');
-    })
-    .catch(err => {
-      toastr.error('Prueba AJAX fallida.', '¡Upss!');
-    });
-  }
-  
   /**
    * Alerta para confirmar una acción establecida en un link o ruta específica
    */
@@ -156,75 +77,158 @@ $(document).ready(function() {
     }
   }
 
-  /**
-   * Interactua con la API de Bee framework función de prueba y demostración
-   * @param {string} method El tipo de petición a ejecutar
-   * @param {mixed} data Información del cuerpo de la petición
-   * @returns mixed
-   */
-  function posts(method = 'get', data = null) {
-    return fetch(Bee.url + 'api/posts', {
-      headers    : { 'auth_private_key': Bee.private_key },
-      type       : method,
-      data       : data
-    })
-    .then(response => response.json());
-  }
-
-  /**
-   * Prueba de peticiones a la API en versión 1.5.5
-   */
-  function test_api() {
-    if ($('#test_api').length == 0) return;
-
-    posts('get').then(res => toastr.success(`API funcional, fueron cargados <b>${res.data.length}</b> registros.`, 'Prueba de la API'));
-  }
-
   // Inicialización de elementos
   init_summernote();
   init_tooltips();
   init_toastr_setup();
+
+  ////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////
+  ///////// INGRESA TU FUNCIONALIDAD CON JQUERY AQUÍ ABAJO
+  ////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  ////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////
+  ///////// FUNCIONES SÓLO DE PRUEBA, PUEDEN SER BORRADAS
+  ////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////
+  init_bee_greeting();
   init_db_test();
   test_ajax();
   test_api();
 
   ////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////
-  ///////// NO REQUERIDOS, SOLO PARA EL PROYECTO DEMO DE GASTOS E INGRESOS
+  ///////// INGRESA TU FUNCIONALIDAD CON VANILLA JAVASCRIPT AQUÍ ABAJO
   ////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////
-
-  // Guardar o actualizar opciones
-  $('.bee_save_options').on('submit', bee_save_options);
-  function bee_save_options(event) {
-    event.preventDefault();
-
-    var form = $('.bee_save_options'),
-    data     = new FormData(form.get(0));
-
-    // AJAX
-    $.ajax({
-      url: 'ajax/bee_save_options',
-      type: 'post',
-      dataType: 'json',
-      contentType: false,
-      processData: false,
-      cache: false,
-      data : data,
-      beforeSend: function() {
-        form.waitMe();
-      }
-    }).done(function(res) {
-      if(res.status === 200 || res.status === 201) {
-        toastr.success(res.msg, '¡Bien!');
-        bee_get_movements();
-      } else {
-        toastr.error(res.msg, '¡Upss!');
-      }
-    }).fail(function(err) {
-      toastr.error('Hubo un error en la petición', '¡Upss!');
-    }).always(function() {
-      form.waitMe('hide');
-    })
-  }
 });
+
+// Función para crear y mostrar el loader dinámicamente
+function showLoader() {
+  var loaderContainer = document.createElement('div');
+  loaderContainer.className = 'loader-container';
+  loaderContainer.id = 'loaderContainer';
+  loaderContainer.style.display = 'block';
+
+  var loader = document.createElement('div');
+  loader.className = 'loader';
+  loader.textContent = 'Cargando...';
+
+  loaderContainer.appendChild(loader);
+  document.body.appendChild(loaderContainer);
+}
+
+// Función para eliminar el loader dinámicamente
+function hideLoader() {
+  var loaderContainer = document.getElementById('loaderContainer');
+  if (loaderContainer) {
+    loaderContainer.parentNode.removeChild(loaderContainer);
+  }
+}
+
+/**
+ * Mostrar Bee object en entorno de desarrollo
+ */
+function init_bee_greeting() {
+  console.log('////////// Bienvenido a Bee Framework Versión ' + Bee.bee_version + ' //////////');
+  console.log('//////////////////// www.joystick.com.mx ////////////////////');
+  if (Bee?.is_local == true) {
+    console.log(Bee);
+  }
+}
+
+/**
+ * Prueba la conexión a la base de datos
+ * @since 1.1.4
+ * 
+ * @returns 
+ */
+function init_db_test() {
+  const wrapper = document.querySelector('.wrapper_db_test');
+
+  if (!wrapper) return;
+
+  const alert   = wrapper.querySelector('.alert');
+
+  alert.classList.remove('alert-success');
+  alert.classList.add('alert-danger');
+
+  alert.innerHTML       = '<i class="fas fa-spinner fa-spin"></i> Probando conexión a la base de datos...';
+  wrapper.style.display = 'block';
+
+  setTimeout(() => {
+    fetch('ajax/db_test')
+    .then(res => res.json())
+    .then(res => {
+      if (res.status === 200) {
+        alert.classList.remove('alert-danger');
+        alert.classList.add('alert-success');
+        alert.innerHTML = res.msg;
+      } else {
+        alert.innerHTML = res.msg;
+      }
+    })
+    .catch(err => {
+      alert.innerHTML = 'Hubo un error en la petición, vuelve a intentarlo.';
+    });
+  }, 1000);
+}
+
+/**
+ * Prueba de peticiones ajax al backend en versión 1.1.3
+ */
+function test_ajax() {
+  const wrapper  = document.getElementById('test_ajax');
+  const csrf     = Bee.csrf;
+  const data     = new FormData;
+
+  if (!wrapper) return;
+
+  data.append('csrf', csrf);
+
+  if (!wrapper) return;
+
+  showLoader();
+
+  fetch('ajax/test', {
+    method: "POST",
+    body: data
+  })
+  .then(res => res.json())
+  .then(res => {
+    if (res.status === 200) {
+      toastr.success(res.msg, 'Prueba AJAX');
+    } else {
+      toastr.error(res.msg, '¡Error!');
+    }
+
+    hideLoader();
+  })
+  .catch(err => {
+    toastr.error('Prueba AJAX fallida.', '¡Upss!');
+  });
+}
+
+/**
+ * Prueba de peticiones a la API en versión 1.5.5
+ */
+async function test_api() {
+  const wrapper = document.getElementById('test_api');
+
+  if (!wrapper) return;
+
+  const res = await fetch(Bee.url + 'api/posts', {
+    headers    : { 'auth_private_key': Bee.private_key },
+    type       : 'GET'
+  }).then(res => res.json());
+
+  if (res.status === 200) {
+    toastr.success(`API funcional, fueron cargados <b>${res.data.length}</b> registros.`, 'Prueba de la API')
+  } else {
+    toastr.error(res.msg, 'Hubo un error');
+  }
+}

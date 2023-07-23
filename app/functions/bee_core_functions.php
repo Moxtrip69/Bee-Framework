@@ -270,8 +270,7 @@ function buildURL($url , $params = [] , $redirection = true, $csrf = true) {
  * @return string
  */
 function build_url($url , $params = [] , $redirection = true, $csrf = true) {
-	
-	// Check if theres a ?
+	// Formateo y parseo inicial de la URL pasada descomponiendo sus elementos
 	$raw_url     = parse_url($url, PHP_URL_PATH);
 	$query       = parse_url($url, PHP_URL_QUERY); // extraer parámetros existentes
 	$query_array = [];
@@ -356,8 +355,7 @@ function logger($message , $type = 'debug' , $output = false) {
  *
  * @return bool
  */
-function backtrace()
-{
+function backtrace() {
 	// Para seguir errores o ejecuciones de código
 	$bt     = debug_backtrace();
 	$caller = array_shift($bt);
@@ -724,9 +722,9 @@ function insert_inputs() {
 		$location = CUR_PAGE;
 	}
 
-	$output .= '<input type="hidden" name="redirect_to" value="'.$location.'">';
-	$output .= '<input type="hidden" name="timecheck" value="'.time().'">';
-	$output .= '<input type="hidden" name="csrf" value="'.CSRF_TOKEN.'">';
+	$output .= '<input type="hidden" name="redirect_to" value="'.$location.'" required>';
+	$output .= '<input type="hidden" name="timecheck" value="'.time().'" required>';
+	$output .= '<input type="hidden" name="csrf" value="'.CSRF_TOKEN.'" required>';
 
 	return $output;
 }
@@ -942,8 +940,7 @@ function generate_token($length = 32) {
  *
  * @return string
  */
-function generate_key()
-{
+function generate_key() {
 	$key = implode('-', str_split(substr(strtolower(md5(microtime().rand(1000, 9999))), 0, 30), 6));
 
 	return $key;
@@ -1576,8 +1573,7 @@ function is_local() {
  *
  * @return mixed
  */
-function get_css_framework()
-{
+function get_css_framework() {
 	if (!defined('CSS_FRAMEWORK')) {
 		return false;
 	}
@@ -1631,8 +1627,7 @@ function get_css_framework()
  * definido en settings.php
  * @return mixed
  */
-function get_css_framework_scripts()
-{
+function get_css_framework_scripts() {
 	if (!defined('CSS_FRAMEWORK')) {
 		return false;
 	}
@@ -1671,8 +1666,7 @@ function get_css_framework_scripts()
  *
  * @return mixed
  */
-function get_jquery()
-{
+function get_jquery() {
 	if (!defined('JQUERY')) {
 		return false;
 	}
@@ -1689,8 +1683,7 @@ function get_jquery()
  *
  * @return string
  */
-function get_vuejs($runtime = false)
-{
+function get_vuejs($runtime = false) {
 	if (!defined('VUEJS')) {
 		return false;
 	}
@@ -1708,8 +1701,7 @@ function get_vuejs($runtime = false)
  *
  * @return mixed
  */
-function get_axios()
-{
+function get_axios() {
 	if (!defined('AXIOS')) {
 		return false;
 	}
@@ -1726,8 +1718,7 @@ function get_axios()
  *
  * @return mixed
  */
-function get_toastr($type = 'script')
-{
+function get_toastr($type = 'script') {
 	if (!defined('TOASTR')) {
 		return false;
 	}
@@ -1759,8 +1750,7 @@ function get_toastr($type = 'script')
  *
  * @return mixed
  */
-function get_sweetalert2()
-{
+function get_sweetalert2() {
 	if (!defined('SWEETALERT2')) {
 		return false;
 	}
@@ -1777,8 +1767,7 @@ function get_sweetalert2()
  *
  * @return mixed
  */
-function get_waitMe($type = 'script')
-{
+function get_waitMe($type = 'script') {
 	if (!defined('WAITME')) {
 		return false;
 	}
@@ -1810,8 +1799,7 @@ function get_waitMe($type = 'script')
  *
  * @return string
  */
-function get_lightbox($type = 'script')
-{
+function get_lightbox($type = 'script') {
 	if (!defined('LIGHTBOX')) {
 		return false;
 	}
@@ -1842,8 +1830,7 @@ function get_lightbox($type = 'script')
  *
  * @return string
  */
-function get_fontawesome()
-{
+function get_fontawesome() {
 	$placeholder = '<link rel="stylesheet" href="%s"/>';
 	$cdn         = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css';
 
@@ -1856,8 +1843,7 @@ function get_fontawesome()
  *
  * @return mixed
  */
-function get_bee_info()
-{
+function get_bee_info() {
 	$db   = Db::connect();
 	$data =
 	[
@@ -1921,8 +1907,7 @@ function get_bee_info()
  * @param string $password
  * @return string
  */
-function get_new_password($password = null)
-{
+function get_new_password($password = null) {
 	$password = $password === null ? random_password() : $password;
 
 	return 
@@ -1941,8 +1926,7 @@ function get_new_password($password = null)
  * @param array $headers
  * @return mixed
  */
-function bee_die( $message, $headers = [] )
-{
+function bee_die( $message, $headers = [] ) {
 	if (!is_string($message)) {
 		throw new Exception('El parámetro $message debe ser un string válido.');
 	}
@@ -1962,8 +1946,7 @@ function bee_die( $message, $headers = [] )
  *
  * @return bool
  */
-function persistent_session()
-{
+function persistent_session() {
 	if (!defined('BEE_COOKIES') || BEE_COOKIES !== true) {
 		return false;
 	}
@@ -1976,8 +1959,7 @@ function persistent_session()
  *
  * @return array
  */
-function get_all_cookies()
-{
+function get_all_cookies() {
 	$cookies = [];
 
 	if (!isset($_COOKIE) || empty($_COOKIE)) {
@@ -2000,8 +1982,7 @@ function get_all_cookies()
  *
  * @return bool
  */
-function load_all_cookies()
-{
+function load_all_cookies() {
 	global $Bee_Cookies;
 
 	$Bee_Cookies = get_all_cookies();
@@ -2010,286 +1991,272 @@ function load_all_cookies()
 }
 
 /**
-   * Creamos un cookie directamente
-   * con base a los parámetros pasados
-   *
-   * @param array $cookies
-   * @return bool
-   */
-	function new_cookie($name, $value, $lifetime = null, $path = '', $domain = '')
-	{
-		// Para prevenir cualquier error de ejecución
-		// al ser enviadas ya las cabeceras del sitio
-		if (headers_sent()) {
-			return false;
+ * Creamos un cookie directamente
+ * con base a los parámetros pasados
+ *
+ * @param array $cookies
+ * @return bool
+ */
+function new_cookie($name, $value, $lifetime = null, $path = '', $domain = '') {
+	// Para prevenir cualquier error de ejecución
+	// al ser enviadas ya las cabeceras del sitio
+	if (headers_sent()) {
+		return false;
+	}
+	
+	// Valor por defecto de la duración del cookie
+	$default  = 60 * 60 * 24; // 1 día por defecto si no existe la constante
+	$lifetime = defined('BEE_COOKIE_LIFETIME') && $lifetime === null ? BEE_COOKIE_LIFETIME : (!is_integer($lifetime) ? $default : $lifetime); 
+	
+	// Creamos el nuevo cookie
+	setcookie($name , $value , time() + $lifetime , $path, $domain);
+
+	return true;
+}
+
+/**
+ * Carga la información de un cookie en caso de existir
+ *
+ * @param string $cookie
+ * @return bool | true si existe | false si no
+ */
+function cookie_exists($cookie) {
+	return isset($_COOKIE[$cookie]);
+}
+
+/**
+ * Borrar cookies en caso de existir,
+ * se pasa el nombre de cada cookie como parámetro array
+ *
+ * @param array $cookies
+ * @return bool
+ */
+function destroy_cookie($cookie, $path = '', $domain = '') {
+	global $Bee_Cookies;
+
+	// Para prevenir cualquier error de ejecución
+	// al ser enviadas ya las cabeceras del sitio
+	if (headers_sent()) {
+		return false;
+	}
+
+	// Verificamos que exista el cookie dentro de nuestra
+	// global, si no existe entonces no existe el cookie en sí
+	if (!isset($_COOKIE[$cookie])) {
+		return false;
+	}
+
+	// Seteamos el cookie con un valor null y tiempo negativo para destruirlo
+	setcookie($cookie , null , time() - 1000, $path, $domain);
+	unset($Bee_Cookies[$cookie]);
+	
+	return true;
+}
+
+/**
+ * Verifica si existe un determinado cookie creado
+ *
+ * @param string $cookie_name
+ * @return mixed
+ */
+function get_cookie($cookie) {
+	return isset($_COOKIE[$cookie]) ? $_COOKIE[$cookie] : false;
+}
+
+/**
+ * Carga todos los mensajes configurados por defecto para
+ * su uso en el sistema de Bee framework
+ *
+ * @return array
+ */
+function get_bee_default_messages() {
+	$messages =
+	[
+		'0'           => 'Acceso no autorizado.',
+		'1'           => 'Acción no autorizada.',
+		'2'           => 'Ocurrió un error, intenta más tarde.',
+		'3'           => 'No pudimos procesar tu solicitud.',
+		'added'       => 'Nuevo registro agregado con éxito.',
+		'not_added'   => 'Hubo un problema al agregar el registro.',
+		'updated'     => 'Registro actualizado con éxito.',
+		'not_updated' => 'Hubo un problema al actualizar el registro.',
+		'found'       => 'Registro encontrado con éxito.',
+		'not_found'   => 'El registro no existe o ha sido borrado.',
+		'deleted'     => 'Registro borrado con éxito.',
+		'not_deleted' => 'Hubo un problema al borrar el registro.',
+		'sent'        => 'Mensaje enviado con éxito.',
+		'not_sent'    => 'Hubo un problema al enviar el mensaje.',
+		'sent_to'     => 'Mensaje enviado con éxito a %s.',
+		'not_sent_to' => 'Hubo un problema al enviar el mensaje a %s.',
+		'auth'        => 'Debes iniciar sesión para continuar.',
+		'expired'     => 'La sesión ha expirado, vuelve a ingresar por favor.',
+		'm_params'    => 'Parámetros incompletos, acceso no autorizado.',
+		'm_form'      => 'Campos incompletos, completa el formulario por favor.',
+		'm_token'     => 'Token no encontrado o no válido, acceso no autorizado.'
+	];
+	
+	return $messages;
+}
+
+/**
+ * Carga todos los mensajes registrados en el
+ * array de Bee_Messages del sistema bee framework
+ *
+ * @return array
+ */
+function get_all_bee_messages() {
+	global $Bee_Messages;
+
+	return $Bee_Messages;
+}
+
+/**
+ * Registra un nuevo mensaje al array
+ * de mensajes para su uso en bee framework
+ *
+ * @param string $code
+ * @param string $message
+ * @return bool
+ */
+function register_bee_custom_message($code, $message) {
+	global $Bee_Messages;
+
+	try {
+		if (isset($Bee_Messages[$code])) {
+			throw new Exception(sprintf('Ya existe el código de mensaje %s.', $code));
 		}
-		
-		// Valor por defecto de la duración del cookie
-		$default  = 60 * 60 * 24; // 1 día por defecto si no existe la constante
-		$lifetime = defined('BEE_COOKIE_LIFETIME') && $lifetime === null ? BEE_COOKIE_LIFETIME : (!is_integer($lifetime) ? $default : $lifetime); 
-		
-		// Creamos el nuevo cookie
-		setcookie($name , $value , time() + $lifetime , $path, $domain);
+
+		$Bee_Messages[$code] = $message;
 
 		return true;
+
+	} catch (Exception $e) {
+		bee_die($e->getMessage());
+	}
+}
+
+/**
+ * Carga un mensaje de bee framework existente
+ * en el array de la global Bee_Messages
+ * 
+ * OPCIONES ACTUALES
+ * '0'           => 'Acceso no autorizado.'
+ * '1'           => 'Acción no autorizada.'
+ * '2'           => 'Ocurrió un error, intenta más tarde.'
+ * '3'           => 'No pudimos procesar tu solicitud.'
+ * 'added'       => 'Nuevo registro agregado con éxito.'
+ * 'not_added'   => 'Hubo un problema al agregar el registro.'
+ * 'updated'     => 'Registro actualizado con éxito.'
+ * 'not_updated' => 'Hubo un problema al actualizar el registro.'
+ * 'found'       => 'Registro encontrado con éxito.'
+ * 'not_found'   => 'El registro no existe o ha sido borrado.'
+ * 'deleted'     => 'Registro borrado con éxito.'
+ * 'not_deleted' => 'Hubo un problema al borrar el registro.'
+ * 'sent'        => 'Mensaje enviado con éxito.'
+ * 'not_sent'    => 'Hubo un problema al enviar el mensaje.'
+ * 'sent_to'     => 'Mensaje enviado con éxito a %s.'
+ * 'not_sent_to' => 'Hubo un problema al enviar el mensaje a %s.'
+ * 'auth'        => 'Debes iniciar sesión para continuar.'
+ * 'expired'     => 'La sesión ha expirado, vuelve a ingresar por favor.'
+ * 'm_params'    => 'Parámetros incompletos, acceso no autorizado.'
+ * 'm_form'      => 'Campos incompletos, completa el formulario por favor.'
+ * 'm_token'     => 'Token no encontrado o no válido, acceso no autorizado.' 
+ * 
+ * @param string $code
+ * @return string
+ */
+function get_bee_message($code) {
+	global $Bee_Messages;
+
+	$code = (string) $code;
+
+	return isset($Bee_Messages[$code]) ? $Bee_Messages[$code] : '';
+}
+
+/**
+ * Regresa la api key pública para consumir las rutas de la API
+ *
+ * @return string
+ */
+function get_bee_api_public_key() {
+	$name = 'API_PUBLIC_KEY';
+	if (!defined($name)) {
+		throw new Exception(sprintf('La constante %s no existe o no se ha definido en el sistema y es requerida para esta función.', $name));
 	}
 
-	/**
-	 * Carga la información de un cookie en caso de existir
-	 *
-	 * @param string $cookie
-	 * @return bool | true si existe | false si no
-	 */
-	function cookie_exists($cookie)
-	{
-    return isset($_COOKIE[$cookie]);
+	$key = API_PUBLIC_KEY;
+	return $key;
+}
+
+/**
+ * Regresa la api key privada para consumir las rutas de la API
+ *
+ * @return string
+ */
+function get_bee_api_private_key() {
+	$name = 'API_PRIVATE_KEY';
+	if (!defined($name)) {
+		throw new Exception(sprintf('La constante %s no existe o no se ha definido en el sistema y es requerida para esta función.', $name));
 	}
 
-	/**
-   * Borrar cookies en caso de existir,
-   * se pasa el nombre de cada cookie como parámetro array
-   *
-   * @param array $cookies
-   * @return bool
-   */
-	function destroy_cookie($cookie, $path = '', $domain = '')
-	{
-		global $Bee_Cookies;
+	$key = API_PRIVATE_KEY;
+	return $key;
+}
 
-		// Para prevenir cualquier error de ejecución
-		// al ser enviadas ya las cabeceras del sitio
-		if (headers_sent()) {
-			return false;
-		}
-
-		// Verificamos que exista el cookie dentro de nuestra
-		// global, si no existe entonces no existe el cookie en sí
-		if (!isset($_COOKIE[$cookie])) {
-			return false;
-		}
-
-		// Seteamos el cookie con un valor null y tiempo negativo para destruirlo
-		setcookie($cookie , null , time() - 1000, $path, $domain);
-		unset($Bee_Cookies[$cookie]);
-		
-		return true;
+/**
+ * Regresa true si es requerida autenticación con api keys para consumir los
+ * recursos de la API de bee framework y la instancia actual
+ *
+ * @return bool
+ */
+function bee_api_authentication() {
+	$name = 'API_AUTH';
+	if (!defined($name)) {
+		throw new Exception(sprintf('La constante %s no existe o no se ha definido en el sistema y es requerida para esta función.', $name));
 	}
 
-	/**
-   * Verifica si existe un determinado cookie creado
-   *
-   * @param string $cookie_name
-   * @return mixed
-   */
-	function get_cookie($cookie)
-	{
-		return isset($_COOKIE[$cookie]) ? $_COOKIE[$cookie] : false;
+	return (API_AUTH === true);
+}	
+
+/**
+ * Regresa una versión de un asset si estamos en desarrollo generará
+ * una versión random para evitar el cache y cargar el archivo más reciente,
+ * en producción cargará la versión cacheada
+ *
+ * @return string
+ */
+function get_asset_version() {
+	return is_local() ? time() : get_version();
+}
+
+/**
+ * Valida si el string o texto es alfanumérico, puede o no tener espacios incluidos
+ *
+ * @param string $string
+ * @param boolean $spaces
+ * @return boolean
+ */
+function is_alphanumeric($string, $accept_spaces = false) {
+	if ($accept_spaces === true) {
+		return preg_match("/^[\p{L} ]+$/u", clean($string)) === 1;
 	}
 
-	/**
-	 * Carga todos los mensajes configurados por defecto para
-	 * su uso en el sistema de Bee framework
-	 *
-	 * @return array
-	 */
-	function get_bee_default_messages()
-	{
-		$messages =
-		[
-			'0'           => 'Acceso no autorizado.',
-			'1'           => 'Acción no autorizada.',
-			'2'           => 'Ocurrió un error, intenta más tarde.',
-			'3'           => 'No pudimos procesar tu solicitud.',
-			'added'       => 'Nuevo registro agregado con éxito.',
-			'not_added'   => 'Hubo un problema al agregar el registro.',
-			'updated'     => 'Registro actualizado con éxito.',
-			'not_updated' => 'Hubo un problema al actualizar el registro.',
-			'found'       => 'Registro encontrado con éxito.',
-			'not_found'   => 'El registro no existe o ha sido borrado.',
-			'deleted'     => 'Registro borrado con éxito.',
-			'not_deleted' => 'Hubo un problema al borrar el registro.',
-			'sent'        => 'Mensaje enviado con éxito.',
-			'not_sent'    => 'Hubo un problema al enviar el mensaje.',
-			'sent_to'     => 'Mensaje enviado con éxito a %s.',
-			'not_sent_to' => 'Hubo un problema al enviar el mensaje a %s.',
-			'auth'        => 'Debes iniciar sesión para continuar.',
-			'expired'     => 'La sesión ha expirado, vuelve a ingresar por favor.',
-			'm_params'    => 'Parámetros incompletos, acceso no autorizado.',
-			'm_form'      => 'Campos incompletos, completa el formulario por favor.',
-			'm_token'     => 'Token no encontrado o no válido, acceso no autorizado.'
-		];
-		
-		return $messages;
+	return preg_match("/^[a-zA-Z0-9]+$/", clean($string)) === 1;
+}
+
+/**
+ * Valida si una variable es nula o está vacía, de ser así
+ * regresa un em-dash para sustituir su espacio, denotando que no hay
+ * información en dicho lugar
+ *
+ * @param mixed $value
+ * @param string $placeholder
+ * @return string
+ */
+function _e($value, string $placeholder = "—") {
+	if (empty($value) || !isset($value)) {
+		return $placeholder;
 	}
 
-	/**
-	 * Carga todos los mensajes registrados en el
-	 * array de Bee_Messages del sistema bee framework
-	 *
-	 * @return array
-	 */
-	function get_all_bee_messages()
-	{
-		global $Bee_Messages;
-
-		return $Bee_Messages;
-	}
-
-	/**
-	 * Registra un nuevo mensaje al array
-	 * de mensajes para su uso en bee framework
-	 *
-	 * @param string $code
-	 * @param string $message
-	 * @return bool
-	 */
-	function register_bee_custom_message($code, $message)
-	{
-		global $Bee_Messages;
-
-		try {
-			if (isset($Bee_Messages[$code])) {
-				throw new Exception(sprintf('Ya existe el código de mensaje %s.', $code));
-			}
-
-			$Bee_Messages[$code] = $message;
-
-			return true;
-
-		} catch (Exception $e) {
-			bee_die($e->getMessage());
-		}
-	}
-
-	/**
-	 * Carga un mensaje de bee framework existente
-	 * en el array de la global Bee_Messages
-	 * 
-	 * OPCIONES ACTUALES
-	 * '0'           => 'Acceso no autorizado.'
-	 * '1'           => 'Acción no autorizada.'
-	 * '2'           => 'Ocurrió un error, intenta más tarde.'
-	 * '3'           => 'No pudimos procesar tu solicitud.'
-	 * 'added'       => 'Nuevo registro agregado con éxito.'
-	 * 'not_added'   => 'Hubo un problema al agregar el registro.'
-	 * 'updated'     => 'Registro actualizado con éxito.'
-	 * 'not_updated' => 'Hubo un problema al actualizar el registro.'
-	 * 'found'       => 'Registro encontrado con éxito.'
-	 * 'not_found'   => 'El registro no existe o ha sido borrado.'
-	 * 'deleted'     => 'Registro borrado con éxito.'
-	 * 'not_deleted' => 'Hubo un problema al borrar el registro.'
-	 * 'sent'        => 'Mensaje enviado con éxito.'
-	 * 'not_sent'    => 'Hubo un problema al enviar el mensaje.'
-	 * 'sent_to'     => 'Mensaje enviado con éxito a %s.'
-	 * 'not_sent_to' => 'Hubo un problema al enviar el mensaje a %s.'
-	 * 'auth'        => 'Debes iniciar sesión para continuar.'
-	 * 'expired'     => 'La sesión ha expirado, vuelve a ingresar por favor.'
-	 * 'm_params'    => 'Parámetros incompletos, acceso no autorizado.'
-	 * 'm_form'      => 'Campos incompletos, completa el formulario por favor.'
-	 * 'm_token'     => 'Token no encontrado o no válido, acceso no autorizado.' 
-	 * 
-	 * @param string $code
-	 * @return string
-	 */
-	function get_bee_message($code)
-	{
-		global $Bee_Messages;
-
-		$code = (string) $code;
-
-		return isset($Bee_Messages[$code]) ? $Bee_Messages[$code] : '';
-	}
-
-	/**
-	 * Regresa la api key pública para consumir las rutas de la API
-	 *
-	 * @return string
-	 */
-	function get_bee_api_public_key()
-	{
-		$name = 'API_PUBLIC_KEY';
-		if (!defined($name)) {
-			throw new Exception(sprintf('La constante %s no existe o no se ha definido en el sistema y es requerida para esta función.', $name));
-		}
-
-		$key = API_PUBLIC_KEY;
-		return $key;
-	}
-
-	/**
-	 * Regresa la api key privada para consumir las rutas de la API
-	 *
-	 * @return string
-	 */
-	function get_bee_api_private_key()
-	{
-		$name = 'API_PRIVATE_KEY';
-		if (!defined($name)) {
-			throw new Exception(sprintf('La constante %s no existe o no se ha definido en el sistema y es requerida para esta función.', $name));
-		}
-
-		$key = API_PRIVATE_KEY;
-		return $key;
-	}
-
-	/**
-	 * Regresa true si es requerida autenticación con api keys para consumir los
-	 * recursos de la API de bee framework y la instancia actual
-	 *
-	 * @return bool
-	 */
-	function bee_api_authentication()
-	{
-		$name = 'API_AUTH';
-		if (!defined($name)) {
-			throw new Exception(sprintf('La constante %s no existe o no se ha definido en el sistema y es requerida para esta función.', $name));
-		}
-
-		return (API_AUTH === true);
-	}	
-
-	/**
-	 * Regresa una versión de un asset si estamos en desarrollo generará
-	 * una versión random para evitar el cache y cargar el archivo más reciente,
-	 * en producción cargará la versión cacheada
-	 *
-	 * @return string
-	 */
-	function get_asset_version()
-	{
-		return is_local() ? time() : get_version();
-	}
-
-	/**
-	 * Valida si el string o texto es alfanumérico, puede o no tener espacios incluidos
-	 *
-	 * @param string $string
-	 * @param boolean $spaces
-	 * @return boolean
-	 */
-	function is_alphanumeric($string, $accept_spaces = false)
-	{
-		if ($accept_spaces === true) {
-			return preg_match("/^[\p{L} ]+$/u", clean($string)) === 1;
-		}
-
-		return preg_match("/^[a-zA-Z0-9]+$/", clean($string)) === 1;
-	}
-
-	/**
-	 * Valida si una variable es nula o está vacía, de ser así
-	 * regresa un em-dash para sustituir su espacio, denotando que no hay
-	 * información en dicho lugar
-	 *
-	 * @param mixed $value
-	 * @param string $placeholder
-	 * @return string
-	 */
-	function _e($value, string $placeholder = "—")
-	{
-		if (empty($value) || !isset($value)) {
-			return $placeholder;
-		}
-
-		return $value;
-	}
+	return $value;
+}

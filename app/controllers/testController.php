@@ -59,7 +59,6 @@ class testController extends Controller {
   function create_table()
   {
     try {
-
       // Si es requerido podemos hacer un drop table if exists
       // Model::drop($table_name); // Para borrar una tabla de la base de datos
       $table_name = 'usuarios';
