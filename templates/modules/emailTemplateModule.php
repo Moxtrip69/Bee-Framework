@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width" />
@@ -326,7 +326,6 @@
           border-color: #34495e !important; 
         } 
       }
-
     </style>
   </head>
   <body class="">
@@ -379,7 +378,7 @@
                 </tr>
                 <tr>
                   <td class="content-block powered-by">
-                    Creada por <a href="http://htmlemail.io">HTMLemail</a>.
+                    Creada por <a href="<?php echo get_base_url(); ?>"><?php echo get_sitename(); ?></a>.
                   </td>
                 </tr>
               </table>
