@@ -35,14 +35,19 @@ class Csrf
    */
   private function generate()
   {
-    if (function_exists('bin2hex')) {
-      $this->token = bin2hex(random_bytes($this->length)); // ASDFUHASIO32Jasdasdjf349mfjads9mfas4asdf
+    if (function_exists('random_bytes')) {
+      $this->token = bin2hex(random_bytes($this->length));
+    } elseif (function_exists('openssl_random_pseudo_bytes')) {
+      $this->token = bin2hex(openssl_random_pseudo_bytes($this->length));
     } else {
-      $this->token = bin2hex(openssl_random_pseudo_bytes($this->length)); // asdfuhasi487a9s49mafmsau84
+      $this->token = '';
+      for ($i = 0; $i < $this->length; $i++) {
+          $this->token .= dechex(mt_rand(0, 15));
+      }
     }
 
     $this->token_expiration = time() + $this->expiration_time;
-    return $this;
+    return $this->token;
   }
 
   /**

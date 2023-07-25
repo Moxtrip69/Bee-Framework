@@ -20,9 +20,7 @@ class testController extends Controller {
 
   public function index()
   {
-    $user = get_user();
-
-    debug($user);
+    debug($_SESSION);
   }
   
   public function db_user()

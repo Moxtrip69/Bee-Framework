@@ -388,8 +388,7 @@ function json_encode_utf8($var) {
  * @return string
  */
 function format_date($date_string, $type = 'd M, Y') {
-	// Para versiones de PHP inferiores a 8.1.0 cuando se vuelve deprecada
-	// la función strftime()
+	// Para versiones de PHP inferiores a 8.1.0 cuando se vuelve deprecada la función strftime()
 	if (version_compare(phpversion(), '8.1.0', "<")) {
 		setlocale(LC_ALL, "es_MX.UTF-8", "es_MX", "esp");
 
@@ -438,15 +437,65 @@ function format_date($date_string, $type = 'd M, Y') {
 				return sprintf('%s de %s, %s', $date['dia'], $date['mes'], $date['año']);
 		}
 	} else {
-		$fmt = datefmt_create(
-			'es_MX',
-			IntlDateFormatter::FULL,
-			IntlDateFormatter::FULL,
-			'America/Mexico_City',
-			IntlDateFormatter::GREGORIAN
-		);
-		
-		return datefmt_format($fmt, $date_string);
+		$locale   = "es_MX";
+		$timezone = date_default_timezone_get();
+
+		// Validar si la extensión está activa:
+		if (!extension_loaded('intl')) {
+			throw new Exception('Debes activar la extensión "intl" en tu archivo php.ini');
+		}
+
+		$calendar = IntlDateFormatter::GREGORIAN;
+		$pattern  = "";
+
+		switch ($type) {
+			case 'd M, Y':
+				$pattern = "d 'de' MMMM, yyyy";
+				break;
+
+			case 'm Y':
+				$pattern = "MMMM yyyy";
+				break;
+
+			case 'd m Y':
+				$pattern = "dd MMMM yyyy";
+				break;
+
+			case 'mY':
+				$pattern = "";
+				break;
+
+			case 'MY':
+				$pattern = "";
+				break;
+
+			case 'd M, Y time':
+				$pattern = "";
+				break;
+
+			case 'time':
+				$pattern = "";
+				break;
+
+			case 'date time':
+				$pattern = "";
+				break;
+
+			case 'short': //01/Nov/2019
+				$pattern = "d'/'MMM'/'yyyy";
+				break;
+
+			default:
+				$pattern = "EEEE, d 'de' MMMM, yyyy";
+		}
+
+		$fmt      = new IntlDateFormatter($locale, IntlDateFormatter::FULL, IntlDateFormatter::FULL, $timezone, $calendar, $pattern);
+		$res      = ucfirst(datefmt_format($fmt, strtotime($date_string)));
+
+		// Debugging
+		//echo datefmt_get_error_message($fmt);
+
+		return $res;
 	}
 }
 
@@ -922,11 +971,15 @@ function debug($data, $var_dump_mode = false) {
  * @return string
  */
 function generate_token($length = 32) {
-	$token = null;
-	if (function_exists('bin2hex')) {
-		$token = bin2hex(random_bytes($length)); // ASDFUHASIO32Jasdasdjf349mfjads9mfas4asdf
+	if (function_exists('random_bytes')) {
+		$token = bin2hex(random_bytes($length));
+	} elseif (function_exists('openssl_random_pseudo_bytes')) {
+		$token = bin2hex(openssl_random_pseudo_bytes($length));
 	} else {
-		$token = bin2hex(openssl_random_pseudo_bytes($length)); // asdfuhasi487a9s49mafmsau84
+		$token = '';
+		for ($i = 0; $i < $length; $i++) {
+			$token .= dechex(mt_rand(0, 15));
+		}
 	}
 
 	return $token;
@@ -2360,4 +2413,36 @@ function get_page_og_meta_tags() {
 	$output .= sprintf('<meta property="og:image" content="%s" />', $OG_Image);
 	
 	return $output;
+}
+
+/**
+ * Sanitiza el input de usuario para prevenir cualquier código malicioso
+ * al ser guardado en bases de datos o inyectado en el DOM
+ *
+ * @param string $input
+ * @param integer $max_length
+ * @return string
+ */
+function sanitize_input($input, $max_length = null) {
+	// Eliminamos espacios en blanco adicionales al inicio y al final del input.
+	$sanitized_input = trim($input);
+
+	// Eliminar etiquetas HTML y PHP del input.
+	$sanitized_input = strip_tags($sanitized_input);
+
+	// Utilizamos FILTER_SANITIZE_FULL_SPECIAL_CHARS para eliminar o codificar caracteres
+	// especiales que podrían ser peligrosos o causar problemas de seguridad.
+	$sanitized_input = filter_var($sanitized_input, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+	// Si el input contiene una cadena mal formada de UTF-8, eliminamos los bytes inválidos.
+	// Esto puede ayudar a prevenir ataques basados en UTF-8 malformado.
+	$sanitized_input = mb_convert_encoding($sanitized_input, 'UTF-8', 'UTF-8');
+
+	// Otras medidas de seguridad adicionales, como limitar la longitud del input.
+	if ($max_length !== null) {
+		$max_length      = !is_integer($max_length) ? 100 : $max_length; // Define el máximo número de caracteres permitidos.
+		$sanitized_input = substr($sanitized_input, 0, $max_length);
+	}
+
+	return $sanitized_input;
 }
