@@ -1,5 +1,8 @@
 <?php
 
+use Facebook\Facebook;
+use Facebook\Exceptions\FacebookResponseException;
+use Facebook\Exceptions\FacebookSDKException;
 /**
  * Plantilla general de controladores
  * Versión 1.0.2
@@ -73,13 +76,5 @@ class testController extends Controller {
     } catch (Exception $e) {
       echo 'Regular: '.$e->getMessage();
     }
-  }
-
-  function pixel()
-  {
-    $options = optionModel::save('fb-pixel', '3541935069465214');
-    debug($options, true);
-
-    debug(optionModel::search('fb-pixel'));
   }
 }

@@ -21,6 +21,8 @@
   
   <!-- inc_styles.php -->
   <?php require_once INCLUDES.'inc_styles.php'; ?>
+
+  <?php echo init_meta_pixel(); ?>
 </head>
 
 <body>

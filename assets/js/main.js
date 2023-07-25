@@ -100,6 +100,21 @@ document.addEventListener('DOMContentLoaded', () => {
   test_ajax();
   test_api();
 
+  // var valorCompra = 300;
+  // var moneda      = 'MXN';
+  // var metadata    = {
+  //   producto     : 'Nombre del producto',
+  //   categoria    : 'Categoría del producto',
+  //   numero_pedido: 'Número de pedido 123',
+  //   // Agrega más metadatos personalizados si es necesario
+  // };
+
+  // fbq('track', 'Purchase', {
+  //   value      : valorCompra,
+  //   currency   : moneda,
+  //   custom_data: metadata
+  // });
+
   ////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////
   ///////// INGRESA TU FUNCIONALIDAD CON VANILLA JAVASCRIPT AQUÍ ABAJO

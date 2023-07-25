@@ -248,14 +248,19 @@ class Bee {
 		// Define si un usuario está loggeado o no y su información actual
     $GLOBALS['Bee_User']     = [];
 
-    // Del sistema
+    // Define las configuraciones generales del sistema
 		$GLOBALS['Bee_Settings'] = [];
 
     // Objeto Bee que será insertado en el footer como script javascript dinámico para fácil acceso
     $GLOBALS['Bee_Object']   = [];
 
     // Define los mensajes por defecto para usar en notificaciones o errores
-    $GLOBALS['Bee_Messages'] = [];    
+    $GLOBALS['Bee_Messages'] = [];
+    
+    //////////////////////////////////////////////
+    // Globales de Open Graph valores por defecto
+    //////////////////////////////////////////////
+    set_page_og_meta_tags();
 
     //////////////////////////////////////////////
     // Globales personales

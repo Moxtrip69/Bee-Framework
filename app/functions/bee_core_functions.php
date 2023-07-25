@@ -2260,3 +2260,104 @@ function _e($value, string $placeholder = "—") {
 
 	return $value;
 }
+
+/**
+ * Devuelve el metal pixel almacenado en la tabla
+ * de opciones de la base de datos
+ *
+ * @return string
+ */
+function get_meta_pixel() {
+	$meta_pixel = get_option('fb-pixel');
+	return $meta_pixel;
+}
+
+/**
+ * Inyecta el código html para inicializar
+ * el rastreo de meta pixel
+ *
+ * @return string
+ */
+function init_meta_pixel() {
+	$pixel  = get_meta_pixel();
+	$output = '';
+
+	if (empty($pixel)) return $output;
+
+	$output .= '<!-- Meta Pixel Code -->';
+	$output .=
+	"<script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '%1\$s');
+    fbq('track', 'PageView');
+  </script>";
+
+	$output .= '<noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=%1$s&ev=PageView&noscript=1"
+  /></noscript>';
+	$output .= '<!-- End Meta Pixel Code -->';
+
+	return sprintf($output, $pixel);
+}
+
+/**
+ * Establece los valores de los og meta tags
+ *
+ * @param string $title
+ * @param string $description
+ * @param string $image
+ * @param string $url
+ * @param string $type
+ * @return bool
+ */
+function set_page_og_meta_tags($title = null, $description = null, $image = null, $url = null, $type = 'article') {
+	global $OG_Title;
+	global $OG_Description;
+	global $OG_Url;
+	global $OG_Image;
+	global $OG_Type;
+
+	$OG_Title       = $title === null ? get_sitename() : clean($title);
+	$OG_Description = $description === null ? SITE_DESC : clean($description);
+	$OG_Url         = $url === null ? CUR_PAGE : $url;
+	$OG_Image       = $image === null ? IMAGES . 'og-bee-framework.png'  : $image;
+	$OG_Type        = $type === 'article' ? $type : 'website';
+
+	return true;
+}
+
+/**
+ * Regresa el código html de los open graph meta tags
+ * listos para ser insertados en el DOM
+ *
+ * @param string $title
+ * @param string $description
+ * @param string $image
+ * @param string $url
+ * @param boolean $article
+ * @return string
+ */
+function get_page_og_meta_tags() {
+	global $OG_Title;
+	global $OG_Description;
+	global $OG_Url;
+	global $OG_Image;
+	global $OG_Type;
+
+	$output = '';
+	$output .= sprintf('<meta property="og:title" content="%s" />', $OG_Title);
+	$output .= sprintf('<meta property="og:description" content="%s" />', $OG_Description);
+	$output .= sprintf('<meta name="description" content="%s" />', $OG_Description);
+	$output .= sprintf('<meta property="og:url" content="%s" />', $OG_Url);
+	$output .= sprintf('<meta property="og:type" content="%s" />', $OG_Type);
+	$output .= sprintf('<meta property="og:image" content="%s" />', $OG_Image);
+	
+	return $output;
+}

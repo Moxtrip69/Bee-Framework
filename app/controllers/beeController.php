@@ -27,6 +27,9 @@ class beeController extends Controller {
      */
     register_to_bee_obj('nuevaVariable', '123');
 
+    // Definir og meta tags
+    set_page_og_meta_tags('Bienvenido a Bee framework', null, null, null, 'website');
+
     $data =
     [
       'title' => 'Bienvenido'
