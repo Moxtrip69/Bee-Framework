@@ -26,6 +26,14 @@
         <li class="mb-1"><b>ORM</b> sencillo incluido para manipulación de bases de datos</li>
         <li class="mb-1"><b>100%</b> personalizable y escalable <?php echo more_info('Soy un Tooltip de Bootstrap 5'); ?></li>
       </ul>
+
+      <a 
+      href="https://github.com/Moxtrip69/Bee-Framework/tree/1.5.5" 
+      class="btn btn-success btn-lg mt-3 col-12 col-sm-6 col-md-6 col-lg-4"
+      target="_blank"
+      >
+        <i class="fas fa-download me-2"></i>Descargar
+      </a>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
       <img src="<?php echo get_image('bee-framework-academia-de-joystick-roberto-orozco-aviles.png'); ?>" alt="<?php echo get_bee_name(); ?>" class="img-fluid" style="width: 80%;">
