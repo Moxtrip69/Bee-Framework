@@ -48,10 +48,6 @@ CREATE TABLE `options` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
--- Records of options
--- ----------------------------
-
--- ----------------------------
 -- Table structure for posts
 -- ----------------------------
 DROP TABLE IF EXISTS `posts`;

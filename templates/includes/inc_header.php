@@ -22,6 +22,10 @@
   <!-- inc_styles.php -->
   <?php require_once INCLUDES.'inc_styles.php'; ?>
 
+  <!-- Carga de meta tags -->
+  <?php echo get_page_og_meta_tags(); ?>
+  
+  <!-- Carga de Meta Pixel -->
   <?php echo init_meta_pixel(); ?>
 </head>
 

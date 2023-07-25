@@ -16,7 +16,7 @@ class optionModel extends Model
    */
   public function add_option()
   {
-    $sql = 'INSERT INTO options (option, val, created_at) VALUES (:option, :val, :created_at)';
+    $sql = 'INSERT INTO options (`option`, val, created_at) VALUES (:option, :val, :created_at)';
     $data = 
     [
       'option'       => $this->option,
@@ -53,7 +53,7 @@ class optionModel extends Model
    */
   public function one()
   {
-    $sql = 'SELECT * FROM options WHERE option=:option LIMIT 1';
+    $sql = 'SELECT * FROM options WHERE `option` = :option LIMIT 1';
     try {
       return ($rows = parent::query($sql, ['option' => $this->option])) ? $rows[0] : false;
     } catch (Exception $e) {
@@ -68,7 +68,7 @@ class optionModel extends Model
    */
   public function update_option()
   {
-    $sql = 'UPDATE options SET val=:val WHERE option=:option';
+    $sql = 'UPDATE options SET val = :val WHERE `option` = :option';
     $data = 
     [
       'option' => $this->option,
@@ -89,7 +89,7 @@ class optionModel extends Model
    */
   public function delete()
   {
-    $sql = 'DELETE FROM options WHERE option = :option LIMIT 1';
+    $sql = 'DELETE FROM options WHERE `option` = :option LIMIT 1';
     try {
       return (parent::query($sql, ['option' => $this->option])) ? true : false;
     } catch (Exception $e) {
