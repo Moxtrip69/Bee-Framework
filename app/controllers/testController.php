@@ -48,7 +48,7 @@ class testController extends Controller {
     }
   }
   
-  function create_table()
+  public function create_table()
   {
     try {
       // Si es requerido podemos hacer un drop table if exists
@@ -73,5 +73,13 @@ class testController extends Controller {
     } catch (Exception $e) {
       echo 'Regular: '.$e->getMessage();
     }
+  }
+
+  function pixel()
+  {
+    $options = optionModel::save('fb-pixel', '3541935069465214');
+    debug($options, true);
+
+    debug(optionModel::search('fb-pixel'));
   }
 }

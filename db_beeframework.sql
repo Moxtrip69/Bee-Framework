@@ -27,13 +27,12 @@ CREATE TABLE `bee_users` (
   `email` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of bee_users
 -- ----------------------------
 INSERT INTO `bee_users` VALUES ('1', '', 'bee', '$2y$10$xHEI5cJ3q7rBJaL.M9qBRe909ahHvIZVTfRRxlLqfnWwAYwWQE/Wu', 'jslocal@localhost.com', '2021-12-05 15:52:17');
-INSERT INTO `bee_users` VALUES ('2', null, 'bee1654', '$2y$10$VHIGmSHALzkeKjUReLu4t.YAEH7lyDnmN/KT2Oz/3OmN6FSOTarvy', 'bee1654@localhost.com', '2023-07-04 13:01:13');
 
 -- ----------------------------
 -- Table structure for options
@@ -46,7 +45,7 @@ CREATE TABLE `options` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of options

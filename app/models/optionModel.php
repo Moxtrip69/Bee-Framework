@@ -102,10 +102,10 @@ class optionModel extends Model
     // Verificar si existe la opción
     $self         = new self();
     $self->option = $option;
-    $self->val    = $val;
+    $self->val    = clean($val);
 
     // Si no existe, guardar
-    if(!$option = $self->one()) {
+    if(!$row = $self->one()) {
       return ($self->id = $self->add_option()) ? $self->id : false;
     }
 
