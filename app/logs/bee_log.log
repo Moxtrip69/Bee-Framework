@@ -1,0 +1,103 @@
+[DEBUG] 25-07-2023 08:40:16 - 51362e-0cb1b9-f9c183-17b0a3-1a002e
+[DEBUG] 25-07-2023 08:40:16 - 51362e-0cb1b9-f9c183-17b0a3-1a002e
+[DEBUG] 25-07-2023 08:44:09 - Array
+(
+    [sec-fetch-site] => same-origin
+    [sec-fetch-mode] => cors
+    [sec-fetch-dest] => empty
+    [cookie] => __stripe_mid=e8145533-4b2d-4bee-849e-45708a94457c821625; jserp__id_js=1; jserp__tkn_js=ad0271d28fdedc612c29e17256537eea5631501ef049c48acf56e68be42676e35b83860175de5395c85b83cf14ab35bb25465bfdc8a8d9af40d507ef9f75d317; jserp___whatsNew=true; PHPSESSID=3mot5cuen4bbtufdsp5sv3asis
+    [connection] => close
+    [dnt] => 1
+    [origin] => http://localhost:8848
+    [content-length] => 237
+    [content-type] => multipart/form-data; boundary=---------------------------104412535434920513804168765960
+    [referer] => http://localhost:8848/Bee-Framework/
+    [accept-language] => es-MX,es;q=0.8,en-US;q=0.5,en;q=0.3
+    [accept] => */*
+    [user-agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0
+    [host] => localhost
+)
+
+[DEBUG] 25-07-2023 08:44:09 - Array
+(
+    [sec-fetch-site] => same-origin
+    [sec-fetch-mode] => cors
+    [sec-fetch-dest] => empty
+    [cookie] => __stripe_mid=e8145533-4b2d-4bee-849e-45708a94457c821625; jserp__id_js=1; jserp__tkn_js=ad0271d28fdedc612c29e17256537eea5631501ef049c48acf56e68be42676e35b83860175de5395c85b83cf14ab35bb25465bfdc8a8d9af40d507ef9f75d317; jserp___whatsNew=true; PHPSESSID=3mot5cuen4bbtufdsp5sv3asis
+    [connection] => close
+    [dnt] => 1
+    [auth_private_key] => 51362e-0cb1b9-f9c183-17b0a3-1a002e
+    [referer] => http://localhost:8848/Bee-Framework/
+    [accept-language] => es-MX,es;q=0.8,en-US;q=0.5,en;q=0.3
+    [accept] => */*
+    [user-agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0
+    [host] => localhost
+)
+
+[DEBUG] 25-07-2023 08:44:10 - Array
+(
+    [sec-fetch-site] => same-origin
+    [sec-fetch-mode] => cors
+    [sec-fetch-dest] => empty
+    [cookie] => __stripe_mid=e8145533-4b2d-4bee-849e-45708a94457c821625; jserp__id_js=1; jserp__tkn_js=ad0271d28fdedc612c29e17256537eea5631501ef049c48acf56e68be42676e35b83860175de5395c85b83cf14ab35bb25465bfdc8a8d9af40d507ef9f75d317; jserp___whatsNew=true; PHPSESSID=3mot5cuen4bbtufdsp5sv3asis
+    [connection] => close
+    [dnt] => 1
+    [referer] => http://localhost:8848/Bee-Framework/
+    [accept-language] => es-MX,es;q=0.8,en-US;q=0.5,en;q=0.3
+    [accept] => */*
+    [user-agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0
+    [host] => localhost
+)
+
+[DEBUG] 25-07-2023 08:48:43 - Array
+(
+    [sec-fetch-site] => same-origin
+    [sec-fetch-mode] => cors
+    [sec-fetch-dest] => empty
+    [cookie] => __stripe_mid=e8145533-4b2d-4bee-849e-45708a94457c821625; jserp__id_js=1; jserp__tkn_js=ad0271d28fdedc612c29e17256537eea5631501ef049c48acf56e68be42676e35b83860175de5395c85b83cf14ab35bb25465bfdc8a8d9af40d507ef9f75d317; jserp___whatsNew=true; PHPSESSID=3mot5cuen4bbtufdsp5sv3asis
+    [connection] => close
+    [dnt] => 1
+    [auth_private_key] => 51362e-0cb1b9-f9c183-17b0a3-1a002e
+    [referer] => http://localhost:8848/Bee-Framework/
+    [accept-language] => es-MX,es;q=0.8,en-US;q=0.5,en;q=0.3
+    [accept] => */*
+    [user-agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0
+    [host] => localhost
+)
+
+[DEBUG] 25-07-2023 08:48:43 - Array
+(
+    [sec-fetch-site] => same-origin
+    [sec-fetch-mode] => cors
+    [sec-fetch-dest] => empty
+    [cookie] => __stripe_mid=e8145533-4b2d-4bee-849e-45708a94457c821625; jserp__id_js=1; jserp__tkn_js=ad0271d28fdedc612c29e17256537eea5631501ef049c48acf56e68be42676e35b83860175de5395c85b83cf14ab35bb25465bfdc8a8d9af40d507ef9f75d317; jserp___whatsNew=true; PHPSESSID=3mot5cuen4bbtufdsp5sv3asis
+    [connection] => close
+    [dnt] => 1
+    [origin] => http://localhost:8848
+    [content-length] => 235
+    [content-type] => multipart/form-data; boundary=---------------------------73440811716090793851612851688
+    [referer] => http://localhost:8848/Bee-Framework/
+    [accept-language] => es-MX,es;q=0.8,en-US;q=0.5,en;q=0.3
+    [accept] => */*
+    [user-agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0
+    [host] => localhost
+)
+
+[DEBUG] 25-07-2023 08:48:44 - Array
+(
+    [sec-fetch-site] => same-origin
+    [sec-fetch-mode] => cors
+    [sec-fetch-dest] => empty
+    [cookie] => __stripe_mid=e8145533-4b2d-4bee-849e-45708a94457c821625; jserp__id_js=1; jserp__tkn_js=ad0271d28fdedc612c29e17256537eea5631501ef049c48acf56e68be42676e35b83860175de5395c85b83cf14ab35bb25465bfdc8a8d9af40d507ef9f75d317; jserp___whatsNew=true; PHPSESSID=3mot5cuen4bbtufdsp5sv3asis
+    [connection] => close
+    [dnt] => 1
+    [referer] => http://localhost:8848/Bee-Framework/
+    [accept-language] => es-MX,es;q=0.8,en-US;q=0.5,en;q=0.3
+    [accept] => */*
+    [user-agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0
+    [host] => localhost
+)
+
+[DEBUG] 25-07-2023 08:53:17 - http
+[DEBUG] 25-07-2023 08:53:17 - http
+[DEBUG] 25-07-2023 08:53:18 - http

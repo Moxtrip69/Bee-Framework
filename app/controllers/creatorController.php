@@ -8,6 +8,7 @@ class creatorController extends Controller {
   {
     // Prevenir el ingreso en Producción
     if (!is_local()) {
+      Flasher::error(get_bee_message(0));
       Redirect::to(DEFAULT_CONTROLLER);
     }
   }

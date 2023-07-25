@@ -9,11 +9,6 @@
 class beeController extends Controller {
   function __construct()
   {
-    // Prevenir el ingreso en Producción
-    if (!is_local()) {
-      Redirect::to(DEFAULT_CONTROLLER);
-    }
-    
     // Validación de sesión de usuario, descomentar si requerida
     /**
     if (!Auth::validate()) {
@@ -226,6 +221,10 @@ class beeController extends Controller {
   function email()
   {
     try {
+      if (!is_local()) {
+        throw new Exception(get_bee_message(0));
+      }
+
       $email   = 'jslocal@localhost.com';
       $subject = 'El asunto del correo';
       $body    = 'El cuerpo del mensaje, puede ser html o texto plano.';
@@ -247,6 +246,10 @@ class beeController extends Controller {
   function smtp()
   {
     try {
+      if (!is_local()) {
+        throw new Exception(get_bee_message(0));
+      }
+
       send_email('tuemail@hotmail.com', 'tuemail@hotmail.com', 'Probando smtp', '¡Hola mundo!', 'Correo de prueba.');
       echo 'Mensaje enviado con éxito.';
     } catch (Exception $e) {
@@ -284,6 +287,10 @@ class beeController extends Controller {
   function generate_user()
   {
     try {
+      if (!is_local()) {
+        throw new Exception(get_bee_message(0));
+      }
+      
       if (!Model::table_exists(BEE_USERS_TABLE)) {
         throw new Exception(sprintf('Es necesaria la tabla <b>%s</b> en la base de datos.', BEE_USERS_TABLE));
       }

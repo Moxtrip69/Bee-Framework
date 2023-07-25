@@ -165,12 +165,17 @@ function init_db_test() {
     .then(res => res.json())
     .then(res => {
       if (res.status === 200) {
-        alert.classList.remove('alert-danger');
+        alert.classList.remove('alert-danger', 'd-none');
         alert.classList.add('alert-success');
         alert.innerHTML = res.msg;
       } else {
         alert.innerHTML = res.msg;
       }
+
+      setTimeout(() => {
+        alert.classList.add('d-none');
+        alert.innerHTML = '';
+      }, 3000);
     })
     .catch(err => {
       alert.innerHTML = 'Hubo un error en la petición, vuelve a intentarlo.';

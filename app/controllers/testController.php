@@ -13,14 +13,6 @@ class testController extends Controller {
     if (!is_local()) {
       Redirect::to(DEFAULT_CONTROLLER);
     }
-
-    // Validación de sesión de usuario, descomentar si requerida
-    /**
-    if (!Auth::validate()) {
-      Flasher::new('Debes iniciar sesión primero.', 'danger');
-      Redirect::to('login');
-    }
-    */
   }
 
   public function index()

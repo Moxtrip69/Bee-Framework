@@ -59,7 +59,7 @@ class ajaxController extends Controller {
   {
     try {
       $db = Db::connect(true);
-      json_output(json_build(200, null, sprintf('Conexión realizada con éxito a la base de datos <b>%s</b>.', is_local() ? LDB_NAME : DB_NAME)));
+      json_output(json_build(200, null, sprintf('Conexión realizada con éxito a la base de datos <b>%s</b>.', is_local() ? LDB_NAME : add_ellipsis(DB_NAME, 5))));
     } catch (Exception $e) {
       json_output(json_build(400, null, $e->getMessage()));
     }

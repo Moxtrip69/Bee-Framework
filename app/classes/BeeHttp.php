@@ -142,6 +142,20 @@ class BeeHttp
    */
   private $authenticate     = false;
 
+  /**
+   * Procolo de la URL definido en settings.php
+   * puede ser http o https según sea el caso
+   * 
+   * Esto genera una variación en las cabeceras enviadas, es necesario para
+   * leer de forma correcta los parámetros de autorización
+   * Auth_private_key o auth_private_key
+   * 
+   * @since 1.5.5
+   *
+   * @var string
+   */
+  private $protocol         = null;
+
   function __construct($class)
   {
     // Validar el contexto de la petición
@@ -164,6 +178,11 @@ class BeeHttp
     if(!in_array(strtoupper($this->r_type), $this->accepted_verbs)) {
       throw new BeeHttpException(get_bee_message(1), 403); // 403
     }
+
+    /**
+     * @since 1.5.5
+     */
+    $this->protocol = PROTOCOL; // definido en settings.php
 
     // Almacenando y determinando las cabeceras recibidas
     $this->get_headers();
@@ -216,8 +235,20 @@ class BeeHttp
   {
     // En caso de existir custom headers para autenticación o consumo
     if ($this->apache_request === true) {
-      $this->public_key  = isset($this->headers['auth_public_key']) ? $this->headers['auth_public_key'] : null;
-      $this->private_key = isset($this->headers['auth_private_key']) ? $this->headers['auth_private_key'] : null;
+      switch ($this->protocol) {
+        case 'https':
+          $public_key_name  = 'Auth_public_key';
+          $private_key_name = 'Auth_private_key';
+          break;
+        
+        case 'http':
+        default:
+          $public_key_name  = 'auth_public_key';
+          $private_key_name = 'auth_private_key';
+          break;
+      }
+      $this->public_key  = isset($this->headers[$public_key_name]) ? $this->headers[$public_key_name] : null;
+      $this->private_key = isset($this->headers[$private_key_name]) ? $this->headers[$private_key_name] : null;
     } else {
       $this->public_key  = isset($this->headers['HTTP_AUTH_PUBLIC_KEY']) ? $this->headers['HTTP_AUTH_PUBLIC_KEY'] : null;
       $this->private_key = isset($this->headers['HTTP_AUTH_PRIVATE_KEY']) ? $this->headers['HTTP_AUTH_PRIVATE_KEY'] : null;
