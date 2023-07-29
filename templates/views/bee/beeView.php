@@ -43,47 +43,47 @@
     <div class="col-12 mt-5">
       <div class="d-flex flex-column flex-md-row justify-content-between alight-items-center">
         <div class="d-flex flex-column align-items-center mb-3">
-          <i class="fas fa-book fs-1"></i>
+          <i class="fas fa-book fs-1 text-warning mb-2"></i>
           <h3 class="fw-bold">Creator</h3>
           <p>Crea un nuevo controlador o modelo.</p>
-          <a class="btn btn-primary btn-sm" href="creator">Ver más</a>
+          <a class="btn btn-light btn-sm" href="creator">Ver más</a>
         </div>
 
         <?php if (!Auth::validate()) : ?>
           <div class="d-flex flex-column align-items-center mb-3">
-            <i class="fas fa-user fs-1"></i>
+            <i class="fas fa-user fs-1 text-info mb-2"></i>
             <h3 class="fw-bold">Mi cuenta</h3>
             <p>Accede a la cuenta de pruebas.</p>
-            <a class="btn btn-primary btn-sm" href="login">Ingresar</a>
+            <a class="btn btn-light btn-sm" href="login">Ingresar</a>
           </div>
         <?php else : ?>
           <div class="d-flex flex-column align-items-center mb-3">
-            <i class="fas fa-user fs-1"></i>
+            <i class="fas fa-user fs-1 text-info mb-2"></i>
             <h3 class="fw-bold">Mi cuenta</h3>
             <p>Mira la información de la cuenta actual.</p>
-            <a class="btn btn-primary btn-sm" href="bee/perfil">Mi cuenta</a>
+            <a class="btn btn-light btn-sm" href="bee/perfil">Mi cuenta</a>
           </div>
         <?php endif; ?>
 
         <div class="d-flex flex-column align-items-center mb-3">
-          <i class="fab fa-vuejs fs-1"></i>
+          <i class="fab fa-vuejs fs-1 text-success mb-2"></i>
           <h3 class="fw-bold">Vue JS</h3>
           <p>Mira el ejemplo de integración.</p>
-          <a class="btn btn-primary btn-sm" href="vuejs">Ver más</a>
+          <a class="btn btn-light btn-sm" href="vuejs">Ver más</a>
         </div>
 
         <div class="d-flex flex-column align-items-center mb-3">
-          <i class="fab fa-github fs-1"></i>
+          <i class="fab fa-github fs-1 mb-2"></i>
           <h3 class="fw-bold">Github</h3>
           <p>Sígueme en Github.</p>
-          <a class="btn btn-primary btn-sm" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.5.5">Ver más</a>
+          <a class="btn btn-light btn-sm" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.5.5">Ver más</a>
         </div>
 
         <div class="d-flex flex-column align-items-center mb-3">
-          <i class="fas fa-play fs-1"></i>
+          <i class="fas fa-play fs-1 text-danger mb-2"></i>
           <h3 class="fw-bold">El curso oficial</h3>
           <p>Mira cómo nació Bee framework.</p>
-          <a class="btn btn-primary btn-sm" href="https://www.academy.joystick.com.mx/courses/crea-tu-propio-framework-profesional-mvc-con-php-poo-mysql" target="_blank">Ver curso</a>
+          <a class="btn btn-light btn-sm" href="https://www.academy.joystick.com.mx/courses/crea-tu-propio-framework-profesional-mvc-con-php-poo-mysql" target="_blank">Ver curso</a>
         </div>
       </div>
     </div>

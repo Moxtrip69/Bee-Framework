@@ -55,8 +55,10 @@ class apiController extends Controller {
       $this->data  = $this->req['data'];
       $this->files = $this->req['files'];
     } catch (BeeHttpException $e) {
+      http_response_code($e->getStatusCode());
       json_output(json_build($e->getStatusCode(), null, $e->getMessage()));
     } catch (Exception $e) {
+      http_response_code(400);
       json_output(json_build(400, null, $e->getMessage()));
     }
   }
@@ -74,11 +76,10 @@ class apiController extends Controller {
   {
     try {
       $this->http->accept(['get','post','put','delete']);
+      $this->http->authenticate_request();
 
       switch ($this->req['type']) {
         case 'GET':
-          $this->http->authenticate_request();
-
           if ($id !== null) {
             $this->get_post($id);
           } else {
@@ -87,26 +88,26 @@ class apiController extends Controller {
           break;
           
         case 'POST':
-          $this->http->authenticate_request();
           $this->post_posts();
           break;
 
         case 'PUT':
-          $this->http->authenticate_request();
           $this->put_post($id);
           break;
 
         case 'DELETE':
-          $this->http->authenticate_request();
           $this->delete_posts($id);
           break;
       }
       
     } catch (BeeHttpException $e) {
+      http_response_code($e->getStatusCode());
       json_output(json_build($e->getStatusCode(), null, $e->getMessage()));
     } catch (BeeJsonException $e) {
+      http_response_code($e->getStatusCode());
       json_output(json_build($e->getStatusCode(), null, $e->getMessage(), $e->getErrorCode()));
     } catch (Exception $e) {
+      http_response_code(400);
       json_output(json_build(400, null, $e->getMessage()));
     }
   }
@@ -150,9 +151,9 @@ class apiController extends Controller {
     // Más validaciones y sanitizaciones de input debe ser realizada
     // solo es un ejemplo general de como utilizar el área de la API
 
-    $nombre    = clean($this->data['nombre'], true);
-    $titulo    = clean($this->data['titulo'], true);
-    $contenido = clean($this->data['contenido'], true);
+    $nombre    = sanitize_input($this->data['nombre'], true);
+    $titulo    = sanitize_input($this->data['titulo'], true);
+    $contenido = sanitize_input($this->data['contenido'], true);
     $data      =
     [
       'nombre'    => $nombre,
@@ -173,14 +174,14 @@ class apiController extends Controller {
   private function put_post($id)
   {
     try {
-      if (!check_posted_data(['id','titulo','contenido','nombre'], $this->data)) {
+      if (!check_posted_data(['titulo','contenido','nombre'], $this->data)) {
         throw new Exception('Parámetros faltantes.');
       }
 
-      $id        = clean($this->data['id']);
-      $nombre    = clean($this->data['nombre']);
-      $titulo    = clean($this->data['titulo']);
-      $contenido = clean($this->data['contenido']);
+      $id        = sanitize_input($id);
+      $nombre    = sanitize_input($this->data['nombre']);
+      $titulo    = sanitize_input($this->data['titulo']);
+      $contenido = sanitize_input($this->data['contenido']);
 
       if (!$post = Model::list('pruebas', ['id' => $id], 1)) {
         throw new Exception(get_bee_message('not_found'));

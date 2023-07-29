@@ -13,7 +13,7 @@ export const testComponent = {
       this.postId = Bee.current_params[0];
 
       const res = await fetch(Bee.url + `api/posts/${this.postId}`, {
-        headers: { 'Auth-Private-Key': Bee.private_key },
+        headers: { 'Authorization': `Bearer ${Bee.private_key}` },
         method: 'GET'
       }).then(res => res.json());
 

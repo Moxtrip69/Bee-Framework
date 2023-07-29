@@ -2474,16 +2474,17 @@ function hash_256($data) {
  */
 function normalize_string($input, $remove_internal_spaces = false, $remove_special_chars = false) {
   // Convertimos a minúsculas y eliminamos espacios extras al inicio y final
-  $normalized = trim(strtolower($input));
+  $normalized = trim(mb_strtolower($input, 'UTF-8'));
 
   // Opcionalmente, removemos espacios internos si se solicita
   if ($remove_internal_spaces) {
     $normalized = preg_replace('/\s+/', '', $normalized);
   }
-
+	
   // Opcionalmente, removemos caracteres especiales si se solicita
   if ($remove_special_chars) {
-    $normalized = preg_replace('/[^a-z0-9\s]/', '', $normalized);
+		$normalized = preg_replace('/[^a-z0-9\s]/', '', $normalized);
+		$normalized = htmlspecialchars($normalized, ENT_QUOTES, 'UTF-8');
   }
 
   return $normalized;

@@ -208,13 +208,13 @@ async function test_ajax() {
 
   showLoader();
 
-  const data = {
+  const body = {
     csrf: Bee.csrf
   }
 
   const res = await fetch('ajax/test', {
     method: "POST",
-    body: JSON.stringify(data)
+    body: JSON.stringify(body)
   })
   .then(res => res.json())
   .catch(err => {
@@ -240,7 +240,7 @@ async function test_api() {
   if (!wrapper) return;
 
   const res = await fetch(Bee.url + 'api/posts', {
-    headers    : { 'Auth-Private-Key': Bee.private_key },
+    headers    : { 'Authorization': `Bearer ${Bee.private_key}` },
     method     : 'GET'
   }).then(res => res.json());
 

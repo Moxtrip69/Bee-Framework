@@ -1,8 +1,5 @@
 <?php
 
-use Facebook\Facebook;
-use Facebook\Exceptions\FacebookResponseException;
-use Facebook\Exceptions\FacebookSDKException;
 /**
  * Plantilla general de controladores
  * Versión 1.0.2
@@ -20,7 +17,6 @@ class testController extends Controller {
 
   public function index()
   {
-    debug($_SESSION);
   }
   
   public function db_user()

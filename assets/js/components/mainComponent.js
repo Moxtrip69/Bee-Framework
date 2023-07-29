@@ -28,8 +28,8 @@ export const mainComponent = {
   },
   methods: {
     async fetchData() {
-      const res = await fetch(Bee.url + 'api/posts',{
-        headers: { 'Auth-Private-Key': Bee.private_key },
+      const res = await fetch(Bee.url + 'api/posts', {
+        headers: { 'Authorization': `Bearer ${Bee.private_key}` },
         method: 'GET'
       }).then(res => res.json());
 

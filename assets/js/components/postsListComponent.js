@@ -37,16 +37,16 @@ export const postsListComponent = {
       }
 
       // Petición de agregado
-      const data = {
+      const body = {
         nombre: this.post.nombre,
         titulo: this.post.titulo,
         contenido: this.post.contenido
       };
 
       const res = await fetch(Bee.url + `api/posts`, {
-        headers: { 'Auth-Private-Key': Bee.private_key },
-        method: 'post',
-        body: JSON.stringify(data)
+        headers: { 'Authorization': `Bearer ${Bee.private_key}`, 'Content-Type': 'application/json' },
+        method: 'POST',
+        body: JSON.stringify(body)
       }).then(res => res.json());
 
       if (res.status !== 201) {
@@ -78,14 +78,13 @@ export const postsListComponent = {
 
       // Petición de agregado
       const body = {
-        id       : this.postEdit.id,
         nombre   : this.postEdit.nombre,
         titulo   : this.postEdit.titulo,
         contenido: this.postEdit.contenido
       };
 
-      const res = await fetch(Bee.url + `api/posts`, {
-        headers: { 'Auth-Private-Key': Bee.private_key },
+      const res = await fetch(Bee.url + `api/posts/${this.postEdit.id}`, {
+        headers: { 'Authorization': `Bearer ${Bee.private_key}`, 'Content-Type': 'application/json' },
         method: 'PUT',
         body: JSON.stringify(body)
       }).then(res => res.json());
@@ -109,12 +108,9 @@ export const postsListComponent = {
       if (!confirm('¿Estás seguro?')) return;
 
       // Petición de borrado
-      const res = await fetch({
-        url: Bee.url + `api/posts/${this.postId}`,
-        method: 'delete',
-        headers: {
-          auth_private_key: Bee.auth_private_key // utiliza tu API private key
-        }
+      const res = await fetch(Bee.url + `api/posts/${this.postId}`, {
+        headers: { 'Authorization': `Bearer ${Bee.private_key}` },
+        method: 'delete'
       }).then(res => res.json());
 
       if (res.status === 200) {
@@ -129,7 +125,7 @@ export const postsListComponent = {
       this.postEdit.id = id;
 
       const res = await fetch(Bee.url + `api/posts/${this.postEdit.id}`, {
-        headers: { 'Auth-Private-Key': Bee.private_key },
+        headers: { 'Authorization': `Bearer ${Bee.private_key}` },
         method: 'GET'
       }).then(res => res.json());
 

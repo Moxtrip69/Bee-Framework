@@ -217,8 +217,9 @@ class BeeHttp
     if (function_exists('apache_request_headers')) {
       $this->headers        = apache_request_headers();
       $this->apache_request = true;
+      $this->headers        = isset($_SERVER) ? array_merge($this->headers, $_SERVER) : $this->headers;
     } else {
-      $this->headers        = isset($_SERVER) ? $_SERVER : [];
+      $this->headers        = isset($_SERVER) ? $_SERVER : $this->headers;
     }
   }
   
@@ -227,32 +228,24 @@ class BeeHttp
    * si se han enviado alguna de las API keys de autenticación
    * para consumir los recursos de la API.
    * 
+   * Se ha actualizado el nombre de nuestra cabecera de autorización para
+   * mejorar la seguridad e ir a la par con estándares actuales
+   * 
    * @since 1.1.4
    *
    * @return void
    */
   private function set_api_keys()
   {
-    // En caso de existir custom headers para autenticación o consumo
-    if ($this->apache_request === true) {
-      // Depende del protocolo HTTP se muede mostrar la llave o clave de diferente manera
-      switch ($this->protocol) {
-        case 'https':
-          $public_key_name  = 'Auth-Public-Key';
-          $private_key_name = 'Auth-Private-Key';
-          break;
-        
-        case 'http':
-        default:
-          $public_key_name  = 'auth-public-key';
-          $private_key_name = 'auth-private-key';
-          break;
+    // Verificar si la cabecera 'Authorization' está presente en la solicitud
+    if (isset($this->headers['HTTP_AUTHORIZATION'])) {
+      // Obtener el valor del encabezado 'Authorization'
+      $authorizationHeader = $this->headers['HTTP_AUTHORIZATION'];
+
+      // Comprobar si el encabezado contiene el prefijo "Bearer "
+      if (preg_match('/^Bearer\s+(.*)$/', $authorizationHeader, $matches)) {
+        $this->private_key = $matches[1];
       }
-      $this->public_key  = isset($this->headers[$public_key_name]) ? $this->headers[$public_key_name] : null;
-      $this->private_key = isset($this->headers[$private_key_name]) ? $this->headers[$private_key_name] : null;
-    } else {
-      $this->public_key  = isset($this->headers['HTTP_AUTH_PUBLIC_KEY']) ? $this->headers['HTTP_AUTH_PUBLIC_KEY'] : null;
-      $this->private_key = isset($this->headers['HTTP_AUTH_PRIVATE_KEY']) ? $this->headers['HTTP_AUTH_PRIVATE_KEY'] : null;
     }
   }
 
@@ -319,15 +312,39 @@ class BeeHttp
       case 'delete':
       case 'headers':
       case 'options':
-        $this->body   = file_get_contents('php://input');
-        $this->data   = json_decode($this->body, true);
-        
-        // En caso de que sea una petición POST nativa en otro formato que no sea JSON
-        if (isset($_POST) && !empty($_POST)) {
-          $this->data = $this->data === null ? $_POST : array_merge($this->data, $_POST);
+        // Accedemos al content type definido por la petición
+        $contentType = isset($this->headers['CONTENT_TYPE']) ? $this->headers['CONTENT_TYPE'] : '';
+
+        // Dependiendo el tipo de petición accedemos de forma diferente al cuerpo de la petición y la data en él
+        if ($this->r_type === 'POST') {
+          if ($contentType === 'application/json' || strpos($contentType, 'application/json') !== false) {
+            // El cuerpo de la solicitud está en formato JSON
+            $this->body   = file_get_contents('php://input');
+            $this->data   = json_decode($this->body, true);
+          } else if (strpos($contentType, 'multipart/form-data') !== false) {
+            // El cuerpo de la solicitud está en formato form-data o similar
+            $this->data   = $_POST;
+          }
+        } else if ($this->r_type === 'PUT') {
+          // Cargamos todo el contenido del cuerpo de la solicitud
+          $this->body     = file_get_contents('php://input');
+
+          // Verificar el tipo de contenido del cuerpo de la solicitud
+          if ($contentType === 'application/json') {
+            // El cuerpo de la solicitud está en formato JSON
+            $this->data   = json_decode($this->body, true);
+          } else if (strpos($contentType, 'multipart/form-data') !== false) {
+            // El cuerpo de la solicitud está en formato form-data o similar
+            // Puedes usar parse_str para analizar los datos de form-data en un array asociativo
+            parse_str($this->body, $this->parsed);
+            $this->data = $this->parsed;
+          }
+        } else {
+          $this->body   = file_get_contents('php://input');
+          $this->data   = json_decode($this->body, true);
         }
 
-        $this->parsed = $this->data;
+        // Anexamos todos los archivos encontrados
         $this->files  = isset($_FILES) ? $_FILES : [];
         break;
     }

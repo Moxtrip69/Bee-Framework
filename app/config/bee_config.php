@@ -33,7 +33,3 @@ define('AUTH_ID_NAME' , 'bee__cookie_id');  // deprecado en versión 1.1.4
 
 // Salt utilizada para agregar seguridad al hash de contraseñas dependiendo el uso requerido
 define('AUTH_SALT'    , '$2y$10$WNRjHI4M7E/rMJlKYj2Im.0Pv5qlhoRTeT6jCoFzDAAHx69gyAMS.');
-
-
-
-
