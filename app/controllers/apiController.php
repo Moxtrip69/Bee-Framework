@@ -42,7 +42,6 @@ class apiController extends Controller {
 
   function __construct()
   {
-    logger($_FILES);
     // Prevenir el acceso no autorizado
     if (!defined('DOING_AJAX') && !defined('DOING_API')) {
       http_response_code(403);
