@@ -238,3 +238,65 @@
 
 )
 
+[DEBUG] 28-07-2023 22:52:12 - Array
+(
+)
+
+[DEBUG] 28-07-2023 22:52:15 - Array
+(
+)
+
+[DEBUG] 28-07-2023 22:52:25 - Array
+(
+    [imagen] => Array
+        (
+            [name] => js_466.jpg
+            [full_path] => js_466.jpg
+            [type] => image/jpeg
+            [tmp_name] => C:\xampp8.2.0\tmp\phpF7A3.tmp
+            [error] => 0
+            [size] => 213964
+        )
+
+)
+
+[DEBUG] 28-07-2023 22:52:37 - Array
+(
+    [imagen] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+
+[DEBUG] 28-07-2023 22:52:50 - Array
+(
+)
+
+[DEBUG] 28-07-2023 22:52:57 - Array
+(
+    [imagen] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+
+[DEBUG] 28-07-2023 22:53:19 - Array
+(
+)
+
+[DEBUG] 28-07-2023 22:53:34 - Array
+(
+)
+

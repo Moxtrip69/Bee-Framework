@@ -236,7 +236,7 @@ class apiController extends Controller {
       $uploaded = move_uploaded_file($imagen['tmp_name'], UPLOADS . $new_name);
 
       if (!$uploaded) {
-        throw new Exception('Hubo un error al subir la imagne.');
+        throw new Exception('Hubo un error al subir la imagen.');
       }
 
       // Procesar la imagen
