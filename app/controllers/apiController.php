@@ -226,16 +226,21 @@ class apiController extends Controller {
       $this->http->accept(['POST']);
       $this->http->authenticate_request();
 
-      $imagen = $this->files['logo'];
+      if (!isset($this->files['imagen'])) {
+        throw new Exception('Envía una imagen válida.');
+      }
 
-      $ok = move_uploaded_file($imagen['tmp_name'], UPLOADS . $imagen['name']);
+      $imagen   = $this->files['imagen'];
+      $ext      = pathinfo($imagen['name'], PATHINFO_EXTENSION);
+      $new_name = sprintf('%s.%s', generate_filename(), $ext);
+      $uploaded = move_uploaded_file($imagen['tmp_name'], UPLOADS . $new_name);
 
-      if (!$ok) {
+      if (!$uploaded) {
         throw new Exception('Hubo un error al subir la imagne.');
       }
 
       // Procesar la imagen
-      json_output(json_build(200, $imagen, 'Imagen subida con éxito.'));
+      json_output(json_build(200, $imagen, sprintf('Imagen %s subida con éxito.', $new_name)));
       
     } catch (BeeHttpException $e) {
       json_output(json_build($e->getStatusCode(), null, $e->getMessage()));
