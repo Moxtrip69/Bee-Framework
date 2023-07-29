@@ -315,6 +315,8 @@ class BeeHttp
         // Accedemos al content type definido por la petición
         $contentType = isset($this->headers['CONTENT_TYPE']) ? $this->headers['CONTENT_TYPE'] : '';
 
+        logger($contentType);
+
         // Dependiendo el tipo de petición accedemos de forma diferente al cuerpo de la petición y la data en él
         if ($this->r_type === 'POST') {
           if ($contentType === 'application/json' || strpos($contentType, 'application/json') !== false) {
@@ -324,6 +326,9 @@ class BeeHttp
           } else if (strpos($contentType, 'multipart/form-data') !== false) {
             // El cuerpo de la solicitud está en formato form-data o similar
             $this->data   = $_POST;
+          } else if (strpos($contentType, 'text/plain') !== false) {
+            $this->body   = file_get_contents('php://input');
+            $this->data   = json_decode($this->body, true);
           }
         } else if ($this->r_type === 'PUT') {
           // Cargamos todo el contenido del cuerpo de la solicitud

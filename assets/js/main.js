@@ -213,6 +213,7 @@ async function test_ajax() {
   }
 
   const res = await fetch('ajax/test', {
+    headers: { "Content-Type": "application/json" },
     method: "POST",
     body: JSON.stringify(body)
   })
