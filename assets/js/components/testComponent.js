@@ -9,29 +9,19 @@ export const testComponent = {
     this.get();
   },
   methods: {
-    get() {
+    async get() {
       this.postId = Bee.current_params[0];
 
-      const body = {
-        id: this.postId
-      }
+      const res = await fetch(Bee.url + `api/posts/${this.postId}`, {
+        headers: { 'Auth-Private-Key': Bee.private_key },
+        method: 'GET'
+      }).then(res => res.json());
 
-      $.ajax({
-        url: 'ajax/test_get_post',
-        type: 'get',
-        dataTpe: 'json',
-        cache: false,
-        data: body
-      }).done(res => {
-        if (res.status === 200) {
-          this.post = res.data;
-        } else {
-          toastr.error(res.msg);
-        }
-      }).fail(err => {
-        toastr.error(err.responseJSON.msg);
-      }).always(() => {
-      })
+      if (res.status === 200) {
+        this.post = res.data;
+      } else {
+        toastr.error(res.msg);
+      }
     }
   },
   template:

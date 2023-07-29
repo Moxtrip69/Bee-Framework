@@ -27,33 +27,19 @@ export const mainComponent = {
     this.fetchData();
   },
   methods: {
-    fetchData: function() {
-      var xhr = new XMLHttpRequest(),
-      $this   = this;
+    async fetchData() {
+      const res = await fetch(Bee.url + 'api/posts',{
+        headers: { 'Auth-Private-Key': Bee.private_key },
+        method: 'GET'
+      }).then(res => res.json());
 
-      xhr.open("get", Bee.url + 'ajax/test_posts');
-      xhr.onload = function() {
-        var res     = JSON.parse(xhr.responseText);
-        $this.posts = res.data;
-      };
-      xhr.send();
-
-      $.ajax({
-        url: 'ajax/test_posts',
-        type: 'get',
-        dataType: 'json',
-        cache: false,
-        data: {},
-        beforeSend() {
-          $('#vueApp').waitMe();
-        }
-      }).done(res => {
-      }).fail(err => {
-        var res = err.responseJSON;
+      if (res.status !== 200) {
         toastr.error(res.msg, '¡Hubo un error!');
-      }).always(() => {
-        $('#vueApp').waitMe('hide');
-      });
+        return;
+      }
+
+      this.posts = res.data;
+      $('#vueApp').waitMe('hide');
     },
     addNewTodo() {
       if (this.newTodo.length < 5) {

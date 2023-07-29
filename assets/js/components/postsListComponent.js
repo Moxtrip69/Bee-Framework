@@ -20,7 +20,7 @@ export const postsListComponent = {
     }
   },
   methods: {
-    addPost() {
+    async addPost() {
       if (this.post.titulo.length < 5) {
         toastr.error('Completa el título del post.');
         return;
@@ -37,35 +37,30 @@ export const postsListComponent = {
       }
 
       // Petición de agregado
-      const body = {
+      const data = {
         nombre: this.post.nombre,
         titulo: this.post.titulo,
-        contenido: this.post.contenido,
-        csrf: Bee.csrf
+        contenido: this.post.contenido
       };
 
-      $.ajax({
-        url: 'ajax/test_add_post',
-        type: 'post',
-        dataType: 'json',
-        cache: false,
-        data: body,
-        beforeSend() {
-        }
-      }).done(res => {
-        if (res.status === 201) {
-          this.resetPost();
-          toastr.success(res.msg);
-          this.$emit('fetch-data');
-        } else {
-          toastr.error(res.msg);
-        }
-      }).fail(err => {
-        toastr.error(err.responseJSON.msg, 'Hubo un error');
-      }).always(() => {
-      });
+      const res = await fetch(Bee.url + `api/posts`, {
+        headers: { 'Auth-Private-Key': Bee.private_key },
+        method: 'post',
+        body: JSON.stringify(data)
+      }).then(res => res.json());
+
+      if (res.status !== 201) {
+        toastr.error(res.msg);
+        return;
+      } 
+
+      this.resetPost();
+      toastr.success(res.msg);
+      this.$emit('fetch-data');
+      return;
+
     },
-    updatePost() {
+    async updatePost() {
       if (this.postEdit.titulo.length < 5) {
         toastr.error('Completa el título del post.');
         return;
@@ -86,33 +81,25 @@ export const postsListComponent = {
         id       : this.postEdit.id,
         nombre   : this.postEdit.nombre,
         titulo   : this.postEdit.titulo,
-        contenido: this.postEdit.contenido,
-        csrf     : Bee.csrf
+        contenido: this.postEdit.contenido
       };
 
-      $.ajax({
-        url: 'ajax/test_update_post',
-        type: 'put',
-        dataType: 'json',
-        cache: false,
-        data: body,
-        beforeSend() {
-        }
-      }).done(res => {
-        if (res.status === 200) {
-          this.isEditing = false;
-          this.resetPost();
-          toastr.success(res.msg);
-          this.$emit('fetch-data');
-        } else {
-          toastr.error(res.msg);
-        }
-      }).fail(err => {
-        toastr.error(err.responseJSON.msg, 'Hubo un error');
-      }).always(() => {
-      });
+      const res = await fetch(Bee.url + `api/posts`, {
+        headers: { 'Auth-Private-Key': Bee.private_key },
+        method: 'PUT',
+        body: JSON.stringify(body)
+      }).then(res => res.json());
+
+      if (res.status === 200) {
+        this.isEditing = false;
+        this.resetPost();
+        toastr.success(res.msg);
+        this.$emit('fetch-data');
+      } else {
+        toastr.error(res.msg);
+      }
     },
-    removePost(id) {
+    async removePost(id) {
       this.postId = id;
 
       if (!this.postId) {
@@ -122,57 +109,38 @@ export const postsListComponent = {
       if (!confirm('¿Estás seguro?')) return;
 
       // Petición de borrado
-      $.ajax({
-        url: 'api/posts/'+this.postId,
-        type: 'delete',
-        dataType: 'json',
+      const res = await fetch({
+        url: Bee.url + `api/posts/${this.postId}`,
+        method: 'delete',
         headers: {
-          auth_private_key: '51362e-0cb1b9-f9c183-17b0a3-1a002e'
-        },
-        cache: false,
-        beforeSend() {
+          auth_private_key: Bee.auth_private_key // utiliza tu API private key
         }
-      }).done(res => {
-        if (res.status === 200) {
-          toastr.success(res.msg);
-          this.$emit('fetch-data');
-        } else {
-          toastr.error(res.msg);
-        }
-      }).fail(err => {
-        toastr.error(err.responseJSON.msg, 'Hubo un error');
-      }).always(() => {
-        this.postId = null;
-      });
+      }).then(res => res.json());
+
+      if (res.status === 200) {
+        toastr.success(res.msg);
+        this.$emit('fetch-data');
+      } else {
+        toastr.error(res.msg);
+      }
+      this.postId = null;
     },
-    openEdit(id) {
+    async openEdit(id) {
       this.postEdit.id = id;
 
-      const body = {
-        id: this.postEdit.id
-      }
+      const res = await fetch(Bee.url + `api/posts/${this.postEdit.id}`, {
+        headers: { 'Auth-Private-Key': Bee.private_key },
+        method: 'GET'
+      }).then(res => res.json());
 
-      $.ajax({
-        url: 'ajax/test_get_post',
-        type: 'get',
-        dataType: 'json',
-        cache: false,
-        data: body,
-        beforeSend() {
-        }
-      }).done(res => {
-        if (res.status === 200) {
-          this.postEdit.titulo = res.data.titulo;
-          this.postEdit.nombre = res.data.nombre;
-          this.postEdit.contenido = res.data.contenido;
-          this.isEditing = true;
-        } else {
-          toastr.error(res.msg);
-        }
-      }).fail(err => {
-        toastr.error(err.responseJSON.msg, 'Hubo un error');
-      }).always(() => {
-      });
+      if (res.status === 200) {
+        this.postEdit.titulo    = res.data.titulo;
+        this.postEdit.nombre    = res.data.nombre;
+        this.postEdit.contenido = res.data.contenido;
+        this.isEditing          = true;
+      } else {
+        toastr.error(res.msg);
+      }
     },
     resetPost() {
       this.post = {

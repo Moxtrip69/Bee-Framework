@@ -235,16 +235,17 @@ class BeeHttp
   {
     // En caso de existir custom headers para autenticación o consumo
     if ($this->apache_request === true) {
+      // Depende del protocolo HTTP se muede mostrar la llave o clave de diferente manera
       switch ($this->protocol) {
         case 'https':
-          $public_key_name  = 'Auth_public_key';
-          $private_key_name = 'Auth_private_key';
+          $public_key_name  = 'Auth-Public-Key';
+          $private_key_name = 'Auth-Private-Key';
           break;
         
         case 'http':
         default:
-          $public_key_name  = 'auth_public_key';
-          $private_key_name = 'auth_private_key';
+          $public_key_name  = 'auth-public-key';
+          $private_key_name = 'auth-private-key';
           break;
       }
       $this->public_key  = isset($this->headers[$public_key_name]) ? $this->headers[$public_key_name] : null;
@@ -314,17 +315,20 @@ class BeeHttp
         $this->data  = $this->body;
         break;
       case 'post':
-        $this->body  = $_POST;
-        $this->data  = $this->body;
-        $this->files = isset($_FILES) ? $_FILES : [];
-        break;
       case 'put':
       case 'delete':
       case 'headers':
       case 'options':
-        $this->body = file_get_contents('php://input');
-        parse_str($this->body, $this->parsed);
-        $this->data = $this->parsed;
+        $this->body   = file_get_contents('php://input');
+        $this->data   = json_decode($this->body, true);
+        
+        // En caso de que sea una petición POST nativa en otro formato que no sea JSON
+        if (isset($_POST) && !empty($_POST)) {
+          $this->data = $this->data === null ? $_POST : array_merge($this->data, $_POST);
+        }
+
+        $this->parsed = $this->data;
+        $this->files  = isset($_FILES) ? $_FILES : [];
         break;
     }
   }

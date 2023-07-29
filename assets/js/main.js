@@ -201,36 +201,34 @@ function init_db_test() {
 /**
  * Prueba de peticiones ajax al backend en versión 1.1.3
  */
-function test_ajax() {
+async function test_ajax() {
   const wrapper  = document.getElementById('test_ajax');
-  const csrf     = Bee.csrf;
-  const data     = new FormData;
-
-  if (!wrapper) return;
-
-  data.append('csrf', csrf);
 
   if (!wrapper) return;
 
   showLoader();
 
-  fetch('ajax/test', {
+  const data = {
+    csrf: Bee.csrf
+  }
+
+  const res = await fetch('ajax/test', {
     method: "POST",
-    body: data
+    body: JSON.stringify(data)
   })
   .then(res => res.json())
-  .then(res => {
-    if (res.status === 200) {
-      toastr.success(res.msg, 'Prueba AJAX');
-    } else {
-      toastr.error(res.msg, '¡Error!');
-    }
-
-    hideLoader();
-  })
   .catch(err => {
     toastr.error('Prueba AJAX fallida.', '¡Upss!');
+    return false;
   });
+  
+  if (res.status === 200) {
+    toastr.success(res.msg, 'Prueba AJAX');
+  } else {
+    toastr.error(res.msg, '¡Error!');
+  }
+
+  hideLoader();
 }
 
 /**
@@ -242,8 +240,8 @@ async function test_api() {
   if (!wrapper) return;
 
   const res = await fetch(Bee.url + 'api/posts', {
-    headers    : { 'auth_private_key': Bee.private_key },
-    type       : 'GET'
+    headers    : { 'Auth-Private-Key': Bee.private_key },
+    method     : 'GET'
   }).then(res => res.json());
 
   if (res.status === 200) {

@@ -1550,7 +1550,7 @@ function upload_image($file_field = null, $check_image = false, $random_name = f
 		throw new Exception('Por favor específica un campo de archivo válido.', 1);
 	}
 	
-	if (!$path) {
+	if (!is_dir($path)) {
 		throw new Exception('Por favor específica una ruta de guardado válida.', 1);
 	}
 	
@@ -2445,4 +2445,46 @@ function sanitize_input($input, $max_length = null) {
 	}
 
 	return $sanitized_input;
+}
+
+/**
+ * Genera el hash de un string usando el algorítmo sha256
+ *
+ * @param string $data
+ * @return string
+ */
+function hash_256($data) {
+  // Verificamos si el algoritmo SHA-256 está disponible
+  if (in_array('sha256', hash_algos(), true)) {
+    // Calculamos el hash SHA-256 y lo devolvemos
+    return hash('sha256', $data);
+  }
+
+  // Si el algoritmo SHA-256 no está disponible, devolvemos un valor nulo, es poco probable que pase
+  return null;
+}
+
+/**
+ * Normaliza el formato de un string para envío seguro de información o almacenado
+ *
+ * @param string $input
+ * @param boolean $remove_internal_spaces
+ * @param boolean $remove_special_chars
+ * @return string
+ */
+function normalize_string($input, $remove_internal_spaces = false, $remove_special_chars = false) {
+  // Convertimos a minúsculas y eliminamos espacios extras al inicio y final
+  $normalized = trim(strtolower($input));
+
+  // Opcionalmente, removemos espacios internos si se solicita
+  if ($remove_internal_spaces) {
+    $normalized = preg_replace('/\s+/', '', $normalized);
+  }
+
+  // Opcionalmente, removemos caracteres especiales si se solicita
+  if ($remove_special_chars) {
+    $normalized = preg_replace('/[^a-z0-9\s]/', '', $normalized);
+  }
+
+  return $normalized;
 }

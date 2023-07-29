@@ -32,8 +32,17 @@ class apiController extends Controller {
    */
   private $data = [];
 
+  /**
+   * Array de archivos enviados en la petición
+   * @since 1.5.6
+   *
+   * @var array
+   */
+  private $files = [];
+
   function __construct()
   {
+    logger($_FILES);
     // Prevenir el acceso no autorizado
     if (!defined('DOING_AJAX') && !defined('DOING_API')) {
       http_response_code(403);
@@ -42,9 +51,10 @@ class apiController extends Controller {
 
     // Procesamos la petición que está siendo mandada al servidor
     try {
-      $this->http = new BeeHttp(__CLASS__);
-      $this->req  = $this->http->get_request();
-      $this->data = $this->req['data'];
+      $this->http  = new BeeHttp(__CLASS__);
+      $this->req   = $this->http->get_request();
+      $this->data  = $this->req['data'];
+      $this->files = $this->req['files'];
     } catch (BeeHttpException $e) {
       json_output(json_build($e->getStatusCode(), null, $e->getMessage()));
     } catch (Exception $e) {
@@ -64,17 +74,27 @@ class apiController extends Controller {
   function posts($id = null)
   {
     try {
-      $this->http->accept(['get','post','delete']);
+      $this->http->accept(['get','post','put','delete']);
 
       switch ($this->req['type']) {
         case 'GET':
           $this->http->authenticate_request();
-          $this->get_posts();
+
+          if ($id !== null) {
+            $this->get_post($id);
+          } else {
+            $this->get_posts();
+          }
           break;
           
         case 'POST':
           $this->http->authenticate_request();
           $this->post_posts();
+          break;
+
+        case 'PUT':
+          $this->http->authenticate_request();
+          $this->put_post($id);
           break;
 
         case 'DELETE':
@@ -96,6 +116,17 @@ class apiController extends Controller {
   {
     $posts = Model::list('pruebas');
     json_output(json_build(200, $posts));
+  }
+
+  private function get_post($id)
+  {
+    $post = Model::list('pruebas', ['id' => $id], 1);
+
+    if (empty($post)) {
+      json_output(json_build(404, $post));
+    }
+
+    json_output(json_build(200, $post));
   }
 
   private function post_posts()
@@ -140,6 +171,42 @@ class apiController extends Controller {
     json_output(json_build(201, $post, 'Nuevo post agregado con éxito.'));
   }
 
+  private function put_post($id)
+  {
+    try {
+      if (!check_posted_data(['id','titulo','contenido','nombre'], $this->data)) {
+        throw new Exception('Parámetros faltantes.');
+      }
+
+      $id        = clean($this->data['id']);
+      $nombre    = clean($this->data['nombre']);
+      $titulo    = clean($this->data['titulo']);
+      $contenido = clean($this->data['contenido']);
+
+      if (!$post = Model::list('pruebas', ['id' => $id], 1)) {
+        throw new Exception(get_bee_message('not_found'));
+      }
+
+      $data =
+      [
+        'nombre'    => $nombre,
+        'titulo'    => $titulo,
+        'contenido' => $contenido
+      ];
+
+      if (!Model::update('pruebas', ['id' => $id], $data)) {
+        throw new Exception(get_bee_message('not_updated'));
+      }
+
+      $post = Model::list('pruebas', ['id' => $id], 1);
+      
+      json_output(json_build(200, $post, get_bee_message('updated')));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
   private function delete_posts($id = null)
   {
     if (!$post = Model::list('pruebas', ['id' => $id], 1)) {
@@ -151,5 +218,31 @@ class apiController extends Controller {
     }
     
     json_output(json_build(200, $post, 'Post borrado con éxito.'));
+  }
+
+  function upload()
+  {
+    try {
+      $this->http->accept(['POST']);
+      $this->http->authenticate_request();
+
+      $imagen = $this->files['logo'];
+
+      $ok = move_uploaded_file($imagen['tmp_name'], UPLOADS . $imagen['name']);
+
+      if (!$ok) {
+        throw new Exception('Hubo un error al subir la imagne.');
+      }
+
+      // Procesar la imagen
+      json_output(json_build(200, $imagen, 'Imagen subida con éxito.'));
+      
+    } catch (BeeHttpException $e) {
+      json_output(json_build($e->getStatusCode(), null, $e->getMessage()));
+    } catch (BeeJsonException $e) {
+      json_output(json_build($e->getStatusCode(), null, $e->getMessage(), $e->getErrorCode()));
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
   }
 }

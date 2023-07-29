@@ -1,0 +1,110 @@
+[DEBUG] 28-07-2023 22:39:44 - Array
+(
+)
+
+[DEBUG] 28-07-2023 22:39:45 - Array
+(
+    [logo] => Array
+        (
+            [name] => 636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png
+            [full_path] => 636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png
+            [type] => image/png
+            [tmp_name] => C:\xampp8.2.0\tmp\php5E98.tmp
+            [error] => 0
+            [size] => 10386
+        )
+
+)
+
+[DEBUG] 28-07-2023 22:40:18 - Array
+(
+)
+
+[DEBUG] 28-07-2023 22:40:33 - Array
+(
+)
+
+[DEBUG] 28-07-2023 22:40:44 - Array
+(
+)
+
+[DEBUG] 28-07-2023 22:41:07 - Array
+(
+    [pdf] => Array
+        (
+            [name] => 2023-07-28T16-28 Transaction #6375220765928229-12766633.pdf
+            [full_path] => 2023-07-28T16-28 Transaction #6375220765928229-12766633.pdf
+            [type] => application/pdf
+            [tmp_name] => C:\xampp8.2.0\tmp\php9E9B.tmp
+            [error] => 0
+            [size] => 1055826
+        )
+
+)
+
+[DEBUG] 28-07-2023 22:42:51 - Array
+(
+)
+
+[DEBUG] 28-07-2023 22:43:16 - Array
+(
+)
+
+[DEBUG] 28-07-2023 22:43:29 - Array
+(
+    [logo] => Array
+        (
+            [name] => 636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png
+            [full_path] => 636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png
+            [type] => image/png
+            [tmp_name] => C:\xampp8.2.0\tmp\phpCB7E.tmp
+            [error] => 0
+            [size] => 10386
+        )
+
+)
+
+[DEBUG] 28-07-2023 22:45:45 - Array
+(
+)
+
+[DEBUG] 28-07-2023 22:45:48 - Array
+(
+)
+
+[DEBUG] 28-07-2023 22:45:51 - Array
+(
+)
+
+[DEBUG] 28-07-2023 22:45:53 - Array
+(
+    [logo] => Array
+        (
+            [name] => 636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png
+            [full_path] => 636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png
+            [type] => image/png
+            [tmp_name] => C:\xampp8.2.0\tmp\phpFC59.tmp
+            [error] => 0
+            [size] => 10386
+        )
+
+)
+
+[DEBUG] 28-07-2023 22:45:54 - Array
+(
+)
+
+[DEBUG] 28-07-2023 22:45:57 - Array
+(
+    [logo] => Array
+        (
+            [name] => 636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png
+            [full_path] => 636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png
+            [type] => image/png
+            [tmp_name] => C:\xampp8.2.0\tmp\phpDB0.tmp
+            [error] => 0
+            [size] => 10386
+        )
+
+)
+
