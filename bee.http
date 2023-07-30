@@ -3,35 +3,39 @@
 ### Extensión requerida: REST Client para VS Code
 ### ----------------------------------------------------
 ### ----------------------------------------------------
+@privateKey = 51362e-0cb1b9-f9c183-17b0a3-1a002e
 
 ### CARGAR TODOS LOS POSTS
 GET http://localhost:8848/Bee-Framework/api/posts HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer 51362e-0cb1b9-f9c183-17b0a3-1a002e
+Authorization: Bearer {{privateKey}}
 ### ----------------------------------------------------
 
 ### CARGAR UN POST
 GET http://localhost:8848/Bee-Framework/api/posts/5 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer 51362e-0cb1b9-f9c183-17b0a3-1a002e
+Authorization: Bearer {{privateKey}}
 ### ----------------------------------------------------
 
 ### AGREGAR NUEVO POST
+# @prompt nombre
+# @prompt titulo El título de la entrada
+# @prompt contenido El contenido de la entrada
 POST http://localhost:8848/Bee-Framework/api/posts HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer 51362e-0cb1b9-f9c183-17b0a3-1a002e
+Authorization: Bearer {{privateKey}}
 
 {
-  "nombre"  : "VSCode",
-  "titulo": "Nueva noticia desde VSCode",
-  "contenido": "Agregado desde REST Client."
+  "nombre"  : "{{nombre}}",
+  "titulo": "{{titulo}}",
+  "contenido": "{{contenido}}"
 }
 ### ----------------------------------------------------
 
 ### ACTUALIZAR POST
 PUT http://localhost:8848/Bee-Framework/api/posts/12 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer 51362e-0cb1b9-f9c183-17b0a3-1a002e
+Authorization: Bearer {{privateKey}}
 
 {
   "nombre"  : "VSCode",
@@ -43,7 +47,7 @@ Authorization: Bearer 51362e-0cb1b9-f9c183-17b0a3-1a002e
 ### BORRAR UN POST
 DELETE  http://localhost:8848/Bee-Framework/api/posts/13 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer 51362e-0cb1b9-f9c183-17b0a3-1a002e
+Authorization: Bearer {{privateKey}}
 ### ----------------------------------------------------
 
 ### TEST AJAX
