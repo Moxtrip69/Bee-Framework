@@ -1,32 +1,39 @@
 ### ------------- 
 ### ------------- 
-### Extensión requerida: REST Cliente para VS Code
+### Extensión requerida: REST Client para VS Code
 ### ------------- 
 ### ------------- 
-POST http://localhost:8848/Bee-Framework/ajax/test HTTP/1.1
+GET http://localhost:8848/Bee-Framework/api/posts HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer 51362e-0cb1b9-f9c183-17b0a3-1a002e
+
+### CARGAR UN POST
+GET http://localhost:8848/Bee-Framework/api/posts/5 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer 51362e-0cb1b9-f9c183-17b0a3-1a002e
+
+### AGREGAR NUEVO POST
+POST http://localhost:8848/Bee-Framework/api/posts HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer 51362e-0cb1b9-f9c183-17b0a3-1a002e
 
 {
-  "hook"  : "bee_hook",
-  "action": "get"
+  "nombre"  : "VSCode",
+  "titulo": "Nueva noticia desde VSCode",
+  "contenido": "Agregado desde REST Client."
 }
 
-###
-
-POST http://localhost:8848/Bee-Framework/ajax/test HTTP/1.1
+### ACTUALIZAR POST
+POST http://localhost:8848/Bee-Framework/api/posts/12 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer 51362e-0cb1b9-f9c183-17b0a3-1a002e
 
 {
-  "hook"  : "bee_hook",
-  "action": "post"
+  "nombre"  : "VSCode",
+  "titulo": "Nueva noticia desde VSCode Editada",
+  "contenido": "Editado desde REST Client."
 }
 
-###
-
+### TEST AJAX
 POST http://localhost:8848/Bee-Framework/ajax/test HTTP/1.1
 Content-Type: application/json
-
-{
-  "hook"  : "bee_hook",
-  "action": "put"
-}

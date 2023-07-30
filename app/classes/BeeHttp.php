@@ -315,8 +315,6 @@ class BeeHttp
         // Accedemos al content type definido por la petición
         $contentType = isset($this->headers['CONTENT_TYPE']) ? $this->headers['CONTENT_TYPE'] : '';
 
-        logger($contentType);
-
         // Dependiendo el tipo de petición accedemos de forma diferente al cuerpo de la petición y la data en él
         if ($this->r_type === 'POST') {
           if ($contentType === 'application/json' || strpos($contentType, 'application/json') !== false) {

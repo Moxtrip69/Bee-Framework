@@ -212,21 +212,24 @@ async function test_ajax() {
     csrf: Bee.csrf
   }
 
-  const res = await fetch('ajax/test', {
-    headers: { "Content-Type": "application/json" },
-    method: "POST",
-    body: JSON.stringify(body)
-  })
-  .then(res => res.json())
-  .catch(err => {
-    toastr.error('Prueba AJAX fallida.', '¡Upss!');
-    return false;
-  });
-  
-  if (res.status === 200) {
-    toastr.success(res.msg, 'Prueba AJAX');
-  } else {
-    toastr.error(res.msg, '¡Error!');
+  try {
+    const res = await fetch('ajax/test', {
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+      body: JSON.stringify(body)
+    })
+    .then(res => res.json())
+    .catch(error => {
+      throw new Error(error);
+    });
+
+    if (res.status === 200) {
+      toastr.success(res.msg, 'Prueba AJAX');
+    } else {
+      toastr.error(res.msg, '¡Error!');
+    }
+  } catch (error) {
+    toastr.error(error, '¡Error!');
   }
 
   hideLoader();
