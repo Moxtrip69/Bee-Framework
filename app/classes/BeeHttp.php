@@ -333,7 +333,7 @@ class BeeHttp
           $this->body     = file_get_contents('php://input');
 
           // Verificar el tipo de contenido del cuerpo de la solicitud
-          if ($contentType === 'application/json') {
+          if ($contentType === 'application/json' || strpos($contentType, 'application/json') !== false) {
             // El cuerpo de la solicitud está en formato JSON
             $this->data   = json_decode($this->body, true);
           } else if (strpos($contentType, 'multipart/form-data') !== false) {

@@ -2432,11 +2432,12 @@ function sanitize_input($input, $max_length = null) {
 
 	// Utilizamos FILTER_SANITIZE_FULL_SPECIAL_CHARS para eliminar o codificar caracteres
 	// especiales que podrían ser peligrosos o causar problemas de seguridad.
-	$sanitized_input = filter_var($sanitized_input, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+	//$sanitized_input = filter_var($sanitized_input, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+	$sanitized_input = filter_var($sanitized_input, FILTER_UNSAFE_RAW); 
 
 	// Si el input contiene una cadena mal formada de UTF-8, eliminamos los bytes inválidos.
 	// Esto puede ayudar a prevenir ataques basados en UTF-8 malformado.
-	$sanitized_input = mb_convert_encoding($sanitized_input, 'UTF-8', 'UTF-8');
+	//$sanitized_input = mb_convert_encoding($sanitized_input, 'UTF-8', 'UTF-8');
 
 	// Otras medidas de seguridad adicionales, como limitar la longitud del input.
 	if ($max_length !== null) {
