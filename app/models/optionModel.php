@@ -24,11 +24,7 @@ class optionModel extends Model
       'created_at'   => now()
     ];
 
-    try {
-      return ($this->id = parent::query($sql, $data)) ? $this->id : false;
-    } catch (Exception $e) {
-      throw $e;
-    }
+    return ($this->id = parent::query($sql, $data)) ? $this->id : false;
   }
 
   /**
@@ -39,11 +35,7 @@ class optionModel extends Model
   public function all()
   {
     $sql = 'SELECT * FROM options ORDER BY id DESC';
-    try {
-      return ($rows = parent::query($sql)) ? $rows : false;
-    } catch (Exception $e) {
-      throw $e;
-    }
+    return ($rows = parent::query($sql)) ? $rows : false;
   }
 
   /**
@@ -54,11 +46,7 @@ class optionModel extends Model
   public function one()
   {
     $sql = 'SELECT * FROM options WHERE `option` = :option LIMIT 1';
-    try {
-      return ($rows = parent::query($sql, ['option' => $this->option])) ? $rows[0] : false;
-    } catch (Exception $e) {
-      throw $e;
-    }
+    return ($rows = parent::query($sql, ['option' => $this->option])) ? $rows[0] : false;
   }
 
   /**
@@ -75,11 +63,7 @@ class optionModel extends Model
       'val'    => $this->val,
     ];
 
-    try {
-      return (parent::query($sql, $data)) ? true : false;
-    } catch (Exception $e) {
-      throw $e;
-    }
+    return (parent::query($sql, $data)) ? true : false;
   }
 
   /**
@@ -90,11 +74,7 @@ class optionModel extends Model
   public function delete()
   {
     $sql = 'DELETE FROM options WHERE `option` = :option LIMIT 1';
-    try {
-      return (parent::query($sql, ['option' => $this->option])) ? true : false;
-    } catch (Exception $e) {
-      throw $e;
-    }
+    return (parent::query($sql, ['option' => $this->option])) ? true : false;
   }
 
   public static function save($option, $val)
