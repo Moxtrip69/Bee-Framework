@@ -250,4 +250,499 @@ class apiController extends Controller {
       json_output(json_build(400, null, $e->getMessage()));
     }
   }
+
+  ///////////////////////////////////////////////////////
+  ////////////// CLASE EN VIVO #2 #3   //////////////////
+  ///////////////////////////////////////////////////////
+  function juegos($id = null)
+  {
+    try {
+      $this->http->accept(['get','post','put','delete']);
+      $this->http->authenticate_request();
+
+      switch ($this->req['type']) {
+        case 'GET':
+          if ($id !== null) {
+            $this->get_juego($id);
+          } else {
+            $this->get_juegos();
+          }
+          break;
+          
+        case 'POST':
+          $this->post_juego();
+          break;
+
+        case 'PUT':
+          $this->put_juego($id);
+          break;
+
+        case 'DELETE':
+          $this->detele_juego($id);
+          break;
+      }
+      
+    } catch (BeeHttpException $e) {
+      http_response_code($e->getStatusCode());
+      json_output(json_build($e->getStatusCode(), [], $e->getMessage()));
+
+    } catch (BeeJsonException $e) {
+      http_response_code($e->getStatusCode());
+      json_output(json_build($e->getStatusCode(), [], $e->getMessage(), $e->getErrorCode()));
+
+    } catch (Exception $e) {
+      http_response_code(400);
+      json_output(json_build(400, [], $e->getMessage()));
+    }
+  }
+
+  private function get_juego($id)
+  {
+    // Validación de parámetro id
+    if (!is_numeric($id)) {
+      throw new BeeJsonException('Parámetro ID no válido.', 400, 'id_invalid');
+    }
+
+    // Query a la base de datos
+    $sql = 
+    'SELECT 
+    j.* ,
+    (SELECT COUNT(id) FROM votos WHERE j.id = id_juego) AS votos
+    FROM juegos j
+    WHERE j.id = :id 
+    LIMIT 1';
+    $row = Model::query($sql, ['id' => $id]);
+
+    if (empty($row)) {
+      json_output(json_build(404, [], 'No existe el juego solicitado.'));
+    }
+
+    json_output(json_build(200, $row[0]));
+  }
+
+  private function get_juegos()
+  {
+    $sql = 
+    'SELECT 
+    j.* ,
+    (SELECT COUNT(id) FROM votos WHERE j.id = id_juego) AS votos
+    FROM juegos j
+    ORDER BY j.id';
+
+    $rows = Model::query($sql);
+
+    json_output(json_build(200, !empty($rows) ? $rows : []));
+  }
+
+  private function post_juego()
+  {
+    // Verificar que estemos recibiendo todos los parámetros
+    if (!check_posted_data(['titulo','plataforma','precio'], $this->data)) {
+      throw new BeeJsonException('Parámetros faltantes en la petición.', 400, 'missing_params');
+    }
+
+    // Definición
+    $titulo     = $this->data['titulo'];
+    $plataforma = $this->data['plataforma'];
+    $precio     = (float) $this->data['precio'];
+
+    // Validaciones para: título
+    if (!is_string($titulo)) {
+      throw new BeeJsonException(
+        'Parámetro título debe ser un string válido.', 
+        400,
+        'invalid_type'
+      );
+    }
+
+    if (strlen($titulo) < 5) {
+      throw new BeeJsonException(
+        'Parámetro título debe ser mayor a 5 caracteres.', 
+        400,
+        'invalid_format'
+      );
+    }
+    
+    // Validaciones para: plataforma
+    if (!is_string($plataforma)) {
+      throw new BeeJsonException(
+        'Parámetro plataforma debe ser un string válido.', 
+        400,
+        'invalid_type'
+      );
+    }
+
+    // Validaciones para: precio
+    if (!is_float($precio)) {
+      throw new BeeJsonException(
+        'Parámetro precio debe ser un número válido.', 
+        400,
+        'invalid_type'
+      );
+    }
+
+    // Validaciones para: imagen
+    if (!isset($this->files['imagen'])) {
+      throw new BeeJsonException(
+        'Parámetro imagen debe ser un archivo de imagen válido.', 
+        400,
+        'missing_image'
+      );
+    }
+
+    // Definimos la imagen
+    $imagen = $this->files['imagen'];
+
+    if ($imagen['error'] !== UPLOAD_ERR_OK) {
+      throw new BeeJsonException(
+        'Hubo un problema al subir el archivo.', 
+        400,
+        'upload_error'
+      );
+    }
+
+    // Datos del archivo
+    $imagen_nombre = $imagen['name'];
+    $imagen_tmp    = $imagen['tmp_name'];
+    $imagen_tipo   = $imagen['type'];
+    $imagen_ext    = pathinfo($imagen_nombre, PATHINFO_EXTENSION);
+    $nuevo_nombre  = sprintf('%s.%s', generate_filename(), $imagen_ext);
+
+    // Lista de tipos MIME válidos para imágenes
+    $tipos_permitidos = ['image/jpeg', 'image/png', 'image/gif'];
+    $ext_permitidas   = ['jpg', 'jpeg', 'png', 'gif'];
+
+    // Verificar si la extensión y el tipo MIME están permitidos
+    if (!in_array($imagen_tipo, $tipos_permitidos) || !in_array($imagen_ext, $ext_permitidas)) {
+      throw new BeeJsonException(
+        'El formato de la imagen es inválido.', 
+        400,
+        'invalid_format'
+      );
+    }
+
+    // Mover el archivo
+    if (!move_uploaded_file($imagen_tmp, UPLOADS . $nuevo_nombre)) {
+      throw new BeeJsonException(
+        'Hubo un problema al mover el archivo.', 
+        400,
+        'upload_error'
+      );
+    }
+
+    // Sanitización para guardado
+    $data =
+    [
+      'titulo'     => $titulo,
+      'plataforma' => $plataforma,
+      'precio'     => $precio,
+      'imagen'     => $nuevo_nombre,
+      'creado'     => now()
+    ];
+
+    if (!$id = Model::add('juegos', $data)) {
+      unlink(UPLOADS . $nuevo_nombre); // borrar la imagen
+      throw new BeeJsonException(
+        'El registro no se ha insertado.', 
+        400,
+        'db_error'
+      );
+    }
+
+    $juego = Model::list('juegos', ['id' => $id], 1);
+
+    json_output(json_build(201, $juego, 'Nuevo juego agregado con éxito.'));
+  }
+
+  private function put_juego($id = null)
+  {
+    if ($id === null) {
+      throw new BeeJsonException(
+        'Parámetro ID faltante en la petición.', 
+        400, 
+        'missing_params'
+      );
+    }
+
+    // Verificar que estemos recibiendo todos los parámetros
+    if (!check_posted_data(['titulo','plataforma','precio'], $this->data)) {
+      throw new BeeJsonException(
+        'Parámetros faltantes en la petición.', 
+        400, 
+        'missing_params'
+      );
+    }
+
+    // Definición
+    $titulo     = $this->data['titulo'];
+    $plataforma = $this->data['plataforma'];
+    $precio     = (float) $this->data['precio'];
+
+    // Validar que exista el registro
+    if (!Model::list('juegos', ['id' => $id], 1)) {
+      throw new BeeJsonException(
+        'No existe el juego solicitado.', 
+        404, 
+        'not_found'
+      );
+    }
+
+    // Validaciones para: título
+    if (!is_string($titulo)) {
+      throw new BeeJsonException(
+        'Parámetro título debe ser un string válido.', 
+        400,
+        'invalid_type'
+      );
+    }
+
+    if (strlen($titulo) < 5) {
+      throw new BeeJsonException(
+        'Parámetro título debe ser mayor a 5 caracteres.', 
+        400,
+        'invalid_format'
+      );
+    }
+    
+    // Validaciones para: plataforma
+    if (!is_string($plataforma)) {
+      throw new BeeJsonException(
+        'Parámetro plataforma debe ser un string válido.', 
+        400,
+        'invalid_type'
+      );
+    }
+
+    // Validaciones para: precio
+    if (!is_float($precio)) {
+      throw new BeeJsonException(
+        'Parámetro precio debe ser un número válido.', 
+        400,
+        'invalid_type'
+      );
+    }
+
+    // Sanitización para guardado
+    $data =
+    [
+      'titulo'     => $titulo,
+      'plataforma' => $plataforma,
+      'precio'     => $precio
+    ];
+
+    if (!Model::update('juegos', ['id' => $id], $data)) {
+      throw new BeeJsonException(
+        'El registro no se ha actualizado.', 
+        400,
+        'db_error'
+      );
+    }
+
+    $juego = Model::list('juegos', ['id' => $id], 1);
+
+    json_output(json_build(200, $juego, 'Juego actualizado con éxito.'));
+  }
+
+  private function detele_juego($id = null)
+  {
+    if ($id === null) {
+      throw new BeeJsonException(
+        'Parámetro ID faltante en la petición.', 
+        400, 
+        'missing_params'
+      );
+    }
+
+    // Validar que exista el registro
+    if (!$juego = Model::list('juegos', ['id' => $id], 1)) {
+      throw new BeeJsonException(
+        'No existe el juego solicitado.', 
+        404, 
+        'not_found'
+      );
+    }
+
+    // Borrar de la base de datos
+    if (!Model::remove('juegos', ['id' => $id])) {
+      throw new BeeJsonException(
+        'El registro no se ha borrado.', 
+        400, 
+        'db_error'
+      );
+    }
+    
+    json_output(json_build(200, $juego, 'Juego borrado con éxito.'));
+  }
+
+  function votar($id = null)
+  {
+    try {
+      $this->http->accept(['post']);
+      $this->http->authenticate_request();
+
+      if ($id === null) {
+        throw new BeeJsonException(
+          'Parámetro ID faltante en la petición.', 
+          400, 
+          'missing_params'
+        );
+      }
+  
+      // Validar que exista el registro
+      if (!Model::list('juegos', ['id' => $id], 1)) {
+        throw new BeeJsonException(
+          'No existe el juego solicitado.', 
+          404, 
+          'not_found'
+        );
+      }
+  
+      // Validar que no exista ya un voto con base a la IP o usuario
+  
+      // Agregar el voto en la base de datos
+      $data =
+      [
+        'id_juego' => $id,
+        'ip'       => get_user_ip()
+      ];
+  
+      // Agregar el voto en la base de datos
+      if (!Model::add('votos', $data)) {
+        throw new BeeJsonException(
+          'El registro no se ha insertado.', 
+          400, 
+          'db_error'
+        );
+      }
+  
+      $juego = Model::list('juegos', ['id' => $id], 1);
+      
+      json_output(json_build(201, $juego, 'Voto agregado con éxito.'));
+
+    } catch (BeeHttpException $e) {
+      http_response_code($e->getStatusCode());
+      json_output(json_build($e->getStatusCode(), [], $e->getMessage()));
+
+    } catch (BeeJsonException $e) {
+      http_response_code($e->getStatusCode());
+      json_output(json_build($e->getStatusCode(), [], $e->getMessage(), $e->getErrorCode()));
+
+    } catch (Exception $e) {
+      http_response_code(400);
+      json_output(json_build(400, [], $e->getMessage()));
+    }
+  }
+
+  function imagen($id = null)
+  {
+    try {
+      $this->http->accept(['post']);
+      $this->http->authenticate_request();
+
+      if ($id === null) {
+        throw new BeeJsonException(
+          'Parámetro ID faltante en la petición.', 
+          400, 
+          'missing_params'
+        );
+      }
+  
+      // Validar que exista el registro
+      if (!$juego = Model::list('juegos', ['id' => $id], 1)) {
+        throw new BeeJsonException(
+          'No existe el juego solicitado.', 
+          404, 
+          'not_found'
+        );
+      }
+
+      // Almacenar imagen anterior
+      $imagen_vieja = $juego['imagen'];
+  
+      // Validaciones para: imagen
+      if (!isset($this->files['imagen'])) {
+        throw new BeeJsonException(
+          'Parámetro imagen debe ser un archivo de imagen válido.', 
+          400,
+          'missing_image'
+        );
+      }
+
+      // Definimos la imagen
+      $imagen = $this->files['imagen'];
+
+      if ($imagen['error'] !== UPLOAD_ERR_OK) {
+        throw new BeeJsonException(
+          'Hubo un problema al subir el archivo.', 
+          400,
+          'upload_error'
+        );
+      }
+
+      // Datos del archivo
+      $imagen_nombre = $imagen['name'];
+      $imagen_tmp    = $imagen['tmp_name'];
+      $imagen_tipo   = $imagen['type'];
+      $imagen_ext    = pathinfo($imagen_nombre, PATHINFO_EXTENSION);
+      $nuevo_nombre  = sprintf('%s.%s', generate_filename(), $imagen_ext);
+
+      // Lista de tipos MIME válidos para imágenes
+      $tipos_permitidos = ['image/jpeg', 'image/png', 'image/gif'];
+      $ext_permitidas   = ['jpg', 'jpeg', 'png', 'gif'];
+
+      // Verificar si la extensión y el tipo MIME están permitidos
+      if (!in_array($imagen_tipo, $tipos_permitidos) || !in_array($imagen_ext, $ext_permitidas)) {
+        throw new BeeJsonException(
+          'El formato de la imagen es inválido.', 
+          400,
+          'invalid_format'
+        );
+      }
+
+      // Mover el archivo
+      if (!move_uploaded_file($imagen_tmp, UPLOADS . $nuevo_nombre)) {
+        throw new BeeJsonException(
+          'Hubo un problema al mover el archivo.', 
+          400,
+          'upload_error'
+        );
+      }
+
+      // Actualizar el registro
+      $data =
+      [
+        'imagen' => $nuevo_nombre
+      ];
+      
+      if (!Model::update('juegos', ['id' => $id], $data)) {
+        unlink(UPLOADS . $nuevo_nombre);
+        throw new BeeJsonException(
+          'El registro no se ha actualizado.', 
+          400,
+          'db_error'
+        );
+      }
+
+      // Borrar imagen anterior
+      if (is_file(UPLOADS . $imagen_vieja)) {
+        unlink(UPLOADS . $imagen_vieja);
+      }
+  
+      $juego = Model::list('juegos', ['id' => $id], 1);
+      
+      json_output(json_build(200, $juego, 'Imagen actualizada con éxito.'));
+
+    } catch (BeeHttpException $e) {
+      http_response_code($e->getStatusCode());
+      json_output(json_build($e->getStatusCode(), [], $e->getMessage()));
+
+    } catch (BeeJsonException $e) {
+      http_response_code($e->getStatusCode());
+      json_output(json_build($e->getStatusCode(), [], $e->getMessage(), $e->getErrorCode()));
+
+    } catch (Exception $e) {
+      http_response_code(400);
+      json_output(json_build(400, [], $e->getMessage()));
+    }
+  }
 }

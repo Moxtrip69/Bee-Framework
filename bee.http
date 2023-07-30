@@ -3,7 +3,7 @@
 ### Extensión requerida: REST Client para VS Code
 ### ----------------------------------------------------
 ### ----------------------------------------------------
-@privateKey = 51362e-0cb1b9-f9c183-17b0a3-1a002e
+@privateKey = 3b8072-90bcb5-941d6e-1e1f50-35efca
 
 ### CARGAR TODOS LOS POSTS
 GET http://localhost:8848/Bee-Framework/api/posts HTTP/1.1

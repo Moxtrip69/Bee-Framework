@@ -11,8 +11,8 @@ date_default_timezone_set('America/Mexico_City');
  * puedes regenerarlas en bee/generate
  * @since 1.1.4
  */
-define('API_PUBLIC_KEY' , '03d427-c4034c-d2dc71-373b10-36da67');
-define('API_PRIVATE_KEY', '51362e-0cb1b9-f9c183-17b0a3-1a002e');
+define('API_PUBLIC_KEY' , 'b3fe21-38f8b9-21276e-bc2903-a2aafc');
+define('API_PRIVATE_KEY', '3b8072-90bcb5-941d6e-1e1f50-35efca');
 
 /**
  * Define si es requerida autenticación para consumir los recursos de la API
