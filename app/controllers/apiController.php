@@ -254,6 +254,7 @@ class apiController extends Controller {
   ///////////////////////////////////////////////////////
   ////////////// CLASE EN VIVO #2 #3   //////////////////
   ///////////////////////////////////////////////////////
+  // GET GET POST PUT DELETE
   function juegos($id = null)
   {
     try {
@@ -296,11 +297,16 @@ class apiController extends Controller {
     }
   }
 
+  // API/juegos/123
   private function get_juego($id)
   {
     // Validación de parámetro id
     if (!is_numeric($id)) {
-      throw new BeeJsonException('Parámetro ID no válido.', 400, 'id_invalid');
+      throw new BeeJsonException(
+        'Parámetro ID no válido.', 
+        400, 
+        'id_invalid'
+      );
     }
 
     // Query a la base de datos
@@ -338,7 +344,11 @@ class apiController extends Controller {
   {
     // Verificar que estemos recibiendo todos los parámetros
     if (!check_posted_data(['titulo','plataforma','precio'], $this->data)) {
-      throw new BeeJsonException('Parámetros faltantes en la petición.', 400, 'missing_params');
+      throw new BeeJsonException(
+        'Parámetros faltantes en la petición.', 
+        400, 
+        'missing_params'
+      );
     }
 
     // Definición
@@ -410,7 +420,7 @@ class apiController extends Controller {
 
     // Lista de tipos MIME válidos para imágenes
     $tipos_permitidos = ['image/jpeg', 'image/png', 'image/gif'];
-    $ext_permitidas   = ['jpg', 'jpeg', 'png', 'gif'];
+    $ext_permitidas   = ['jpg', 'jpeg', 'png', 'gif', 'svg'];
 
     // Verificar si la extensión y el tipo MIME están permitidos
     if (!in_array($imagen_tipo, $tipos_permitidos) || !in_array($imagen_ext, $ext_permitidas)) {
@@ -563,7 +573,7 @@ class apiController extends Controller {
     }
 
     // Borrar de la base de datos
-    if (!Model::remove('juegos', ['id' => $id])) {
+    if (!Model::remove('juegos', ['id' => $id], 1)) {
       throw new BeeJsonException(
         'El registro no se ha borrado.', 
         400, 

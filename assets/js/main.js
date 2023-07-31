@@ -99,21 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
   init_db_test();
   test_ajax();
   test_api();
-
-  // var valorCompra = 300;
-  // var moneda      = 'MXN';
-  // var metadata    = {
-  //   producto     : 'Nombre del producto',
-  //   categoria    : 'Categoría del producto',
-  //   numero_pedido: 'Número de pedido 123',
-  //   // Agrega más metadatos personalizados si es necesario
-  // };
-
-  // fbq('track', 'Purchase', {
-  //   value      : valorCompra,
-  //   currency   : moneda,
-  //   custom_data: metadata
-  // });
+  cargar_juegos();
 
   ////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////
@@ -253,4 +239,13 @@ async function test_api() {
   } else {
     toastr.error(res.msg, 'Hubo un error');
   }
+}
+
+async function cargar_juegos() {
+  const res = await fetch(Bee.url + 'api/juegos', {
+    headers    : { 'Authorization': `Bearer ${Bee.private_key}` },
+    method     : 'GET'
+  }).then(res => res.json());
+
+  console.log(res);
 }
