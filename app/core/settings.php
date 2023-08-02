@@ -42,7 +42,10 @@ define('TOASTR'       , true);  // define si es requerido Toastr para notificaci
 define('WAITME'       , true);  // define si es requerido WaitMe
 define('LIGHTBOX'     , false); // define si es requerido Lightbox
 
-// Motor de templates o plantillas con Twig 3.6
+/**
+ * Motor de templates con Twig 3.6
+ * @since 1.5.7
+ */
 define('USE_TWIG'     , true); // define si será usado Twig para renderizar las vistas
 
 // Versión de la aplicación
