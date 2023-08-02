@@ -1,0 +1,12 @@
+{% extends "includes/template.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+  <h1>¡Hola, {{ name }}!</h1>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur, maxime.</p>
+  <p>{{ get_base_url }}</p>
+  <p>{{ money(123) }}</p>
+  <p>{{ Bienvenido | md5 }}</p>
+  <a href="{{ get_base_url() }}">Función en Twig</a>
+{% endblock %}

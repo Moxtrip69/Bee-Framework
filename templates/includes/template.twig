@@ -1,0 +1,9 @@
+<!-- template.twig -->
+{% include "includes/header.twig" %}
+{% include "includes/navbar.twig" %}
+
+<main class="container py-5">
+  {% block content %}{% endblock %}
+</main>
+
+{% include "includes/footer.twig" %}

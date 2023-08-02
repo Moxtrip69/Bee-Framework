@@ -1,0 +1,11 @@
+<!-- base.twig -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base href="{{ basepath() }}">
+  <title>{% block title %}{{ title }}{% endblock %}</title>
+
+  {% include "includes/styles.twig" %}
+</head>
+<body>

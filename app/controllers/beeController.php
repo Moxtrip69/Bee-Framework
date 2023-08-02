@@ -333,20 +333,13 @@ class beeController extends Controller {
    */
   function twig()
   {
-    // Configurar el entorno de Twig
-    $loader = new \Twig\Loader\FilesystemLoader(VIEWS);
-    $twig   = new \Twig\Environment($loader);
-
     // Datos que se pasan a la plantilla
     $data = [
       'title' => 'Mi Página',
       'name'  => 'Usuario',
     ];
 
-    // Nombre de la plantilla a renderizar
-    $template = 'bee/test.twig';
-
     // Renderizar la plantilla
-    echo $twig->render($template, $data);
+    View::render_twig('test', $data);
   }
 }
