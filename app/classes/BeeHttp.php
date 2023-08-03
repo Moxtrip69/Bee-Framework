@@ -11,6 +11,8 @@
  * Esta clase implementa las funcionalidades anteriores de bee ajaxController
  * en su versión 1.1.3
  * 
+ * @version 1.0.2
+ * 
  */
 class BeeHttp
 {
@@ -156,6 +158,25 @@ class BeeHttp
    */
   private $protocol         = null;
 
+  /**
+   * El dominio de origen de la petición, para autorizar cuando la API se consume
+   * o se trata de acceder desde otro diferente
+   * 
+   * @since 1.5.5
+   *
+   * @var string
+   */
+  private $origin           = '';
+
+  /**
+   * Dominios autorizados para acceder a los recursos
+   * 
+   * @since 1.5.5
+   *
+   * @var array
+   */
+  private $domains          = [];
+
   function __construct($class)
   {
     // Validar el contexto de la petición
@@ -165,24 +186,36 @@ class BeeHttp
     } elseif ($class === 'ajaxController' && defined('DOING_AJAX')) {
       $this->call         = 'ajax';
     } else {
-      throw new BeeHttpException(get_bee_message(0), 403); // 403
+      throw new BeeHttpException(
+        get_bee_message(0), 
+        403
+      ); // 403
     }
 
-    // Tipo de petición solicitada
-    $this->r_type = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : null;
+    // El verbo HTTP utilizado en la petición
+    $this->r_type   = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : null;
 
+    // Protocolo http de la petición
+    $this->protocol = PROTOCOL; // definido en settings.php
+
+    return $this;
+  }
+
+  function process()
+  {
     /**
      * @since 1.1.4
      */
     // Validar que se pase un verbo válido y aceptado
     if(!in_array(strtoupper($this->r_type), $this->accepted_verbs)) {
-      throw new BeeHttpException(get_bee_message(1), 403); // 403
+      throw new BeeHttpException(
+        get_bee_message(1), 
+        403
+      ); // 403
     }
 
-    /**
-     * @since 1.5.5
-     */
-    $this->protocol = PROTOCOL; // definido en settings.php
+    // Se encarga de validar la petición OPTIONS de preflight para CORS
+    $this->handlePreflightRequest();
 
     // Almacenando y determinando las cabeceras recibidas
     $this->get_headers();
@@ -195,11 +228,55 @@ class BeeHttp
 
     // Validar token CSRF
     $this->check_csrf();
-   
+    
     // Validar de la petición post / put / delete el token csrf
     $this->validate_csrf();
+  }
 
-    return $this;
+  function registerDomain($domain)
+  {
+    $this->domains[] = $domain;
+
+    return true;
+  }
+
+  function handlePreflightRequest()
+  {
+    // Establecer las cabeceras CORS para la Preflight Request
+    // Obtener el valor del origen de la solicitud desde el encabezado
+    $this->origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : null;
+
+    // Verificar si el origen está en la lista de dominios permitidos
+    if (in_array($this->origin, $this->domains)) {
+      // Establecer el valor del origen permitido en la cabecera Access-Control-Allow-Origin
+      header('Access-Control-Allow-Origin: ' . $this->origin);
+    } else if(in_array('*', $this->domains)) {
+      // Permitir cualquier origen (dominio) para acceder a tu API
+      header('Access-Control-Allow-Origin: *');
+    } else {
+      // Permitir sólo el dominio base por defecto
+      header('Access-Control-Allow-Origin: ' . URL);
+    }
+
+    // Especificar los métodos HTTP permitidos para acceder a tu API
+    header(sprintf('Access-Control-Allow-Methods: %s', rtrim(implode(',', $this->accepted_verbs), ',')));
+
+    if ($this->authenticate === true) {
+      // Permitir ciertos encabezados personalizados en las solicitudes
+      header('Access-Control-Allow-Headers: Content-Type, Authorization');
+
+      // Indicar si las credenciales (cookies, autenticación HTTP) se pueden incluir en la solicitud desde el cliente
+      header('Access-Control-Allow-Credentials: true');
+
+    } else {
+      header('Access-Control-Allow-Headers: Content-Type');
+    }
+
+    // Verificar si la solicitud es una Preflight Request (OPTIONS)
+    if ($this->r_type === 'OPTIONS') {
+      http_response_code(200);
+      exit(); // Terminar el script después de enviar las cabeceras de respuesta
+    }
   }
 
   /**

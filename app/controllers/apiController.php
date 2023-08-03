@@ -9,6 +9,13 @@
 class apiController extends Controller {
 
   /**
+   * Versión de la API actual de Bee framework
+   *
+   * @var string
+   */
+  private $version = '1.0.0';
+
+  /**
    * Instancia de la clase BeeHttp
    *
    * @var BeeHttp
@@ -51,22 +58,23 @@ class apiController extends Controller {
     // Procesamos la petición que está siendo mandada al servidor
     try {
       $this->http  = new BeeHttp(__CLASS__);
+      $this->http->registerDomain('http://midominio.com'); // Recomiendo cambiar a un dominio específico por seguridad
+      $this->http->process();
       $this->req   = $this->http->get_request();
       $this->data  = $this->req['data'];
       $this->files = $this->req['files'];
     } catch (BeeHttpException $e) {
       http_response_code($e->getStatusCode());
-      json_output(json_build($e->getStatusCode(), null, $e->getMessage()));
+      json_output(json_build($e->getStatusCode(), [], $e->getMessage()));
     } catch (Exception $e) {
       http_response_code(400);
-      json_output(json_build(400, null, $e->getMessage()));
+      json_output(json_build(400, [], $e->getMessage()));
     }
   }
   
   function index()
   {
-    http_response_code(404);
-    json_output(json_build(404, null, 'Ruta no encontrada.'));
+    json_output(json_build(204, [], sprintf('Bienvenido, versión de la API %s', $this->version)));
   }
 
   ///////////////////////////////////////////////////////
