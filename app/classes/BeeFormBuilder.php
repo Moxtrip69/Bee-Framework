@@ -88,6 +88,16 @@ class BeeFormBuilder
   // TODO: Agregar textos de ayuda abajo de los campos por si es requerido
   // TODO: Agregar grupos de inputs en los formularios (para que no se vea tan líneal el formulario)
 
+  /**
+   * Inicialización del formulario
+   *
+   * @param string $name
+   * @param string $id
+   * @param array $classes
+   * @param string $action
+   * @param boolean $post
+   * @param boolean $sendFiles
+   */
   function __construct($name, $id = null, $classes = [], $action = null, $post = true, $sendFiles = false)
   {
     $this->formName = $name;
