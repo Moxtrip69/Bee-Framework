@@ -20,7 +20,7 @@ class apiController extends Controller {
    *
    * @var BeeHttp
    */
-  private $http = null;
+  private $http    = null;
 
   /**
    * La información de la petición completa
@@ -29,7 +29,7 @@ class apiController extends Controller {
    * 
    * @var array
    */
-  private $req  = null;
+  private $req     = null;
 
   /**
    * Información ya formateada conteniendo el cuerpo
@@ -37,7 +37,7 @@ class apiController extends Controller {
    *
    * @var array
    */
-  private $data = [];
+  private $data    = [];
 
   /**
    * Array de archivos enviados en la petición
@@ -45,7 +45,7 @@ class apiController extends Controller {
    *
    * @var array
    */
-  private $files = [];
+  private $files   = [];
 
   function __construct()
   {
@@ -58,7 +58,7 @@ class apiController extends Controller {
     // Procesamos la petición que está siendo mandada al servidor
     try {
       $this->http  = new BeeHttp(__CLASS__);
-      $this->http->registerDomain('http://midominio.com'); // Recomiendo cambiar a un dominio específico por seguridad
+      $this->http->registerDomain('*'); // Recomiendo cambiar a un dominio específico por seguridad
       $this->http->process();
       $this->req   = $this->http->get_request();
       $this->data  = $this->req['data'];
@@ -66,9 +66,11 @@ class apiController extends Controller {
     } catch (BeeHttpException $e) {
       http_response_code($e->getStatusCode());
       json_output(json_build($e->getStatusCode(), [], $e->getMessage()));
+
     } catch (Exception $e) {
       http_response_code(400);
       json_output(json_build(400, [], $e->getMessage()));
+
     }
   }
   
@@ -110,13 +112,13 @@ class apiController extends Controller {
       
     } catch (BeeHttpException $e) {
       http_response_code($e->getStatusCode());
-      json_output(json_build($e->getStatusCode(), null, $e->getMessage()));
+      json_output(json_build($e->getStatusCode(), [], $e->getMessage()));
     } catch (BeeJsonException $e) {
       http_response_code($e->getStatusCode());
-      json_output(json_build($e->getStatusCode(), null, $e->getMessage(), $e->getErrorCode()));
+      json_output(json_build($e->getStatusCode(), [], $e->getMessage(), $e->getErrorCode()));
     } catch (Exception $e) {
       http_response_code(400);
-      json_output(json_build(400, null, $e->getMessage()));
+      json_output(json_build(400, [], $e->getMessage()));
     }
   }
 
@@ -211,7 +213,7 @@ class apiController extends Controller {
       json_output(json_build(200, $post, get_bee_message('updated')));
 
     } catch (Exception $e) {
-      json_output(json_build(400, null, $e->getMessage()));
+      json_output(json_build(400, [], $e->getMessage()));
     }
   }
 
@@ -251,11 +253,31 @@ class apiController extends Controller {
       json_output(json_build(200, $imagen, sprintf('Imagen %s subida con éxito.', $new_name)));
       
     } catch (BeeHttpException $e) {
-      json_output(json_build($e->getStatusCode(), null, $e->getMessage()));
+      json_output(json_build($e->getStatusCode(), [], $e->getMessage()));
     } catch (BeeJsonException $e) {
-      json_output(json_build($e->getStatusCode(), null, $e->getMessage(), $e->getErrorCode()));
+      json_output(json_build($e->getStatusCode(), [], $e->getMessage(), $e->getErrorCode()));
     } catch (Exception $e) {
-      json_output(json_build(400, null, $e->getMessage()));
+      json_output(json_build(400, [], $e->getMessage()));
+    }
+  }
+
+  function form_builder()
+  {
+    try {
+      $this->http->accept(['get','post','put','delete']);
+      $this->http->authenticate_request();
+
+      json_output(json_build(200, array_merge($this->data, $this->files), 'Información recibida con éxito.'));
+      
+    } catch (BeeHttpException $e) {
+      http_response_code($e->getStatusCode());
+      json_output(json_build($e->getStatusCode(), [], $e->getMessage()));
+    } catch (BeeJsonException $e) {
+      http_response_code($e->getStatusCode());
+      json_output(json_build($e->getStatusCode(), [], $e->getMessage(), $e->getErrorCode()));
+    } catch (Exception $e) {
+      http_response_code(400);
+      json_output(json_build(400, [], $e->getMessage()));
     }
   }
 }

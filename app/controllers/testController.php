@@ -17,6 +17,71 @@ class testController extends Controller {
 
   public function index()
   {
+    // Nuevo formulario
+    $form = new BeeFormBuilder('test-form', 'test-form', ['una-clase'], 'test/post_test', true, true);
+
+    // Agregar inputs personalizados (puede servir para intectar el token csrf al formulario)
+    $form->addCustomFields(insert_inputs());
+
+    // Ocultos
+    $form->addHiddenField('id', 'El ID del usuario', ['form-control'], 'id', true, 123);
+
+    // Nombre y apellidos
+    $form->addTextField('nombre', 'Tu nombre', ['form-control'], 'nombre', true, 'Pancho');
+    $form->addTextField('apellido', 'Tu apellido', ['form-control'], 'apellido', true, 'Villa');
+
+    // Correo electrónico
+    $form->addEmailField('email', 'Correo electrónico', ['form-control'], 'email', true, 'pancho@doe.com');
+
+    // Contraseña
+    $form->addPasswordField('contraseña', 'Tu contraseña', ['form-control'], 'password', true);
+
+    // Seleccionable
+    $options = [
+      'option1' => 'Opción 1',
+      'option2' => 'Opción 2',
+      'option3' => 'Opción 3',
+      'option4' => 'Opción 4'
+    ];
+    $form->addSelectField('país', 'Tu país', $options, ['form-select'], 'pais', true, 'option2');
+
+    // Radio y checkbox
+    $form->addRadioField('aceptar', 'Aceptas los términos y condiciones', 'si', ['form-check-input'], 'aceptar', false, true);
+    $form->addCheckboxField('recordar', 'Recordar mis datos', 'si', ['form-check-input'], 'recordar', false, true);
+
+    // Textarea
+    $form->addTextareaField('contenido', 'Contenido de la entrada', 10, 5, ['form-control'], 'contenido', true, 'Lorem ipsum dolor sit amet.');
+
+    // Archivos
+    $form->addFileField('imagen', 'Tu imagen de perfil', ['form-control'], 'imagen', true);
+    $form->addFileField('avatar', 'Tu avatar', ['form-control'], 'avatar');
+
+    // Sliders
+    $form->addSliderField('valoración', 'Tu calificación', 1, 5, 1, ['form-range'], 'valoracion', true);
+
+    // Número
+    $form->addNumberField('edad', 'Tu edad', 15, 99, 1, 18, ['form-control'], 'edad', true);
+
+    // Color
+    $form->addColorField('color', 'Tu color favorito', ['form-control form-control-color'], 'color', false, 'fff');
+
+    // Agregando botones
+    $form->addButton('submit', 'submit', 'Enviar formulario', ['btn btn-success me-2'], 'submit-button');
+
+    // Fechas
+    $form->addDateField('fecha', 'La fecha', date('Y-m-d'), ['form-control'], 'fecha', true);
+
+    $html   = $form->getFormHtml(); // El formulario en sí
+    $script = $form->generateFetchScript(URL . 'api/form-builder', API_PRIVATE_KEY); // Script generado automaticamente para enviar los datos con AJAX
+
+    $data   =
+    [
+      'title'  => 'Vista de prueba',
+      'form'   => $html,
+      'script' => $script
+    ];
+
+    View::render('index', $data);
   }
   
   public function db_user()

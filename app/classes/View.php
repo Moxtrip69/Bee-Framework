@@ -89,7 +89,20 @@ class View {
       $this->templateEngine = 'twig';
       $this->twigLoader     = new FilesystemLoader($this->baseDir);
       $this->twigIntance    = new Environment($this->twigLoader);
+      $this->registerFunctions();
     }
+  }
+
+  private function registerFunctions()
+  {
+    // Todas las funciones definidas y cargadas en Bee framework
+    $functions = get_defined_functions();
+    foreach ($functions['user'] as $function) {
+      $twigFunction = new TwigFunction($function, $function);
+      $this->twigIntance->addFunction($twigFunction);
+    }
+
+    return true;
   }
 
   /**
@@ -152,6 +165,8 @@ class View {
       die("Hay un error fatal: " . $e->getMessage());
     } catch (SyntaxError $e) {
       die("Hay un error de sintaxis: " . $e->getMessage());
+    } catch (LogicException $e) {
+      die("Hay un error de lógica: " . $e->getMessage());
     }
   }
 
@@ -176,19 +191,19 @@ class View {
    */
   function getTwigFunctions()
   {
-    $this->twigIntance->addFunction(
-      new TwigFunction('get_base_url', 'get_base_url')
-    );
+    // $this->twigIntance->addFunction(
+    //   new TwigFunction('get_base_url', 'get_base_url')
+    // );
 
-    $this->twigIntance->addFunction(
-      new TwigFunction('money', 'money')
-    );
+    // $this->twigIntance->addFunction(
+    //   new TwigFunction('money', 'money')
+    // );
 
-    $this->twigIntance->addFunction(
-      new TwigFunction('basepath', function() {
-        return BASEPATH;
-      })
-    );
+    // $this->twigIntance->addFunction(
+    //   new TwigFunction('basepath', function() {
+    //     return BASEPATH;
+    //   })
+    // );
   }
 
   /**
