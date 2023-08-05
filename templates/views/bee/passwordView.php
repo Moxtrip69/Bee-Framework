@@ -9,7 +9,7 @@
   </div>
   <div class="row">
     <div class="col-12 text-center mb-5">
-      <h2><a href="<?php echo URL; ?>"><img src="<?php echo get_bee_logo(); ?>" alt="Bee framework" class="img-fluid" style="width: 100px;"></a></h2>
+      <h2><a href="<?php echo get_base_url(); ?>"><img src="<?php echo get_bee_logo(); ?>" alt="Bee framework" class="img-fluid" style="width: 100px;"></a></h2>
     </div>
 
     <div class="col-12">

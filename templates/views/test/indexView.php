@@ -3,7 +3,7 @@
 <div class="container">
   <div class="row">
     <div class="col-6 offset-xl-3 py-5">
-      <a href="<?php echo URL; ?>"><img src="<?php echo get_bee_logo(); ?>" alt="<?php echo get_bee_name(); ?>" class="img-fluid" style="width: 200px;"></a>
+      <a href="<?php echo get_base_url(); ?>"><img src="<?php echo get_bee_logo(); ?>" alt="<?php echo get_bee_name(); ?>" class="img-fluid" style="width: 200px;"></a>
       <h2 class="mt-5 mb-3"><span class="text-warning">Bee</span> framework</h2>
       <!-- contenido -->
       <div class="border rounded shadow p-3">

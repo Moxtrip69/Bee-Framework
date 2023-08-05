@@ -8,7 +8,7 @@
   </div>
   <div class="row">
     <div class="col-xl-6 col-12 text-center offset-xl-3 py-5">
-      <a href="<?php echo URL; ?>">
+      <a href="<?php echo get_base_url(); ?>">
         <img src="<?php echo get_logo() ?>" alt="<?php echo get_sitename(); ?>" class="img-fluid" style="width: 150px;">
       </a>
 

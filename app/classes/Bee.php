@@ -6,13 +6,13 @@ class Bee {
    * Propiedades del framework
    * Desarrollado por el equipo de Joystick
    * Sugerencias o pullrequest a:
-   * hellow@joystick.com.mx
+   * soporte@joystick.com.mx
    * 
    * Roberto Orozco / roborozco@joystick.com.mx
    * Yoshio Mrtz / yosmartinez@joystick.com.mx
    * Jorge Maldonado / jormaldonado@joystick.com.mx
    * 
-   * Creado en el curso de udemy:
+   * Creado en nuestro curso dentro de la Academia:
    * https://www.academy.joystick.com.mx/bundles/pack-desarrollo-web-full-stack
    * 
    * ¡Gracias por todo su apoyo!
@@ -123,26 +123,26 @@ class Bee {
    * Método para cargar la configuración del sistema
    *
    * @return void
-   */ 
+   */
   private function init_load_config()
   {
     // Carga del archivo de settings inicialmente para establecer las constantes personalizadas
     // desde un comienzo en la ejecución del sitio
     $file = 'bee_config.php';
-    if(!is_file('app/config/'.$file)) {
+    if (!is_file('app/config/' . $file)) {
       die(sprintf('El archivo %s no se encuentra, es requerido para que el sitio funcione.', $file));
     }
 
     // Cargando el archivo de configuración
-    require_once 'app/config/'.$file;
-    
+    require_once 'app/config/' . $file;
+
     $file = 'settings.php';
-    if(!is_file('app/core/'.$file)) {
+    if (!is_file('app/core/' . $file)) {
       die(sprintf('El archivo %s no se encuentra, es requerido para que el sitio funcione.', $file));
     }
 
     // Cargando el archivo de configuración
-    require_once 'app/core/'.$file;
+    require_once 'app/core/' . $file;
 
     return;
   }
@@ -170,20 +170,20 @@ class Bee {
   private function init_load_functions()
   {
     $file = 'bee_core_functions.php';
-    if(!is_file(FUNCTIONS.$file)) {
+    if (!is_file(FUNCTIONS . $file)) {
       die(sprintf('El archivo %s no se encuentra, es requerido para que el sitio funcione.', $file));
     }
 
     // Cargando el archivo de funciones core
-    require_once FUNCTIONS.$file;
+    require_once FUNCTIONS . $file;
 
     $file = 'bee_custom_functions.php';
-    if(!is_file(FUNCTIONS.$file)) {
+    if (!is_file(FUNCTIONS . $file)) {
       die(sprintf('El archivo %s no se encuentra, es requerido para que el sitio funcione.', $file));
     }
 
     // Cargando el archivo de funciones custom
-    require_once FUNCTIONS.$file;
+    require_once FUNCTIONS . $file;
 
     return;
   }
@@ -539,7 +539,7 @@ class Bee {
       call_user_func_array([$this->controller, $this->current_method], $this->params);
     }
 
-    return true; // Línea final todo sucede entre esta línea y el comienzo
+    return true; // Línea final, todo sucede entre esta línea y el comienzo
   }
 
   /**

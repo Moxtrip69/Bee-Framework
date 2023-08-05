@@ -20,31 +20,45 @@ class TableSchema
     $this->charset    = $charset !== null ? $charset : $this->charset;
   }
 
+  /**
+   * Undocumented function
+   *
+   * @param String $column_name
+   * @param String $type
+   * @param [type] $value
+   * @param boolean $nulleable
+   * @param string $default_value
+   * @param boolean $pk
+   * @param boolean $auto_inc
+   * @return void
+   */
   public function add_column(String $column_name, String $type, $value = null, Bool $nulleable = true, $default_value = 'null', Bool $pk = false, Bool $auto_inc = false)
   {
     // type` varchar(30) DEFAULT NULL,
-    $this->column = sprintf('%s %s %s %s', 
-    sprintf($this->ph, $column_name),
-    $this->validate_datatype($type, $value),
-    $nulleable === true ? 'NULL' : 'NOT NULL',
-    $this->validate_default_value($default_value)
+    $this->column = sprintf(
+      '%s %s %s %s', 
+      sprintf(
+        $this->ph, 
+        $column_name
+      ),
+      $this->validate_datatype($type, $value),
+      $nulleable === true ? 'NULL' : 'NOT NULL',
+      $this->validate_default_value($default_value)
     );
 
     // Si es primary key
     if ($pk === true) {
       $this->pk[]    = $column_name;
-      $this->column .= sprintf(' PRIMARY KEY');
+      $this->column .= ' PRIMARY KEY';
     }
 
     // Autoincrement
     if ($pk === true && $auto_inc === true) {
-      $this->column .= sprintf(' AUTO_INCREMENT');
+      $this->column .= ' AUTO_INCREMENT';
     }
 
     // Se anexa a la lista de columnas del query
     $this->columns[] = $this->column;
-
-    return $this->columns;
   }
 
   private function validate_datatype($type, $value = null)
@@ -53,7 +67,7 @@ class TableSchema
 
     switch (strtolower($type)) {
       case 'varchar':
-        $default = 100;
+        $default = 255;
         $min     = 1;
         $max     = 255;
 
@@ -141,10 +155,6 @@ class TableSchema
 
   private function build()
   {
-    if (empty($this->table_name)) {
-      throw new Exception('Ingresa un nombre de tabla válido.');
-    }
-
     if (empty($this->columns)) {
       throw new Exception('No hay columnas para crear la tabla.');
     }

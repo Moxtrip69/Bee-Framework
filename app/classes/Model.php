@@ -2,7 +2,6 @@
 
 class Model extends Db {
 
-
   /**
    * Lista registros de la base de datos o un solo registro
    *
@@ -16,6 +15,7 @@ class Model extends Db {
 		// It creates the col names and values to bind
 		$cols_values = "";
 		$limits      = "";
+		
 		if (!empty($params)) {
 			$cols_values .= "WHERE";
 			foreach ($params as $key => $value) {
@@ -48,15 +48,17 @@ class Model extends Db {
 	**/
 	public static function add($table, $params)
 	{	
-		$cols = "";
+		$cols         = "";
 		$placeholders = "";
+		
 		foreach ($params as $key => $value) {
-			$cols .= "{$key} ,";
+			$cols         .= "{$key} ,";
 			$placeholders .= ":{$key} ,";
 		}
-		$cols = substr($cols, 0 , -1);
+
+		$cols         = substr($cols, 0 , -1);
 		$placeholders = substr($placeholders, 0 , -1);
-		$stmt = 
+		$stmt         = 
 		"INSERT INTO {$table}
 		({$cols})
 		VALUES
@@ -67,9 +69,8 @@ class Model extends Db {
 		if ($id = parent::query($stmt , $params)) {
 			return $id;
 		}
-		else {
-			return false;
-		}
+
+		return false;
   }
   
   /**
@@ -92,20 +93,16 @@ class Model extends Db {
 			foreach ($haystack as $key => $value) {
 				$col .= " $key = :$key AND";
 			}
+
 			$col = substr($col, 0, -3);
+
 		} else {
 			foreach ($haystack as $key => $value) {
 				$col .= " $key = :$key";
 			}
 		}
 
-		$stmt = 
-		"UPDATE $table
-		SET
-		$placeholders
-		WHERE
-		$col
-		";
+		$stmt = "UPDATE $table SET $placeholders WHERE $col";
 
 		// Manda el statement a query()
 		if (!parent::query($stmt , array_merge($params,$haystack))) {

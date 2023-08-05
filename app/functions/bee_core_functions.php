@@ -319,34 +319,34 @@ function build_url($url , $params = [] , $redirection = true, $csrf = true) {
  * @param boolean $output
  * @return mixed
  */
-function logger($message , $type = 'debug' , $output = false) {
-  $types = ['debug','import','info','success','warning','error'];
+function logger($message, $type = 'debug', $output = false) {
+	$types = ['debug', 'import', 'info', 'success', 'warning', 'error'];
 
-  if(!in_array($type , $types)){
-    $type = 'debug';
-  }
+	if (!in_array($type, $types)) {
+		$type = 'debug';
+	}
 
-  $now_time = date("d-m-Y H:i:s");
-
-	$message = is_array($message) || is_object($message) ? print_r($message, true) : $message;
-  $message = "[".strtoupper($type)."] $now_time - $message";
+	$now_time = date("d-m-Y H:i:s");
+	$message  = is_array($message) || is_object($message) ? print_r($message, true) : $message;
+	$message  = "[" . strtoupper($type) . "] $now_time - $message";
 
 	if (!is_dir(LOGS)) {
 		mkdir(LOGS);
 	}
 
-  if(!$fh = fopen(LOGS."bee_log.log", 'a')) { 
-    error_log(sprintf('Can not open this file on %s', LOGS.'bee_log.log'));
-    return false;
-  }
+	$filename = is_local() ? "dev_log.log" : "bee_log.log";
+	if (!$fh = fopen(LOGS . $filename, 'a')) {
+		error_log(sprintf('Can not open this file on %s', LOGS . 'bee_log.log'));
+		return false;
+	}
 
-  fwrite($fh, "$message\n");
+	fwrite($fh, "$message\n");
 	fclose($fh);
-	if($output){
+	if ($output) {
 		print "$message\n";
 	}
 
-  return true;
+	return true;
 }
 
 /**
