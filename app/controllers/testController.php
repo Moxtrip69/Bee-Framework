@@ -15,7 +15,21 @@ class testController extends Controller {
     }
   }
 
-  public function index()
+  function index()
+  {
+  }
+
+  function three()
+  {
+    $data =
+    [
+      'title' => 'Threejs'
+    ];
+
+    View::render('three', $data);
+  }
+
+  function forms()
   {
     // Nuevo formulario
     $form = new BeeFormBuilder('test-form', 'test-form', ['una-clase'], 'test/post_test', true, true);
@@ -84,7 +98,7 @@ class testController extends Controller {
     View::render('index', $data);
   }
   
-  public function db_user()
+  function db_user()
   {
     try {
       $sql   = 'SELECT * FROM pruebas';
@@ -110,7 +124,7 @@ class testController extends Controller {
     }
   }
   
-  public function create_table()
+  function create_table()
   {
     try {
       // Si es requerido podemos hacer un drop table if exists
