@@ -50,7 +50,7 @@ define('USE_TWIG'     , false); // define si será usado Twig para renderizar la
 
 // Versión de la aplicación
 define('BEE_NAME'    , 'Bee Framework');  // Nombre del framework
-define('BEE_VERSION' , '1.5.5');          // Versión del framework
+define('BEE_VERSION' , '1.5.8');          // Versión del framework
 define('BEE_LOGO'    , 'bee_logo.png');   // Nombre del archivo del logotipo de Bee Framework
 
 // Datos de la empresa / negocio / sistema
