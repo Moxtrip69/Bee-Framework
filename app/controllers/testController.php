@@ -17,6 +17,26 @@ class testController extends Controller {
 
   public function index()
   {
+    $data =
+    [
+      'title' => 'Pruebas controladas',
+      'tests' => 
+      [
+        ['title' => 'Prueba de Three.js', 'url' => 'test/three']
+      ]
+    ];
+
+    View::render('index', $data);
+  }
+
+  function three()
+  {
+    $data =
+    [
+      'title' => 'Ejemplo de Three.js'
+    ];
+
+    View::render('three', $data);
   }
   
   public function db_user()

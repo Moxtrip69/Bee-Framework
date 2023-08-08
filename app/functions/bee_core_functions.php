@@ -1465,6 +1465,7 @@ function bee_obj_default_config() {
 		'assets'        => ASSETS,
 		'images'        => IMAGES,
 		'uploaded'      => UPLOADED,
+		'root'          => ROOT,
 		'php_version'   => phpversion(),
 		'css_framework' => CSS_FRAMEWORK,
 		'toastr'        => TOASTR,

@@ -21,5 +21,11 @@
 <!-- Estilos registrados manualmente -->
 <?php echo load_styles(); ?>
 
+<!-- Three js -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+
 <!-- Estilos personalizados deben ir en main.css o abajo de esta línea -->
-<link rel="stylesheet" href="<?php echo CSS . 'main.css?v='.get_asset_version(); ?>">
+<link rel="stylesheet" href="<?php echo CSS . 'main.css?v=' . get_asset_version(); ?>">
