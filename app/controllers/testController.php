@@ -19,16 +19,6 @@ class testController extends Controller {
   {
   }
 
-  function three()
-  {
-    $data =
-    [
-      'title' => 'Threejs'
-    ];
-
-    View::render('three', $data);
-  }
-
   function forms()
   {
     // Nuevo formulario
