@@ -1621,6 +1621,14 @@ function is_local() {
 }
 
 /**
+ * Validación del sistema si está en modo de pruebas
+ * para transacciones o pasarelas de pago
+ */
+function is_sandbox() {
+	return SANDBOX === true;
+}
+
+/**
  * Carga las hojas de estilos con CDN del framework css a utilizar
  * definido en settings.php
  *
@@ -1726,6 +1734,22 @@ function get_jquery() {
 
 	$placeholder = '<script src="%s"></script>';
 	$cdn         = 'https://code.jquery.com/jquery-3.6.0.min.js';
+
+	return JQUERY === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
+}
+
+/**
+ * Carga jQuery easing de ser necesario
+ *
+ * @return string
+ */
+function get_jquery_easing() {
+	if (!defined('JQUERY')) {
+		return false;
+	}
+
+	$placeholder = '<script src="%s"></script>';
+	$cdn         = 'https://cdn.jsdelivr.net/npm/jquery.easing@1.4.1/jquery.easing.min.js';
 
 	return JQUERY === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
 }
@@ -2489,4 +2513,42 @@ function normalize_string($input, $remove_internal_spaces = false, $remove_speci
   }
 
   return $normalized;
+}
+
+/**
+ * Regresa el valor de la constante BASEPATH
+ *
+ * @return string
+ */
+function get_basepath() {
+	return BASEPATH;
+}
+
+/**
+ * Regresa el valor del lenguaje por defecto del sistema, configurado en settings.php
+ *
+ * @return string
+ */
+function get_site_lang() {
+	return SITE_LANG;
+}
+
+/**
+ * Regresa el valor del charset por defecto del sistema, configurado en settings.php
+ *
+ * @return void
+ */
+function get_site_charset() {
+	return SITE_CHARSET;
+}
+
+function get_referer_url($fallbackUrl = null)
+{
+	// Verificar si el encabezado 'Referer' está presente
+	if (isset($_SERVER['HTTP_REFERER'])) {
+		// Obtener la URL de referencia
+		return $_SERVER['HTTP_REFERER'];
+	} else {
+		return $fallbackUrl === null ? get_base_url() : $fallbackUrl;
+	}
 }

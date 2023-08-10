@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="<?php echo SITE_LANG; ?>">
+<html lang="<?php echo get_site_lang(); ?>">
 
 <head>
   <!-- Agregar basepath para definir a partir de donde se deben generar los enlaces y la carga de archivos -->
-  <base href="<?php echo BASEPATH; ?>">
+  <base href="<?php echo get_basepath(); ?>">
 
   <!-- Charset del sitio -->
-  <meta charset="<?php echo SITE_CHARSET; ?>">
+  <meta charset="<?php echo get_site_charset(); ?>">
 
   <!-- Título general del sitio -->
   <title><?php echo isset($d->title) ? $d->title . ' - ' . get_sitename() : 'Bienvenido - ' . get_sitename(); ?></title>

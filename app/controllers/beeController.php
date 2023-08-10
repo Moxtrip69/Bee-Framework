@@ -269,15 +269,7 @@ class beeController extends Controller {
    */
   function perfil()
   {
-    parent::auth();
-
-    $data =
-    [
-      'title' => 'Perfil de usuario',
-      'user'  => User::profile()
-    ];
-
-    View::render('perfil', $data);
+    Redirect::to('admin/perfil');
   }
 
   /**

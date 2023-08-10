@@ -1,3 +1,4 @@
+<!-- vista deprecada -->
 <?php require_once INCLUDES.'inc_header.php'; ?>
 
 <div class="container">

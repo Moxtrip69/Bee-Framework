@@ -5,7 +5,7 @@ class loginController extends Controller {
   {
     if (Auth::validate()) {
       Flasher::new('Ya hay una sesión abierta.');
-      Redirect::to('bee/perfil');
+      Redirect::to('admin/perfil');
     }
   }
 
@@ -17,7 +17,7 @@ class loginController extends Controller {
       'padding' => '0px'
     ];
 
-    View::render('index', $data);
+    View::render('login', $data);
   }
 
   function post_login()
@@ -79,7 +79,7 @@ class loginController extends Controller {
       }
       
       // Redirección a la página inicial después de log in
-      Redirect::to(DEFAULT_CONTROLLER);
+      Redirect::to('admin');
 
     } catch (Exception $e) {
       Flasher::error($e->getMessage());

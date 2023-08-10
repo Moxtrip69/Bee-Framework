@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="<?php echo SITE_LANG; ?>">
+<html lang="<?php echo get_site_lang(); ?>">
+
 <head>
   <!-- Agregar basepath para definir a partir de donde se deben generar los enlaces y la carga de archivos -->
-  <base href="<?php echo BASEPATH; ?>">
+  <base href="<?php echo get_basepath(); ?>">
 
   <!-- Charset del sitio -->
-  <meta charset="<?php echo SITE_CHARSET; ?>">
-  
+  <meta charset="<?php echo get_site_charset(); ?>">
+
   <!-- Título general del sitio -->
-  <title><?php echo isset($d->title) ? $d->title.' - '.get_sitename() : 'Bienvenido - '.get_sitename(); ?></title>
+  <title><?php echo isset($d->title) ? $d->title . ' - ' . get_sitename() : 'Bienvenido - ' . get_sitename(); ?></title>
 
   <!-- Meta viewport requerido para responsividad -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,9 +19,9 @@
 
   <!-- Favicon del sitio -->
   <?php echo get_favicon(); ?>
-  
+
   <!-- inc_styles.php -->
-  <?php require_once INCLUDES.'inc_styles.php'; ?>
+  <?php require_once INCLUDES . 'inc_styles.php'; ?>
 
   <!-- Carga de meta tags -->
   <?php echo get_page_og_meta_tags(); ?>
