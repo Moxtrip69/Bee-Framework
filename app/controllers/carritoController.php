@@ -7,13 +7,20 @@
  */
 class carritoController extends Controller {
 
+  private $cartHandler;
+  private $cart;
+
   function __construct()
   {
     // Validación de sesión de usuario, descomentar si requerida
-    if (!Auth::validate()) {
-      Flasher::new('Debes iniciar sesión primero.', 'danger');
-      Redirect::to('login');
-    }
+    // if (!Auth::validate()) {
+    //   Flasher::new('Debes iniciar sesión primero.', 'danger');
+    //   Redirect::to('login');
+    // }
+
+    // Carga del carrito de compras
+    $this->cartHandler = new BeeCartHandler();
+    $this->cart        = $this->cartHandler->loadCart();
 
     // Verificar si existe un cupón de descuento en la URL
     $couponCode = isset($_GET["couponCode"]) ? clean(strtoupper($_GET["couponCode"])) : null;
@@ -26,9 +33,8 @@ class carritoController extends Controller {
         // Crear el cupón de descuento como ejemplo
         $coupon      = new BeeCartCoupon($couponCode, 'Apoyo educativo de la Academia.', 50, 'percentage', strtotime('+5 days'));
 
-        // Inicializar el carrito y agregar el cupón
-        $cartHandler = new BeeCartHandler();
-        $cartHandler->addCoupon($coupon);
+        // Agregar el cupón
+        $this->cartHandler->addCoupon($coupon);
 
         // Informar al usuario
         Flasher::success(sprintf('Cupón <b>%s</b> aplicado con éxito en tu carrito.', $couponCode));
@@ -39,11 +45,10 @@ class carritoController extends Controller {
   
   function index()
   {
-    $cart = new BeeCartHandler();
     $data = 
     [
       'title' => 'Carrito de compras',
-      'cart'  => $cart->loadCart()
+      'cart'  => $this->cartHandler->loadCart()
     ];
     
     // Descomentar vista si requerida
@@ -76,9 +81,8 @@ class carritoController extends Controller {
       // Agregar al carrito de compras
       $item = new BeeCartItem($itemId, $product['name'], $price, $quantity, $product['description'], $product['image']);
 
-      // Inicializar carrito
-      $cart = new BeeCartHandler();
-      $cart->addItem($item);
+      // Agregar el item
+      $this->cartHandler->addItem($item);
       
       Flasher::success(sprintf('Producto <b>%s</b> agregado al carrito de compras con éxito.', $product['name']));
       Redirect::back('carrito');
@@ -98,8 +102,7 @@ class carritoController extends Controller {
       }
 
       // Inicializar el carrito de compras
-      $cartHandler = new BeeCartHandler();
-      $cart        = $cartHandler->loadCart();
+      $cart        = $this->cartHandler->loadCart();
       $items       = $cart['items'];
 
       // Verificar items en el carrito
@@ -108,7 +111,7 @@ class carritoController extends Controller {
       }
       
       // Remover del carrito de compras
-      if ($cartHandler->removeItem($product['id']) === false) {
+      if ($this->cartHandler->removeItem($product['id']) === false) {
         throw new Exception('Hubo un problema al remover el producto de tu carrito.');
       }
 
@@ -124,9 +127,8 @@ class carritoController extends Controller {
   function vaciar()
   {
     try {
-      // Inicializar carrito
-      $cart = new BeeCartHandler();
-      $cart->emptyCart();
+      // Vaciar los items del carrito de compras
+      $this->cartHandler->emptyCart();
       
       Flasher::success('Tu carrito de compras ha sido vaciado con éxito.');
       Redirect::to('carrito');

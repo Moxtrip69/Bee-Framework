@@ -12,23 +12,34 @@
           <a class="nav-link" aria-current="page" href="bee">Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.5.5" target="_blank">Documentación</a>
+          <a class="nav-link" aria-current="page" href="tienda">Tienda</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.5.5#v-155" target="_blank">Changelog</a>
+          <a class="nav-link" aria-current="page" href="carrito">Carrito</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="utilidades" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Utilidades
+            Herramientas
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="utilidades">
+            <li><a class="dropdown-item" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.5.8#v-158" target="_blank">Changelog</a></li>
+            <li><a class="dropdown-item" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.5.8" target="_blank">Documentación</a></li>
             <li><a class="dropdown-item" href="bee/info">Bee info</a></li>
-            <li><a class="dropdown-item" href="bee/password">Generar Password</a></li>
-            <li><a class="dropdown-item" href="<?php echo build_url('bee/generate-user'); ?>">Generar Usuario</a></li>
+            <li><a class="dropdown-item" href="bee/password">Generar contraseña</a></li>
+            <li><a class="dropdown-item" href="<?php echo build_url('bee/generate-user'); ?>">Crear nuevo usuario</a></li>
             <li><a class="dropdown-item" href="<?php echo build_url('bee/regenerate'); ?>">Regenerar API keys</a></li>
             <li><a class="dropdown-item" href="https://bit.ly/cursos-gratuitos-ajs">Cursos Gratuitos</a></li>
           </ul>
         </li>
+        <?php if (is_logged()): ?>
+          <li class="nav-item">
+            <a class="nav-link" href="admin">Administración</a>
+          </li>
+        <?php else: ?>
+          <li class="nav-item ms-2">
+            <a class="btn btn-primary" href="login">Ingresar</a>
+          </li>
+        <?php endif; ?>
       </ul>
     </div>
   </div>

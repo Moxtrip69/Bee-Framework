@@ -1,7 +1,7 @@
 <?php
 /**
  * Plantilla general de controladores
- * @version 1.0.5
+ * @version 1.0.1
  *
  * Controlador de [[REPLACE]]
  */
@@ -9,12 +9,10 @@ class [[REPLACE]]Controller extends Controller {
   function __construct()
   {
     // Validación de sesión de usuario, descomentar si requerida
-    /**
-    if (!Auth::validate()) {
-      Flasher::new('Debes iniciar sesión primero.', 'danger');
-      Redirect::to('login');
-    }
-    */
+    // if (!Auth::validate()) {
+    //  Flasher::new('Debes iniciar sesión primero.', 'danger');
+    //  Redirect::to('login');
+    // }
   }
   
   function index()
@@ -26,7 +24,7 @@ class [[REPLACE]]Controller extends Controller {
     ];
     
     // Descomentar vista si requerida
-    View::render('index', $data);
+    View::render('index', $data, '[[ENGINE]]');
   }
 
   function ver($id)

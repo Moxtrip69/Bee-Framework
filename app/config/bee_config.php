@@ -20,7 +20,7 @@ define('DB_HOST'      , 'localhost');
 define('DB_NAME'      , '___REMOTE DB___');
 define('DB_USER'      , '___REMOTE DB___');
 define('DB_PASS'      , '___REMOTE DB___');
-define('DB_CHARSET'   , '___REMOTE CHARTSET___');
+define('DB_CHARSET'   , '___REMOTE CHARSET___');
 
 // Para uso de Google Maps
 define('GMAPS'        , '__TOKEN__');

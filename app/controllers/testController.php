@@ -1,5 +1,5 @@
 <?php
-
+use Cocur\Slugify\Slugify;
 /**
  * Plantilla general de controladores
  * Versión 1.0.2
@@ -17,38 +17,7 @@ class testController extends Controller {
 
   function index()
   {
-    // session_destroy();
-    $item1 = new BeeCartItem(1, 'Pack de desarrollo web Full Stack', 1000, 1, '', '', true);
-    $item2 = new BeeCartItem(2, 'Emprendepack', 50);
-    $item3 = new BeeCartItem(3, 'Súper pack de diseños', 200);
-    $item4 = new BeeCartItem(4, 'Mascarilla de avena', 10);
-
-    $customer = new BeeCartCustomer('Roberto', 'Orozco', 'jslocal@localhost.com', '5522334455');
-    $customer->setLine1('Oriente 345 #123');
-    $customer->setCity('Merced Balbuena');
-    $customer->setState('CDMX');
-    $customer->setCountry('México');
-    $customer->setZp('15810');
-
-    $shipping = new BeeCartShipping('Fedex', 125, strtotime('+3 days'));
-
-    $coupon = new BeeCartCoupon('APOYOEDU2023', 'Apoyo educativo de la Academia de Joystick.', 70, 'percentage', strtotime('+10 days'));
-
-    $cart  = new BeeCartHandler();
-    // $cart->addItem($item1);
-    // $cart->addItem($item2);
-    // $cart->addItem($item3);
-    // $cart->addItem($item4);
-    $cart->addCustomer($customer);
-
-    $cart->addShipping($shipping);
-
-    $cart->addCoupon($coupon);
-
-    // $cart->removeItem(2);
-
-    // $cart->restartCart();
-    debug($cart->loadCart());
+    
   }
 
   function menus()

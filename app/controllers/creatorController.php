@@ -41,6 +41,7 @@ class creatorController extends Controller {
     $filename = str_replace('.php', '', $filename);
     $keyword  = 'Controller';
     $g_vista  = isset($_POST["generar-vista"]) ? true : false;
+    $twig     = isset($_POST["usar-twig"]) ? true : false;
     $template = MODULES . 'bee' . DS . 'controllerTemplate.txt';
 
     // Validar que sea un string válido
@@ -56,8 +57,8 @@ class creatorController extends Controller {
     }
 
     // Validar la existencia del controlador para prevenir remover un archivo existente
-    if (is_file(CONTROLLERS.$filename.$keyword.'.php')) {
-      Flasher::new(sprintf('Ya existe el controlador %s.', $filename.$keyword), 'danger');
+    if (is_file(CONTROLLERS . $filename . $keyword . '.php')) {
+      Flasher::new(sprintf('Ya existe el controlador %s.', $filename . $keyword), 'danger');
       Redirect::back();
     }
 
@@ -66,13 +67,14 @@ class creatorController extends Controller {
       Flasher::new(sprintf('No existe la plantilla %s.', $template), 'danger');
       Redirect::back();
     }
-    
+
     // Cargar contenido del archivo
     $php = @file_get_contents($template);
     $php = str_replace('[[REPLACE]]', $filename, $php);
+    $php = str_replace('[[ENGINE]]', $twig ? 'twig' : 'bee', $php);
 
     // Generar el archivo del controlador
-    if (file_put_contents(CONTROLLERS . $filename . $keyword . '.php', $php) === false)  {
+    if (file_put_contents(CONTROLLERS . $filename . $keyword . '.php', $php) === false) {
       Flasher::new(sprintf('Ocurrió un problema al crear el controlador %s.', $template), 'danger');
       Redirect::back();
     }
@@ -84,28 +86,14 @@ class creatorController extends Controller {
 
     // Generar la vista solo si así se solicita
     if ($g_vista === true) {
-      $html_template = MODULES . 'bee' . DS . 'viewTemplate.txt';
+      $viewTemplate = MODULES . 'bee' . DS . ($twig ? 'viewTwigTemplate.txt' : 'viewTemplate.txt');
 
-      if (is_file($html_template)) {
-        $html = @file_get_contents($html_template);
+      if (!is_file($viewTemplate)) {
+        Flasher::error(sprintf('La vista no fue creada, no existe la plantilla <b>%s</b>.', $viewTemplate));
       } else {
-        $html =
-        '<?php require_once INCLUDES.\'inc_header.php\'; ?>
-        <div class="container">
-          <div class="row">
-            <div class="col-6 text-center offset-xl-3">
-              <a href="<?php echo get_base_url(); ?>"><img src="<?php echo IMAGES.\'bee_logo.png\' ?>" alt="Bee framework" class="img-fluid" style="width: 200px;"></a>
-              <h2 class="mt-5 mb-3"><span class="text-warning">Bee</span> framework</h2>
-              <!-- contenido -->
-              <h1><?php echo $d->msg; ?></h1>
-              <!-- ends -->
-            </div>
-          </div>
-        </div>
-        <?php require_once INCLUDES.\'inc_bee_footer.php\'; ?>';
+        $html = @file_get_contents($viewTemplate);
+        @file_put_contents(VIEWS . $filename . DS . ($twig ? 'indexView.twig' : 'indexView.php'), $html);
       }
-
-      @file_put_contents(VIEWS . $filename . DS . 'indexView.php', $html);
     }
 
     // Crear una vista por defecto
@@ -155,9 +143,10 @@ class creatorController extends Controller {
     }
     
     // Cargar contenido del archivo
-    $php = @file_get_contents($template);
-    $php = str_replace('[[REPLACE]]', $filename, $php);
-    $php = str_replace('[[REPLACE_TABLE]]', (empty($table) ? $filename : $table), $php);
+    $php     = @file_get_contents($template);
+    $serch   = ['[[REPLACE]]', '[[REPLACE_TABLE]]'];
+    $replace = [$filename, (empty($table) ? $filename : $table)];
+    $php     = str_replace($serch, $replace, $php);
 
     // Validar si es necesario procesar el esquema de Modelo
     if (!empty($scheme)) {

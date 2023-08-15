@@ -3,7 +3,7 @@
 <div class="container">
   <div class="row">
     <div class="col-12 col-md-6 text-center offset-md-3 py-5">
-      <a href="tienda">
+      <a href="<?php echo get_base_url(); ?>">
         <img src="<?php echo get_logo(); ?>" alt="<?php echo get_sitename(); ?>" class="img-fluid" style="width: 200px;">
       </a>
     </div>
@@ -25,9 +25,7 @@
                   <a href="<?php echo build_url(sprintf('carrito/remover/%s', $item->id), [], true, false); ?>" class="text-danger text-decoration-none me-2">
                     <i class="fas fa-times"></i>
                   </a>
-                  <?php if (!empty($item->image)): ?>
-                    <img src="<?php echo $item->image; ?>" alt="<?php echo $item->name; ?>" class="img-fluid border rounded me-2" style="max-width: 50px; height: 50px; object-fit: cover;">                  
-                  <?php endif; ?>
+                  <img src="<?php echo get_uploaded_image($item->image); ?>" alt="<?php echo $item->name; ?>" class="img-fluid border rounded me-2" style="max-width: 50px; height: 50px; object-fit: cover;">                  
                   <div class="me-2">
                     <h6 class="my-0">
                       <?php echo $item->name; ?> 

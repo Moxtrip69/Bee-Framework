@@ -532,9 +532,11 @@ class BeeFormBuilder
       $fieldValue   = isset($field['value']) ? $field['value'] : '';
       $defaultValue = isset($field['defaultValue']) ? $field['defaultValue'] : '';
       $required     = $field['required'];
+      
+      $specialTypes = ['hidden','checkbox','radio','custom'];
 
       // Label y grupo del input, no mostrar si es hidden para evitar espaciados no deseados
-      if (!in_array($fieldType, ['hidden','custom'])) {
+      if (!in_array($fieldType, $specialTypes)) {
         $this->formHtml .= '<div class="mb-3">';
         $this->formHtml .= sprintf('<label for="%s">%s%s</label>', 
           $fieldId, 
@@ -582,6 +584,7 @@ class BeeFormBuilder
         case 'checkbox':
         case 'radio':
           $checked = $field['checked'] ? 'checked' : '';
+          $this->formHtml .= '<div class="form-check mb-3">';
           $this->formHtml .= sprintf(
             '<input type="%s" name="%s" id="%s" value="%s" %s class="%s">',
             $fieldType,
@@ -592,8 +595,14 @@ class BeeFormBuilder
             $fieldClasses,
             $required === true ? 'required' : ''
           );
+          $this->formHtml .= sprintf(
+            '<label class="form-check-label" for="%s">%s</label>',
+            $fieldId,
+            $fieldLabel
+          );
+          $this->formHtml .= '</div>';
           break;
-        
+
         case 'hidden':
         case 'email':
         case 'password':
@@ -677,7 +686,7 @@ class BeeFormBuilder
       }
 
       // Cerrar el div abierto para campos que no son ocultos
-      if (!in_array($fieldType, ['hidden','custom'])) {
+      if (!in_array($fieldType, $specialTypes)) {
         $this->formHtml .= '</div>';
       }
     }

@@ -23,3 +23,5 @@
             <h1 class="h3 mb-0 text-gray-800"><?php echo $d->title; ?></h1>
             <?php require_once INCLUDES . 'admin/dashboardButtons.php'; ?>
           </div>
+
+          <?php echo Flasher::flash(); ?>

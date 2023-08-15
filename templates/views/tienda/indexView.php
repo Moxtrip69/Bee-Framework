@@ -7,10 +7,12 @@
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">Tienda de ejemplo</h1>
-        <p class="lead text-body-secondary">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa doloribus quae maiores temporibus quam tenetur ratione eum itaque omnis officia id qui officiis nobis voluptates sit asperiores, sint voluptatem tempora!</p>
+        <p class="lead text-body-secondary">Recuerda que esta vista se encuentra dentro de <code>templates/views/indexView.php</code>, puedes editarla a tu necesidad. La lógica la encontrarás en <code>tiendaController.php</code> y en <code>carritoController.php</code></p>
         <p>
           <a href="carrito" class="btn btn-primary my-2 me-2">Ver el carrito</a>
-          <a href="admin" class="btn btn-secondary my-2">Ir al Dashboard</a>
+          <?php if (is_logged()): ?>
+            <a href="admin" class="btn btn-secondary my-2">Ir al Dashboard</a>
+          <?php endif; ?>
         </p>
       </div>
     </div>
@@ -21,7 +23,7 @@
       <?php echo Flasher::flash(); ?>
 
       <?php if (!empty($d->products->rows)) : ?>
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 g-4">
           <?php foreach ($d->products->rows as $p) : ?>
             <div class="col">
               <div class="card shadow-sm">

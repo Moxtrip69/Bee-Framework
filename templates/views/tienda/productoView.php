@@ -5,11 +5,11 @@
   <div class="row">
     <div class="col-md-5">
       <div class="main-img">
-        <img class="img-fluid rounded" src="<?php echo $d->p->image; ?>" alt="<?php echo $d->p->name; ?>">
+        <img class="img-fluid rounded" src="<?php echo get_uploaded_image($d->p->image); ?>" alt="<?php echo $d->p->name; ?>">
         <div class="row my-3 previews">
           <?php foreach ([1,2,3,4] as $img): ?>
             <div class="col-md-3">
-              <img class="img-fluid h-100 rounded" src="<?php echo $d->p->image; ?>" alt="<?php echo $d->p->name; ?>">
+              <img class="img-fluid h-100 rounded" src="<?php echo get_uploaded_image($d->p->image); ?>" alt="<?php echo $d->p->name; ?>">
             </div>
           <?php endforeach; ?>
         </div>

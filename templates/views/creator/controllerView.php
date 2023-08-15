@@ -31,6 +31,10 @@
                 <input class="form-check-input" type="checkbox" id="generar-vista" name="generar-vista">
                 <label class="form-check-label" for="generar-vista">Crear carpeta y vista inicial</label>
               </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="usar-twig" name="usar-twig">
+                <label class="form-check-label" for="usar-twig">Usar Twig</label>
+              </div>
             </div>
 
             <button class="btn btn-primary btn-lg btn-block" type="submit">Crear ahora</button>

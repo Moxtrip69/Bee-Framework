@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception AS EmailException;
+use PHPMailer\PHPMailer\Exception as EmailException;
 //////////////////////////////////////////////////
 
 /**
@@ -12,8 +12,9 @@ use PHPMailer\PHPMailer\Exception AS EmailException;
  * @param array $array
  * @return object
  */
-function to_object($array) {
-  return json_decode(json_encode($array));
+function to_object($array)
+{
+	return json_decode(json_encode($array));
 }
 
 /**
@@ -21,8 +22,9 @@ function to_object($array) {
  *
  * @return string
  */
-function get_sitename() {
-  return SITE_NAME;
+function get_sitename()
+{
+	return SITE_NAME;
 }
 
 /**
@@ -30,7 +32,8 @@ function get_sitename() {
  *
  * @return string
  */
-function get_version() {
+function get_version()
+{
 	return SITE_VERSION;
 }
 
@@ -59,8 +62,9 @@ function get_bee_version()
  *
  * @return string
  */
-function get_siteemail() {
-  return 'jslocal@localhost.com';
+function get_siteemail()
+{
+	return 'jslocal@localhost.com';
 }
 
 /**
@@ -88,8 +92,9 @@ function get_default_controller()
  *
  * @return string
  */
-function now() {
-  return date('Y-m-d H:i:s');
+function now()
+{
+	return date('Y-m-d H:i:s');
 }
 
 /**
@@ -99,21 +104,22 @@ function now() {
  * @param boolean $die
  * @return string|bool
  */
-function json_output($json, $die = true) {
-  header('Access-Control-Allow-Origin: *');
-  header('Content-Type: application/json;charset=utf-8');
+function json_output($json, $die = true)
+{
+	header('Access-Control-Allow-Origin: *');
+	header('Content-Type: application/json;charset=utf-8');
 
-  if(is_array($json)){
-    $json = json_encode($json);
-  }
+	if (is_array($json)) {
+		$json = json_encode($json);
+	}
 
-  echo $json;
+	echo $json;
 
-  if($die === true) {
-    die;
-  }
-  
-  return true;
+	if ($die === true) {
+		die;
+	}
+
+	return true;
 }
 
 /**
@@ -140,15 +146,16 @@ function json_output($json, $die = true) {
  * @param string $msg
  * @return string
  */
-function json_build($status = 200 , $data = [] , $msg = '', $error_code = null) {
-  if(empty($msg) || $msg == '') {
-    switch ($status) {
-      case 200:
-        $msg = 'OK';
-        break;
-      case 201:
-        $msg = 'Created';
-        break;
+function json_build($status = 200, $data = [], $msg = '', $error_code = null)
+{
+	if (empty($msg) || $msg == '') {
+		switch ($status) {
+			case 200:
+				$msg = 'OK';
+				break;
+			case 201:
+				$msg = 'Created';
+				break;
 			case 300:
 				$msg = 'Multiple Choices';
 				break;
@@ -158,44 +165,44 @@ function json_build($status = 200 , $data = [] , $msg = '', $error_code = null) 
 			case 302:
 				$msg = 'Found';
 				break;
-      case 400:
-        $msg = 'Invalid request';
-        break;
-      case 403:
-        $msg = 'Access denied';
-        break;
-      case 404:
-        $msg = 'Not found';
-        break;
-      case 500:
-        $msg = 'Internal Server Error';
-        break;
-      case 550:
-        $msg = 'Permission denied';
-        break;
-      default:
-        break;
-    }
-  }
+			case 400:
+				$msg = 'Invalid request';
+				break;
+			case 403:
+				$msg = 'Access denied';
+				break;
+			case 404:
+				$msg = 'Not found';
+				break;
+			case 500:
+				$msg = 'Internal Server Error';
+				break;
+			case 550:
+				$msg = 'Permission denied';
+				break;
+			default:
+				break;
+		}
+	}
 
-  $json =
-  [
-    'status'     => $status,
-    'error'      => false,
-		'error_code' => $error_code,
-    'msg'        => $msg,
-    'data'       => $data
-  ];
+	$json =
+		[
+			'status'     => $status,
+			'error'      => false,
+			'error_code' => $error_code,
+			'msg'        => $msg,
+			'data'       => $data
+		];
 
-  if (in_array($status, [400,403,404,405,500])){
-    $json['error'] = true;
-  }
+	if (in_array($status, [400, 403, 404, 405, 500])) {
+		$json['error'] = true;
+	}
 
-  if ($error_code !== null) {
-    $json['error_code'] = $error_code;
-  }
+	if ($error_code !== null) {
+		$json['error_code'] = $error_code;
+	}
 
-  return json_encode($json);
+	return json_encode($json);
 }
 
 /**
@@ -205,14 +212,15 @@ function json_build($status = 200 , $data = [] , $msg = '', $error_code = null) 
  * @param array $data
  * @return bool|string
  */
-function get_module($view, $data = []) {
-  $file_to_include = MODULES . $view . 'Module.php';
+function get_module($view, $data = [])
+{
+	$file_to_include = MODULES . $view . 'Module.php';
 	$output = '';
-	
+
 	// Por si queremos trabajar con objeto
 	$d = to_object($data);
-	
-	if(!is_file($file_to_include)) {
+
+	if (!is_file($file_to_include)) {
 		return false;
 	}
 
@@ -230,8 +238,9 @@ function get_module($view, $data = []) {
  * @param string $symbol
  * @return string
  */
-function money($amount, $symbol = '$') {
-  return $symbol.number_format($amount, 2, '.', ',');
+function money($amount, $symbol = '$')
+{
+	return $symbol . number_format($amount, 2, '.', ',');
 }
 
 /**
@@ -240,12 +249,13 @@ function money($amount, $symbol = '$') {
  * @param mixed $option
  * @return mixed
  */
-function get_option($option) {
-  return optionModel::search($option);
+function get_option($option)
+{
+	return optionModel::search($option);
 }
 
 /**
-  * Generar un link dinámico con parámetros get y token
+ * Generar un link dinámico con parámetros get y token
  * @param string $url
  * @param array $params
  * @param bool $redirection
@@ -255,7 +265,8 @@ function get_option($option) {
  * 
  * @return string
  */
-function buildURL($url , $params = [] , $redirection = true, $csrf = true) {
+function buildURL($url, $params = [], $redirection = true, $csrf = true)
+{
 	return build_url($url, $params, $redirection, $csrf);
 }
 
@@ -269,12 +280,13 @@ function buildURL($url , $params = [] , $redirection = true, $csrf = true) {
  * 
  * @return string
  */
-function build_url($url , $params = [] , $redirection = true, $csrf = true) {
+function build_url($url, $params = [], $redirection = true, $csrf = true)
+{
 	// Formateo y parseo inicial de la URL pasada descomponiendo sus elementos
 	$raw_url     = parse_url($url, PHP_URL_PATH);
 	$query       = parse_url($url, PHP_URL_QUERY); // extraer parámetros existentes
 	$query_array = [];
-	
+
 	// Sólo si ya hay parámetros existentes en la URL
 	if (!empty($query)) {
 		parse_str($query, $query_array); // convertir en array los parámetros
@@ -284,7 +296,7 @@ function build_url($url , $params = [] , $redirection = true, $csrf = true) {
 	if ($csrf) {
 		$query_array["_t"]          = CSRF_TOKEN;
 	}
-	
+
 	// Si requiere redirección
 	if ($redirection) {
 		$query_array["redirect_to"] = CUR_PAGE;
@@ -307,7 +319,7 @@ function build_url($url , $params = [] , $redirection = true, $csrf = true) {
 		$args = http_build_query($query_array);
 		$url  = sprintf("%s?%s", $raw_url, $args);
 	}
-	
+
 	return $url;
 }
 
@@ -319,7 +331,8 @@ function build_url($url , $params = [] , $redirection = true, $csrf = true) {
  * @param boolean $output
  * @return mixed
  */
-function logger($message, $type = 'debug', $output = false) {
+function logger($message, $type = 'debug', $output = false)
+{
 	$types = ['debug', 'import', 'info', 'success', 'warning', 'error'];
 
 	if (!in_array($type, $types)) {
@@ -355,7 +368,8 @@ function logger($message, $type = 'debug', $output = false) {
  *
  * @return bool
  */
-function backtrace() {
+function backtrace()
+{
 	// Para seguir errores o ejecuciones de código
 	$bt     = debug_backtrace();
 	$caller = array_shift($bt);
@@ -372,8 +386,9 @@ function backtrace() {
  * @param mixed $var
  * @return string
  */
-function json_encode_utf8($var) {
-  return json_encode($var, JSON_UNESCAPED_UNICODE);
+function json_encode_utf8($var)
+{
+	return json_encode($var, JSON_UNESCAPED_UNICODE);
 }
 
 /**
@@ -387,7 +402,8 @@ function json_encode_utf8($var) {
  * @param string $type
  * @return string
  */
-function format_date($date_string, $type = 'd M, Y') {
+function format_date($date_string, $type = 'd M, Y')
+{
 	// Para versiones de PHP inferiores a 8.1.0 cuando se vuelve deprecada la función strftime()
 	if (version_compare(phpversion(), '8.1.0', "<")) {
 		setlocale(LC_ALL, "es_MX.UTF-8", "es_MX", "esp");
@@ -400,7 +416,7 @@ function format_date($date_string, $type = 'd M, Y') {
 		$dia       = strftime("%e", strtotime($date_string));
 		$hora      = strftime("%H", strtotime($date_string));
 		$minutos   = strftime("%M", strtotime($date_string));
-	
+
 		// Variantes para formar nuestra fecha
 		$date = [
 			'año'        => $anio,
@@ -413,7 +429,7 @@ function format_date($date_string, $type = 'd M, Y') {
 			'minutos'    => $minutos,
 			'tiempo'     => $hora . ':' . $minutos
 		];
-		
+
 		switch ($type) {
 			case 'd M, Y':
 				return sprintf('%s de %s, %s', $date['dia'], $date['mes'], $date['año']);
@@ -426,11 +442,11 @@ function format_date($date_string, $type = 'd M, Y') {
 			case 'MY':
 				return sprintf('%s, %s', ucfirst($date['mes']), $date['año']);
 			case 'd M, Y time':
-				return $date['dia'].' de '.$date['mes'].', '.$date['año'].' a las '.date('H:i A', strtotime($date_string));
+				return $date['dia'] . ' de ' . $date['mes'] . ', ' . $date['año'] . ' a las ' . date('H:i A', strtotime($date_string));
 			case 'time':
-				return $date['tiempo'].' '.date('A', strtotime($date_string));
+				return $date['tiempo'] . ' ' . date('A', strtotime($date_string));
 			case 'date time':
-				return $date['dia'].'/'.$date['mes_corto'].'/'.$date['año'].' '.$date['tiempo'].' '.date('A', strtotime($date_string));
+				return $date['dia'] . '/' . $date['mes_corto'] . '/' . $date['año'] . ' ' . $date['tiempo'] . ' ' . date('A', strtotime($date_string));
 			case 'short': //01/Nov/2019
 				return sprintf('%s/%s/%s', $date['dia_mes'], ucfirst($date['mes_corto']), $date['año']);
 			default:
@@ -506,14 +522,15 @@ function format_date($date_string, $type = 'd M, Y') {
  * @param boolean $cleanhtml
  * @return string
  */
-function clean($str, $cleanhtml = false) {
-  $str = @trim(@rtrim($str));
+function clean($str, $cleanhtml = false)
+{
+	$str = @trim(@rtrim($str));
 	$str = filter_var($str, FILTER_UNSAFE_RAW);
 
 	if ($cleanhtml === true) {
 		return htmlspecialchars($str);
-  }
-  
+	}
+
 	return $str;
 }
 
@@ -523,21 +540,22 @@ function clean($str, $cleanhtml = false) {
  * @param array $files
  * @return array|bool
  */
-function arrenge_posted_files($files) {
-	if(empty($files)) {
+function arrenge_posted_files($files)
+{
+	if (empty($files)) {
 		return false;
 	}
-	
+
 	foreach ($files['error'] as $err) {
-		if(intval($err) === 4){
+		if (intval($err) === 4) {
 			return false;
 		}
 	}
-	
+
 	$file_ary   = array();
 	$file_count = (is_array($files)) ? count($files['name']) : 1;
 	$file_keys  = array_keys($files);
-	
+
 	for ($i = 0; $i < $file_count; $i++) {
 		foreach ($file_keys as $key) {
 			$file_ary[$i][$key] = $files[$key][$i];
@@ -554,21 +572,22 @@ function arrenge_posted_files($files) {
  * @param string $type
  * @return string
  */
-function random_password($length = 8, $type = 'default') {
+function random_password($length = 8, $type = 'default')
+{
 	$alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-  
-  if ($type === 'numeric') {
+
+	if ($type === 'numeric') {
 		$alphabet = '1234567890';
 	}
-  
-  $pass = array(); //remember to declare $pass as an array
+
+	$pass = array(); //remember to declare $pass as an array
 	$alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
-  
-  for ($i = 0; $i < $length; $i++) {
+
+	for ($i = 0; $i < $length; $i++) {
 		$n = rand(0, $alphaLength);
 		$pass[] = $alphabet[$n];
-  }
-  
+	}
+
 	return str_shuffle(implode($pass)); //turn the array into a string
 }
 
@@ -579,12 +598,13 @@ function random_password($length = 8, $type = 'default') {
  * @param integer $lng
  * @return string
  */
-function add_ellipsis($string , $lng = 100) {
-	if(!is_integer($lng)) {
+function add_ellipsis($string, $lng = 100)
+{
+	if (!is_integer($lng)) {
 		$lng = 100;
 	}
 
-  $output = strlen($string) > $lng ? mb_substr($string, 0, $lng, 'UTF-8').'...' : $string;
+	$output = strlen($string) > $lng ? mb_substr($string, 0, $lng, 'UTF-8') . '...' : $string;
 	return $output;
 }
 
@@ -593,7 +613,8 @@ function add_ellipsis($string , $lng = 100) {
  *
  * @return string
  */
-function get_user_ip() {
+function get_user_ip()
+{
 	$ipaddress = '';
 	if (getenv('HTTP_CLIENT_IP'))
 		$ipaddress = getenv('HTTP_CLIENT_IP');
@@ -617,15 +638,15 @@ function get_user_ip() {
  *
  * @return string
  */
-function get_user_os() {
-	if (isset( $_SERVER ) ) {
+function get_user_os()
+{
+	if (isset($_SERVER)) {
 		$agent = $_SERVER['HTTP_USER_AGENT'];
 	} else {
 		global $HTTP_SERVER_VARS;
-		if ( isset( $HTTP_SERVER_VARS ) ) {
+		if (isset($HTTP_SERVER_VARS)) {
 			$agent = $HTTP_SERVER_VARS['HTTP_USER_AGENT'];
-		}
-		else {
+		} else {
 			global $HTTP_USER_AGENT;
 			$agent = $HTTP_USER_AGENT;
 		}
@@ -712,11 +733,11 @@ function get_user_os() {
 	$ros[] = array('libwww-perl', 'Unix');
 	$ros[] = array('UP.Browser', 'Windows CE');
 	$ros[] = array('NetAnts', 'Windows');
-	$file = count ( $ros );
+	$file = count($ros);
 	$os = '';
-	for ( $n=0 ; $n < $file ; $n++ ){
-		if ( @preg_match('/'.$ros[$n][0].'/i' , $agent, $name)){
-			$os = @$ros[$n][1].' '.@$name[2];
+	for ($n = 0; $n < $file; $n++) {
+		if (@preg_match('/' . $ros[$n][0] . '/i', $agent, $name)) {
+			$os = @$ros[$n][1] . ' ' . @$name[2];
 			break;
 		}
 	}
@@ -728,7 +749,8 @@ function get_user_os() {
  *
  * @return string
  */
-function get_user_browser() {
+function get_user_browser()
+{
 	$user_agent = (isset($_SERVER) ? $_SERVER['HTTP_USER_AGENT'] : NULL);
 
 	$browser       = "Unknown Browser";
@@ -760,20 +782,21 @@ function get_user_browser() {
  *
  * @return string
  */
-function insert_inputs() {
+function insert_inputs()
+{
 	$output = '';
 
-	if(isset($_POST['redirect_to'])){
+	if (isset($_POST['redirect_to'])) {
 		$location = $_POST['redirect_to'];
-	} else if(isset($_GET['redirect_to'])){
+	} else if (isset($_GET['redirect_to'])) {
 		$location = $_GET['redirect_to'];
 	} else {
 		$location = CUR_PAGE;
 	}
 
-	$output .= '<input type="hidden" name="redirect_to" value="'.$location.'" required>';
-	$output .= '<input type="hidden" name="timecheck" value="'.time().'" required>';
-	$output .= '<input type="hidden" name="csrf" value="'.CSRF_TOKEN.'" required>';
+	$output .= '<input type="hidden" name="redirect_to" value="' . $location . '" required>';
+	$output .= '<input type="hidden" name="timecheck" value="' . time() . '" required>';
+	$output .= '<input type="hidden" name="csrf" value="' . CSRF_TOKEN . '" required>';
 
 	return $output;
 }
@@ -785,17 +808,18 @@ function insert_inputs() {
  * @param integer $span
  * @return string
  */
-function generate_filename($size = 12, $span = 3) {
-	if(!is_integer($size)){
+function generate_filename($size = 12, $span = 3)
+{
+	if (!is_integer($size)) {
 		$size = 6;
 	}
-	
+
 	$name = '';
-	for ($i=0; $i < $span; $i++) { 
-		$name .= random_password($size).'-';
+	for ($i = 0; $i < $span; $i++) {
+		$name .= random_password($size) . '-';
 	}
 
-	$name = rtrim($name , '-');
+	$name = rtrim($name, '-');
 	return strtolower($name);
 }
 
@@ -806,7 +830,8 @@ function generate_filename($size = 12, $span = 3) {
  * @param integer $precision
  * @return string
  */
-function filesize_formatter($size , $precision = 1) {
+function filesize_formatter($size, $precision = 1)
+{
 	$units = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
 	$step = 1024;
 	$i = 0;
@@ -823,7 +848,8 @@ function filesize_formatter($size , $precision = 1) {
  * @param string $url
  * @return string
  */
-function fix_url($url) {
+function fix_url($url)
+{
 	return str_replace('\\', '/', $url);
 }
 
@@ -833,25 +859,26 @@ function fix_url($url) {
  * @param string $key
  * @return mixed|false
  */
-function get_session($key = null) {
-  if($key === null){
-    return $_SESSION;
-  }
+function get_session($key = null)
+{
+	if ($key === null) {
+		return $_SESSION;
+	}
 
-  // Si es un array, deberá ir separado con punto: ejemplo usuario.reportes
-  if ( strpos($key , ".") !== false ) {
-    $array = explode('.', $key);
-    $lvls  = count($array);
+	// Si es un array, deberá ir separado con punto: ejemplo usuario.reportes
+	if (strpos($key, ".") !== false) {
+		$array = explode('.', $key);
+		$lvls  = count($array);
 
-    for ($i=0; $i < $lvls; $i++) { 
-      if(!isset($_SESSION[$array[$i]])){
-        return false;
-      }
-    }
-  }
+		for ($i = 0; $i < $lvls; $i++) {
+			if (!isset($_SESSION[$array[$i]])) {
+				return false;
+			}
+		}
+	}
 
 	// Si es una clave directa sin subniveles
-  return isset($_SESSION[$key]) ? $_SESSION[$key] : false;
+	return isset($_SESSION[$key]) ? $_SESSION[$key] : false;
 }
 
 /**
@@ -861,9 +888,10 @@ function get_session($key = null) {
  * @param mixed $v
  * @return bool
  */
-function set_session($key, $value) {
-  $_SESSION[$key] = $value;
-  return true;
+function set_session($key, $value)
+{
+	$_SESSION[$key] = $value;
+	return true;
 }
 
 /**
@@ -879,7 +907,8 @@ function set_session($key, $value) {
  * @param array $attachments
  * @return mixed
  */
-function send_email($from, $to, $subject, $body, $alt = null, $bcc = null, $reply_to = null, $attachments = []) {
+function send_email($from, $to, $subject, $body, $alt = null, $bcc = null, $reply_to = null, $attachments = [])
+{
 	try {
 		$mail     = new PHPMailer(PHPMAILER_EXCEPTIONS); // Para desactivar Excepciones pasar false al constructor
 		$template = PHPMAILER_TEMPLATE;
@@ -890,14 +919,14 @@ function send_email($from, $to, $subject, $body, $alt = null, $bcc = null, $repl
 			if (PHPMAILER_DEBUG === true) {
 				$mail->SMTPDebug  = SMTP::DEBUG_SERVER;        //Enable verbose debug output
 			}
-				
+
 			$mail->SMTPAuth   = is_bool(PHPMAILER_AUTH) ? PHPMAILER_AUTH : true;  //Enable SMTP authentication
 			$mail->Host       = PHPMAILER_HOST;                                   //Set the SMTP server to send through
 			$mail->Username   = PHPMAILER_USERNAME;                               //SMTP username
 			$mail->Password   = PHPMAILER_PASSWORD;                               //SMTP password
-			$mail->SMTPSecure = PHPMAILER_SECURITY === 'ssl' ? 
-			PHPMailer::ENCRYPTION_SMTPS :
-			PHPMailer::ENCRYPTION_STARTTLS;                                       //Enable implicit TLS encryption
+			$mail->SMTPSecure = PHPMAILER_SECURITY === 'ssl' ?
+				PHPMailer::ENCRYPTION_SMTPS :
+				PHPMailer::ENCRYPTION_STARTTLS;                                       //Enable implicit TLS encryption
 			$mail->Port       = PHPMAILER_PORT;                                   // Puerto de conexión
 		}
 
@@ -938,7 +967,6 @@ function send_email($from, $to, $subject, $body, $alt = null, $bcc = null, $repl
 		// Enviar el correo electrónico
 		$mail->send();
 		return true;
-
 	} catch (EmailException $e) {
 		throw new Exception($e->getMessage());
 	}
@@ -950,10 +978,11 @@ function send_email($from, $to, $subject, $body, $alt = null, $bcc = null, $repl
  * @param mixed $data
  * @return void
  */
-function debug($data, $var_dump_mode = false) {
+function debug($data, $var_dump_mode = false)
+{
 	if ($var_dump_mode === false) {
 		echo '<pre>';
-		if(is_array($data) || is_object($data)) {
+		if (is_array($data) || is_object($data)) {
 			print_r($data);
 		} else {
 			echo $data;
@@ -970,7 +999,8 @@ function debug($data, $var_dump_mode = false) {
  * @param integer $length
  * @return string
  */
-function generate_token($length = 32) {
+function generate_token($length = 32)
+{
 	if (function_exists('random_bytes')) {
 		$token = bin2hex(random_bytes($length));
 	} elseif (function_exists('openssl_random_pseudo_bytes')) {
@@ -993,8 +1023,9 @@ function generate_token($length = 32) {
  *
  * @return string
  */
-function generate_key() {
-	$key = implode('-', str_split(substr(strtolower(md5(microtime().rand(1000, 9999))), 0, 30), 6));
+function generate_key()
+{
+	$key = implode('-', str_split(substr(strtolower(md5(microtime() . rand(1000, 9999))), 0, 30), 6));
 
 	return $key;
 }
@@ -1006,34 +1037,35 @@ function generate_key() {
  * @param array $posted_data
  * @return bool
  */
-function check_posted_data($required_params = [] , $posted_data = []) {
+function check_posted_data($required_params = [], $posted_data = [])
+{
 
 	if (!is_array($required_params)) {
 		return false;
 	}
 
-  if(empty($required_params) || empty($posted_data)) {
-    return false;
-  }
+	if (empty($required_params) || empty($posted_data)) {
+		return false;
+	}
 
-  // Keys necesarios en toda petición
+	// Keys necesarios en toda petición
 	/**
 	 * @deprecated 1.1.4
 	 */
-  $required = count($required_params);
-  $found    = 0;
+	$required = count($required_params);
+	$found    = 0;
 
-  foreach ($posted_data as $k => $v) {
-    if(in_array($k , $required_params)) {
-      $found++;
-    }
-  }
+	foreach ($posted_data as $k => $v) {
+		if (in_array($k, $required_params)) {
+			$found++;
+		}
+	}
 
-  if($found !== $required) {
-    return false;
-  }
+	if ($found !== $required) {
+		return false;
+	}
 
-  return true;
+	return true;
 }
 
 /**
@@ -1043,34 +1075,35 @@ function check_posted_data($required_params = [] , $posted_data = []) {
  * @param array $get_data
  * @return bool
  */
-function check_get_data($required_params = [] , $get_data = []) {
+function check_get_data($required_params = [], $get_data = [])
+{
 
 	if (!is_array($required_params)) {
 		return false;
 	}
 
-  if(empty($required_params) || empty($get_data)) {
-    return false;
-  }
+	if (empty($required_params) || empty($get_data)) {
+		return false;
+	}
 
-  // Keys necesarios en toda petición
+	// Keys necesarios en toda petición
 	/**
 	 * @deprecated 1.1.4
 	 */
-  $required = count($required_params);
-  $found    = 0;
+	$required = count($required_params);
+	$found    = 0;
 
-  foreach ($get_data as $k => $v) {
-    if(in_array($k , $required_params)) {
-      $found++;
-    }
-  }
+	foreach ($get_data as $k => $v) {
+		if (in_array($k, $required_params)) {
+			$found++;
+		}
+	}
 
-  if($found !== $required) {
-    return false;
-  }
+	if ($found !== $required) {
+		return false;
+	}
 
-  return true;
+	return true;
 }
 
 /**
@@ -1081,10 +1114,11 @@ function check_get_data($required_params = [] , $get_data = []) {
  * @param string $icon La clase para el icono de fontawesome 5
  * @return string
  */
-function more_info($content , $color = 'text-info' , $icon = 'fas fa-exclamation-circle') {
-  $str    = clean($content);
-  $output = '<span class="%s" %s><i class="%s"></i></span>';
-  return sprintf($output, $color, tooltip($content), $icon);
+function more_info($content, $color = 'text-info', $icon = 'fas fa-exclamation-circle')
+{
+	$str    = clean($content);
+	$output = '<span class="%s" %s><i class="%s"></i></span>';
+	return sprintf($output, $color, tooltip($content), $icon);
 }
 
 /**
@@ -1093,8 +1127,9 @@ function more_info($content , $color = 'text-info' , $icon = 'fas fa-exclamation
  * @param string $string
  * @return string
  */
-function placeholder($string = 'Lorem ipsum') {
-  return sprintf('placeholder="%s"', $string);
+function placeholder($string = 'Lorem ipsum')
+{
+	return sprintf('placeholder="%s"', $string);
 }
 
 /**
@@ -1103,12 +1138,13 @@ function placeholder($string = 'Lorem ipsum') {
  * @param string $title
  * @return string|bool
  */
-function tooltip($title = null) {
-	if($title == null){
+function tooltip($title = null)
+{
+	if ($title == null) {
 		return false;
 	}
 
-	return 'data-bs-toggle="tooltip" title="'.$title.'"';
+	return 'data-bs-toggle="tooltip" title="' . $title . '"';
 }
 
 /**
@@ -1118,41 +1154,42 @@ function tooltip($title = null) {
  * @param string $active
  * @return string
  */
-function create_menu($links, $slug_active = 'home') {
-  $output = '';
-  $output .= '<ul class="nav flex-column">';
-  foreach ($links as $link) {
-    if ($slug_active === $link['slug']) {
-      $output .= 
-      sprintf(
-        '<li class="nav-item">
+function create_menu($links, $slug_active = 'home')
+{
+	$output = '';
+	$output .= '<ul class="nav flex-column">';
+	foreach ($links as $link) {
+		if ($slug_active === $link['slug']) {
+			$output .=
+				sprintf(
+					'<li class="nav-item">
         <a class="nav-link active" href="%s">
           <span data-feather="%s"></span>
           %s
         </a>
         </li>',
-        $link['url'],
-        $link['icon'],
-        $link['title']
-      );
-    } else {
-      $output .= 
-      sprintf(
-        '<li class="nav-item">
+					$link['url'],
+					$link['icon'],
+					$link['title']
+				);
+		} else {
+			$output .=
+				sprintf(
+					'<li class="nav-item">
         <a class="nav-link" href="%s">
           <span data-feather="%s"></span>
           %s
         </a>
         </li>',
-        $link['url'],
-        $link['icon'],
-        $link['title']
-      );
-    }
-  }
-  $output .= '</ul>';
+					$link['url'],
+					$link['icon'],
+					$link['title']
+				);
+		}
+	}
+	$output .= '</ul>';
 
-  return $output;
+	return $output;
 }
 
 /**
@@ -1160,15 +1197,16 @@ function create_menu($links, $slug_active = 'home') {
  *
  * @return string
  */
-function get_bee_logo() {
+function get_bee_logo()
+{
 	$default_logo = BEE_LOGO;
 	$dummy_logo   = 'https://via.placeholder.com/150x60';
 
-	if (!is_file(IMAGES_PATH.$default_logo)) {
+	if (!is_file(IMAGES_PATH . $default_logo)) {
 		return $dummy_logo;
 	}
 
-	return IMAGES.$default_logo;
+	return IMAGES . $default_logo;
 }
 
 /**
@@ -1176,15 +1214,16 @@ function get_bee_logo() {
  *
  * @return string
  */
-function get_logo() {
+function get_logo()
+{
 	$default_logo = SITE_LOGO;
 	$dummy_logo   = 'https://via.placeholder.com/150x60';
 
-	if (!is_file(IMAGES_PATH.$default_logo)) {
+	if (!is_file(IMAGES_PATH . $default_logo)) {
 		return $dummy_logo;
 	}
 
-	return IMAGES.$default_logo;
+	return IMAGES . $default_logo;
 }
 
 /**
@@ -1194,40 +1233,41 @@ function get_logo() {
  *
  * @return mixed
  */
-function get_favicon() {
+function get_favicon()
+{
 	$path        = FAVICON; // path del archivo favicon
 	$favicon     = SITE_FAVICON; // nombre del archivo favicon
 	$type        = '';
 	$href        = '';
 	$placeholder = '<link rel="icon" type="%s" href="%s">';
 
-	switch (pathinfo($path.$favicon, PATHINFO_EXTENSION)) {
+	switch (pathinfo($path . $favicon, PATHINFO_EXTENSION)) {
 		case 'ico':
 			$type = 'image/vnd.microsoft.icon';
-			$href = $path.$favicon;
+			$href = $path . $favicon;
 			break;
 
 		case 'png':
 			$type = 'image/png';
-			$href = $path.$favicon;
+			$href = $path . $favicon;
 			break;
 
 		case 'gif':
 			$type = 'image/gif';
-			$href = $path.$favicon;
+			$href = $path . $favicon;
 			break;
-		
+
 		case 'svg':
 			$type = 'image/svg+xml';
-			$href = $path.$favicon;
+			$href = $path . $favicon;
 			break;
 
 		case 'jpg':
 		case 'jpeg':
 			$type = 'image/jpg';
-			$href = $path.$favicon;
+			$href = $path . $favicon;
 			break;
-		
+
 		default:
 			return false;
 	}
@@ -1243,7 +1283,8 @@ function get_favicon() {
  * @param string $key Es el nombre de la columna en la base de datos
  * @return array|false
  */
-function get_user($key = null) {
+function get_user($key = null)
+{
 	global $Bee_User; // Información persistente del usuario
 
 	if (!isset($_SESSION['user_session'])) return false;
@@ -1272,7 +1313,8 @@ function get_user($key = null) {
  *
  * @return boolean
  */
-function is_demo() {
+function is_demo()
+{
 	return IS_DEMO;
 }
 
@@ -1282,20 +1324,21 @@ function is_demo() {
  * de así solicitarlo
  * @return bool
  */
-function check_if_demo($flash = true, $redirect = true) {
-  $demo = is_demo();
+function check_if_demo($flash = true, $redirect = true)
+{
+	$demo = is_demo();
 
-  if ($demo == false) return false;
+	if ($demo == false) return false;
 
-  if ($flash == true) {
-    Flasher::new(sprintf('No disponible en la versión de demostración de %s.', get_sitename()), 'danger');
-  }
+	if ($flash == true) {
+		Flasher::new(sprintf('No disponible en la versión de demostración de %s.', get_sitename()), 'danger');
+	}
 
-  if ($redirect == true) {
-    Redirect::back();
-  }
+	if ($redirect == true) {
+		Redirect::back();
+	}
 
-  return true;
+	return true;
 }
 
 /**
@@ -1305,16 +1348,17 @@ function check_if_demo($flash = true, $redirect = true) {
  * @param string $comment
  * @return bool
  */
-function register_styles($stylesheets , $comment = null) {
-  global $Bee_Styles;
+function register_styles($stylesheets, $comment = null)
+{
+	global $Bee_Styles;
 
-  $Bee_Styles[] = 
-  [
-    'comment' => (!empty($comment) ? $comment : null),
-    'files'   => $stylesheets
-  ];
+	$Bee_Styles[] =
+		[
+			'comment' => (!empty($comment) ? $comment : null),
+			'files'   => $stylesheets
+		];
 
-  return true;
+	return true;
 }
 
 /**
@@ -1324,16 +1368,17 @@ function register_styles($stylesheets , $comment = null) {
  * @param string $comment
  * @return bool
  */
-function register_scripts($scripts , $comment = null) {
-  global $Bee_Scripts;
+function register_scripts($scripts, $comment = null)
+{
+	global $Bee_Scripts;
 
-  $Bee_Scripts[] = 
-  [
-    'comment' => (!empty($comment) ? $comment : null),
-    'files'   => $scripts
-  ];
+	$Bee_Scripts[] =
+		[
+			'comment' => (!empty($comment) ? $comment : null),
+			'files'   => $scripts
+		];
 
-  return true;
+	return true;
 }
 
 /**
@@ -1342,27 +1387,28 @@ function register_scripts($scripts , $comment = null) {
  *
  * @return string
  */
-function load_styles() {
-  global $Bee_Styles;
-  $output = '';
+function load_styles()
+{
+	global $Bee_Styles;
+	$output = '';
 
-  if(empty($Bee_Styles)){
-    return $output;
-  }
+	if (empty($Bee_Styles)) {
+		return $output;
+	}
 
 	// Iterar sobre cada elemento registrado
-  foreach (json_decode(json_encode($Bee_Styles)) as $css) {
-    if($css->comment){
-      $output .= '<!-- '.$css->comment.' -->'."\n";
-    }
+	foreach (json_decode(json_encode($Bee_Styles)) as $css) {
+		if ($css->comment) {
+			$output .= '<!-- ' . $css->comment . ' -->' . "\n";
+		}
 
 		// Iterar sobre cada path de archivo registrado
-    foreach ($css->files as $f) {
-      $output .= "\t".'<link rel="stylesheet" href="'.$f.'" >'."\n";
-    }
-  }
+		foreach ($css->files as $f) {
+			$output .= "\t" . '<link rel="stylesheet" href="' . $f . '" >' . "\n";
+		}
+	}
 
-  return $output;
+	return $output;
 }
 
 /**
@@ -1371,27 +1417,28 @@ function load_styles() {
  *
  * @return string
  */
-function load_scripts() {
-  global $Bee_Scripts;
-  $output = '';
+function load_scripts()
+{
+	global $Bee_Scripts;
+	$output = '';
 
-  if(empty($Bee_Scripts)){
-    return $output;
-  }
+	if (empty($Bee_Scripts)) {
+		return $output;
+	}
 
 	// Itera sobre todos los elementos registrados
-  foreach (json_decode(json_encode($Bee_Scripts)) as $js) {
-    if($js->comment){
-      $output .= '<!-- '.$js->comment.' -->'."\n";
-    }
+	foreach (json_decode(json_encode($Bee_Scripts)) as $js) {
+		if ($js->comment) {
+			$output .= '<!-- ' . $js->comment . ' -->' . "\n";
+		}
 
 		// Itera sobre todos los paths registrados
-    foreach ($js->files as $f) {
-      $output .= '<script src="'.$f.'" type="text/javascript"></script>'."\n";
-    }
-  }
+		foreach ($js->files as $f) {
+			$output .= '<script src="' . $f . '" type="text/javascript"></script>' . "\n";
+		}
+	}
 
-  return $output;
+	return $output;
 }
 
 /**
@@ -1403,7 +1450,8 @@ function load_scripts() {
  * @param mixed $value
  * @return bool
  */
-function register_to_bee_obj($key, $value) {
+function register_to_bee_obj($key, $value)
+{
 	global $Bee_Object;
 
 	/**
@@ -1411,7 +1459,7 @@ function register_to_bee_obj($key, $value) {
 	 * javascript
 	 * @since 1.1.4
 	 */
-	$key = str_replace([' ','-'], '_', $key);
+	$key = str_replace([' ', '-'], '_', $key);
 
 	if (is_array($value) || is_object($value)) {
 		$Bee_Object[$key] = $value;
@@ -1419,7 +1467,7 @@ function register_to_bee_obj($key, $value) {
 		$Bee_Object[$key] = clean($value);
 	}
 
-  return true;
+	return true;
 }
 
 /**
@@ -1428,17 +1476,18 @@ function register_to_bee_obj($key, $value) {
  *
  * @return string
  */
-function load_bee_obj() {
+function load_bee_obj()
+{
 	global $Bee_Object;
 	$output = '';
 
-  if(empty($Bee_Object)){
-    return $output;
-  }
+	if (empty($Bee_Object)) {
+		return $output;
+	}
 
 	$output = '<script>var Bee = %s </script>';
-	
-  return sprintf($output, json_encode_utf8($Bee_Object));
+
+	return sprintf($output, json_encode_utf8($Bee_Object));
 }
 
 /**
@@ -1446,36 +1495,37 @@ function load_bee_obj() {
  *
  * @return array
  */
-function bee_obj_default_config() {
+function bee_obj_default_config()
+{
 	$options =
-	[
-		'sitename'      => get_sitename(),
-		'version'       => get_version(),
-		'bee_name'      => get_bee_name(),
-		'bee_version'   => get_bee_version(),
-		'csrf'          => CSRF_TOKEN,
-		'url'           => URL,
-		'cur_page'      => CUR_PAGE,
-		'is_local'      => IS_LOCAL,
-		'is_demo'       => IS_DEMO,
-		'basepath'      => BASEPATH,
-		'sandbox'       => SANDBOX,
-		'port'          => PORT,
-		'request_uri'   => REQUEST_URI,
-		'assets'        => ASSETS,
-		'images'        => IMAGES,
-		'uploaded'      => UPLOADED,
-		'php_version'   => phpversion(),
-		'css_framework' => CSS_FRAMEWORK,
-		'toastr'        => TOASTR,
-		'axios'         => AXIOS,
-		'sweetalert2'   => SWEETALERT2,
-		'waitme'        => WAITME,
-		'lightbox'      => LIGHTBOX,
-		'vuejs'         => VUEJS,
-		'public_key'    => get_bee_api_public_key(),
-		'private_key'   => get_bee_api_private_key()
-	];
+		[
+			'sitename'      => get_sitename(),
+			'version'       => get_version(),
+			'bee_name'      => get_bee_name(),
+			'bee_version'   => get_bee_version(),
+			'csrf'          => CSRF_TOKEN,
+			'url'           => URL,
+			'cur_page'      => CUR_PAGE,
+			'is_local'      => IS_LOCAL,
+			'is_demo'       => IS_DEMO,
+			'basepath'      => BASEPATH,
+			'sandbox'       => SANDBOX,
+			'port'          => PORT,
+			'request_uri'   => REQUEST_URI,
+			'assets'        => ASSETS,
+			'images'        => IMAGES,
+			'uploaded'      => UPLOADED,
+			'php_version'   => phpversion(),
+			'css_framework' => CSS_FRAMEWORK,
+			'toastr'        => TOASTR,
+			'axios'         => AXIOS,
+			'sweetalert2'   => SWEETALERT2,
+			'waitme'        => WAITME,
+			'lightbox'      => LIGHTBOX,
+			'vuejs'         => VUEJS,
+			'public_key'    => get_bee_api_public_key(),
+			'private_key'   => get_bee_api_private_key()
+		];
 
 	return $options;
 }
@@ -1485,9 +1535,10 @@ function bee_obj_default_config() {
  *
  * @return bool
  */
-function use_summernote() {
-	register_styles(['https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-lite.css'] , 'Summernote');
-	register_scripts(['https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-lite.js'] , 'Summernote');
+function use_summernote()
+{
+	register_styles(['https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-lite.css'], 'Summernote');
+	register_scripts(['https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-lite.js'], 'Summernote');
 	return true;
 }
 
@@ -1498,12 +1549,13 @@ function use_summernote() {
  * @param string $filename
  * @return string
  */
-function get_image($filename) {
-	if (!is_file(IMAGES_PATH.$filename)) {
-		return IMAGES.'broken.png';
+function get_image($filename)
+{
+	if (!is_file(IMAGES_PATH . $filename)) {
+		return IMAGES . 'broken.png';
 	}
 
-	return IMAGES.$filename;
+	return IMAGES . $filename;
 }
 
 /**
@@ -1513,12 +1565,13 @@ function get_image($filename) {
  * @param string $filename
  * @return string
  */
-function get_uploaded_image($filename) {
-	if (!is_file(UPLOADS.$filename)) {
-		return IMAGES.'broken.png';
+function get_uploaded_image($filename)
+{
+	if (!is_file(UPLOADS . $filename)) {
+		return IMAGES . 'broken.png';
 	}
 
-	return UPLOADED.$filename;
+	return UPLOADED . $filename;
 }
 
 /**
@@ -1529,7 +1582,8 @@ function get_uploaded_image($filename) {
  * @param boolean $random_name
  * @return mixed
  */
-function upload_image($file_field = null, $check_image = false, $random_name = false) {
+function upload_image($file_field = null, $check_image = false, $random_name = false)
+{
 	// Path para subir el archivo
 	$path = UPLOADS;
 
@@ -1537,76 +1591,76 @@ function upload_image($file_field = null, $check_image = false, $random_name = f
 	$max_size = 1000000;
 
 	// Lista blanca de extensiones permitidas
-	$whitelist_ext = array('jpeg','jpg','png','gif');
+	$whitelist_ext = array('jpeg', 'jpg', 'png', 'gif');
 
 	// Tipos de archivo permitidos en lista blanca
-	$whitelist_type = array('image/jpeg', 'image/jpg', 'image/png','image/gif');
-	
+	$whitelist_type = array('image/jpeg', 'image/jpg', 'image/png', 'image/gif');
+
 	// Validación
 	// Para guardar cualquier error presente en el proceso
 	$out = array('error' => null);
-	
+
 	if (!$file_field) {
 		throw new Exception('Por favor específica un campo de archivo válido.', 1);
 	}
-	
+
 	if (!is_dir($path)) {
 		throw new Exception('Por favor específica una ruta de guardado válida.', 1);
 	}
-	
+
 	// Si no se sube un archivo
-	if((!empty($_FILES[$file_field])) || ($_FILES[$file_field]['error'] !== 0)) {
+	if ((!empty($_FILES[$file_field])) || ($_FILES[$file_field]['error'] !== 0)) {
 		throw new Exception('Ningún archivo seleccionado para subir.', 1);
 	}
-	
+
 	// Nombre del archivo
 	$file_info = pathinfo($_FILES[$file_field]['name']);
 	$name      = $file_info['filename'];
 	$ext       = $file_info['extension'];
-	
+
 	// Verificar extensión
 	if (!in_array($ext, $whitelist_ext)) {
 		throw new Exception('La extensión no es válida o permitida.', 1);
 	}
-	
+
 	// Verificar tipo de archivo
 	if (!in_array($_FILES[$file_field]["type"], $whitelist_type)) {
 		throw new Exception('El tipo de archivo no es válido o permitido.', 1);
 	}
-	
+
 	// Verificar tamaño
 	if ($_FILES[$file_field]["size"] > $max_size) {
 		throw new Exception('El tamaño del archivo es demasiado grande.', 1);
 	}
-	
+
 	// Verificar si es una imagen válida
 	if ($check_image === true) {
 		if (!getimagesize($_FILES[$file_field]['tmp_name'])) {
 			throw new Exception('El archivo seleccionado no es una imagen válida.', 1);
 		}
 	}
-	
+
 	// Crear nombre random de archivo
 	if ($random_name === true) {
-		$newname = generate_filename().'.'.$ext;
+		$newname = generate_filename() . '.' . $ext;
 	} else {
-		$newname = $name.'.'.$ext;
+		$newname = $name . '.' . $ext;
 	}
-	
+
 	// Verificar si el nombre ya existe en el servidor
-	if (file_exists($path.$newname)) {
+	if (file_exists($path . $newname)) {
 		throw new Exception('Un archivo con el mismo nombre ya existe en el servidor.', 1);
 	}
-	
+
 	// Guardando en el servidor
-	if (move_uploaded_file($_FILES[$file_field]['tmp_name'], $path.$newname) === false) {
+	if (move_uploaded_file($_FILES[$file_field]['tmp_name'], $path . $newname) === false) {
 		throw new Exception('Hubo un error en el servidor, intenta más tarde.', 1);
 	}
 
 	// Se ha subido con éxito el archivo y se ha guardado
 	$out['filepath'] = $path;
 	$out['filename'] = $newname;
-	$out['file']     = $path.$newname;
+	$out['file']     = $path . $newname;
 	return $out;
 }
 
@@ -1616,7 +1670,8 @@ function upload_image($file_field = null, $check_image = false, $random_name = f
  *
  * @return boolean
  */
-function is_local() {
+function is_local()
+{
 	return (IS_LOCAL === true);
 }
 
@@ -1624,7 +1679,8 @@ function is_local() {
  * Validación del sistema si está en modo de pruebas
  * para transacciones o pasarelas de pago
  */
-function is_sandbox() {
+function is_sandbox()
+{
 	return SANDBOX === true;
 }
 
@@ -1634,7 +1690,8 @@ function is_sandbox() {
  *
  * @return mixed
  */
-function get_css_framework() {
+function get_css_framework()
+{
 	if (!defined('CSS_FRAMEWORK')) {
 		return false;
 	}
@@ -1648,7 +1705,7 @@ function get_css_framework() {
 		case 'bl':
 			$cdn = 'https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css';
 			break;
-			
+
 		case 'fn':
 			$cdn = 'https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/css/foundation.min.css';
 			break;
@@ -1672,7 +1729,7 @@ function get_css_framework() {
 		case 'bs_zephyr':
 			$cdn = $bs_themes . 'zephyr.min.css';
 			break;
-				
+
 		case 'bs':
 		case 'bs5':
 		default:
@@ -1688,7 +1745,8 @@ function get_css_framework() {
  * definido en settings.php
  * @return mixed
  */
-function get_css_framework_scripts() {
+function get_css_framework_scripts()
+{
 	if (!defined('CSS_FRAMEWORK')) {
 		return false;
 	}
@@ -1698,11 +1756,11 @@ function get_css_framework_scripts() {
 	$cdn         = null;
 
 	switch ($framework) {
-		
+
 		case 'fn':
 			$cdn = 'https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/js/foundation.min.js';
 			break;
-			
+
 		case 'bl':
 			return ''; // Bulma no cuenta con scripts
 
@@ -1727,7 +1785,8 @@ function get_css_framework_scripts() {
  *
  * @return mixed
  */
-function get_jquery() {
+function get_jquery()
+{
 	if (!defined('JQUERY')) {
 		return false;
 	}
@@ -1743,7 +1802,8 @@ function get_jquery() {
  *
  * @return string
  */
-function get_jquery_easing() {
+function get_jquery_easing()
+{
 	if (!defined('JQUERY')) {
 		return false;
 	}
@@ -1760,14 +1820,14 @@ function get_jquery_easing() {
  *
  * @return string
  */
-function get_vuejs($runtime = false) {
+function get_vuejs($runtime = false)
+{
 	if (!defined('VUEJS')) {
 		return false;
 	}
 
 	$placeholder = '<script src="%s"></script>';
-	$cdn         = is_local() ? 'https://unpkg.com/vue@3/dist/vue.global.js' : 
-	($runtime === true ? 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.11/vue.runtime.global.prod.js' : 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.11/vue.global.prod.js');
+	$cdn         = is_local() ? 'https://unpkg.com/vue@3/dist/vue.global.js' : ($runtime === true ? 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.11/vue.runtime.global.prod.js' : 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.11/vue.global.prod.js');
 
 	return VUEJS === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
 }
@@ -1778,7 +1838,8 @@ function get_vuejs($runtime = false) {
  *
  * @return mixed
  */
-function get_axios() {
+function get_axios()
+{
 	if (!defined('AXIOS')) {
 		return false;
 	}
@@ -1795,7 +1856,8 @@ function get_axios() {
  *
  * @return mixed
  */
-function get_toastr($type = 'script') {
+function get_toastr($type = 'script')
+{
 	if (!defined('TOASTR')) {
 		return false;
 	}
@@ -1810,7 +1872,7 @@ function get_toastr($type = 'script') {
 			$placeholder = '<link rel="stylesheet" href="%s"/>';
 			$cdn         = 'https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css';
 			break;
-		
+
 		case 'script':
 		default:
 			$placeholder = '<script src="%s"></script>';
@@ -1827,7 +1889,8 @@ function get_toastr($type = 'script') {
  *
  * @return mixed
  */
-function get_sweetalert2() {
+function get_sweetalert2()
+{
 	if (!defined('SWEETALERT2')) {
 		return false;
 	}
@@ -1844,7 +1907,8 @@ function get_sweetalert2() {
  *
  * @return mixed
  */
-function get_waitMe($type = 'script') {
+function get_waitMe($type = 'script')
+{
 	if (!defined('WAITME')) {
 		return false;
 	}
@@ -1857,9 +1921,9 @@ function get_waitMe($type = 'script') {
 	switch ($type) {
 		case 'styles':
 			$placeholder = '<link rel="stylesheet" href="%s"/>';
-			$cdn         = PLUGINS.'waitme/waitMe.min.css';
+			$cdn         = PLUGINS . 'waitme/waitMe.min.css';
 			break;
-		
+
 		case 'script':
 		default:
 			$placeholder = '<script src="%s"></script>';
@@ -1876,7 +1940,8 @@ function get_waitMe($type = 'script') {
  *
  * @return string
  */
-function get_lightbox($type = 'script') {
+function get_lightbox($type = 'script')
+{
 	if (!defined('LIGHTBOX')) {
 		return false;
 	}
@@ -1891,7 +1956,7 @@ function get_lightbox($type = 'script') {
 			$placeholder = '<link rel="stylesheet" href="%s"/>';
 			$cdn         = 'https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css';
 			break;
-		
+
 		case 'script':
 		default:
 			$placeholder = '<script src="%s"></script>';
@@ -1907,7 +1972,8 @@ function get_lightbox($type = 'script') {
  *
  * @return string
  */
-function get_fontawesome() {
+function get_fontawesome()
+{
 	$placeholder = '<link rel="stylesheet" href="%s"/>';
 	$cdn         = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css';
 
@@ -1920,59 +1986,60 @@ function get_fontawesome() {
  *
  * @return mixed
  */
-function get_bee_info() {
+function get_bee_info()
+{
 	$db   = Db::connect();
 	$data =
-	[
-		'Título'               => sprintf('Bee framework %s', get_bee_version()),
-		'Versión Bee'          => get_bee_version(),
-		'Versión PHP'          => phpversion(),
-		'Versión MySQL'        => $db->getAttribute(PDO::ATTR_SERVER_VERSION),
-		'Charset'              => SITE_CHARSET,
-		'Lenguaje'             => SITE_LANG,
-		'Entorno local'        => IS_LOCAL === true ? 'Si' : 'No',
-		'Demostración'         => IS_DEMO === true ? 'Si' : 'No',
-		'Sandbox'              => SANDBOX === true ? 'Si' : 'No',
-		'URL del sitio'        => URL,
-		'URL actual'           => CUR_PAGE,
-		'Path base'            => BASEPATH,
-		'Raíz'                 => ROOT,
-		'App'                  => APP,
-		'Templates'            => TEMPLATES,
-		'Configuración'        => CONFIG,
-		'Controladores'        => CONTROLLERS,
-		'Modelos'              => MODELS,
-		'Clases'               => CLASSES,
-		'Funciones'            => FUNCTIONS,
-		'Logs'                 => LOGS,
-		'Includes'             => INCLUDES,
-		'Módulos'              => MODULES,
-		'Vistas'               => VIEWS,
-		'Imágenes'             => IMAGES_PATH,
-		'Subidas'              => UPLOADS,
-		'Usando Prepros'       => PREPROS === true ? 'Si' : 'No',
-		'Puerto Prepros'       => PORT,
-		'URL de recursos'      => ASSETS,
-		'URL de subidas'       => UPLOADED,
-		'URL de imágenes'      => IMAGES,
-		'Sal de seguridad'     => AUTH_SALT,
-		'DB Engine (local)'    => LDB_ENGINE,
-		'DB Host (local)'      => LDB_HOST,
-		'DB Nombre (local)'    => LDB_NAME,
-		'DB Usuario (local)'   => LDB_USER,
-		'DB Charset (local)'   => LDB_CHARSET,
-		'DB Engine'            => DB_ENGINE,
-		'DB Host'              => DB_HOST,
-		'DB Nombre'            => DB_NAME,
-		'DB Usuario'           => DB_USER,
-		'DB Charset'           => DB_CHARSET,
-		'Plantilla de correos' => PHPMAILER_TEMPLATE,
-		'Nombre del sitio'     => SITE_NAME,
-		'Versión del sitio'    => SITE_VERSION,
-		'Favicon del sitio'    => SITE_FAVICON,
-		'Logotipo del sitio'   => SITE_LOGO,
-		'Google Maps'          => GMAPS,
-	];
+		[
+			'Título'               => sprintf('Bee framework %s', get_bee_version()),
+			'Versión Bee'          => get_bee_version(),
+			'Versión PHP'          => phpversion(),
+			'Versión MySQL'        => $db->getAttribute(PDO::ATTR_SERVER_VERSION),
+			'Charset'              => SITE_CHARSET,
+			'Lenguaje'             => SITE_LANG,
+			'Entorno local'        => IS_LOCAL === true ? 'Si' : 'No',
+			'Demostración'         => IS_DEMO === true ? 'Si' : 'No',
+			'Sandbox'              => SANDBOX === true ? 'Si' : 'No',
+			'URL del sitio'        => URL,
+			'URL actual'           => CUR_PAGE,
+			'Path base'            => BASEPATH,
+			'Raíz'                 => ROOT,
+			'App'                  => APP,
+			'Templates'            => TEMPLATES,
+			'Configuración'        => CONFIG,
+			'Controladores'        => CONTROLLERS,
+			'Modelos'              => MODELS,
+			'Clases'               => CLASSES,
+			'Funciones'            => FUNCTIONS,
+			'Logs'                 => LOGS,
+			'Includes'             => INCLUDES,
+			'Módulos'              => MODULES,
+			'Vistas'               => VIEWS,
+			'Imágenes'             => IMAGES_PATH,
+			'Subidas'              => UPLOADS,
+			'Usando Prepros'       => PREPROS === true ? 'Si' : 'No',
+			'Puerto Prepros'       => PORT,
+			'URL de recursos'      => ASSETS,
+			'URL de subidas'       => UPLOADED,
+			'URL de imágenes'      => IMAGES,
+			'Sal de seguridad'     => AUTH_SALT,
+			'DB Engine (local)'    => LDB_ENGINE,
+			'DB Host (local)'      => LDB_HOST,
+			'DB Nombre (local)'    => LDB_NAME,
+			'DB Usuario (local)'   => LDB_USER,
+			'DB Charset (local)'   => LDB_CHARSET,
+			'DB Engine'            => DB_ENGINE,
+			'DB Host'              => DB_HOST,
+			'DB Nombre'            => DB_NAME,
+			'DB Usuario'           => DB_USER,
+			'DB Charset'           => DB_CHARSET,
+			'Plantilla de correos' => PHPMAILER_TEMPLATE,
+			'Nombre del sitio'     => SITE_NAME,
+			'Versión del sitio'    => SITE_VERSION,
+			'Favicon del sitio'    => SITE_FAVICON,
+			'Logotipo del sitio'   => SITE_LOGO,
+			'Google Maps'          => GMAPS,
+		];
 
 	return get_module('bee/info', $data);
 }
@@ -1984,14 +2051,15 @@ function get_bee_info() {
  * @param string $password
  * @return string
  */
-function get_new_password($password = null) {
+function get_new_password($password = null)
+{
 	$password = $password === null ? random_password() : $password;
 
-	return 
-	[
-		'password' => $password,
-		'hash'     => password_hash($password.AUTH_SALT, PASSWORD_BCRYPT)
-	];
+	return
+		[
+			'password' => $password,
+			'hash'     => password_hash($password . AUTH_SALT, PASSWORD_BCRYPT)
+		];
 }
 
 /**
@@ -2003,7 +2071,8 @@ function get_new_password($password = null) {
  * @param array $headers
  * @return mixed
  */
-function bee_die( $message, $headers = [] ) {
+function bee_die($message, $headers = [])
+{
 	if (!is_string($message)) {
 		throw new Exception('El parámetro $message debe ser un string válido.');
 	}
@@ -2023,7 +2092,8 @@ function bee_die( $message, $headers = [] ) {
  *
  * @return bool
  */
-function persistent_session() {
+function persistent_session()
+{
 	if (!defined('BEE_COOKIES') || BEE_COOKIES !== true) {
 		return false;
 	}
@@ -2036,7 +2106,8 @@ function persistent_session() {
  *
  * @return array
  */
-function get_all_cookies() {
+function get_all_cookies()
+{
 	$cookies = [];
 
 	if (!isset($_COOKIE) || empty($_COOKIE)) {
@@ -2059,7 +2130,8 @@ function get_all_cookies() {
  *
  * @return bool
  */
-function load_all_cookies() {
+function load_all_cookies()
+{
 	global $Bee_Cookies;
 
 	$Bee_Cookies = get_all_cookies();
@@ -2074,19 +2146,20 @@ function load_all_cookies() {
  * @param array $cookies
  * @return bool
  */
-function new_cookie($name, $value, $lifetime = null, $path = '', $domain = '') {
+function new_cookie($name, $value, $lifetime = null, $path = '', $domain = '')
+{
 	// Para prevenir cualquier error de ejecución
 	// al ser enviadas ya las cabeceras del sitio
 	if (headers_sent()) {
 		return false;
 	}
-	
+
 	// Valor por defecto de la duración del cookie
 	$default  = 60 * 60 * 24; // 1 día por defecto si no existe la constante
-	$lifetime = defined('BEE_COOKIE_LIFETIME') && $lifetime === null ? BEE_COOKIE_LIFETIME : (!is_integer($lifetime) ? $default : $lifetime); 
-	
+	$lifetime = defined('BEE_COOKIE_LIFETIME') && $lifetime === null ? BEE_COOKIE_LIFETIME : (!is_integer($lifetime) ? $default : $lifetime);
+
 	// Creamos el nuevo cookie
-	setcookie($name , $value , time() + $lifetime , $path, $domain);
+	setcookie($name, $value, time() + $lifetime, $path, $domain);
 
 	return true;
 }
@@ -2097,7 +2170,8 @@ function new_cookie($name, $value, $lifetime = null, $path = '', $domain = '') {
  * @param string $cookie
  * @return bool | true si existe | false si no
  */
-function cookie_exists($cookie) {
+function cookie_exists($cookie)
+{
 	return isset($_COOKIE[$cookie]);
 }
 
@@ -2108,7 +2182,8 @@ function cookie_exists($cookie) {
  * @param array $cookies
  * @return bool
  */
-function destroy_cookie($cookie, $path = '', $domain = '') {
+function destroy_cookie($cookie, $path = '', $domain = '')
+{
 	global $Bee_Cookies;
 
 	// Para prevenir cualquier error de ejecución
@@ -2124,9 +2199,9 @@ function destroy_cookie($cookie, $path = '', $domain = '') {
 	}
 
 	// Seteamos el cookie con un valor null y tiempo negativo para destruirlo
-	setcookie($cookie , null , time() - 1000, $path, $domain);
+	setcookie($cookie, null, time() - 1000, $path, $domain);
 	unset($Bee_Cookies[$cookie]);
-	
+
 	return true;
 }
 
@@ -2136,7 +2211,8 @@ function destroy_cookie($cookie, $path = '', $domain = '') {
  * @param string $cookie_name
  * @return mixed
  */
-function get_cookie($cookie) {
+function get_cookie($cookie)
+{
 	return isset($_COOKIE[$cookie]) ? $_COOKIE[$cookie] : false;
 }
 
@@ -2146,32 +2222,33 @@ function get_cookie($cookie) {
  *
  * @return array
  */
-function get_bee_default_messages() {
+function get_bee_default_messages()
+{
 	$messages =
-	[
-		'0'           => 'Acceso no autorizado.',
-		'1'           => 'Acción no autorizada.',
-		'2'           => 'Ocurrió un error, intenta más tarde.',
-		'3'           => 'No pudimos procesar tu solicitud.',
-		'added'       => 'Nuevo registro agregado con éxito.',
-		'not_added'   => 'Hubo un problema al agregar el registro.',
-		'updated'     => 'Registro actualizado con éxito.',
-		'not_updated' => 'Hubo un problema al actualizar el registro.',
-		'found'       => 'Registro encontrado con éxito.',
-		'not_found'   => 'El registro no existe o ha sido borrado.',
-		'deleted'     => 'Registro borrado con éxito.',
-		'not_deleted' => 'Hubo un problema al borrar el registro.',
-		'sent'        => 'Mensaje enviado con éxito.',
-		'not_sent'    => 'Hubo un problema al enviar el mensaje.',
-		'sent_to'     => 'Mensaje enviado con éxito a %s.',
-		'not_sent_to' => 'Hubo un problema al enviar el mensaje a %s.',
-		'auth'        => 'Debes iniciar sesión para continuar.',
-		'expired'     => 'La sesión ha expirado, vuelve a ingresar por favor.',
-		'm_params'    => 'Parámetros incompletos, acceso no autorizado.',
-		'm_form'      => 'Campos incompletos, completa el formulario por favor.',
-		'm_token'     => 'Token no encontrado o no válido, acceso no autorizado.'
-	];
-	
+		[
+			'0'           => 'Acceso no autorizado.',
+			'1'           => 'Acción no autorizada.',
+			'2'           => 'Ocurrió un error, intenta más tarde.',
+			'3'           => 'No pudimos procesar tu solicitud.',
+			'added'       => 'Nuevo registro agregado con éxito.',
+			'not_added'   => 'Hubo un problema al agregar el registro.',
+			'updated'     => 'Registro actualizado con éxito.',
+			'not_updated' => 'Hubo un problema al actualizar el registro.',
+			'found'       => 'Registro encontrado con éxito.',
+			'not_found'   => 'El registro no existe o ha sido borrado.',
+			'deleted'     => 'Registro borrado con éxito.',
+			'not_deleted' => 'Hubo un problema al borrar el registro.',
+			'sent'        => 'Mensaje enviado con éxito.',
+			'not_sent'    => 'Hubo un problema al enviar el mensaje.',
+			'sent_to'     => 'Mensaje enviado con éxito a %s.',
+			'not_sent_to' => 'Hubo un problema al enviar el mensaje a %s.',
+			'auth'        => 'Debes iniciar sesión para continuar.',
+			'expired'     => 'La sesión ha expirado, vuelve a ingresar por favor.',
+			'm_params'    => 'Parámetros incompletos, acceso no autorizado.',
+			'm_form'      => 'Campos incompletos, completa el formulario por favor.',
+			'm_token'     => 'Token no encontrado o no válido, acceso no autorizado.'
+		];
+
 	return $messages;
 }
 
@@ -2181,7 +2258,8 @@ function get_bee_default_messages() {
  *
  * @return array
  */
-function get_all_bee_messages() {
+function get_all_bee_messages()
+{
 	global $Bee_Messages;
 
 	return $Bee_Messages;
@@ -2195,7 +2273,8 @@ function get_all_bee_messages() {
  * @param string $message
  * @return bool
  */
-function register_bee_custom_message($code, $message) {
+function register_bee_custom_message($code, $message)
+{
 	global $Bee_Messages;
 
 	try {
@@ -2206,7 +2285,6 @@ function register_bee_custom_message($code, $message) {
 		$Bee_Messages[$code] = $message;
 
 		return true;
-
 	} catch (Exception $e) {
 		bee_die($e->getMessage());
 	}
@@ -2242,7 +2320,8 @@ function register_bee_custom_message($code, $message) {
  * @param string $code
  * @return string
  */
-function get_bee_message($code) {
+function get_bee_message($code)
+{
 	global $Bee_Messages;
 
 	$code = (string) $code;
@@ -2255,7 +2334,8 @@ function get_bee_message($code) {
  *
  * @return string
  */
-function get_bee_api_public_key() {
+function get_bee_api_public_key()
+{
 	$name = 'API_PUBLIC_KEY';
 	if (!defined($name)) {
 		throw new Exception(sprintf('La constante %s no existe o no se ha definido en el sistema y es requerida para esta función.', $name));
@@ -2270,7 +2350,8 @@ function get_bee_api_public_key() {
  *
  * @return string
  */
-function get_bee_api_private_key() {
+function get_bee_api_private_key()
+{
 	$name = 'API_PRIVATE_KEY';
 	if (!defined($name)) {
 		throw new Exception(sprintf('La constante %s no existe o no se ha definido en el sistema y es requerida para esta función.', $name));
@@ -2286,14 +2367,15 @@ function get_bee_api_private_key() {
  *
  * @return bool
  */
-function bee_api_authentication() {
+function bee_api_authentication()
+{
 	$name = 'API_AUTH';
 	if (!defined($name)) {
 		throw new Exception(sprintf('La constante %s no existe o no se ha definido en el sistema y es requerida para esta función.', $name));
 	}
 
 	return (API_AUTH === true);
-}	
+}
 
 /**
  * Regresa una versión de un asset si estamos en desarrollo generará
@@ -2302,7 +2384,8 @@ function bee_api_authentication() {
  *
  * @return string
  */
-function get_asset_version() {
+function get_asset_version()
+{
 	return is_local() ? time() : get_version();
 }
 
@@ -2313,7 +2396,8 @@ function get_asset_version() {
  * @param boolean $spaces
  * @return boolean
  */
-function is_alphanumeric($string, $accept_spaces = false) {
+function is_alphanumeric($string, $accept_spaces = false)
+{
 	if ($accept_spaces === true) {
 		return preg_match("/^[\p{L} ]+$/u", clean($string)) === 1;
 	}
@@ -2330,7 +2414,8 @@ function is_alphanumeric($string, $accept_spaces = false) {
  * @param string $placeholder
  * @return string
  */
-function _e($value, string $placeholder = "—") {
+function _e($value, string $placeholder = "—")
+{
 	if (empty($value) || !isset($value)) {
 		return $placeholder;
 	}
@@ -2344,7 +2429,8 @@ function _e($value, string $placeholder = "—") {
  *
  * @return string
  */
-function get_meta_pixel() {
+function get_meta_pixel()
+{
 	$meta_pixel = get_option('fb-pixel');
 	return $meta_pixel;
 }
@@ -2355,7 +2441,8 @@ function get_meta_pixel() {
  *
  * @return string
  */
-function init_meta_pixel() {
+function init_meta_pixel()
+{
 	$pixel  = get_meta_pixel();
 	$output = '';
 
@@ -2363,7 +2450,7 @@ function init_meta_pixel() {
 
 	$output .= '<!-- Meta Pixel Code -->';
 	$output .=
-	"<script>
+		"<script>
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -2394,7 +2481,8 @@ function init_meta_pixel() {
  * @param string $type
  * @return bool
  */
-function set_page_og_meta_tags($title = null, $description = null, $image = null, $url = null, $type = 'article') {
+function set_page_og_meta_tags($title = null, $description = null, $image = null, $url = null, $type = 'article')
+{
 	global $OG_Title;
 	global $OG_Description;
 	global $OG_Url;
@@ -2421,7 +2509,8 @@ function set_page_og_meta_tags($title = null, $description = null, $image = null
  * @param boolean $article
  * @return string
  */
-function get_page_og_meta_tags() {
+function get_page_og_meta_tags()
+{
 	global $OG_Title;
 	global $OG_Description;
 	global $OG_Url;
@@ -2435,7 +2524,7 @@ function get_page_og_meta_tags() {
 	$output .= sprintf('<meta property="og:url" content="%s" />', $OG_Url);
 	$output .= sprintf('<meta property="og:type" content="%s" />', $OG_Type);
 	$output .= sprintf('<meta property="og:image" content="%s" />', $OG_Image);
-	
+
 	return $output;
 }
 
@@ -2447,7 +2536,8 @@ function get_page_og_meta_tags() {
  * @param integer $max_length
  * @return string
  */
-function sanitize_input($input, $max_length = null) {
+function sanitize_input($input, $max_length = null)
+{
 	// Eliminamos espacios en blanco adicionales al inicio y al final del input.
 	$sanitized_input = trim($input);
 
@@ -2457,7 +2547,7 @@ function sanitize_input($input, $max_length = null) {
 	// Utilizamos FILTER_SANITIZE_FULL_SPECIAL_CHARS para eliminar o codificar caracteres
 	// especiales que podrían ser peligrosos o causar problemas de seguridad.
 	//$sanitized_input = filter_var($sanitized_input, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-	$sanitized_input = filter_var($sanitized_input, FILTER_UNSAFE_RAW); 
+	$sanitized_input = filter_var($sanitized_input, FILTER_UNSAFE_RAW);
 
 	// Si el input contiene una cadena mal formada de UTF-8, eliminamos los bytes inválidos.
 	// Esto puede ayudar a prevenir ataques basados en UTF-8 malformado.
@@ -2478,15 +2568,16 @@ function sanitize_input($input, $max_length = null) {
  * @param string $data
  * @return string
  */
-function hash_256($data) {
-  // Verificamos si el algoritmo SHA-256 está disponible
-  if (in_array('sha256', hash_algos(), true)) {
-    // Calculamos el hash SHA-256 y lo devolvemos
-    return hash('sha256', $data);
-  }
+function hash_256($data)
+{
+	// Verificamos si el algoritmo SHA-256 está disponible
+	if (in_array('sha256', hash_algos(), true)) {
+		// Calculamos el hash SHA-256 y lo devolvemos
+		return hash('sha256', $data);
+	}
 
-  // Si el algoritmo SHA-256 no está disponible, devolvemos un valor nulo, es poco probable que pase
-  return null;
+	// Si el algoritmo SHA-256 no está disponible, devolvemos un valor nulo, es poco probable que pase
+	return null;
 }
 
 /**
@@ -2497,22 +2588,23 @@ function hash_256($data) {
  * @param boolean $remove_special_chars
  * @return string
  */
-function normalize_string($input, $remove_internal_spaces = false, $remove_special_chars = false) {
-  // Convertimos a minúsculas y eliminamos espacios extras al inicio y final
-  $normalized = trim(mb_strtolower($input, 'UTF-8'));
+function normalize_string($input, $remove_internal_spaces = false, $remove_special_chars = false)
+{
+	// Convertimos a minúsculas y eliminamos espacios extras al inicio y final
+	$normalized = trim(mb_strtolower($input, 'UTF-8'));
 
-  // Opcionalmente, removemos espacios internos si se solicita
-  if ($remove_internal_spaces) {
-    $normalized = preg_replace('/\s+/', '', $normalized);
-  }
-	
-  // Opcionalmente, removemos caracteres especiales si se solicita
-  if ($remove_special_chars) {
+	// Opcionalmente, removemos espacios internos si se solicita
+	if ($remove_internal_spaces) {
+		$normalized = preg_replace('/\s+/', '', $normalized);
+	}
+
+	// Opcionalmente, removemos caracteres especiales si se solicita
+	if ($remove_special_chars) {
 		$normalized = preg_replace('/[^a-z0-9\s]/', '', $normalized);
 		$normalized = htmlspecialchars($normalized, ENT_QUOTES, 'UTF-8');
-  }
+	}
 
-  return $normalized;
+	return $normalized;
 }
 
 /**
@@ -2520,7 +2612,8 @@ function normalize_string($input, $remove_internal_spaces = false, $remove_speci
  *
  * @return string
  */
-function get_basepath() {
+function get_basepath()
+{
 	return BASEPATH;
 }
 
@@ -2529,7 +2622,8 @@ function get_basepath() {
  *
  * @return string
  */
-function get_site_lang() {
+function get_site_lang()
+{
 	return SITE_LANG;
 }
 
@@ -2538,10 +2632,17 @@ function get_site_lang() {
  *
  * @return void
  */
-function get_site_charset() {
+function get_site_charset()
+{
 	return SITE_CHARSET;
 }
 
+/**
+ * Obtiene la URL de referencia cuando alguien viene de alguna fuente a nuestro sistema
+ *
+ * @param string $fallbackUrl
+ * @return string
+ */
 function get_referer_url($fallbackUrl = null)
 {
 	// Verificar si el encabezado 'Referer' está presente
@@ -2551,4 +2652,63 @@ function get_referer_url($fallbackUrl = null)
 	} else {
 		return $fallbackUrl === null ? get_base_url() : $fallbackUrl;
 	}
+}
+
+/**
+ * Verifica si el usuario actual está loggeado o no
+ *
+ * @return boolean
+ */
+function is_logged()
+{
+	return Auth::validate();
+}
+
+/**
+ * Imprime un bloque de código de forma segura cómo string
+ *
+ * @param string $snippet
+ * @return string
+ */
+function code_block($snippet)
+{
+	$snippet = htmlentities($snippet);
+	return "<pre><code>$snippet</code></pre>";
+}
+
+/**
+ * Verifica si una dirección de correo electrónico
+ * no es de un proveedor de correos electrónicos temporales
+ *
+ * @param string $email
+ * @return boolean
+ */
+function is_temporary_email($email)
+{
+	// Lista de proveedores de correo temporal
+	$temporaryDomains = [
+		'guerrillamail.com', 'mailinator.com', 'sharklasers.com', 'getnada.com', 'fakeinbox.com',
+		'dispostable.com', 'yopmail.com', 'tempmail.com', 'mailnesia.com', 'jetable.com',
+		'mintemail.com', 'emailondeck.com', 'throwawaymail.com', 'spambog.com', 'mailexpire.com',
+		'mailcatch.com', 'inboxbear.com', '10minutemail.com', 'temp-mail.com', 'burnermail.io',
+		'tempmailaddress.com', '20minutemail.com', 'maildrop.cc', 'trashmail.com', 'mailimate.com'
+	];
+
+	// Sepára los elementos del correo electrónico
+	$emailParts = explode('@', $email);
+	
+	// Contar las partes del correo electrónico
+	if (count($emailParts) !== 2) {
+		return false;
+	}
+
+	// normalizar el dominio del correo
+	$domain = strtolower($emailParts[1]);
+
+	// buscar en el array de dominios no autorizados
+	if (in_array($domain, $temporaryDomains)) {
+		return true; // se encontró dentro de la lista
+	}
+
+	return false;
 }
