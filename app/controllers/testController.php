@@ -1,12 +1,13 @@
 <?php
-use Cocur\Slugify\Slugify;
+
 /**
  * Plantilla general de controladores
  * Versión 1.0.2
  *
  * Controlador de test
  */
-class testController extends Controller {
+class testController extends Controller
+{
   function __construct()
   {
     // Prevenir el ingreso en Producción
@@ -17,7 +18,6 @@ class testController extends Controller {
 
   function index()
   {
-    
   }
 
   function menus()
@@ -118,41 +118,42 @@ class testController extends Controller {
     $script = $form->generateFetchScript(URL . 'api/form-builder', API_PRIVATE_KEY); // Script generado automaticamente para enviar los datos con AJAX
 
     $data   =
-    [
-      'title'  => 'Vista de prueba',
-      'form'   => $html,
-      'script' => $script
-    ];
+      [
+        'title'  => 'Vista de prueba',
+        'form'   => $html,
+        'script' => $script
+      ];
 
     View::render('index', $data);
   }
-  
+
   function db_user()
   {
+    // Ejemplo de uso de nuestra clase Db en POO evitando el uso de métodos estáticos
     try {
       $sql   = 'SELECT * FROM pruebas';
       $db    = new Db();
       $conn  = $db->link();
-    
-      // begin the transaction
+
+      // Inicializar la transacción
       $conn->beginTransaction();
-  
-      // our SQL statements
+
+      // Enunciados SQL
       $conn->exec("INSERT INTO pruebas (nombre) VALUES ('John')");
       $conn->exec("INSERT INTO pruebas (nombre) VALUES ('Juan')");
       $conn->exec("INSERT INTO pruebas (nombre) VALUES ('Rigoberto')");
       $conn->exec("INSERT INTO pruebas (nombre) VALUES ('Rolon')");
-    
-      // commit the transaction
+
+      // Aplicar los cambios
       $conn->commit();
       echo "New records created successfully";
-    } catch(PDOException $e) {
-      // roll back the transaction if something failed
+    } catch (PDOException $e) {
+      // Si hubo algún fallo, hacer rollback
       $conn->rollback();
       echo "Error: " . $e->getMessage();
     }
   }
-  
+
   function create_table()
   {
     try {
@@ -168,15 +169,14 @@ class testController extends Controller {
       $table->add_column('nombre', 'varchar');
       $table->add_column('email', 'varchar');
       debug($table->get_sql());
-      
+
       // Crea una tabla con base al TableSchema
       $res = Model::create($table);
       debug($res);
-
     } catch (PDOException $e) {
       echo $e->getMessage();
     } catch (Exception $e) {
-      echo 'Regular: '.$e->getMessage();
+      echo 'Error: ' . $e->getMessage();
     }
   }
 }
