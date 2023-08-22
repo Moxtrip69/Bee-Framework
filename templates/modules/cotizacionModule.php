@@ -233,6 +233,8 @@
           </tr>
         </tfoot>
       </table>
+
+      <img src="<?php echo $d->chart; ?>" alt="Gráfica generada">
     </div>
   </div>
 </body>

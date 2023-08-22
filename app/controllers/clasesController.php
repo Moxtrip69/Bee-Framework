@@ -108,6 +108,15 @@ class clasesController extends Controller {
       // Conceptos
       $concepts    = $_SESSION['conceptos'];
 
+      // Gráfica
+      $chart = new BeeQuickChart('bar');
+      $chart->setSize(1000, 300);
+      $chart->setLabels(['Enero', 'Febrero', 'Marzo', 'Abril']);
+      $chart->addDataset('Ventas'  , [10, 20, 30, 25]);
+      $chart->addDataset('Compras' , [15, 32, 55, 64]);
+      $chart->addDataset('Saldo'   , [35, 52, 155, 84]);
+      $chartUrl = $chart->getUrl();
+
       ////////////////////////////////////////////////////////////////////////////
       ////////////////////////////////////////////////////////////////////////////
       //////// Opciones de configuración de Dompdf
@@ -118,10 +127,9 @@ class clasesController extends Controller {
       // $options->set('fontDir', UPLOADS); // Directorio donde se encuentran las fuentes personalizadas.
       // $options->set('fontCache', ...); // Directorio para almacenar en caché de fuentes.
       // $options->set('isPhpEnabled', false); // Permite la ejecución de PHP en el contenido HTML (no recomendado por razones de seguridad).
-
-      $options->set('dpi', 300); // Resolución en puntos por pulgada para la renderización de imágenes (valor predeterminado: 96).
-      $options->set('isHtml5ParserEnabled', true); // Habilita el uso del parser HTML5 en lugar del parser más antiguo de HTML.
-      $options->set('isRemoteEnabled', true); // Para poder hacer uso de recursos externos cómo imágenes
+      $options->set('dpi'                  , 300); // Resolución en puntos por pulgada para la renderización de imágenes (valor predeterminado: 96).
+      $options->set('isHtml5ParserEnabled' , true); // Habilita el uso del parser HTML5 en lugar del parser más antiguo de HTML.
+      $options->set('isRemoteEnabled'      , true); // Para poder hacer uso de recursos externos cómo imágenes
 
       ////////////////////////////////////////////////////////////////////////////
       ////////////////////////////////////////////////////////////////////////////
@@ -148,7 +156,8 @@ class clasesController extends Controller {
         'companyName'    => $companyName,
         'companyAddress' => $companyAddress,
         'companyUrl'     => $companyUrl,
-        'tipografia'     => 'Verdana'
+        'tipografia'     => 'Verdana',
+        'chart'          => $chartUrl
       ];
 
       // Recuerda, el módulo debe ir dentro de templates/modules/...

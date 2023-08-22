@@ -7,10 +7,8 @@
       <h2 class="mt-5 mb-3"><span class="text-warning">Bee</span> framework</h2>
       <!-- contenido -->
       <div class="border rounded shadow p-3">
-        <h3><?php echo $d->title; ?></h3>
-        <?php echo $d->form; ?>
+        <img src="<?php echo $d->url; ?>" alt="" class="img-fluid">
       </div>
-      <?php echo $d->script; ?>
     </div>
   </div>
 </div>

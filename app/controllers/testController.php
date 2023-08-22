@@ -20,6 +20,37 @@ class testController extends Controller
   {
   }
 
+  function quickcharts()
+  {
+    $chart = new BeeQuickChart('bar');
+    $chart->setSize(500, 300);
+    $chart->setLabels(['Enero', 'Febrero', 'Marzo', 'Abril']);
+
+    $dataset1 = new BeeQuickChartDataset();
+    $dataset1->setLabel('Ventas');
+    $dataset1->setData([10, 20, 30, 25]);
+    $dataset1->setBaseColor('#e84118', 0.75);
+    $dataset1->setBorder(10, 5);
+    $dataset1->setPointRadius(3);
+    $chart->addDataset($dataset1);
+
+    $dataset2 = new BeeQuickChartDataset();
+    $dataset2->setLabel('Compras');
+    $dataset2->setData([28, 22, 35, 49]);
+    $dataset2->setBaseColor('#273c75', 0.4);
+    $chart->addDataset($dataset2);
+
+    //$image = $chart->saveToImage();
+
+    $data =
+    [
+      'title' => 'QuickCharts',
+      'url'   => $chart->getUrl(),
+    ];
+
+    View::render('index', $data);
+  }
+
   function menus()
   {
     $item = new BeeMenuItem();
@@ -146,11 +177,13 @@ class testController extends Controller
 
       // Aplicar los cambios
       $conn->commit();
-      echo "New records created successfully";
+      echo "Nuevos registros agregados con éxito.";
+
     } catch (PDOException $e) {
       // Si hubo algún fallo, hacer rollback
       $conn->rollback();
-      echo "Error: " . $e->getMessage();
+      echo "Hubo un error: " . $e->getMessage();
+
     }
   }
 
@@ -171,7 +204,7 @@ class testController extends Controller
       debug($table->get_sql());
 
       // Crea una tabla con base al TableSchema
-      $res = Model::create($table);
+      $res = Model::createTable($table);
       debug($res);
     } catch (PDOException $e) {
       echo $e->getMessage();

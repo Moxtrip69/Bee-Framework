@@ -1,6 +1,6 @@
 <?php 
 
-final class BeeMenuItem
+class BeeMenuItem
 {
   private $item;
   private $text;

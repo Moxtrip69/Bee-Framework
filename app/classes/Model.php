@@ -1,9 +1,16 @@
 <?php 
 
+/**
+ * Modelo principal y general
+ * 
+ * @version 1.0.5
+ */
 class Model extends Db {
 
+	
   /**
-   * Lista registros de la base de datos o un solo registro
+   * Lista registros de la base de datos o un solo registro,
+	 * regresa un array de resultados, si el $limit es 1, regresa sólo un array
    *
    * @param string $table
    * @param array $params
@@ -162,9 +169,9 @@ class Model extends Db {
 	 * @param boolean $if_exists
 	 * @return bool
 	 */
-	public static function drop($table, $if_exists = true)
+	public static function dropTable(string $table, bool $if_exists = true)
 	{
-		$sql = sprintf('DROP TABLE %s %s', $if_exists === true ? 'IF EXISTS' : null, clean($table, true));
+		$sql = sprintf('DROP TABLE %s %s', $if_exists === true ? 'IF EXISTS' : null, $table);
 		return parent::query($sql);
 	}
 
@@ -175,21 +182,20 @@ class Model extends Db {
 	 * @param string $table
 	 * @return bool
 	 */
-	public static function truncate($table)
+	public static function truncateTable($table)
 	{
 		$sql = sprintf('TRUNCATE TABLE %s', clean($table, true));
 		return parent::query($sql);
 	}
 
 	/**
-	 * TODO: Aún pendiente por terminar esta funcionalidad
 	 * Crea una nueva tabla de la base de datos actualmente
 	 * conectada.
 	 *
-	 * @param TableSchema $schema
+	 * @param TableSchema $schema el query SQL de la creación de la tabla
 	 * @return bool
 	 */
-	public static function create(TableSchema $schema)
+	public static function createTable(TableSchema $schema)
 	{
 		$sql = $schema->get_sql();
 		return parent::query($sql);

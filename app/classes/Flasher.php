@@ -1,8 +1,12 @@
 <?php 
 
+/**
+ * Clase para notificaciones Flash en pantalla
+ * 
+ * @version 1.0.5
+ */
 class Flasher 
 {
-
   /**
    * El framework css definido en settings.php
    *
@@ -24,7 +28,19 @@ class Flasher
    * @var string
    */
   private $default     = null;
+
+  /**
+   * Tipo de notificación flash
+   *
+   * @var string
+   */
   private $type        = null;
+
+  /**
+   * Contenido de la notificación flash
+   *
+   * @var string
+   */
   private $msg         = null;
 
   function __construct()
@@ -41,7 +57,7 @@ class Flasher
    * @param string $type
    * @return void
    */
-  public static function new(String $msg, String $type = null, String $heading = null, Bool $icon = true)
+  public static function new(string $msg, string $type = null, string $heading = null, bool $icon = true)
   {
     $self = new self();
 
@@ -75,7 +91,7 @@ class Flasher
    * @param string $heading
    * @return void
    */
-  static function error(String $msg, String $heading = null)
+  static function error(string $msg, string $heading = null)
   {
     self::new($msg, 'danger', $heading);
     return true;
@@ -88,7 +104,7 @@ class Flasher
    * @param string $heading
    * @return void
    */
-  static function info(String $msg, String $heading = null)
+  static function info(string $msg, string $heading = null)
   {
     self::new($msg, 'info', $heading);
     return true;
@@ -101,7 +117,7 @@ class Flasher
    * @param string $heading
    * @return void
    */
-  static function success(String $msg, String $heading = null)
+  static function success(string $msg, string $heading = null)
   {
     self::new($msg, 'success', $heading);
     return true;
@@ -114,7 +130,7 @@ class Flasher
    * @param string $heading
    * @return void
    */
-  static function warn(String $msg, String $heading = null)
+  static function warn(string $msg, string $heading = null)
   {
     self::new($msg, 'warning', $heading);
     return true;
@@ -127,7 +143,7 @@ class Flasher
    * @param string $heading
    * @return void
    */
-  static function primary(String $msg, String $heading = null)
+  static function primary(string $msg, string $heading = null)
   {
     self::new($msg, 'primary', $heading);
     return true;
@@ -140,7 +156,7 @@ class Flasher
    * @param string $heading
    * @return void
    */
-  static function dark(String $msg, String $heading = null)
+  static function dark(string $msg, string $heading = null)
   {
     self::new($msg, 'dark', $heading);
     return true;
@@ -246,10 +262,15 @@ class Flasher
 
   /**
    * Muestra un mensaje de acceso denegado
+   * 
+   * 0 Acceso no autorizado.
+   * 1 Acción no autorizado.
+   * 2 Permisos denegados.
+   * 3 No puedes realizar esta acción.
    *
    * @return void
    */
-  public static function deny($type = 0)
+  public static function deny($messageType = 0)
   {
     $types =
     [
@@ -259,7 +280,7 @@ class Flasher
       3 => 'No puedes realizar esta acción.'
     ];
 
-    self::new($types[$type], 'danger');
+    self::new($types[$messageType], 'danger');
     return true;
   }
 

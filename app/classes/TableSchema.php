@@ -9,11 +9,11 @@ class TableSchema
   private $pk         = [];
   private $fk         = [];
   private $engine     = 'InnoDB'; // por defecto
-  private $charset    = 'utf8'; // por defecto
-  private $auto_inc   = 1; // por defecto
-  private $ph         = '`%s`';
+  private $charset    = 'utf8';   // por defecto
+  private $auto_inc   = 1;        // por defecto
+  private $ph         = '`%s`';   // placeholder
 
-  public function __construct(String $table_name, String $engine = null, String $charset = null)
+  public function __construct(string $table_name, string $engine = null, string $charset = null)
   {
     $this->table_name = $table_name;
     $this->engine     = $engine !== null ? $engine : $this->engine;
@@ -21,18 +21,18 @@ class TableSchema
   }
 
   /**
-   * Undocumented function
+   * Agrega una columna a la tabla en curso
    *
-   * @param String $column_name
-   * @param String $type
-   * @param [type] $value
+   * @param string $column_name
+   * @param string $type
+   * @param mixed $value
    * @param boolean $nulleable
    * @param string $default_value
    * @param boolean $pk
    * @param boolean $auto_inc
    * @return void
    */
-  public function add_column(String $column_name, String $type, $value = null, Bool $nulleable = true, $default_value = 'null', Bool $pk = false, Bool $auto_inc = false)
+  public function add_column(string $column_name, string $type, $value = null, bool $nulleable = true, $default_value = 'null', bool $pk = false, bool $auto_inc = false)
   {
     // type` varchar(30) DEFAULT NULL,
     $this->column = sprintf(
@@ -61,6 +61,13 @@ class TableSchema
     $this->columns[] = $this->column;
   }
 
+  /**
+   * Verifica que el valor y tipo de valor sean válidos
+   *
+   * @param string $type
+   * @param mixed $value
+   * @return void
+   */
   private function validate_datatype($type, $value = null)
   {
     $output = '';
@@ -97,12 +104,17 @@ class TableSchema
       
       default:
         throw new Exception(sprintf('El tipo de valor ingresado %s no es válido.', $type));
-        break;
     }
 
     return $output;
   }
 
+  /**
+   * Validar el valor por defecto de la columna
+   *
+   * @param mixed $default_value
+   * @return string
+   */
   private function validate_default_value($default_value)
   {
     $output = '';
@@ -125,7 +137,7 @@ class TableSchema
         break;
       
       default:
-        throw new Exception(sprintf('El valor por defecto %s no es válido.', $default_value));
+        //throw new Exception(sprintf('El valor por defecto %s no es válido.', $default_value));
         $output = sprintf('DEFAULT "%s"', $default_value);
         break;
     }
@@ -133,6 +145,12 @@ class TableSchema
     return $output;
   }
 
+  /**
+   * Método getter
+   *
+   * @param string $property
+   * @return mixed
+   */
   public function get($property)
   {
     if (!isset($this->{$property})) {
@@ -142,6 +160,13 @@ class TableSchema
     return $this->{$property};
   }
 
+  /**
+   * Método setter
+   *
+   * @param string $property
+   * @param mixed $value
+   * @return mixed
+   */
   public function set($property, $value)
   {
     if (!isset($this->{$property})) {
@@ -153,6 +178,11 @@ class TableSchema
     return $this->{$property};
   }
 
+  /**
+   * Construye el query completo para crear la tabla de la base de datos
+   *
+   * @return string
+   */
   private function build()
   {
     if (empty($this->columns)) {
@@ -160,6 +190,11 @@ class TableSchema
     }
 
     $this->sql = sprintf('CREATE TABLE %s', sprintf($this->ph, $this->table_name));
+
+    if (empty($this->columns)) {
+      throw new Exception('No hay columnas, agrega una columna mínimo.');
+    }
+
     $this->sql .= '(';
 
     // Agregando cada una de las columnas
@@ -173,6 +208,7 @@ class TableSchema
     }
     
     $this->sql .= ')';
+
     $this->sql .= sprintf(' ENGINE=%s AUTO_INCREMENT=%s DEFAULT CHARSET=%s;', $this->engine, $this->auto_inc, $this->charset);
     // 'CREATE TABLE `movements` (
     //   `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -183,12 +219,16 @@ class TableSchema
     //   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     //   PRIMARY KEY (`id`)
     // ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;'
-    return $this;
+    return $this->sql;
   }
 
+  /**
+   * Regresa el query SQL completo para la creación de la tabla
+   *
+   * @return string
+   */
   public function get_sql()
   {
-    $this->build();
-    return $this->sql;
+    return $this->build();
   }
 }

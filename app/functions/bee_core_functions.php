@@ -2673,7 +2673,7 @@ function is_logged()
 function code_block($snippet)
 {
 	$snippet = htmlentities($snippet);
-	return "<pre><code>$snippet</code></pre>";
+	return "<pre class='code-block'><code>$snippet</code></pre>";
 }
 
 /**

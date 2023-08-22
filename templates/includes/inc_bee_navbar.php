@@ -23,7 +23,7 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="utilidades">
             <li><a class="dropdown-item" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.5.8#v-158" target="_blank">Changelog</a></li>
-            <li><a class="dropdown-item" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.5.8" target="_blank">Documentación</a></li>
+            <li><a class="dropdown-item" href="#documentacion">Documentación</a></li>
             <li><a class="dropdown-item" href="bee/info">Bee info</a></li>
             <li><a class="dropdown-item" href="bee/password">Generar contraseña</a></li>
             <li><a class="dropdown-item" href="<?php echo build_url('bee/generate-user'); ?>">Crear nuevo usuario</a></li>

@@ -1,5 +1,4 @@
 - Configuración para obtener de que aspect ratio mostrar las imágenes de la tienda
-- Es necesario crear un slug en lugar de usar el ID del producto, es mucho más SEO friendly
 - Función del core para cargar productos relacionados a la busqueda o visualizaciones del usuario
 - CRUD para productos sencillo
 - Ajustar las rutas de las imágenes en carrito y tienda por el URL absoluto de bee

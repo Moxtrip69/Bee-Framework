@@ -6,16 +6,15 @@
  *
  * Controlador de bee
  */
-class beeController extends Controller {
+class beeController extends Controller
+{
   function __construct()
   {
     // Validación de sesión de usuario, descomentar si requerida
-    /**
-    if (!Auth::validate()) {
-      Flasher::new('Debes iniciar sesión primero.', 'danger');
-      Redirect::to('login');
-    }
-    */
+    // if (!Auth::validate()) {
+    //   Flasher::new('Debes iniciar sesión primero.', 'danger');
+    //   Redirect::to('login');
+    // }
   }
 
   function index()
@@ -30,14 +29,22 @@ class beeController extends Controller {
     // Definir og meta tags
     set_page_og_meta_tags('Bienvenido a Bee framework', null, null, null, 'website');
 
+    $test = 
+    <<<'EOD'
+    <?php
+    $test = 'Algo';
+    ?>
+    EOD;
+
     $data =
     [
-      'title' => 'Bienvenido'
+      'title' => 'Bienvenido',
+      'test'  => $test
     ];
 
     View::render('bee', $data);
   }
-  
+
   /**
    * @since 1.5.0
    * 
@@ -78,10 +85,10 @@ class beeController extends Controller {
     }
 
     $data =
-    [
-      'title' => 'Password Generado',
-      'pw'    => get_new_password($password)
-    ];
+      [
+        'title' => 'Password Generado',
+        'pw'    => get_new_password($password)
+      ];
 
     View::render('password', $data);
   }
@@ -103,27 +110,27 @@ class beeController extends Controller {
       if (!Csrf::validate($_GET["_t"])) {
         throw new Exception(get_bee_message('m_token'));
       }
-  
+
       // Validar nombre de archivo
       $filename = 'settings.php';
       $backup   = 'settings-backup.php';
 
       // Validar que existe el archivo settings-backup.php por seguridad
-      if (!is_file(CORE.$backup)) {
+      if (!is_file(CORE . $backup)) {
         throw new Exception(sprintf('El archivo %s no existe, recomendamos crear un backup de %s antes de proceder.', $backup, $filename));
       }
-  
+
       // Validar la existencia del archivo de settings.php | solo por seguridad, en teoría esta validación ya se ha hecho anteriormente
-      if (!is_file(CORE.$filename)) {
+      if (!is_file(CORE . $filename)) {
         throw new Exception(sprintf('No existe el archivo %s, es requerido para proceder.', $filename));
       }
 
       // Keys a insertar en el archivo
       $key1 = generate_key(); // public key
       $key2 = generate_key(); // private key
-      
+
       // Cargar contenido del archivo
-      $php = @file_get_contents(CORE.$filename);
+      $php = @file_get_contents(CORE . $filename);
 
       // En caso de que no se lea contenido
 
@@ -131,12 +138,13 @@ class beeController extends Controller {
         throw new Exception(sprintf('Hubo un problema y no pudimos generatas las API keys para esta instancia de %s.', get_bee_name()));
       }
 
-      $php = str_replace('[[REPLACE_PUBLIC_KEY]]' , $key1, $php, $ok1);
+      $php = str_replace('[[REPLACE_PUBLIC_KEY]]', $key1, $php, $ok1);
       $php = str_replace('[[REPLACE_PRIVATE_KEY]]', $key2, $php, $ok2);
 
       // Validar que se hayan reemplazado con éxito ambas
-      if ($ok1 == 0 && $ok2 == 0) {
-        throw new Exception(sprintf('No pudimos reemplazar las API keys en tu archivo <b>%s</b>, es probable que debas sustituir el contenido de <b>%s</b> con el de <b>%s</b>.',
+      if ($ok1 == 0 || $ok2 == 0) {
+        throw new Exception(sprintf(
+          'No pudimos reemplazar las API keys en tu archivo <b>%s</b>, es probable que debas sustituir el contenido de <b>%s</b> con el de <b>%s</b>.',
           $filename,
           $filename,
           $backup
@@ -144,13 +152,12 @@ class beeController extends Controller {
       }
 
       // Guardar los cambios en el archivo settings.php
-      if (file_put_contents(CORE.$filename, $php) === false)  {
+      if (file_put_contents(CORE . $filename, $php) === false) {
         throw new Exception(sprintf('Ocurrió un problema al actualizar el archivo.', $filename));
       }
 
       Flasher::success(sprintf('API keys generadas con éxito, las encontrarás en <b>%s</b>', $filename));
       Redirect::back();
-
     } catch (Exception $e) {
       Flasher::error($e->getMessage());
       Redirect::back();
@@ -201,10 +208,10 @@ class beeController extends Controller {
       </body>
       </html>';
       $content = sprintf($content, get_bee_logo(), get_bee_name(), get_bee_name(), get_bee_version());
-  
+
       // Método 1
       $pdf = new BeePdf($content); // Se muestra directo en navegador, para descargar pasar en parámetro 2 true y para guardar en parámetro 3 true
-  
+
       // Método 2
       //$pdf = new BeePdf();
       //$pdf->create('bee_pdfs', $content);
@@ -213,7 +220,6 @@ class beeController extends Controller {
       Flasher::new($e->getMessage(), 'danger');
       Redirect::to('home');
     }
-
   }
 
   /**
@@ -285,7 +291,7 @@ class beeController extends Controller {
       if (!is_local()) {
         throw new Exception(get_bee_message(0));
       }
-      
+
       if (!Model::table_exists(BEE_USERS_TABLE)) {
         throw new Exception(sprintf('Es necesaria la tabla <b>%s</b> en la base de datos.', BEE_USERS_TABLE));
       }
@@ -295,12 +301,12 @@ class beeController extends Controller {
       $password = get_new_password();
       $email    = sprintf('%s@localhost.com', $username);
       $user     =
-      [
-        'username'   => $username,
-        'password'   => $password['hash'],
-        'email'      => $email,
-        'created_at' => now()
-      ];
+        [
+          'username'   => $username,
+          'password'   => $password['hash'],
+          'email'      => $email,
+          'created_at' => now()
+        ];
 
       // Insertando el registro en la base de datos
       if (!$id = Model::add(BEE_USERS_TABLE, $user)) {
@@ -309,7 +315,6 @@ class beeController extends Controller {
 
       Flasher::success(sprintf('Nuevo usuario generado con éxito:<br>Usuario: <b>%s</b><br>Contraseña: <b>%s</b>', $user['username'], $password['password']));
       Redirect::back();
-      
     } catch (Exception $e) {
       Flasher::error($e->getMessage());
       Redirect::back();
