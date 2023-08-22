@@ -309,45 +309,20 @@ class adminController extends Controller {
       // Verificar que no exista ya un producto con el sku si es que no está vacío
       $sql = 'SELECT * FROM products WHERE sku = :sku OR `name` = `:name` OR slug = :slug';
       if (productModel::query($sql, ['sku' => $sku, 'name' => $name, 'slug' => $slug])) {
-        throw new Exception('Ya existe un producto registrado con el mismo SKU.');
+        throw new Exception('Ya existe un producto registrado con el mismo SKU o nombre.');
       }
 
       // TODO: Validar que no exista uno con el mismo sku
       // TODO: Validar que no exista uno con el mismo nombre
 
-      // Validaciones necesarias
-      if (!preg_match('/^[a-zA-Z0-9]{5,20}$/', $username)) {
-        $errorMessage .= '- Tu nombre de usuario debe estar formado por mínimo 5 caracteres y máximo 20.<br>';
-        $errors++;
-      }
 
-      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errorMessage .= '- El correo electrónico no es válido.<br>';
-        $errors++;
-      }
-
-      if (is_temporary_email($email)) {
-        $errorMessage .= '- El dominio del correo electrónico no está autorizado.<br>';
-        $errors++;
-      }
-
-      if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*_-])[A-Za-z\d!@#$%^&*_-]{5,20}$/', $password)) {
-        $errorMessage .= '- La contraseña debe ser de entre 5 y 20 caracteres, por lo menos debe contar con: 1 letra minúscula, 1 letra mayúscula, 1 digito y 1 caracter especial de entre <b>!@#$%^&*_-</b>';
-        $errors++;
-      }
 
       if ($errors > 0) {
         throw new Exception($errorMessage);
       }
 
       // Agregar el nuevo usuario a la base de datos
-      $user     =
-      [
-        'username'   => $username,
-        'email'      => $email,
-        'password'   => password_hash($password . AUTH_SALT, PASSWORD_BCRYPT),
-        'created_at' => now()
-      ];
+
 
       // Insertando el registro en la base de datos
       if (!$id = userModel::add(userModel::$t1, $user)) {

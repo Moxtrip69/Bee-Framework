@@ -6,8 +6,6 @@
  * @version 1.0.5
  */
 class Model extends Db {
-
-	
   /**
    * Lista registros de la base de datos o un solo registro,
 	 * regresa un array de resultados, si el $limit es 1, regresa sólo un array

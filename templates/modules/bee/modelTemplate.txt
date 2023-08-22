@@ -1,7 +1,7 @@
 <?php
 /**
  * Plantilla general de modelos
- * @version 1.1.8
+ * @version 1.2.0
  *
  * Modelo de [[REPLACE]]
  */
@@ -21,6 +21,11 @@ class [[REPLACE]]Model extends Model {
   function __construct()
   {
     // Constructor general
+  }
+
+  static function insertOne(Array $data)
+  {
+    return parent::add(self::$t1, $data);
   }
   
   static function all()
