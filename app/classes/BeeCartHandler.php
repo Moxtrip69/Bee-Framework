@@ -190,6 +190,12 @@ final class BeeCartHandler
     return $this->recalculateCart();
   }
 
+  static function get()
+  {
+    $cart = new Self();
+    return $cart->loadCart();
+  }
+
   /**
    * Cargar todos los items agregados en el carrito de compras
    *

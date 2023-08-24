@@ -26,11 +26,16 @@ class clasesController extends Controller {
       Redirect::to(DEFAULT_CONTROLLER);
     }
 
+    // Ejecutar la funcionalidad del Controller padre
+    parent::__construct();
+
     // Validación de sesión de usuario, descomentar si requerida
     // if (!Auth::validate()) {
     //  Flasher::new('Debes iniciar sesión primero.', 'danger');
     //  Redirect::to('login');
     // }
+
+    register_scripts([JS . 'clases.js?v=' . get_asset_version()], 'Scripts para las clases en vivo');
   }
   
   function index()
@@ -108,15 +113,6 @@ class clasesController extends Controller {
       // Conceptos
       $concepts    = $_SESSION['conceptos'];
 
-      // Gráfica
-      $chart = new BeeQuickChart('bar');
-      $chart->setSize(1000, 300);
-      $chart->setLabels(['Enero', 'Febrero', 'Marzo', 'Abril']);
-      $chart->addDataset('Ventas'  , [10, 20, 30, 25]);
-      $chart->addDataset('Compras' , [15, 32, 55, 64]);
-      $chart->addDataset('Saldo'   , [35, 52, 155, 84]);
-      $chartUrl = $chart->getUrl();
-
       ////////////////////////////////////////////////////////////////////////////
       ////////////////////////////////////////////////////////////////////////////
       //////// Opciones de configuración de Dompdf
@@ -156,8 +152,7 @@ class clasesController extends Controller {
         'companyName'    => $companyName,
         'companyAddress' => $companyAddress,
         'companyUrl'     => $companyUrl,
-        'tipografia'     => 'Verdana',
-        'chart'          => $chartUrl
+        'tipografia'     => 'Verdana'
       ];
 
       // Recuerda, el módulo debe ir dentro de templates/modules/...
@@ -176,5 +171,29 @@ class clasesController extends Controller {
       Flasher::error($e->getMessage());
       Redirect::back();
     }
+  }
+
+  function memes()
+  {
+    $this->addToData('title', 'Recopilación de memes');
+    $this->setView('memes');
+    $this->render();
+  }
+
+  function autoguardado()
+  {
+    // Creamos el formulario para nuestras noticias
+    $form = new BeeFormBuilder('autosave-form', 'autosaveForm');
+    $form->addTextField('titulo', 'Título de la noticia', ['form-control'], 'titulo');
+    $form->addHiddenField('id', 'ID', ['form-control'], 'id');
+    $form->addTextareaField('contenido', 'Cuerpo de la noticia', 5, 10, ['form-control'], 'contenido');
+    $form->addCustomFields(insert_inputs());
+    $form->addButton('submit', 'submit', 'Guardar noticia', ['btn btn-success'], 'btnSubmit');
+
+    // Nueva forma de trabajar la lógica de las rutas
+    $this->addToData('title', 'Autoguardado');
+    $this->addToData('form' , $form->getFormHtml());
+    $this->setView('autosave');
+    $this->render();
   }
 }

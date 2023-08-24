@@ -1,9 +1,8 @@
-<?php require_once INCLUDES . 'inc_bee_header.php'; ?>
-<?php require_once INCLUDES . 'inc_bee_navbar.php'; ?>
+<?php require_once INCLUDES . 'header.php'; ?>
+<?php require_once INCLUDES . 'bee_navbar.php'; ?>
 
-<div class="container">
-  <div class="py-5 text-center">
-    <a href="<?php echo get_base_url(); ?>"><img src="<?php echo get_bee_logo() ?>" alt="Bee framework" class="img-fluid" style="width: 150px;"></a>
+<div class="container py-5 main-wrapper">
+  <div class="text-center mb-5">
     <h2><?php echo $d->title; ?></h2>
     <p class="lead">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nam, ullam.</p>
   </div>
@@ -48,4 +47,4 @@
   </div>
 </div>
 
-<?php require_once INCLUDES . 'inc_bee_footer.php'; ?>
+<?php require_once INCLUDES . 'footer.php'; ?>

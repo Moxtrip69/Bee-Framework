@@ -1,13 +1,17 @@
 <?php
 /**
  * Plantilla general de controladores
- * @version 1.0.2
+ * @version 2.0.0
  *
  * Controlador de [[REPLACE]]
  */
-class [[REPLACE]]Controller extends Controller {
+class [[REPLACE]]Controller extends Controller implements ControllerInterface
+{
   function __construct()
   {
+    // Ejecutar la funcionalidad del Controller padre
+    parent::__construct();
+
     // Prevenir el ingreso si nos encontramos en producción y esta ruta es sólo para desarrollo o pruebas
     // if (!is_local()) {
     //   Redirect::to(DEFAULT_CONTROLLER);

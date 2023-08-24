@@ -2712,3 +2712,14 @@ function is_temporary_email($email)
 
 	return false;
 }
+
+/**
+ * Ayuda a definir anclas o anchors para navegación
+ *
+ * @param String $anchor
+ * @return string
+ */
+function new_anchor(String $anchor)
+{
+	return sprintf('%s#%s', CUR_PAGE, $anchor);
+}

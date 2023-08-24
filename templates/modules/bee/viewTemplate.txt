@@ -1,7 +1,13 @@
-<?php require_once INCLUDES . 'inc_header.php'; ?>
+<?php require_once INCLUDES . 'header.php'; ?>
+<?php require_once INCLUDES . 'navbar.php'; ?>
 
-<!-- Plantilla versión 1.0.0 -->
-<div class="container">
+<!-- Plantilla versión 1.0.5 -->
+<div class="container py-5 main-wrapper">
+  <div class="row">
+    <div class="col-12">
+      <?php echo Flasher::flash(); ?>
+    </div>
+  </div>
   <div class="row">
     <div class="col-12 col-md-6 text-center offset-md-3 py-5">
       <a href="<?php echo get_base_url(); ?>">
@@ -19,4 +25,4 @@
   </div>
 </div>
 
-<?php require_once INCLUDES . 'inc_footer.php'; ?>
+<?php require_once INCLUDES . 'footer.php'; ?>

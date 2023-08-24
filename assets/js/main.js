@@ -1,19 +1,19 @@
-$(document).ready(function() {
+$(document).ready(function () {
   /**
    * Alerta para confirmar una acción establecida en un link o ruta específica
    */
-  $('body').on('click', '.confirmar', function(e) {
+  $('body').on('click', '.confirmar', function (e) {
     e.preventDefault();
 
     let url = $(this).attr('href'),
-    ok      = confirm('¿Estás seguro?');
+      ok = confirm('¿Estás seguro?');
 
     // Redirección a la URL del enlace
     if (ok) {
       window.location = url;
       return true;
     }
-    
+
     console.log('Acción cancelada.');
     return true;
   });
@@ -35,10 +35,10 @@ $(document).ready(function() {
    * Inicializa tooltips en todo el sitio
    */
   function init_tooltips() {
-    if (['bs','bs5','bs_lumen','bs_lux','bs_litera','bs_vapor','bs_zephyr'].includes(Bee.css_framework) != true) return;
-    
+    if (['bs', 'bs5', 'bs_lumen', 'bs_lux', 'bs_litera', 'bs_vapor', 'bs_zephyr'].includes(Bee.css_framework) != true) return;
+
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList        = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
       return new bootstrap.Tooltip(tooltipTriggerEl)
     });
   }
@@ -189,34 +189,34 @@ function init_db_test() {
 
   if (!wrapper) return;
 
-  const alert   = wrapper.querySelector('.alert');
+  const alert = wrapper.querySelector('.alert');
 
   alert.classList.remove('alert-success');
   alert.classList.add('alert-danger');
 
-  alert.innerHTML       = '<i class="fas fa-spinner fa-spin"></i> Probando conexión a la base de datos...';
+  alert.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Probando conexión a la base de datos...';
   wrapper.style.display = 'block';
 
   setTimeout(() => {
     fetch('ajax/db_test')
-    .then(res => res.json())
-    .then(res => {
-      if (res.status === 200) {
-        alert.classList.remove('alert-danger', 'd-none');
-        alert.classList.add('alert-success');
-        alert.innerHTML = res.msg;
-      } else {
-        alert.innerHTML = res.msg;
-      }
+      .then(res => res.json())
+      .then(res => {
+        if (res.status === 200) {
+          alert.classList.remove('alert-danger', 'd-none');
+          alert.classList.add('alert-success');
+          alert.innerHTML = res.msg;
+        } else {
+          alert.innerHTML = res.msg;
+        }
 
-      setTimeout(() => {
-        alert.classList.add('d-none');
-        alert.innerHTML = '';
-      }, 3000);
-    })
-    .catch(err => {
-      alert.innerHTML = 'Hubo un error en la petición, vuelve a intentarlo.';
-    });
+        setTimeout(() => {
+          alert.classList.add('d-none');
+          alert.innerHTML = '';
+        }, 3000);
+      })
+      .catch(err => {
+        alert.innerHTML = 'Hubo un error en la petición, vuelve a intentarlo.';
+      });
   }, 1000);
 }
 
@@ -224,7 +224,7 @@ function init_db_test() {
  * Prueba de peticiones ajax al backend en versión 1.1.3
  */
 async function test_ajax() {
-  const wrapper  = document.getElementById('test_ajax');
+  const wrapper = document.getElementById('test_ajax');
 
   if (!wrapper) return;
 
@@ -240,10 +240,10 @@ async function test_ajax() {
       method: "POST",
       body: JSON.stringify(body)
     })
-    .then(res => res.json())
-    .catch(error => {
-      throw new Error(error);
-    });
+      .then(res => res.json())
+      .catch(error => {
+        throw new Error(error);
+      });
 
     if (res.status === 200) {
       toastr.success(res.msg, 'Prueba AJAX');
@@ -266,8 +266,8 @@ async function test_api() {
   if (!wrapper) return;
 
   const res = await fetch(Bee.url + 'api/posts', {
-    headers    : { 'Authorization': `Bearer ${Bee.private_key}` },
-    method     : 'GET'
+    headers: { 'Authorization': `Bearer ${Bee.private_key}` },
+    method: 'GET'
   }).then(res => res.json());
 
   if (res.status === 200) {

@@ -1,4 +1,4 @@
-<?php require_once INCLUDES . 'inc_bee_header.php'; ?>
+<?php require_once INCLUDES . 'header.php'; ?>
 
 <!-- Three js -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
@@ -175,4 +175,4 @@
   animate();
 </script>
 
-<?php require_once INCLUDES . 'inc_bee_footer.php'; ?>
+<?php require_once INCLUDES . 'footer.php'; ?>

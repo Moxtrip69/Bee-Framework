@@ -6,10 +6,13 @@
  *
  * Controlador de test
  */
-class testController extends Controller
+class testController extends Controller implements ControllerInterface
 {
   function __construct()
   {
+    // Ejecutar la funcionalidad del Controller padre
+    parent::__construct();
+
     // Prevenir el ingreso en Producción
     if (!is_local()) {
       Redirect::to(DEFAULT_CONTROLLER);
@@ -18,6 +21,9 @@ class testController extends Controller
 
   function index()
   {
+    $this->addToData('algo', 123);
+    $this->setView('index');
+    $this->render();
   }
 
   function quickcharts()
@@ -41,14 +47,9 @@ class testController extends Controller
     $chart->addDataset($dataset2);
 
     //$image = $chart->saveToImage();
-
-    $data =
-    [
-      'title' => 'QuickCharts',
-      'url'   => $chart->getUrl(),
-    ];
-
-    View::render('index', $data);
+    $this->addToData('title', 'QuickCharts');
+    $this->addToData('url'  , $chart->getUrl());
+    $this->render();
   }
 
   function menus()

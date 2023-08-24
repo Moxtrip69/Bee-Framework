@@ -1,4 +1,4 @@
-<?php require_once INCLUDES . 'inc_header.php'; ?>
+<?php require_once INCLUDES . 'header.php'; ?>
 <?php require_once INCLUDES . 'navbar.php'; ?>
 
 <div class="container my-5">
@@ -113,4 +113,4 @@
   </div>
 </div>
 
-<?php require_once INCLUDES . 'inc_footer.php'; ?>
+<?php require_once INCLUDES . 'footer.php'; ?>

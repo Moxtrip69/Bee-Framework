@@ -1,8 +1,7 @@
-<?php require_once INCLUDES . 'inc_header.php'; ?>
+<?php require_once INCLUDES . 'header.php'; ?>
 <?php require_once INCLUDES . 'navbar.php'; ?>
 
 <main>
-
   <section class="py-5 text-center container">
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
@@ -64,7 +63,6 @@
       <?php endif; ?>
     </div>
   </div>
-
 </main>
 
-<?php require_once INCLUDES . 'inc_footer.php'; ?>
+<?php require_once INCLUDES . 'footer.php'; ?>

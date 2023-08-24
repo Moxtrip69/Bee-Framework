@@ -12,7 +12,10 @@
           <a class="nav-link" aria-current="page" href="<?php echo get_base_url(); ?>">Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="tienda">Tienda</a>
+          <a class="nav-link" href="bee">Bee</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="tienda">Tienda</a>
         </li>
         <li class="nav-item">
           <a class="nav-link position-relative" href="carrito"><i class="fas fa-shopping-cart fa-fw"></i>

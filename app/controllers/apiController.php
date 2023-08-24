@@ -37,7 +37,7 @@ class apiController extends Controller {
    *
    * @var array
    */
-  private $data    = [];
+  protected Array $data = [];
 
   /**
    * Array de archivos enviados en la petición

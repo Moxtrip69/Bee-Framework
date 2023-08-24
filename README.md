@@ -1,6 +1,6 @@
 ![Bee Framework](https://raw.githubusercontent.com/Moxtrip69/Bee-Framework/master/assets/images/bee_logo.png)
 # Bee-Framework
-Mini framework desarrollado por el equipo de Joystick SA de CV en México.
+Mini framework desarrollado por la Academia de Joystick.
 Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y fácil de implementar para proyectos tanto pequeños como aquellos que requieren escalabilidad y visión a futuro.
 
 ## Changelog
@@ -34,7 +34,7 @@ Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y 
 - Nuevos métodos estáticos mejorados para generar notificaciones tipo flash, ahora con títulos en cada alerta e iconos.
 ### v 1.5.0
 - Se ha sustituido el controlador por defecto de **homeController** a **beeController** esto para facilitar el actualizado del core a nuevas versiones una vez en producción, facilitando el trabajo de los desarrolladores que lo utilizan.
-- Se ha implementado el uso de Vue.js 3 con base a **CDN** y no CLI, puede ser removido retirando la etiqueda en el archivo **inc_styles.php**.
+- Se ha implementado el uso de Vue.js 3 con base a **CDN** y no CLI, puede ser removido retirando la etiqueda en el archivo **styles.php**.
 - Nueva clase **BeePdf** implementada para la generación de forma sencilla de documentos formato **pdf** con pocas línea de código, como base se utiliza la librería **dompdf** una de las más potentes y utilizadas actualmente.
 - Hemos mejorado el sistema **ORM** para manipulación de bases de datos con nuevos métodos y opciones de configuración.
 - Nuevos elementos de configuración agregados al framework para controlar que elementos pueden ser incluidos sin tener que editar el código, para mejorar el tiempo de prototipado o pruebas de concepto, puedes encontrar todas las nuevas variables de configuración en **settings.php**.
@@ -75,7 +75,7 @@ Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y 
 - Se corrigió el error en la constante **UPLOADS**, se encontraba mal formateada y con diagonales invertidas adicionales no necesarias que producian errores al cargar archivos.
 - Se mejoró la compatibilidad con Bootstrap 5 Beta en todo el framework.
 - Nuevas funciones core agregadas para facilitar el flujo de desarrollo de cualquier proyecto.
-- Se han separado las hojas de estilos incrustadas en el header al archivo **inc_styles.php** y los scripts al archivo **inc_scripts.php** para facilitar la reutilización de los mismos.
+- Se han separado las hojas de estilos incrustadas en el header al archivo **styles.php** y los scripts al archivo **scripts.php** para facilitar la reutilización de los mismos.
 - Nuevo sistema para registrar hojas de estilo en la cabecera y archivos de scripts en el pie de página de forma manual.
 - Nuevo sistema para registrar un objeto javascript **Bee** que da acceso a los mismos parámetros que tenemos disponibles en **PHP** para las rutas de archivos, csrf, url y más opciones para registrar nuevos valores.
 

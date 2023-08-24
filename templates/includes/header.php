@@ -20,8 +20,8 @@
   <!-- Favicon del sitio -->
   <?php echo get_favicon(); ?>
 
-  <!-- inc_styles.php -->
-  <?php require_once INCLUDES . 'inc_styles.php'; ?>
+  <!-- styles.php -->
+  <?php require_once INCLUDES . 'styles.php'; ?>
 
   <!-- Carga de meta tags -->
   <?php echo get_page_og_meta_tags(); ?>
@@ -31,4 +31,4 @@
 </head>
 
 <body>
-<!-- ends inc_header.php -->
+<!-- ends header.php -->

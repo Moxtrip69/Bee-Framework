@@ -1,7 +1,7 @@
-<?php require_once INCLUDES.'inc_bee_header.php'; ?>
-<?php require_once INCLUDES.'inc_bee_navbar.php'; ?>
+<?php require_once INCLUDES . 'header.php'; ?>
+<?php require_once INCLUDES . 'bee_navbar.php'; ?>
 
-<div class="container py-5">
+<div class="container py-5 main-wrapper">
   <div class="row">
     <div class="col-12 col-md-4 text-center offset-md-4 mb-5">
       <a href="<?php echo get_base_url(); ?>"><img src="<?php echo get_bee_logo() ?>" alt="<?php echo get_sitename(); ?>" class="img-fluid" style="width: 150px;"></a>
@@ -19,7 +19,7 @@
           <div class="table-responsive rounded">
             <table class="table table-sm table-striped table-hover table-bordered">
               <tbody>
-                <?php foreach ($d->user as $k => $v): ?>
+                <?php foreach ($d->user as $k => $v) : ?>
                   <tr>
                     <th><?php echo $k; ?></th>
                     <td><?php echo $v; ?></td>
@@ -38,4 +38,4 @@
   </div>
 </div>
 
-<?php require_once INCLUDES.'inc_bee_footer.php'; ?>
+<?php require_once INCLUDES . 'footer.php'; ?>

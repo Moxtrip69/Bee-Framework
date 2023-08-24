@@ -50,7 +50,7 @@ class carritoController extends Controller {
       'title' => 'Carrito de compras',
       'cart'  => $this->cartHandler->loadCart()
     ];
-    
+
     // Descomentar vista si requerida
     View::render('index', $data);
   }

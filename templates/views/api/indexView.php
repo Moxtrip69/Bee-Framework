@@ -1,4 +1,4 @@
-<?php require_once INCLUDES . 'inc_header.php'; ?>
+<?php require_once INCLUDES . 'header.php'; ?>
 
 <!-- Plantilla versión 1.0.0 -->
 <div class="container">
@@ -18,4 +18,4 @@
   </div>
 </div>
 
-<?php require_once INCLUDES . 'inc_footer.php'; ?>
+<?php require_once INCLUDES . 'footer.php'; ?>

@@ -1,4 +1,4 @@
-<?php require_once INCLUDES . 'admin/head.php'; ?>
+<?php require_once INCLUDES . 'admin/header.php'; ?>
 
 <body id="page-top">
 
