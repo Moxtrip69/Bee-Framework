@@ -7,7 +7,7 @@
 
 <img src="https://raw.githubusercontent.com/Moxtrip69/Bee-Framework/master/assets/images/bee_logo.png" alt="Bee Framework" style="width: 250px;">
 
-# Bee-Framework
+# Bee Framework
 Mini framework desarrollado por la Academia de Joystick.
 Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y fácil de implementar para proyectos tanto pequeños como aquellos que requieren escalabilidad y visión a futuro.
 
