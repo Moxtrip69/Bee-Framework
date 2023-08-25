@@ -3,8 +3,14 @@
 Mini framework desarrollado por la Academia de Joystick.
 Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y fácil de implementar para proyectos tanto pequeños como aquellos que requieren escalabilidad y visión a futuro.
 
+![Únete al servidor de Discord](https://badgen.net/discord/members/wTzhKrg)
+![Bee Framework](https://badgen.net/static/stars/★★★★★)
+
 ## Changelog
 ### v 1.5.8
+- El controlador principal **Controller.php** se ha mejorado y hemos ampliado la forma en que se usa, ahora es posible usarlo para configurar cada nuevo controlador de diferentes maneras, puede ser un *endpoint* para talvez una API, *ajax* o *regular* como un controlador común, ahora tenemos a nuestra disposición nuevos métodos para trabajar de forma orientada a objetos la implementación, el renderizado de la vista, asignación de **$data** pasada a la vista y mucho más, haciendo todo más mantenible y escalable.
+- Nueva clase **BeeHooksManager** para crear y administrar ganchos o hooks a lo largo del flujo de ejecución del framework, aumentando las posibilidades y configuraciones de manera exponencial sin la necesidad de modificar archivos de configuración o del core.
+- Se han hecho mejoras al archivo de **settings.php** y al flujo de carga y ejecución del framework, ahora con el sistema de hooks es posible crear nuevas constantes y configuraciones sin necesidad de tocar los archivos **settings.php** y **bee_config.php**.
 - Nuevas mejoras en la interfaz y en la pantalla de bienvenida del framework, con base a su feedback se re-acomodaron los elementos de navegación.
 - Nueva clase **BeeCartHandler** y sub-clases que permiten la creación de carritos de compra persistentes para la sesión del usuario, totalmente funcional y dinámico, puede ser usado desde el inicio para procesos de tiendas en línea, junto con esto viene un nuevo controlador llamado **tiendaController** dónde se listan todos los productos de la base de datos (nueva tabla *products*) en el esquema inicial, y nuevo controlador **carritoController** para mostrar el carrito y proceso de *Checkout* de forma profesional, puede ser editado y alterado a necesidad.
 - Nueva clase **BeeFormBuilder** para construir de forma dinámica formularios, cómo se lista en la versión anterior.
