@@ -12,22 +12,16 @@ class tiendaController extends Controller {
 
   function __construct()
   {
-    // Carga del carrito de compras
-    $this->cartHandler = new BeeCartHandler();
-    $this->cart        = $this->cartHandler->loadCart();
+    // Ejecutar la funcionalidad del Controller padre
+    parent::__construct();
   }
   
   function index()
   {
-    $data = 
-    [
-      'title'    => 'Bienvenido a la tienda',
-      'cart'     => $this->cart,
-      'products' => productModel::all_paginated()
-    ];
-    
-    // Descomentar vista si requerida
-    View::render('index', $data);
+    $this->setTitle('Bienvenido a la tienda');
+    $this->addToData('products', productModel::all_paginated());
+    $this->setView('index');
+    $this->render();
   }
 
   function producto($slug)
@@ -37,16 +31,12 @@ class tiendaController extends Controller {
         throw new Exception('No existe el producto que buscas.');
       }
 
-      $data = 
-      [
-        'title' => $product['name'],
-        'cart'  => $this->cart,
-        'p'     => $product
-      ];
-
       register_styles([CSS . 'store.css'], 'Estilos de la página de detalles del producto');
 
-      View::render('producto', $data);
+      $this->setTitle($product['name']);
+      $this->addToData('p', $product);
+      $this->setView('producto');
+      $this->render();
 
     } catch (Exception $e) {
       Flasher::error($e->getMessage());

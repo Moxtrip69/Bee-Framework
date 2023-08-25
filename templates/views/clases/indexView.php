@@ -7,11 +7,10 @@
       <a href="<?php echo get_base_url(); ?>">
         <img src="<?php echo get_logo(); ?>" alt="<?php echo get_sitename(); ?>" class="img-fluid" style="width: 200px;">
       </a>
-      <p class="mt-3 text-muted"><?php echo $d->topic; ?></p>
 
       <div class="card mt-5 shadow">
         <div class="card-header bg-white border-bottom-0">
-          <h2>Generar cotización - <?php echo sprintf('Clase #%s', $d->number); ?></h2>
+          <h2>Generar cotización - Clase #6</h2>
         </div>
         <div class="card-body text-start">
           <?php echo Flasher::flash(); ?>

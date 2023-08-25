@@ -3,15 +3,14 @@
 class homeController extends Controller {
   function __construct()
   {
+    // Ejecutar la funcionalidad del Controller padre
+    parent::__construct();
   }
 
   function index()
   {
-    $data =
-    [
-      'title' => 'Home'
-    ];
-
-    View::render('index', $data);
+    $this->setTitle('Inicio');
+    $this->setView('index');
+    $this->render();
   }
 }

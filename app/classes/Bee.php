@@ -1,6 +1,7 @@
-<?php 
+<?php
 
-class Bee {
+class Bee
+{
 
   /**
    * Propiedades del framework
@@ -32,6 +33,13 @@ class Bee {
   private $version;
 
   /**
+   * Logo del framework
+   *
+   * @var string
+   */
+  private $logo;
+
+  /**
    *
    * @var string
    */
@@ -53,20 +61,33 @@ class Bee {
    * @since 1.1.4
    * @var string
    */
-  private $current_controller = null;
-  private $controller         = null;
-  private $current_method     = null;
-  private $method             = null;
-  private $params             = [];
-  private $cont_not_found     = false;
-  private $method_not_found   = false;
-  private $missing_params     = false;
-  private $is_ajax            = false;
-  private $is_api             = false;
+  private $current_controller  = null;
+  private $requestedController = null;
+  private $controller          = null;
+  private $current_method      = null;
+  private $method              = null;
+  private $params              = [];
+  private $cont_not_found      = false;
+  private $method_not_found    = false;
+  private $missing_params      = false;
+  private $is_ajax             = false;
+  private $is_endpoint         = false;
+  private $endpoints           = ['api']; // Rutas o endpoints autorizados de la API
 
   // La función principal que se ejecuta al instanciar nuestra clase
-  function __construct() {
-    $this->init();
+  function __construct()
+  {
+  }
+
+  /**
+   * Agrega un nuevo endpoint a la lista
+   *
+   * @param String $endpoint
+   * @return void
+   */
+  function addEndpoint(String $endpoint)
+  {
+    $this->endpoints[] = $endpoint;
   }
 
   /**
@@ -74,14 +95,17 @@ class Bee {
    *
    * @return void
    */
-  private function init() {
+  private function init()
+  {
     // Todos los métodos que queremos ejecutar consecutivamente
     $this->init_session();
     $this->init_load_config();
     $this->init_framework_properties();
+    $this->init_load_composer(); // Carga las dependencias de composer
+    $this->init_autoload(); // Inicializa el cargador de nuestras clases
     $this->init_load_functions();
-    $this->init_load_composer();
-    $this->init_autoload();
+    BeeHookManager::runHook('init_set_up', $this);
+    BeeHookManager::runHook('after_functions_loaded');
 
     /**
      * Se ha actualizado el orden de ejecución para poder
@@ -93,11 +117,17 @@ class Bee {
     $this->init_filter_url();
     $this->init_set_defaults();
 
+    /**
+     * Inicialización de globales del framework, token csrf y autentificación
+     */
     $this->init_csrf();
     $this->init_globals();
+    BeeHookManager::runHook('after_init_globals');
     $this->init_authentication();
     $this->init_set_globals();
+    BeeHookManager::runHook('after_set_globals');
     $this->init_custom();
+    BeeHookManager::runHook('after_init_custom');
 
     /**
      * Se hace ejecución de todo nuestro framework
@@ -112,11 +142,9 @@ class Bee {
    */
   private function init_session()
   {
-    if(session_status() == PHP_SESSION_NONE) {
+    if (session_status() == PHP_SESSION_NONE) {
       session_start();
     }
-
-    return;
   }
 
   /**
@@ -143,8 +171,6 @@ class Bee {
 
     // Cargando el archivo de configuración
     require_once 'app/core/' . $file;
-
-    return;
   }
 
   /**
@@ -155,11 +181,17 @@ class Bee {
    */
   private function init_framework_properties()
   {
-    $this->framework = BEE_NAME;
-    $this->version   = BEE_VERSION;
-    $this->lng       = SITE_LANG;
+    $this->framework = 'Bee Framework';
+    $this->version   = '1.5.8';
+    $this->logo      = 'bee_logo.png';
 
-    return;
+    define('BEE_NAME'      , $this->framework);
+    define('BEE_VERSION'   , $this->version);
+    define('BEE_LOGO'      , $this->logo);
+    define('BEE_DEVS'      , 'J. Roberto Orozco Aviles');
+    define('BEE_SUPPORT'   , 'soporte@joystick.com.mx');
+    define('BEE_DONATIONS' , 'https://www.joystick.com.mx/donar/');
+    define('BEE_URL'       , 'https://github.com/Moxtrip69/Bee-Framework');
   }
 
   /**
@@ -184,8 +216,6 @@ class Bee {
 
     // Cargando el archivo de funciones custom
     require_once FUNCTIONS . $file;
-
-    return;
   }
 
   /**
@@ -198,14 +228,12 @@ class Bee {
     }
 
     $file = 'app/vendor/autoload.php';
-    if(!is_file($file)) {
+    if (!is_file($file)) {
       die(sprintf('El archivo %s no se encuentra, es requerido para que el sitio funcione.', $file));
     }
 
     // Cargando el archivo de configuración
     require_once $file;
-
-    return;
   }
 
   /**
@@ -215,9 +243,8 @@ class Bee {
    */
   private function init_autoload()
   {
-    require_once CLASSES.'Autoloader.php';
+    require_once CLASSES . 'Autoloader.php';
     Autoloader::init();
-    return;
   }
 
   /**
@@ -245,18 +272,18 @@ class Bee {
     // Cookies del sitio
     $GLOBALS['Bee_Cookies']  = [];
 
-		// Define si un usuario está loggeado o no y su información actual
+    // Define si un usuario está loggeado o no y su información actual
     $GLOBALS['Bee_User']     = [];
 
     // Define las configuraciones generales del sistema
-		$GLOBALS['Bee_Settings'] = [];
+    $GLOBALS['Bee_Settings'] = [];
 
     // Objeto Bee que será insertado en el footer como script javascript dinámico para fácil acceso
     $GLOBALS['Bee_Object']   = [];
 
     // Define los mensajes por defecto para usar en notificaciones o errores
     $GLOBALS['Bee_Messages'] = [];
-    
+
     //////////////////////////////////////////////
     // Globales de Open Graph valores por defecto
     //////////////////////////////////////////////
@@ -267,7 +294,7 @@ class Bee {
     //////////////////////////////////////////////
 
     // jstodo: Generar la funcionalidad para hacer queu y registro de variables globales y cargarlas al inicializar el framework.
-    //bee_load_custom_globals();
+    // bee_load_custom_globals();
   }
 
   /**
@@ -294,11 +321,11 @@ class Bee {
 
           return true; // para prevenir que siga ejecutando
         }
-        
+
         // En esta parte se puede cargar información diferente o adicional del usuario
         // ya que sabemos que su autenticación es válida
         ////////////////////////////////////
-        
+
         $Bee_User = !empty($user) ? $user : [];
         // ---> $user = usuarioModel::by_id($id);
 
@@ -315,7 +342,6 @@ class Bee {
         }
 
         return true;
-
       } catch (Exception $e) {
         bee_die($e->getMessage());
       }
@@ -372,13 +398,15 @@ class Bee {
    */
   private function init_filter_url()
   {
-    if(isset($_GET['uri'])) {
+    if (isset($_GET['uri'])) {
       $this->uri = $_GET['uri'];
       $this->uri = rtrim($this->uri, '/');
       $this->uri = filter_var($this->uri, FILTER_SANITIZE_URL);
       $this->uri = explode('/', $this->uri);
       return $this->uri;
     }
+
+    return $this->uri;
   }
 
   /**
@@ -398,42 +426,45 @@ class Bee {
     /////////////////////////////////////////////////////////////////////////////////
     // Necesitamos saber si se está pasando el nombre de un controlador en nuestro URI
     // $this->uri[0] es el controlador en cuestión
-    if(isset($this->uri[0])) {
-      $this->current_controller = strtolower($this->uri[0]); // users Controller.php
+    if (isset($this->uri[0])) {
+      $this->current_controller  = strtolower($this->uri[0]); // users Controller.php
       unset($this->uri[0]);
     } else {
-      $this->current_controller = DEFAULT_CONTROLLER; // home Controler.php establecido en settings.php
+      $this->current_controller = DEFAULT_CONTROLLER; // establecido en settings.php
     }
 
-    // Validando si la petición entrante original es ajax
+    // Definir el controlador solicitado (este valor no cambiará en ningún punto)
+    $this->requestedController = $this->current_controller;
+    
+    // Validando si la petición entrante original es ajax, ajaxController es el único controlador aceptado para AJAX
     if (in_array($this->current_controller, ['ajax'])) {
       $this->is_ajax            = true; // Lo usaremos para filtrar más adelante nuestro tipo de respuesta al usuario
     }
 
-    // Validando si la petición entrante original es de consumo de la API
-    if (in_array($this->current_controller, ['api', 'v1', 'v2', 'v3'])) {
-      $this->is_api            = true; // Lo usaremos para filtrar más adelante nuestro tipo de respuesta al usuario
+    // Validando si la petición entrante original es un endpoint de la API
+    if (in_array($this->current_controller, $this->endpoints)) {
+      $this->is_endpoint        = true; // Lo usaremos para filtrar más adelante nuestro tipo de respuesta al usuario
     }
 
     // Definiendo el nombre del archivo del controlador
-    $this->controller           = $this->current_controller.'Controller'; // homeController
+    $this->controller           = $this->current_controller . 'Controller'; // xyzController
 
     // Verificamos si no existe la clase buscada, se asigna la por defecto si no existe
-    if(!class_exists($this->controller)) {
+    if (!class_exists($this->controller)) {
       $this->current_controller = DEFAULT_ERROR_CONTROLLER; // Para que el CONTROLLER sea error
-      $this->controller         = DEFAULT_ERROR_CONTROLLER.'Controller'; // errorController
+      $this->controller         = DEFAULT_ERROR_CONTROLLER . 'Controller'; // errorController
       $this->cont_not_found     = true; // No se ha encontrado la clase o controlador en el sistema
     }
 
     /////////////////////////////////////////////////////////////////////////////////
-    // Ejecución del método solicitado
-    if(isset($this->uri[1])) {
+    // Validación del método solicitado
+    if (isset($this->uri[1])) {
       $this->method = str_replace('-', '_', strtolower($this->uri[1]));
-      
+
       // Existe o no el método dentro de la clase a ejecutar (controllador)
-      if(!method_exists($this->controller, $this->method)) {
+      if (!method_exists($this->controller, $this->method)) {
         $this->current_controller = DEFAULT_ERROR_CONTROLLER; // controlador de errores por defecto
-        $this->controller         = DEFAULT_ERROR_CONTROLLER.'Controller'; // errorController
+        $this->controller         = DEFAULT_ERROR_CONTROLLER . 'Controller'; // errorController
         $this->current_method     = DEFAULT_METHOD; // método index por defecto
         $this->method_not_found   = true; // el método de la clase no existe
       } else {
@@ -450,7 +481,7 @@ class Bee {
     if (!$reflection->isPublic()) {
       // Si el método solicitado no es público, se manda a ruta de error
       $this->current_controller = DEFAULT_ERROR_CONTROLLER; // controlador de errores por defecto
-      $this->controller         = DEFAULT_ERROR_CONTROLLER.'Controller'; // errorController
+      $this->controller         = DEFAULT_ERROR_CONTROLLER . 'Controller'; // errorController
       $this->current_method     = DEFAULT_METHOD; // método index por defecto
     }
 
@@ -479,47 +510,42 @@ class Bee {
   private function init_check_request_type()
   {
     /**
-     * Recontruye los valores por defecto si es una petición ajax o a la API
+     * Recontruye los valores por defecto si es una petición AJAX o a Endpoint de API
      * @since 1.1.4
      */
     if ($this->is_ajax === true) {
-      $this->current_controller = 'ajax';
-      $this->controller         = sprintf('%sController', $this->current_controller);
-    } elseif ($this->is_api === true) {
-      $this->current_controller = 'api';
-      $this->controller         = sprintf('%sController', $this->current_controller);
+      define('DOING_AJAX', true);
+    } elseif ($this->is_endpoint === true) {
+      define('DOING_API', true);
+    } elseif ($this->current_controller === 'cronjob') {
+      define('DOING_CRON', true);
+    } elseif ($this->current_controller === 'xml') {
+      define('DOING_XML', true);
     }
 
-    switch ($this->current_controller) {
-      case 'ajax':
-      case 'api':
+    // En caso de que no exista el controlador solicitado pero es AJAX o Endpoint
+    if ($this->cont_not_found === true) {
+      if ($this->is_ajax === true) {
+        $this->current_controller = 'ajax';
+        $this->controller         = $this->current_controller . 'Controller';
+        $this->current_method     = DEFAULT_METHOD;
+      }
 
-        if ($this->current_controller === 'ajax') {
-          define('DOING_AJAX', true);
-        } else {
-          define('DOING_API', true);
-        }
+      if ($this->is_endpoint === true) {
+        $this->current_controller = 'api';
+        $this->controller         = $this->current_controller . 'Controller';
+        $this->current_method     = DEFAULT_METHOD;
+      }
+    }
 
-        // En caso de que no exista la ruta solicitada
-        if ($this->method_not_found === true) {
-          $this->current_method = DEFAULT_METHOD;
-        }
-        
-        break;
-
-      case 'cronjob':
-        define('DOING_CRON', true);
-        break;
-
-      case 'xml':
-        define('DOING_XML', true);
-        break;
-      
-      default:
-        break;
+    // En caso de que no exista la ruta solicitada
+    if ($this->method_not_found === true && ($this->is_ajax || $this->is_endpoint)) {
+      $this->current_controller = $this->requestedController;
+      $this->controller         = $this->current_controller . 'Controller';
+      $this->current_method     = DEFAULT_METHOD;
     }
   }
-  
+
   /**
    * Método para ejecutar y cargar de forma automática el controlador solicitado por el usuario
    * su método y pasar parámetros a él.
@@ -528,12 +554,11 @@ class Bee {
    */
   private function init_dispatch()
   {
-    /////////////////////////////////////////////////////////////////////////////////
     // Ejecutando controlador y método según se haga la petición
     $this->controller = new $this->controller;
 
     // Llamada al método que solicita el usuario en curso
-    if(empty($this->params)) {
+    if (empty($this->params)) {
       call_user_func([$this->controller, $this->current_method]);
     } else {
       call_user_func_array([$this->controller, $this->current_method], $this->params);
@@ -550,6 +575,7 @@ class Bee {
   public static function fly()
   {
     $bee = new self();
+    $bee->init();
     return;
   }
 }

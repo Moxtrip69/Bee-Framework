@@ -7,17 +7,16 @@ class loginController extends Controller {
       Flasher::new('Ya hay una sesión abierta.');
       Redirect::to('admin/perfil');
     }
+
+    // Ejecutar la funcionalidad del Controller padre
+    parent::__construct();
   }
 
   function index()
   {
-    $data =
-    [
-      'title'   => 'Ingresar a tu cuenta',
-      'padding' => '0px'
-    ];
-
-    View::render('login', $data);
+    $this->setTitle('Ingresa a tu cuenta');
+    $this->setView('login');
+    $this->render();
   }
 
   function post_login()

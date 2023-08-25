@@ -6,10 +6,13 @@
  *
  * Controlador de bee
  */
-class beeController extends Controller
+class beeController extends Controller implements ControllerInterface
 {
   function __construct()
   {
+    // Ejecutar la funcionalidad del Controller padre
+    parent::__construct();
+
     // Validación de sesión de usuario, descomentar si requerida
     // if (!Auth::validate()) {
     //   Flasher::new('Debes iniciar sesión primero.', 'danger');
@@ -29,20 +32,9 @@ class beeController extends Controller
     // Definir og meta tags
     set_page_og_meta_tags('Bienvenido a Bee framework', null, null, null, 'website');
 
-    $test = 
-    <<<'EOD'
-    <?php
-    $test = 'Algo';
-    ?>
-    EOD;
-
-    $data =
-    [
-      'title' => 'Bienvenido',
-      'test'  => $test
-    ];
-
-    View::render('bee', $data);
+    $this->setTitle('Bienvenido a Bee framework');
+    $this->setView('bee');
+    $this->render();
   }
 
   /**
@@ -84,13 +76,10 @@ class beeController extends Controller
       }
     }
 
-    $data =
-      [
-        'title' => 'Password Generado',
-        'pw'    => get_new_password($password)
-      ];
-
-    View::render('password', $data);
+    $this->setTitle('Password generado');
+    $this->addToData('pw', get_new_password($password));
+    $this->setView('password');
+    $this->render();
   }
 
   /**
@@ -114,155 +103,75 @@ class beeController extends Controller
       // Validar nombre de archivo
       $filename = 'settings.php';
       $backup   = 'settings-backup.php';
+      $updated  = 0;
+      $errors   = 0;
 
       // Validar que existe el archivo settings-backup.php por seguridad
       if (!is_file(CORE . $backup)) {
-        throw new Exception(sprintf('El archivo %s no existe, recomendamos crear un backup de %s antes de proceder.', $backup, $filename));
+        throw new Exception(sprintf('El archivo <b>%s</b> no existe, recomendamos crear un backup de <b>%s</b> antes de proceder.', $backup, $filename));
       }
 
       // Validar la existencia del archivo de settings.php | solo por seguridad, en teoría esta validación ya se ha hecho anteriormente
       if (!is_file(CORE . $filename)) {
-        throw new Exception(sprintf('No existe el archivo %s, es requerido para proceder.', $filename));
+        throw new Exception(sprintf('No existe el archivo <b>%s</b>, es requerido para proceder.', $filename));
       }
 
-      // Keys a insertar en el archivo
-      $key1 = generate_key(); // public key
-      $key2 = generate_key(); // private key
+      // Claves para buscar y reemplazar
+      $newSettings =
+      [
+        'API_PUBLIC_KEY'  => "'" . generate_key() . "'",
+        'API_PRIVATE_KEY' => "'" . generate_key() . "'",
+        'AUTH_SALT'       => "'" . get_new_password()['hash'] . "'",
+        'NONCE_SALT'      => "'" . get_new_password()['hash'] . "'"
+      ];
 
       // Cargar contenido del archivo
-      $php = @file_get_contents(CORE . $filename);
+      $contenido = @file_get_contents(CORE . $filename);
 
       // En caso de que no se lea contenido
-
-      if (empty($php)) {
-        throw new Exception(sprintf('Hubo un problema y no pudimos generatas las API keys para esta instancia de %s.', get_bee_name()));
+      if (empty($contenido)) {
+        throw new Exception(sprintf('Hubo un problema y no pudimos generar las credenciales de %s.', get_bee_name()));
       }
 
-      $php = str_replace('[[REPLACE_PUBLIC_KEY]]', $key1, $php, $ok1);
-      $php = str_replace('[[REPLACE_PRIVATE_KEY]]', $key2, $php, $ok2);
+      foreach ($newSettings as $k => $v) {
+        // Utilizamos una expresión regular para buscar la línea que contiene la constante
+        $patron = '/define\(\s*["\']' . preg_quote($k, '/') . '["\']\s*,\s*[\'"]?.*?[\'"]?\s*\);/';
 
-      // Validar que se hayan reemplazado con éxito ambas
-      if ($ok1 == 0 || $ok2 == 0) {
-        throw new Exception(sprintf(
-          'No pudimos reemplazar las API keys en tu archivo <b>%s</b>, es probable que debas sustituir el contenido de <b>%s</b> con el de <b>%s</b>.',
-          $filename,
-          $filename,
-          $backup
-        ));
+        if (preg_match($patron, $contenido, $coincidencias)) {
+          // Si se encuentra la línea, reemplazamos el valor
+          $lineaEncontrada  = $coincidencias[0];
+          $lineaActualizada = "define('$k', $v);";
+          $contenido        = str_replace($lineaEncontrada, $lineaActualizada, $contenido);
+  
+          // Guardamos los cambios en el archivo
+          if (@file_put_contents(CORE . $filename, $contenido) === false) {
+            Flasher::error(sprintf('No se pudo actualizar el valor de <b>%s</b>.', $k));
+            $errors++;
+            continue;
+          }
+          
+          Flasher::success(sprintf('Valor actualizado de <b>%s</b>.', $k));
+          $updated++;
+
+        } else {
+          Flasher::error(sprintf('La constante <b>%s</b> no fue encontrada en el archivo.', $k));
+          $errors++;
+        }
       }
 
-      // Guardar los cambios en el archivo settings.php
-      if (file_put_contents(CORE . $filename, $php) === false) {
-        throw new Exception(sprintf('Ocurrió un problema al actualizar el archivo.', $filename));
+      if ($updated == count($newSettings)) {
+        Flasher::success(sprintf('Las claves de acceso a la API y las claves de SALT fueron generadas con éxito, las encontrarás en <b>%s</b>', $filename));
       }
 
-      Flasher::success(sprintf('API keys generadas con éxito, las encontrarás en <b>%s</b>', $filename));
+      if ($errors > 0) {
+        Flasher::error("Hubo <b>$errors</b> en el proceso de actualización.");
+      }
+
       Redirect::back();
+
     } catch (Exception $e) {
       Flasher::error($e->getMessage());
       Redirect::back();
-    }
-  }
-
-  /**
-   * @since 1.1.3
-   * 
-   * Genera un PDF de forma sencilla y dinámica
-   *
-   * @return void
-   */
-  function pdf()
-  {
-    try {
-      $content = '<!DOCTYPE html>
-      <html>
-      <head>
-      <style>
-      code {
-        font-family: Consolas,"courier new";
-        color: crimson;
-        background-color: #f1f1f1;
-        padding: 2px;
-        font-size: 80%%;
-        border-radius: 5px;
-      }
-      </style>
-      </head>
-      <body>
-  
-      <img src="%s" alt="%s" style="width: 100px;"><br>
-  
-      <h1>Bienvenido de nuevo a %s</h1>
-      <p>Versión <b>%s</b></p>
-      
-      <code>
-      // Método 1
-      $content = "Contenido del documento PDF, puedes usar cualquier tipo de HTML e incluso la mayoría de estilos CSS3";
-      $pdf     = new BeePdf($content); // Se muestra directo en navegador, para descargar pasar en parámetro 2 true y para guardar en parámetro 3 true
-  
-      // Método 2
-      $pdf = new BeePdf();
-      $pdf->create("bee_pdfs", $content);
-      </code>
-  
-      </body>
-      </html>';
-      $content = sprintf($content, get_bee_logo(), get_bee_name(), get_bee_name(), get_bee_version());
-
-      // Método 1
-      $pdf = new BeePdf($content); // Se muestra directo en navegador, para descargar pasar en parámetro 2 true y para guardar en parámetro 3 true
-
-      // Método 2
-      //$pdf = new BeePdf();
-      //$pdf->create('bee_pdfs', $content);
-
-    } catch (Exception $e) {
-      Flasher::new($e->getMessage(), 'danger');
-      Redirect::to('home');
-    }
-  }
-
-  /**
-   * Prueba para enviar correos electrónicos regulares
-   *
-   * @return void
-   */
-  function email()
-  {
-    try {
-      if (!is_local()) {
-        throw new Exception(get_bee_message(0));
-      }
-
-      $email   = 'jslocal@localhost.com';
-      $subject = 'El asunto del correo';
-      $body    = 'El cuerpo del mensaje, puede ser html o texto plano.';
-      $alt     = 'El texto corto del correo, preview del contenido.';
-      send_email(get_siteemail(), $email, $subject, $body, $alt);
-      echo sprintf('Correo electrónico enviado con éxito a %s', $email);
-    } catch (Exception $e) {
-      echo $e->getMessage();
-    }
-  }
-
-  /**
-   * @since 1.5.0
-   * 
-   * Prueba de envío de correos electrónicos usando SMTP
-   *
-   * @return void
-   */
-  function smtp()
-  {
-    try {
-      if (!is_local()) {
-        throw new Exception(get_bee_message(0));
-      }
-
-      send_email('tuemail@hotmail.com', 'tuemail@hotmail.com', 'Probando smtp', '¡Hola mundo!', 'Correo de prueba.');
-      echo 'Mensaje enviado con éxito.';
-    } catch (Exception $e) {
-      echo $e->getMessage();
     }
   }
 
@@ -315,28 +224,10 @@ class beeController extends Controller
 
       Flasher::success(sprintf('Nuevo usuario generado con éxito:<br>Usuario: <b>%s</b><br>Contraseña: <b>%s</b>', $user['username'], $password['password']));
       Redirect::back();
+
     } catch (Exception $e) {
       Flasher::error($e->getMessage());
       Redirect::back();
     }
-  }
-
-  /**
-   * @since 1.5.5
-   * 
-   * Prueba general de uso de Twig
-   *
-   * @return void
-   */
-  function twig()
-  {
-    // Datos que se pasan a la plantilla
-    $data = [
-      'title' => 'Mi Página',
-      'name'  => 'Usuario',
-    ];
-
-    // Renderizar la plantilla
-    View::render_twig('test', $data);
   }
 }

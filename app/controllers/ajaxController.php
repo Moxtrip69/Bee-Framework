@@ -1,62 +1,10 @@
 <?php 
 
-class ajaxController extends Controller {
-
-  /**
-   * Instancia de la clase BeeHttp
-   *
-   * @var BeeHttp
-   */
-  private $http = null;
-
-  /**
-   * La información de la petición completa
-   * incluyendo el cuerpo de la petición, cabeceras,
-   * files y el body RAW
-   * 
-   * @var array
-   */
-  private $req  = null;
-
-  /**
-   * Información ya formateada conteniendo el cuerpo
-   * de la petición actual
-   *
-   * @var array
-   */
-  protected Array $data = [];
-
-  /**
-   * Archivos enviados al servidor en la petición
-   *
-   * @var array
-   */
-  private $files = [];
+class ajaxController extends Controller implements ControllerInterface {
 
   function __construct()
   {
-    // Prevenir el acceso no autorizado
-    if (!defined('DOING_AJAX') && !defined('DOING_API')) {
-      http_response_code(403);
-      json_output(json_build(403));
-    }
-
-    // Procesamos la petición que está siendo mandada al servidor
-    try {
-      $this->http  = new BeeHttp(__CLASS__);
-      $this->http->process();
-      $this->req   = $this->http->get_request();
-      $this->data  = $this->req['data'];
-      $this->files = $this->req['files'];
-    } catch (BeeHttpException $e) {
-      http_response_code($e->getStatusCode());
-      json_output(json_build($e->getStatusCode(), [], $e->getMessage()));
-
-    } catch (Exception $e) {
-      http_response_code(400);
-      json_output(json_build(400, [], $e->getMessage()));
-
-    }
+    parent::__construct('ajax');
   }
 
   function index()

@@ -2049,17 +2049,17 @@ function get_bee_info()
  * definida para usuario
  *
  * @param string $password
- * @return string
+ * @return array
  */
 function get_new_password($password = null)
 {
 	$password = $password === null ? random_password() : $password;
 
 	return
-		[
-			'password' => $password,
-			'hash'     => password_hash($password . AUTH_SALT, PASSWORD_BCRYPT)
-		];
+	[
+		'password' => $password,
+		'hash'     => password_hash($password . AUTH_SALT, PASSWORD_BCRYPT)
+	];
 }
 
 /**
@@ -2071,12 +2071,8 @@ function get_new_password($password = null)
  * @param array $headers
  * @return mixed
  */
-function bee_die($message, $headers = [])
+function bee_die(string $message, $headers = [])
 {
-	if (!is_string($message)) {
-		throw new Exception('El parámetro $message debe ser un string válido.');
-	}
-
 	if (empty($headers)) {
 		header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 		header("Cache-Control: post-check=0, pre-check=0", false);
@@ -2489,8 +2485,8 @@ function set_page_og_meta_tags($title = null, $description = null, $image = null
 	global $OG_Image;
 	global $OG_Type;
 
-	$OG_Title       = $title === null ? get_sitename() : clean($title);
-	$OG_Description = $description === null ? SITE_DESC : clean($description);
+	$OG_Title       = $title === null ? get_sitename() : $title;
+	$OG_Description = $description === null ? SITE_DESC : $description;
 	$OG_Url         = $url === null ? CUR_PAGE : $url;
 	$OG_Image       = $image === null ? IMAGES . 'og-bee-framework.png'  : $image;
 	$OG_Type        = $type === 'article' ? $type : 'website';
@@ -2723,3 +2719,28 @@ function new_anchor(String $anchor)
 {
 	return sprintf('%s#%s', CUR_PAGE, $anchor);
 }
+
+/**
+ * Remueve caracteres con acentos en un string y los sustituye por su
+ * versión sin acento del caracter
+ *
+ * @param String $string
+ * @return string
+ */
+function remove_accents(String $string) {
+	$accents     = array('á', 'é', 'í', 'ó', 'ú', 'ü', 'Á', 'É', 'Í', 'Ó', 'Ú', 'Ü', 'ñ', 'Ñ');
+	$substitutes = array('a', 'e', 'i', 'o', 'u', 'u', 'A', 'E', 'I', 'O', 'U', 'U', 'n', 'N');
+	
+	return strtr($string, array_combine($accents, $substitutes));
+}
+
+/**
+ * Ejemplo de uso de hooks para registrar endpoints para la API
+ *
+ * @param Bee $instance
+ * @return void
+ */
+function addEndpoints(Bee $instance)
+{
+}
+BeeHookManager::registerHook('init_set_up', 'addEndpoints');

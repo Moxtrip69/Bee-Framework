@@ -18,9 +18,11 @@ class carritoController extends Controller {
     //   Redirect::to('login');
     // }
 
-    // Carga del carrito de compras
+    // Ejecutar la funcionalidad del Controller padre
+    parent::__construct();
+
+    // Dejar instanciado nuestro handler del carrito
     $this->cartHandler = new BeeCartHandler();
-    $this->cart        = $this->cartHandler->loadCart();
 
     // Verificar si existe un cupón de descuento en la URL
     $couponCode = isset($_GET["couponCode"]) ? clean(strtoupper($_GET["couponCode"])) : null;
@@ -45,14 +47,9 @@ class carritoController extends Controller {
   
   function index()
   {
-    $data = 
-    [
-      'title' => 'Carrito de compras',
-      'cart'  => $this->cartHandler->loadCart()
-    ];
-
-    // Descomentar vista si requerida
-    View::render('index', $data);
+    $this->addToData('title', 'Carrito de compras');
+    $this->setView('index');
+    $this->render();
   }
 
   function agregar($itemId = null, $quantity = 1)

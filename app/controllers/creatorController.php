@@ -11,20 +11,25 @@ class creatorController extends Controller {
       Flasher::error(get_bee_message(0));
       Redirect::to(DEFAULT_CONTROLLER);
     }
+
+    // Ejecutar la funcionalidad del Controller padre
+    parent::__construct();
   }
   
   function index() {
-    View::render('index', ['title' => 'Crea un nuevo archivo']);
-  }
+    $files       = glob(CONTROLLERS . '*Controller.php');
+    $controllers = [];
 
-  function controller()
-  {
-    View::render('controller', ['title' => 'Nuevo controlador']);
-  }
+    foreach ($files as $f) {
+      $basename = basename($f);
+      $basename = str_replace('Controller.php', '', $basename);
+      $controllers[] = $basename;
+    }
 
-  function model()
-  {
-    View::render('model', ['title' => 'Nuevo modelo']);
+    $this->setTitle('Crea un nuevo archivo');
+    $this->addToData('controllers', $controllers);
+    $this->setView('index');
+    $this->render();
   }
 
   function post_controller()
@@ -173,5 +178,63 @@ class creatorController extends Controller {
 
     Flasher::new(sprintf('Modelo <b>%s</b> creado con éxito.', $filename.$keyword));
     Redirect::back();
+  }
+
+  function post_view()
+  {
+    try {
+      if (!Csrf::validate($_POST['csrf'])) {
+        Flasher::deny();
+        Redirect::back();
+      }
+  
+      // Validar nombre de archivo
+      array_map('clean', $_POST);
+      $controller = $_POST["controller"];
+      $viewName   = $_POST["viewName"];
+      $viewName   = strtolower($viewName);
+      $viewName   = str_replace(' ', '_', $viewName);
+      $viewName   = str_replace('.php', '', $viewName);
+      $viewName   = sanitize_input($viewName);
+      $viewName   = remove_accents($viewName);
+      $viewName   = normalize_string($viewName, true);
+      $keyword    = 'View';
+      $twig       = isset($_POST["usar-twig"]) ? true : false;
+      $template   = MODULES . 'bee' . DS . ($twig ? 'viewTwigTemplate.txt' : 'viewTemplate.txt');
+      $filename   = sprintf('%s%s.%s', $viewName, $keyword, $twig ? 'twig' : 'php');
+  
+      // Validar que sea un string válido
+      if (!is_string($viewName)) {
+        throw new Exception(sprintf('Ingresa un nombre de vista válido por favor.', $viewName));
+      }
+  
+      // Validar longitud del nombre
+      if (strlen($viewName) < 5) {
+        throw new Exception(sprintf('Ingresa un nombre de vista válido por favor, <b>%s</b> es demasiado corto.', $viewName));
+      }
+  
+      // Validar la existencia del controlador para prevenir remover un archivo existente
+      $path = VIEWS . $controller . DS . $filename;
+      if (is_file($path)) {
+        throw new Exception(sprintf('Ya existe la vista <b>%s</b> del controlador <b>%s</b>.', $filename, $controller));
+      }
+  
+      // Validar la existencia de la plantilla.txt para crear la vista
+      if (!is_file($template)) {
+        throw new Exception(sprintf('No existe la plantilla <b>%s</b>.', $template));
+      }
+  
+      $html = @file_get_contents($template);
+      if (@file_put_contents($path, $html) === false) {
+        throw new Exception('Hubo un problema al crear la vista.');
+      }
+  
+      Flasher::success(sprintf('La vista <b>%s</b> del controlador <b>%s</b> ha sido creada con éxito.', $filename, $controller));
+      Redirect::back();
+
+    } catch (Exception $e) {
+      Flasher::error($e->getMessage());
+      Redirect::back();
+    }
   }
 }

@@ -65,3 +65,10 @@ define('DEFAULT_METHOD'           , 'index');"
 <?php echo code_block(file_get_contents(MODELS . 'productModel.php')); ?>
 
 <p>Dentro de cada modelo tú podrás expandir la lógica y sus funcionalidades para que se adapten a tus necesidades o las de tu proyecto.</p>
+
+<h4 id="coreFunc"># Funciones del core</h4>
+<p>Dentro de Bee framework, en la carpeta <code>app/functions/</code> encontrarás el archivo <code>bee_core_functions.php</code> que contiene todas las funciones principales e indispinsables para el framework, no debes modificarlas directamente para evitar la pérdida de tus cambios después de alguna actualización.</p>
+<p>Puedes ver la lista completa de las funciones revisando el código fuente en tu editor de código.</p>
+
+<h4 id="customFunc"># Funciones personalizadas</h4>
+<p>De igual manera existe el archivo <code>bee_custom_functions.php</code> que es ahí dónde podrás anexar todas las funciones que requieras para tu desarrollo, también podrás crear más archivos de funciones, sólo recuerda que deberás requerirlos dentro de <code>app/classes/Bee.php</code> para que tus funciones se ejecuten de forma correcta.</p>

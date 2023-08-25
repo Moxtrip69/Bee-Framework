@@ -6,7 +6,7 @@
  *
  * Controlador de api
  */
-class apiController extends Controller {
+class apiController extends Controller implements ControllerInterface {
 
   /**
    * Versión de la API actual de Bee framework
@@ -15,63 +15,9 @@ class apiController extends Controller {
    */
   private $version = '1.0.0';
 
-  /**
-   * Instancia de la clase BeeHttp
-   *
-   * @var BeeHttp
-   */
-  private $http    = null;
-
-  /**
-   * La información de la petición completa
-   * incluyendo el cuerpo de la petición, cabeceras,
-   * files y el body RAW
-   * 
-   * @var array
-   */
-  private $req     = null;
-
-  /**
-   * Información ya formateada conteniendo el cuerpo
-   * de la petición actual
-   *
-   * @var array
-   */
-  protected Array $data = [];
-
-  /**
-   * Array de archivos enviados en la petición
-   * @since 1.5.6
-   *
-   * @var array
-   */
-  private $files   = [];
-
   function __construct()
   {
-    // Prevenir el acceso no autorizado
-    if (!defined('DOING_AJAX') && !defined('DOING_API')) {
-      http_response_code(403);
-      json_output(json_build(403));
-    }
-
-    // Procesamos la petición que está siendo mandada al servidor
-    try {
-      $this->http  = new BeeHttp(__CLASS__);
-      $this->http->registerDomain('*'); // Recomiendo cambiar a un dominio específico por seguridad
-      $this->http->process();
-      $this->req   = $this->http->get_request();
-      $this->data  = $this->req['data'];
-      $this->files = $this->req['files'];
-    } catch (BeeHttpException $e) {
-      http_response_code($e->getStatusCode());
-      json_output(json_build($e->getStatusCode(), [], $e->getMessage()));
-
-    } catch (Exception $e) {
-      http_response_code(400);
-      json_output(json_build(400, [], $e->getMessage()));
-
-    }
+    parent::__construct('endpoint');
   }
   
   function index()
@@ -88,7 +34,7 @@ class apiController extends Controller {
       $this->http->accept(['get','post','put','delete']);
       $this->http->authenticate_request();
 
-      switch ($this->req['type']) {
+      switch ($this->request['type']) {
         case 'GET':
           if ($id !== null) {
             $this->get_post($id);
@@ -223,7 +169,7 @@ class apiController extends Controller {
       throw new BeeJsonException(get_bee_message('not_found'), 400, 'not_found');
     }
 
-    if (!Model::remove('pruebas', ['id' => $id])) {
+    if (!Model::remove('pruebas', ['id' => $id], 1)) {
       throw new BeeJsonException(get_bee_message('not_deleted'), 400, 'not_deleted');
     }
     

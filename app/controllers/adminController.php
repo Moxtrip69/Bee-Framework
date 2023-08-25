@@ -16,67 +16,56 @@ class adminController extends Controller {
       Flasher::new('Debes iniciar sesión primero.', 'danger');
       Redirect::to('login');
     }
+
+    // Ejecutar la funcionalidad del Controller padre
+    parent::__construct();
   }
   
   function index()
   {
     register_scripts([JS . 'admin/demo.js'], 'Chartjs gráficas para administración');
-    
-    $data = 
+
+    $this->setTitle('Administración');
+    $buttons =
     [
-      'title'   => 'Reemplazar título',
-      'buttons' =>
       [
-        [
-          'url'   => 'admin',
-          'class' => 'btn-danger text-white',
-          'id'    => '',
-          'icon'  => 'fas fa-download',
-          'text'  => 'Descargar'
-        ],
-        [
-          'url'   => 'admin',
-          'class' => 'btn-success text-white',
-          'id'    => '',
-          'icon'  => 'fas fa-file-pdf',
-          'text'  => 'Exportar'
-        ]
+        'url'   => 'admin',
+        'class' => 'btn-danger text-white',
+        'id'    => '',
+        'icon'  => 'fas fa-download',
+        'text'  => 'Descargar'
+      ],
+      [
+        'url'   => 'admin',
+        'class' => 'btn-success text-white',
+        'id'    => '',
+        'icon'  => 'fas fa-file-pdf',
+        'text'  => 'Exportar'
       ]
     ];
-    
-    // Descomentar vista si requerida
-    View::render('index', $data);
+    $this->addToData('buttons', $buttons);
+    $this->render();
   }
 
   function perfil()
   {
-    $data =
-    [
-      'title' => 'Perfil de usuario',
-      'user'  => User::profile()
-    ];
-
-    View::render('perfil', $data);
+    $this->setTitle('Perfil de usuario');
+    $this->setView('perfil');
+    $this->render();
   }
 
   function botones()
   {
-    $data =
-    [
-      'title' => 'Botones'
-    ];
-    
-    View::render('botones', $data);
+    $this->setTitle('Botones');
+    $this->setView('botones');
+    $this->render();
   }
 
   function cartas()
   {
-    $data =
-    [
-      'title' => 'Cartas'
-    ];
-    
-    View::render('cartas', $data);
+    $this->setTitle('Cartas');
+    $this->setView('cartas');
+    $this->render();
   }
 
   ////////////////////////////////////////////////////
@@ -88,14 +77,11 @@ class adminController extends Controller {
   ////////////////////////////////////////////////////
   function usuarios()
   {
-    $data =
-    [
-      'title' => 'Usuarios',
-      'users' => userModel::all_paginated(),
-      'slug'  => 'usuarios'
-    ];
-
-    View::render('usuarios/usuarios', $data);
+    $this->setTitle('Usuarios');
+    $this->addToData('users', userModel::all_paginated());
+    $this->addToData('slug' , 'usuarios');
+    $this->setView('usuarios/usuarios');
+    $this->render();
   }
 
   function post_usuarios()
@@ -267,15 +253,12 @@ class adminController extends Controller {
 
     $form->addButton('submit', 'submit', 'Agregar producto', ['btn btn-success'], 'submit-button');
 
-    $data =
-    [
-      'title'    => 'Productos',
-      'form'     => $form->getFormHtml(),
-      'products' => productModel::all_paginated(),
-      'slug'     => 'productos'
-    ];
-
-    View::render('productos/productos', $data);
+    $this->setTitle('Productos');
+    $this->addToData('form'    , $form->getFormHtml());
+    $this->addToData('products', productModel::all_paginated());
+    $this->addToData('slug'    , 'productos');
+    $this->setView('productos/productos');
+    $this->render();
   }
 
   function post_productos()
@@ -321,15 +304,7 @@ class adminController extends Controller {
         throw new Exception($errorMessage);
       }
 
-      // Agregar el nuevo usuario a la base de datos
-
-
-      // Insertando el registro en la base de datos
-      if (!$id = userModel::add(userModel::$t1, $user)) {
-        throw new Exception('Hubo un problema al agregar el usuario.');
-      }
-
-      Flasher::success(sprintf('Nuevo usuario agregado con éxito:<br>Usuario: <b>%s</b><br>Contraseña: <b>%s</b>', $user['username'], $password));
+      Flasher::success('Nuevo producto agregado con éxito.');
       Redirect::back();
 
     } catch (Exception $e) {

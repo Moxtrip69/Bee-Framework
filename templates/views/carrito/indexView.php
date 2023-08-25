@@ -142,7 +142,7 @@
 
           <div class="col-12">
             <label for="address" class="form-label">Dirección</label>
-            <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="">
+            <input type="text" class="form-control" id="address" placeholder="Calle en el mundo #123" required="">
             <div class="invalid-feedback">
               Por favor ingresa una dirección válida.
             </div>
@@ -150,7 +150,7 @@
 
           <div class="col-12">
             <label for="address2" class="form-label">Dirección 2 <span class="text-body-secondary">(Opcional)</span></label>
-            <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
+            <input type="text" class="form-control" id="address2" placeholder="Departamento o interior">
           </div>
 
           <div class="col-md-5">

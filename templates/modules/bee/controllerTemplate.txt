@@ -9,9 +9,6 @@ class [[REPLACE]]Controller extends Controller implements ControllerInterface
 {
   function __construct()
   {
-    // Ejecutar la funcionalidad del Controller padre
-    parent::__construct();
-
     // Prevenir el ingreso si nos encontramos en producción y esta ruta es sólo para desarrollo o pruebas
     // if (!is_local()) {
     //   Redirect::to(DEFAULT_CONTROLLER);
@@ -22,38 +19,34 @@ class [[REPLACE]]Controller extends Controller implements ControllerInterface
     //  Flasher::new('Debes iniciar sesión primero.', 'danger');
     //  Redirect::to('login');
     // }
+
+    // Ejecutar la funcionalidad del Controller padre
+    parent::__construct();
   }
   
   function index()
   {
-    $data = 
-    [
-      'title' => 'Reemplazar título',
-      'msg'   => 'Bienvenido al controlador de "[[REPLACE]]", se ha creado con éxito si ves este mensaje.'
-    ];
-    
-    // Descomentar vista si requerida
-    View::render('index', $data, '[[ENGINE]]');
+    $this->setTitle('Reemplazar título');
+    $this->addToData('msg', 'Bienvenido al controlador de "[[REPLACE]]", se ha creado con éxito si ves este mensaje.');
+    $this->setEngine('[[ENGINE]]');
+    $this->setView('index'); // por defecto es index
+    $this->render();
   }
 
   function ver($id)
   {
-    $data = 
-    [
-      'title' => 'Reemplazar título'
-    ];
-
-    View::render('ver', $data);
+    $this->setTitle('Reemplazar título');
+    $this->setEngine('[[ENGINE]]');
+    $this->setView('ver'); // por defecto es index
+    $this->render();
   }
 
   function agregar()
   {
-    $data = 
-    [
-      'title' => 'Reemplazar título'
-    ];
-
-    View::render('agregar', $data);
+    $this->setTitle('Reemplazar título');
+    $this->setEngine('[[ENGINE]]');
+    $this->setView('agregar'); // por defecto es index
+    $this->render();
   }
 
   function post_agregar()
@@ -63,12 +56,10 @@ class [[REPLACE]]Controller extends Controller implements ControllerInterface
 
   function editar($id)
   {
-    $data = 
-    [
-      'title' => 'Reemplazar título'
-    ];
-
-    View::render('editar', $data);
+    $this->setTitle('Reemplazar título');
+    $this->setEngine('[[ENGINE]]');
+    $this->setView('editar'); // por defecto es index
+    $this->render();
   }
 
   function post_editar()

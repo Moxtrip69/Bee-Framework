@@ -9,7 +9,7 @@
  * Únete gratis en www.joystick.com.mx
  * 
  * Template de configuración inicial
- * @version 1.0.1
+ * @version 1.0.2
  */
 
 // Definir el uso horario o timezone del sistema
@@ -20,8 +20,16 @@ date_default_timezone_set('America/Mexico_City');
  * puedes regenerarlas en bee/generate
  * @since 1.1.4
  */
-define('API_PUBLIC_KEY'          , '[[REPLACE_PUBLIC_KEY]]');
-define('API_PRIVATE_KEY'         , '[[REPLACE_PRIVATE_KEY]]');
+define('API_PUBLIC_KEY'          , '');
+define('API_PRIVATE_KEY'         , '');
+
+/**
+ * Migrados desde config/bee_config.php a core/settings.php
+ * 
+ * Salt utilizada para agregar seguridad al hash de contraseñas dependiendo el uso requerido
+ */
+define('AUTH_SALT'               , '');
+define('NONCE_SALT'              , '');
 
 /**
  * Define si es requerida autenticación para consumir los recursos de la API
@@ -43,7 +51,7 @@ define('PORT'                    , '8848');            // Puerto por defecto de 
 
 // Utilidades
 define('CSS_FRAMEWORK'           , 'bs_lumen'); // opciones disponibles: bs o bs5 = Bootstrap 5 | bl = Bulma | fn = Foundation
-define('JQUERY'                  , true);  // define si es requerido jquery para el sitio
+define('JQUERY'                  , true);  // define si es requerido jQuery para el sitio
 define('VUEJS'                   , true);  // define si es requerido Vue js 3 para el sitio | CDN
 define('AXIOS'                   , false); // define si es requerido Axios para peticiones HTTP
 define('SWEETALERT2'             , true);  // define si es requerido sweetalert2 por defecto
@@ -53,9 +61,9 @@ define('LIGHTBOX'                , false); // define si es requerido Lightbox
 
 /**
  * Motor de templates con Twig 3.6
- * @since 1.5.7
+ * @since 1.5.8
  */
-define('USE_TWIG'                , false); // define si será usado Twig para renderizar las vistas
+define('USE_TWIG'                , false); // define si será usado Twig por defecto para renderizar las vistas
 
 // Versión de la aplicación
 define('BEE_NAME'                , 'Bee Framework');  // Nombre del framework
@@ -94,8 +102,8 @@ define('PHPMAILER_TEMPLATE'      , 'emailTemplate');     // Plantilla por defect
 // Puerto y la URL del sitio
 define('PROTOCOL'                , isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http"); // Detectar si está en HTTPS o HTTP
 define('HOST'                    , $_SERVER['HTTP_HOST'] === 'localhost' ? (PREPROS ? 'localhost:' . PORT : 'localhost') : $_SERVER['HTTP_HOST']); // Dominio o host localhost.com tudominio.com
-define('REQUEST_URI'             , $_SERVER["REQUEST_URI"]); // Parámetros y ruta requerida
-define('URL'                     , PROTOCOL . '://' . HOST . BASEPATH); // URL del sitio
+define('REQUEST_URI'             , $_SERVER["REQUEST_URI"]);               // Parámetros y ruta requerida
+define('URL'                     , PROTOCOL . '://' . HOST . BASEPATH);    // URL del sitio
 define('CUR_PAGE'                , PROTOCOL . '://' . HOST . REQUEST_URI); // URL actual incluyendo parámetros get
 
 // Las rutas de directorios y archivos
@@ -144,3 +152,6 @@ define('LDB_CHARSET'             , 'utf8');
 define('DEFAULT_CONTROLLER'      , 'bee');
 define('DEFAULT_ERROR_CONTROLLER', 'error');
 define('DEFAULT_METHOD'          , 'index');
+
+// Para uso de Google Maps
+define('GMAPS'                   , '__TOKEN__');

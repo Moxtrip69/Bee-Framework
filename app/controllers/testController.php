@@ -21,6 +21,7 @@ class testController extends Controller implements ControllerInterface
 
   function index()
   {
+    $this->setTitle('Título de pruebas');
     $this->addToData('algo', 123);
     $this->setView('index');
     $this->render();
@@ -212,5 +213,126 @@ class testController extends Controller implements ControllerInterface
     } catch (Exception $e) {
       echo 'Error: ' . $e->getMessage();
     }
+  }
+
+  /**
+   * @since 1.1.3
+   * 
+   * Genera un PDF de forma sencilla y dinámica
+   *
+   * @return void
+   */
+  function pdf()
+  {
+    try {
+      $content = '<!DOCTYPE html>
+      <html>
+      <head>
+      <style>
+      code {
+        font-family: Consolas,"courier new";
+        color: crimson;
+        background-color: #f1f1f1;
+        padding: 2px;
+        font-size: 80%%;
+        border-radius: 5px;
+      }
+      </style>
+      </head>
+      <body>
+  
+      <img src="%s" alt="%s" style="width: 100px;"><br>
+  
+      <h1>Bienvenido de nuevo a %s</h1>
+      <p>Versión <b>%s</b></p>
+      
+      <code>
+      // Método 1
+      $content = "Contenido del documento PDF, puedes usar cualquier tipo de HTML e incluso la mayoría de estilos CSS3";
+      $pdf     = new BeePdf($content); // Se muestra directo en navegador, para descargar pasar en parámetro 2 true y para guardar en parámetro 3 true
+  
+      // Método 2
+      $pdf = new BeePdf();
+      $pdf->create("bee_pdfs", $content);
+      </code>
+  
+      </body>
+      </html>';
+      $content = sprintf($content, get_bee_logo(), get_bee_name(), get_bee_name(), get_bee_version());
+
+      // Método 1
+      $pdf = new BeePdf($content); // Se muestra directo en navegador, para descargar pasar en parámetro 2 true y para guardar en parámetro 3 true
+
+      // Método 2
+      //$pdf = new BeePdf();
+      //$pdf->create('bee_pdfs', $content);
+
+    } catch (Exception $e) {
+      Flasher::new($e->getMessage(), 'danger');
+      Redirect::to('home');
+    }
+  }
+
+  /**
+   * Prueba para enviar correos electrónicos regulares
+   *
+   * @return void
+   */
+  function email()
+  {
+    try {
+      if (!is_local()) {
+        throw new Exception(get_bee_message(0));
+      }
+
+      $email   = 'jslocal@localhost.com';
+      $subject = 'El asunto del correo';
+      $body    = 'El cuerpo del mensaje, puede ser html o texto plano.';
+      $alt     = 'El texto corto del correo, preview del contenido.';
+      send_email(get_siteemail(), $email, $subject, $body, $alt);
+      echo sprintf('Correo electrónico enviado con éxito a %s', $email);
+    } catch (Exception $e) {
+      echo $e->getMessage();
+    }
+  }
+
+  /**
+   * @since 1.5.0
+   * 
+   * Prueba de envío de correos electrónicos usando SMTP
+   *
+   * @return void
+   */
+  function smtp()
+  {
+    try {
+      if (!is_local()) {
+        throw new Exception(get_bee_message(0));
+      }
+
+      send_email('tuemail@hotmail.com', 'tuemail@hotmail.com', 'Probando smtp', '¡Hola mundo!', 'Correo de prueba.');
+      echo 'Mensaje enviado con éxito.';
+    } catch (Exception $e) {
+      echo $e->getMessage();
+    }
+  }
+
+  /**
+   * @since 1.5.5
+   * 
+   * Prueba general de uso de Twig
+   *
+   * @return void
+   */
+  function twig()
+  {
+    // Datos que se pasan a la plantilla
+    $data = [
+      'title' => 'Mi Página',
+      'name'  => 'Usuario',
+    ];
+
+    // Renderizar la plantilla
+    View::render_twig('test', $data);
   }
 }

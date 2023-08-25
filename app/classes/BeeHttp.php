@@ -26,8 +26,7 @@ class BeeHttp
   private $call   = null;
 
   /**
-   * El tipo de petición realizada
-   * al servidor en curso
+   * El verbo de la petición realizada al servidor
    *
    * @var string
    */
@@ -177,28 +176,34 @@ class BeeHttp
    */
   private $domains          = [];
 
-  function __construct($class)
+  function __construct(Array $options = [])
   {
-    // Validar el contexto de la petición
-    if ($class === 'apiController' && defined('DOING_API')) {
-      $this->call         = 'api';
-      $this->authenticate = bee_api_authentication();
-    } elseif ($class === 'ajaxController' && defined('DOING_AJAX')) {
-      $this->call         = 'ajax';
-    } else {
+    // Autenticación de acceso con Bearer Token en headers
+    $this->authenticate = isset($options['authenticate']) ? $options['authenticate'] : bee_api_authentication();
+
+    // Dominios para CORS
+    $this->domains      = isset($options['domains']) ? $options['domains'] : [];
+
+    // El verbo HTTP utilizado en la petición
+    $this->r_type       = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : null;
+
+    // Protocolo http de la petición
+    $this->protocol     = PROTOCOL; // definido en settings.php
+  }
+
+  /**
+   * Verifica que la petición tenga un verbo aceptado en la lista de verbos aceptados
+   *
+   * @return void
+   */
+  private function validateRequestVerb()
+  {
+    if(!in_array(strtoupper($this->r_type), $this->accepted_verbs)) {
       throw new BeeHttpException(
-        get_bee_message(0), 
+        'Verbo HTTP no aceptado.', 
         403
       ); // 403
     }
-
-    // El verbo HTTP utilizado en la petición
-    $this->r_type   = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : null;
-
-    // Protocolo http de la petición
-    $this->protocol = PROTOCOL; // definido en settings.php
-
-    return $this;
   }
 
   function process()
@@ -207,12 +212,7 @@ class BeeHttp
      * @since 1.1.4
      */
     // Validar que se pase un verbo válido y aceptado
-    if(!in_array(strtoupper($this->r_type), $this->accepted_verbs)) {
-      throw new BeeHttpException(
-        get_bee_message(1), 
-        403
-      ); // 403
-    }
+    $this->validateRequestVerb();
 
     // Se encarga de validar la petición OPTIONS de preflight para CORS
     $this->handlePreflightRequest();
@@ -233,14 +233,12 @@ class BeeHttp
     $this->validate_csrf();
   }
 
-  function registerDomain($domain)
+  function registerDomain(String $domain)
   {
     $this->domains[] = $domain;
-
-    return true;
   }
 
-  function handlePreflightRequest()
+  private function handlePreflightRequest()
   {
     // Establecer las cabeceras CORS para la Preflight Request
     // Obtener el valor del origen de la solicitud desde el encabezado
@@ -337,12 +335,17 @@ class BeeHttp
     if ($this->authenticate === false) return true; // no es necesaria la autenticación
     
     $api_key = get_bee_api_private_key();
-    
+
     if (strcmp($api_key, $this->private_key) !== 0) {
       throw new BeeHttpException(get_bee_message(0), 403);
     }
 
     return true;
+  }
+
+  function setAuthentication(Bool $authenticate)
+  {
+    $this->authenticate = $authenticate;
   }
 
   /**
@@ -356,6 +359,11 @@ class BeeHttp
     $this->csrf = isset($this->data['csrf']) ? $this->data['csrf'] : null;
   }
 
+  function setCallType(String $callType)
+  {
+    $this->call = $callType;
+  }
+
   /**
    * Valida que el token CSRF enviado en la petición
    * sea correcto y válido para el usuario en curso
@@ -364,7 +372,7 @@ class BeeHttp
    */
   private function validate_csrf()
   {
-    if ($this->call === 'ajax' && in_array(strtolower($this->r_type), ['post', 'put', 'delete', 'headers', 'options']) && !Csrf::validate($this->csrf)) {
+    if ($this->call === 'ajax' && in_array(strtolower($this->r_type), ['post', 'put', 'delete']) && !Csrf::validate($this->csrf)) {
       throw new BeeHttpException('Autorización no válida.', 401); // 401
     }
   }
@@ -449,7 +457,7 @@ class BeeHttp
   }
 
   /**
-   * Para determinar los verbos autorizados o disponibles en una determinada ruta.
+   * Para escpecificar los verbos aceptados o autorizados en una ruta determinada.
    *
    * @param Array $verbs
    * @return true
@@ -457,7 +465,10 @@ class BeeHttp
   public function accept(Array $verbs)
   {
     if (!in_array(strtoupper($this->r_type), array_map('strtoupper', $verbs))) {
-      throw new BeeHttpException('El verbo HTTP utilizado en esta ruta no está autorizado.', 403);
+      throw new BeeHttpException(
+        'El verbo HTTP solicitado no está autorizado en esta ruta.', 
+        403
+      );
     }
     
     return true;

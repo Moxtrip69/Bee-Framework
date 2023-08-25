@@ -73,16 +73,10 @@ class clasesController extends Controller {
     ];
     $_SESSION['conceptos'] = $conceptos;
 
-    $data = 
-    [
-      'title'    => 'Clases en vivo',
-      'number'   => 6,
-      'topic'    => 'Crea documentos y reportes en PDF con PHP y Dompdf.',
-      'concepts' => $conceptos
-    ];
-    
-    // Descomentar vista si requerida
-    View::render('index', $data);
+    $this->setTitle('Clases en vivo');
+    $this->addToData('concepts', $conceptos);
+    $this->setView('index');
+    $this->render();
   }
 
   function post_generar_reporte()
