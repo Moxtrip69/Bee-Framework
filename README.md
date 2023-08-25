@@ -3,6 +3,7 @@
 ![Bee Framework](https://badgen.net/static/stars/★★★★★)
 ![Bee Framework](https://badgen.net/github/watchers/moxtrip69/bee-framework)
 ![Bee Framework](https://badgen.net/github/forks/moxtrip69/bee-framework)
+[![Estudiantes](https://badgen.net//static/Estudiantes/+95,000/f2a)](https://www.academy.joystick.com.mx/)
 
 ![Bee Framework](https://raw.githubusercontent.com/Moxtrip69/Bee-Framework/master/assets/images/bee_logo.png)
 # Bee-Framework
