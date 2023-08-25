@@ -5,7 +5,7 @@
 ![Bee Framework](https://badgen.net/github/forks/moxtrip69/bee-framework)
 [![Estudiantes](https://badgen.net//static/Estudiantes/+95,000/f2a)](https://www.academy.joystick.com.mx/)
 
-![Bee Framework](https://raw.githubusercontent.com/Moxtrip69/Bee-Framework/master/assets/images/bee_logo.png)
+<img src="https://raw.githubusercontent.com/Moxtrip69/Bee-Framework/master/assets/images/bee_logo.png" alt="Bee Framework" style="width:400px;">
 # Bee-Framework
 Mini framework desarrollado por la Academia de Joystick.
 Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y fácil de implementar para proyectos tanto pequeños como aquellos que requieren escalabilidad y visión a futuro.
