@@ -1,10 +1,13 @@
+[![Únete al servidor de Discord](https://badgen.net/discord/members/wTzhKrg)](https://discord.gg/wTzhKrg)
+[![Únete al grupo de WhatsApp](https://badgen.net//static/Únete%20al%20grupo/WhatsApp/25D366)](https://chat.whatsapp.com/GX86T4pVIFvCdMyovY5UgP)
+![Bee Framework](https://badgen.net/static/stars/★★★★★)
+![Bee Framework](https://badgen.net/github/watchers/moxtrip69/bee-framework)
+![Bee Framework](https://badgen.net/github/forks/moxtrip69/bee-framework)
+
 ![Bee Framework](https://raw.githubusercontent.com/Moxtrip69/Bee-Framework/master/assets/images/bee_logo.png)
 # Bee-Framework
 Mini framework desarrollado por la Academia de Joystick.
 Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y fácil de implementar para proyectos tanto pequeños como aquellos que requieren escalabilidad y visión a futuro.
-
-![Únete al servidor de Discord](https://badgen.net/discord/members/wTzhKrg)
-![Bee Framework](https://badgen.net/static/stars/★★★★★)
 
 ## Changelog
 ### v 1.5.8
