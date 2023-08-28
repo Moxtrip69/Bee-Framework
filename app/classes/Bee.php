@@ -72,7 +72,7 @@ class Bee
   private $missing_params      = false;
   private $is_ajax             = false;
   private $is_endpoint         = false;
-  private $endpoints           = ['api']; // Rutas o endpoints autorizados de la API
+  private $endpoints           = ['api']; // Rutas o endpoints autorizados de la API por defecto
 
   // La función principal que se ejecuta al instanciar nuestra clase
   function __construct()

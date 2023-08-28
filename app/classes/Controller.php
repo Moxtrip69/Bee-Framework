@@ -33,6 +33,11 @@ class Controller {
     }
   }
 
+  /**
+   * Ejecuta la funcionalidad dependiendo del tipo de controlador
+   *
+   * @return void
+   */
   private function handleControllerType()
   {
     switch ($this->controllerType) {
@@ -51,6 +56,12 @@ class Controller {
     }
   }
 
+  /**
+   * Se ejecuta cuando es un controlador regular con funcionalidad genérica
+   * y su información por defecto incluida en $data
+   *
+   * @return void
+   */
   private function isRegularController()
   {
     // Valores iniciales del controlador y del método ejecutado
@@ -74,6 +85,11 @@ class Controller {
     $this->addToData('cart'       , BeeCartHandler::get());
   }
 
+  /**
+   * Se ejecuta si es el controlador de AJAX
+   *
+   * @return void
+   */
   private function isAjaxController()
   {
     // Prevenir el acceso no autorizado
@@ -101,6 +117,11 @@ class Controller {
     }
   }
 
+  /**
+   * Se ejecuta si el controlador es un endpoint
+   *
+   * @return void
+   */
   private function isEndpointController()
   {
     // Prevenir el acceso no autorizado
@@ -129,36 +150,77 @@ class Controller {
     }
   }
 
+  /**
+   * Define el título de la página o ruta actual
+   *
+   * @param string $pageTitle
+   * @return void
+   */
   protected function setTitle(string $pageTitle)
   {
     $this->data['title'] = $pageTitle;
   }
 
+  /**
+   * Agrega un elemento a $data que será pasada a la vista
+   *
+   * @param string $key
+   * @param mixed $value
+   * @return void
+   */
   protected function addToData(string $key, $value)
   {
     $this->data[$key] = $value;
   }
 
+  /**
+   * Define todo el contenido de $data que será pasada a la vista
+   *
+   * @param array $data
+   * @return void
+   */
   protected function setData(array $data)
   {
     $this->data = $data;
   }
 
+  /**
+   * Regresa todo el contenido de $data
+   *
+   * @return array
+   */
   protected function getData()
   {
     return $this->data;
   }
 
+  /**
+   * Define el engine de vistas a ser utilizado en la ruta actual
+   *
+   * @param string $engine
+   * @return void
+   */
   protected function setEngine(string $engine)
   {
     $this->engine = $engine;
   }
 
+  /**
+   * Define el nombre de la vista a ser utilizada en la ruta actual
+   *
+   * @param string $viewName
+   * @return void
+   */
   protected function setView(string $viewName)
   {
     $this->viewName = $viewName;
   }
   
+  /**
+   * Realiza el renderizado de la vista
+   *
+   * @return void
+   */
   protected function render()
   {
     View::render($this->viewName, $this->data, $this->engine);
