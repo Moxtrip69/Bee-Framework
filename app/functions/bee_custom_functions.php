@@ -13,6 +13,6 @@ function load_joystick_functions()
 }
 
 /**
- * Se ejecuta después de la carga de todas las funciones del core
+ * Se ejecuta el hook después de la carga de todas las funciones del core
  */
 BeeHookManager::registerHook('after_functions_loaded', 'load_joystick_functions');

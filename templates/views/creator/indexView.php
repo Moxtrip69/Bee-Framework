@@ -104,8 +104,8 @@
 
             <div class="mb-3">
               <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="usar-twig" name="usar-twig" <?php echo USE_TWIG ? 'checked' : ''; ?>>
-                <label class="form-check-label" for="usar-twig">Usar Twig</label>
+                <input class="form-check-input" type="checkbox" id="usar-twig2" name="usar-twig" <?php echo USE_TWIG ? 'checked' : ''; ?>>
+                <label class="form-check-label" for="usar-twig2">Usar Twig</label>
               </div>
             </div>
 

@@ -31,6 +31,9 @@ class tiendaController extends Controller implements ControllerInterface {
         throw new Exception('No existe el producto que buscas.');
       }
 
+      /**
+       * Estilos sólo para la página de producto
+       */
       register_styles([CSS . 'store.css'], 'Estilos de la página de detalles del producto');
 
       $this->setTitle($product['name']);
@@ -39,8 +42,8 @@ class tiendaController extends Controller implements ControllerInterface {
       $this->render();
 
     } catch (Exception $e) {
-      Flasher::error($e->getMessage());
       http_response_code(404);
+      Flasher::error($e->getMessage());
       Redirect::back('tienda');
     }
   }
