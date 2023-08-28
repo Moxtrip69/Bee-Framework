@@ -2,16 +2,62 @@
 
 class BeeSession {
 
-  private $id; // identificador del usuario en curso
+	/**
+	 * Identidicador del usuario en curso
+	 *
+	 * @var mixed
+	 */
+  private $id;
+
+	/**
+	 * Token de acceso del usuario
+	 *
+	 * @var string
+	 */
 	private $token;
 
+	/**
+	 * Tabla dónde se almacena la información de usuarios
+	 *
+	 * @var string
+	 */
   private $bee_users_table     = BEE_USERS_TABLE;
+
+	/**
+	 * Determina si se usarán o no cookies
+	 *
+	 * @var bool
+	 */
   private $bee_cookies         = BEE_COOKIES;
+
+	/**
+	 * Nombre del cookie para el ID
+	 *
+	 * @var string
+	 */
 	private $bee_cookie_id       = BEE_COOKIE_ID;
+
+	/**
+	 * Nombre del cookie para el token
+	 *
+	 * @var string
+	 */
 	private $bee_cookie_token    = BEE_COOKIE_TOKEN;
+
+	/**
+	 * Tiempo de expiración del cookie en segundos
+	 *
+	 * @var int
+	 */
 	private $bee_cookie_lifetime = BEE_COOKIE_LIFETIME;
   private $bee_cookie_path     = BEE_COOKIE_PATH;
 	private $bee_cookie_domain   = BEE_COOKIE_DOMAIN;
+	
+	/**
+	 * Información del usuario
+	 *
+	 * @var ?array
+	 */
 	private $current_user        = null;
 
 
@@ -64,32 +110,32 @@ class BeeSession {
 	public static function authenticate()
 	{
 		// Instancia de nuestra BeeSession
-		$auth = new self();
+		$self = new self();
 
 		// Validar la existencia de los cookies en el sistema
-		if (!cookie_exists($auth->bee_cookie_id) || !cookie_exists($auth->bee_cookie_token)) {
+		if (!cookie_exists($self->bee_cookie_id) || !cookie_exists($self->bee_cookie_token)) {
 			// Si no existe la coincidencia vamos a borrar los cookies por seguridad
-			destroy_cookie($auth->bee_cookie_id, $auth->bee_cookie_path, $auth->bee_cookie_domain);
-			destroy_cookie($auth->bee_cookie_token, $auth->bee_cookie_path, $auth->bee_cookie_domain);
+			destroy_cookie($self->bee_cookie_id, $self->bee_cookie_path, $self->bee_cookie_domain);
+			destroy_cookie($self->bee_cookie_token, $self->bee_cookie_path, $self->bee_cookie_domain);
 
 			return false;
 		}
 
 		// Verificamos que exista el usuario con base a la información de nuestro cookie
-		if (!$auth->current_user = Model::list($auth->bee_users_table, ['id' => get_cookie($auth->bee_cookie_id)], 1)) {
+		if (!$self->current_user = Model::list($self->bee_users_table, ['id' => get_cookie($self->bee_cookie_id)], 1)) {
 			return false;
 		}
 
 		// Información del usuario
-		$user        = $auth->current_user;
-		$auth_token  = $user['auth_token'];
-		$auth->token = get_cookie($auth->bee_cookie_token);
+		$user        = $self->current_user;
+		$auth_token  = $user['auth_token']; // el token guardado en la DB
+		$self->token = get_cookie($self->bee_cookie_token); // el token guardado en la cookie
 
 		// Verificamos si coincide la información
-		if (!password_verify($auth->token, $auth_token)) {
+		if (!password_verify($self->token, $auth_token)) {
 			// Si no existe la coincidencia vamos a borrar los cookies por seguridad
-			destroy_cookie($auth->bee_cookie_id, $auth->bee_cookie_path, $auth->bee_cookie_domain);
-			destroy_cookie($auth->bee_cookie_token, $auth->bee_cookie_path, $auth->bee_cookie_domain);
+			destroy_cookie($self->bee_cookie_id, $self->bee_cookie_path, $self->bee_cookie_domain);
+			destroy_cookie($self->bee_cookie_token, $self->bee_cookie_path, $self->bee_cookie_domain);
 
 			return false;
 		}
@@ -106,31 +152,31 @@ class BeeSession {
 	public static function new_session($id) 
 	{
 		// Nueva instancia para usar las propiedades de la clase
-		$auth  = new self();
+		$self  = new self();
 
 		// Creamos un nuevo token
 		$token = generate_token();
 
 		// Cargamos la información del usuario
-		$user  = Model::list($auth->bee_users_table, ['id' => $id], 1);
+		$user  = Model::list($self->bee_users_table, ['id' => $id], 1);
 
 		if (empty($user)) {
 			return false; // no existe el usuario en curso
 		}
 
 		// Verificamos si existen los cookies para borrarlos y generar nuevos
-		if (cookie_exists($auth->bee_cookie_id) || cookie_exists($auth->bee_cookie_token)) {
+		if (cookie_exists($self->bee_cookie_id) || cookie_exists($self->bee_cookie_token)) {
 			// Si existen los borramos
-			destroy_cookie($auth->bee_cookie_id, $auth->bee_cookie_path, $auth->bee_cookie_domain);
-			destroy_cookie($auth->bee_cookie_token, $auth->bee_cookie_path, $auth->bee_cookie_domain);
+			destroy_cookie($self->bee_cookie_id, $self->bee_cookie_path, $self->bee_cookie_domain);
+			destroy_cookie($self->bee_cookie_token, $self->bee_cookie_path, $self->bee_cookie_domain);
 		}
 
 		// Creamos nuevos cookies
-		new_cookie($auth->bee_cookie_id, $id, $auth->bee_cookie_lifetime, $auth->bee_cookie_path, $auth->bee_cookie_domain);
-		new_cookie($auth->bee_cookie_token, $token, $auth->bee_cookie_lifetime, $auth->bee_cookie_path, $auth->bee_cookie_domain);
+		new_cookie($self->bee_cookie_id, $id, $self->bee_cookie_lifetime, $self->bee_cookie_path, $self->bee_cookie_domain);
+		new_cookie($self->bee_cookie_token, $token, $self->bee_cookie_lifetime, $self->bee_cookie_path, $self->bee_cookie_domain);
 
 		// Actualizamos el token en la base de datos
-		Model::update($auth->bee_users_table, ['id' => $id], ['auth_token' => password_hash($token, PASSWORD_BCRYPT)]);
+		Model::update($self->bee_users_table, ['id' => $id], ['auth_token' => password_hash($token, PASSWORD_BCRYPT)]);
 
 		return true;
 	}
@@ -143,16 +189,16 @@ class BeeSession {
    */
 	public static function destroy_session()
 	{
-		$auth = new self();
+		$self = new self();
 
 		// Se destruyen todos los tokens generados para que sea imposible el ingreso con ese mismo token después
-    if (!Model::update($auth->bee_users_table, ['id' => get_cookie($auth->bee_cookie_id)], ['auth_token' => ''])) {
+    if (!Model::update($self->bee_users_table, ['id' => get_cookie($self->bee_cookie_id)], ['auth_token' => null])) {
       return false;
     }
 		
     // Se destruyen todos los cookies existentes
-		destroy_cookie($auth->bee_cookie_id, $auth->bee_cookie_path, $auth->bee_cookie_domain);
-		destroy_cookie($auth->bee_cookie_token, $auth->bee_cookie_path, $auth->bee_cookie_domain);
+		destroy_cookie($self->bee_cookie_id, $self->bee_cookie_path, $self->bee_cookie_domain);
+		destroy_cookie($self->bee_cookie_token, $self->bee_cookie_path, $self->bee_cookie_domain);
 	
 		// Se regresa true si se borra todo con éxito
 		return true;

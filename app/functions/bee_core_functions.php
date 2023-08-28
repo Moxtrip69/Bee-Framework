@@ -2712,10 +2712,10 @@ function is_temporary_email($email)
 /**
  * Ayuda a definir anclas o anchors para navegación
  *
- * @param String $anchor
+ * @param string $anchor
  * @return string
  */
-function new_anchor(String $anchor)
+function new_anchor(string $anchor)
 {
 	return sprintf('%s#%s', CUR_PAGE, $anchor);
 }
@@ -2724,10 +2724,10 @@ function new_anchor(String $anchor)
  * Remueve caracteres con acentos en un string y los sustituye por su
  * versión sin acento del caracter
  *
- * @param String $string
+ * @param string $string
  * @return string
  */
-function remove_accents(String $string) {
+function remove_accents(string $string) {
 	$accents     = array('á', 'é', 'í', 'ó', 'ú', 'ü', 'Á', 'É', 'Í', 'Ó', 'Ú', 'Ü', 'ñ', 'Ñ');
 	$substitutes = array('a', 'e', 'i', 'o', 'u', 'u', 'A', 'E', 'I', 'O', 'U', 'U', 'n', 'N');
 	

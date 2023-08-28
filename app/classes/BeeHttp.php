@@ -176,7 +176,7 @@ class BeeHttp
    */
   private $domains          = [];
 
-  function __construct(Array $options = [])
+  function __construct(array $options = [])
   {
     // Autenticación de acceso con Bearer Token en headers
     $this->authenticate = isset($options['authenticate']) ? $options['authenticate'] : bee_api_authentication();
@@ -233,7 +233,7 @@ class BeeHttp
     $this->validate_csrf();
   }
 
-  function registerDomain(String $domain)
+  function registerDomain(string $domain)
   {
     $this->domains[] = $domain;
   }
@@ -343,7 +343,7 @@ class BeeHttp
     return true;
   }
 
-  function setAuthentication(Bool $authenticate)
+  function setAuthentication(bool $authenticate)
   {
     $this->authenticate = $authenticate;
   }
@@ -359,7 +359,7 @@ class BeeHttp
     $this->csrf = isset($this->data['csrf']) ? $this->data['csrf'] : null;
   }
 
-  function setCallType(String $callType)
+  function setCallType(string $callType)
   {
     $this->call = $callType;
   }
@@ -459,10 +459,10 @@ class BeeHttp
   /**
    * Para escpecificar los verbos aceptados o autorizados en una ruta determinada.
    *
-   * @param Array $verbs
+   * @param array $verbs
    * @return true
    */
-  public function accept(Array $verbs)
+  public function accept(array $verbs)
   {
     if (!in_array(strtoupper($this->r_type), array_map('strtoupper', $verbs))) {
       throw new BeeHttpException(

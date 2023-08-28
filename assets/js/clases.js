@@ -145,6 +145,9 @@ autosaveForm.addEventListener('submit', async (e) => {
     toastr.error('Completa el título de la noticia por favor.');
     return;
   };
+
+  // Reiniciar el contador de autoguardado
+  resetAutosaveTimer();
   
   // Desactivar el botón de guardado
   btnSubmit.disabled = true;
@@ -159,6 +162,8 @@ autosaveForm.addEventListener('submit', async (e) => {
 
   toastr.success(res.msg);
   btnSubmit.disabled = false;
+
+  // Volver a reiniciar hasta que se vuelva a estar inactivo
   resetAutosaveTimer();
 })
 
@@ -174,7 +179,7 @@ async function saveEntry(payload) {
 // Reiniciar el temporizador cada vez que el usuario interactúa
 function resetAutosaveTimer() {
   clearTimeout(autosaveTimer);
-  autosaveTimer = setTimeout(autoSave, 10000); // Guardar después de 5 segundos de inactividad
+  autosaveTimer = setTimeout(autoSave, 5000); // Guardar después de 5 segundos de inactividad
 }
 
 // Escuchar eventos de entrada en los campos

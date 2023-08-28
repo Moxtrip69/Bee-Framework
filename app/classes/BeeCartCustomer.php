@@ -2,18 +2,95 @@
 
 final class BeeCartCustomer
 {
+  /**
+   * El objeto del cliente completo
+   *
+   * @var array
+   */
   private $customer;
+
+  /**
+   * Primer nombre del cliente
+   *
+   * @var string
+   */
   private $firstName;
+
+  /**
+   * Apellidos del cliente
+   *
+   * @var string
+   */
   private $lastName;
+
+  /**
+   * Nombre completo del cliente
+   *
+   * @var string
+   */
   private $name;
+
+  /**
+   * Correo electrónico
+   *
+   * @var string
+   */
   private $email;
+
+  /**
+   * Teléfono de contacto
+   *
+   * @var string
+   */
   private $phone;
+
+  /**
+   * La dirección completa del cliente
+   *
+   * @var array
+   */
   private $address;
+
+  /**
+   * Línea uno de la dirección y número
+   *
+   * @var string
+   */
   private $line1;
+
+  /**
+   * Línea dos de la dirección y es opcional
+   *
+   * @var string
+   */
   private $line2;
+
+  /**
+   * Ciudad o municipio del cliente
+   *
+   * @var string
+   */
   private $city;
+
+  /**
+   * Estado del cliente
+   *
+   * @var string
+   */
   private $state;
+
+  /**
+   * País del cliente
+   *
+   * @var string
+   */
   private $country;
+
+  /**
+   * Código postal del cliente
+   *
+   * @var string
+   */
   private $zp;
 
   function __construct($firstName, $lastName, $email, $phone = '')

@@ -4,11 +4,46 @@
  */ 
 class Auth
 {
+  /**
+   * El nombre de la variable de sesión o de la clave en si
+   *
+   * @var string
+   */
   private $var    = 'user_session';
+
+  /**
+   * Determina si el usuario está loggueado o no
+   *
+   * @var boolean
+   */
   private $logged = false;
+
+  /**
+   * El token de acceso del usuario en curso
+   *
+   * @var string
+   */
   private $token  = null;
+
+  /**
+   * El ID del usuario en curso
+   *
+   * @var mixed
+   */
   private $id     = null;
+
+  /**
+   * El session_id del usuario en curso
+   *
+   * @var string
+   */
   private $ssid   = null;
+
+  /**
+   * Toda la información registrada del usuario
+   *
+   * @var array
+   */
   private $user   = [];
 
   public function __construct()
@@ -30,12 +65,18 @@ class Auth
     return $this;
   }
 
-  // Crear sesión de usuario
-  public static function login($user_id, $user_data = [])
+  /**
+   * Crea la sesión de un usuario
+   *
+   * @param mixed $user_id
+   * @param array $user_data
+   * @return bool
+   */
+  public static function login(mixed $user_id, array $user_data = [])
   {
     $self         = new self();
     $self->logged = true;
-    $session =
+    $session      =
     [
       'logged' => $self->logged,
       'token'  => generate_token(),
@@ -48,7 +89,11 @@ class Auth
     return true;
   }
 
-  // Validar la sesión del usuario
+  /**
+   * Realizar la validación de la sesión del usuario en curso
+   *
+   * @return bool
+   */
   public static function validate()
   {
     $self = new self();
@@ -59,10 +104,14 @@ class Auth
     }
 
     // Validar la sesión
-    return $_SESSION[$self->var]['logged'] === true && $_SESSION[$self->var]['ssid'] === session_id() && $_SESSION[$self->var]['token'] != null;
+    return $_SESSION[$self->var]['logged'] === true && $_SESSION[$self->var]['ssid'] === session_id() && $_SESSION[$self->var]['token'] !== null;
   }
 
-  // Cerrar sesión del usuario
+  /**
+   * Cierra la sesión del usuario en curso
+   *
+   * @return bool
+   */
   public static function logout()
   {
     $self    = new self();

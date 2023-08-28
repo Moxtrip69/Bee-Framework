@@ -2,7 +2,6 @@
 
 final class BeeMenuBuilder
 {
-
   private $menu;
   private $menuId;
   private $menuWrapper;
@@ -10,21 +9,6 @@ final class BeeMenuBuilder
   private $menuActiveClass;
   private $items = [];
   private $currentSlug;
-
-//   <li class="nav-item">
-//   <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
-//     aria-controls="collapseTwo">
-//     <i class="fas fa-fw fa-cog"></i>
-//     <span>Componentes</span>
-//   </a>
-//   <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-//     <div class="bg-white py-2 collapse-inner rounded">
-//       <h6 class="collapse-header">SB Admin 2</h6>
-//       <a class="collapse-item" href="admin/botones">Botones</a>
-//       <a class="collapse-item" href="admin/cartas">Cartas</a>
-//     </div>
-//   </div>
-// </li>
 
   function __construct($wrapperId = null, $wrapperTag = null, $wrapperClasses = null, $activeClass = null)
   {
@@ -79,13 +63,13 @@ final class BeeMenuBuilder
     );
 
     $this->menu = $output;
+    
+    return $this->menu;
   }
 
   function getMenu()
   {
-    $this->createMenu();
-
-    return $this->menu;
+    return $this->createMenu();
   }
   
 }

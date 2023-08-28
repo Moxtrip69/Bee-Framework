@@ -2,17 +2,82 @@
 
 class BeeQuickChartDataset
 {
-  private ?String $label               = null;
-  private Array $dataset               = [];
-  private Array $data                  = [];
-  private String $backgroundColor      = '';
-  private String $borderColor          = '';
-  private String $pointBackgroundColor = '';
-  private Bool $fill                   = true;
-  private Array $borderDash            = [10, 5];
-  private Int $pointRadius             = 3;
-  private String $pointStyle           = 'dot';
-  private Array $pointStyles           = ['dot', 'triangle', 'rect', 'star', 'cross'];
+  /**
+   * Etiqueta de dataset
+   *
+   * @var string|null
+   */
+  private ?string $label               = null;
+
+  /**
+   * Toda la información del dataset y sus configuraciones
+   *
+   * @var array
+   */
+  private array $dataset               = [];
+
+  /**
+   * Información a ser graficada
+   *
+   * @var array
+   */
+  private array $data                  = [];
+
+  /**
+   * Color de fondo
+   *
+   * @var string
+   */
+  private string $backgroundColor      = '';
+
+  /**
+   * Color del borde
+   *
+   * @var string
+   */
+  private string $borderColor          = '';
+
+  /**
+   * Color de los puntos
+   *
+   * @var string
+   */
+  private string $pointBackgroundColor = '';
+
+  /**
+   * Rellenar área debajo de las curvas
+   *
+   * @var bool
+   */
+  private bool $fill                   = true;
+
+  /**
+   * Ancho y separación de líneas punteadas
+   *
+   * @var array
+   */
+  private array $borderDash            = [10, 5];
+
+  /**
+   * Tamaño de los puntos
+   *
+   * @var int
+   */
+  private int $pointRadius             = 3;
+
+  /**
+   * Tipo de puntos
+   *
+   * @var string
+   */
+  private string $pointStyle           = 'dot';
+
+  /**
+   * Tipos de puntos disponibles
+   *
+   * @var array
+   */
+  private array $pointStyles           = ['dot', 'triangle', 'rect', 'star', 'cross'];
 
   function __construct()
   {
@@ -22,17 +87,36 @@ class BeeQuickChartDataset
     $this->pointBackgroundColor = $this->hexToRgb($colors[1], 1);
   }
 
-  function setLabel(String $label)
+  /**
+   * Establece el label o etiqueta de un dataset
+   *
+   * @param string $label
+   * @return void
+   */
+  function setLabel(string $label)
   {
     $this->label = $label;
   }
 
-  function setData(Array $data)
+  /**
+   * Establece el valor da $data que es la información a ser graficada
+   *
+   * @param array $data
+   * @return void
+   */
+  function setData(array $data)
   {
     $this->data = $data;
   }
 
-  function setBaseColor(String $hexColor, Float $alpha = 1)
+  /**
+   * Establece el color base y de los puntos de la gráfica y su opacidad en caso de requerirla
+   *
+   * @param string $hexColor
+   * @param integer $alpha
+   * @return void
+   */
+  function setBaseColor(string $hexColor, float $alpha = 1)
   {
     $colors                     = $this->generateShades($hexColor);
     $this->backgroundColor      = $this->hexToRgb($colors[1], $alpha);
@@ -40,37 +124,83 @@ class BeeQuickChartDataset
     $this->pointBackgroundColor = $this->hexToRgb($colors[1], 1);
   }
 
-  function setBackgroundColor(String $hexColor, Float $alpha = 1)
+  /**
+   * Establece el color de fondo de los elementos de la gráfica
+   *
+   * @param string $hexColor
+   * @param integer $alpha
+   * @return void
+   */
+  function setBackgroundColor(string $hexColor, float $alpha = 1)
   {
     $this->backgroundColor = $this->hexToRgb($hexColor, $alpha);
   }
 
-  function setBorderColor(String $borderColor, Float $alpha = 1)
+  /**
+   * Establece el color del borde y su transparencia
+   *
+   * @param string $borderColor
+   * @param integer $alpha
+   * @return void
+   */
+  function setBorderColor(string $borderColor, float $alpha = 1)
   {
     $this->borderColor = $this->hexToRgb($borderColor, $alpha);
   }
 
-  function setPointStyle(String $pointStyle)
+  /**
+   * Establece el tipo de punto para los elementos de la gráfica
+   *
+   * @param string $pointStyle
+   * @return void
+   */
+  function setPointStyle(string $pointStyle)
   {
     $this->pointStyle = !in_array($pointStyle, $this->pointStyles) ? 'dot' : $pointStyle;
   }
 
-  function setPointRadius(Int $pointRadius)
+  /**
+   * Establece el radio o tamaño de los puntos
+   *
+   * @param int $pointRadius
+   * @return void
+   */
+  function setPointRadius(int $pointRadius)
   {
     $this->pointRadius = $pointRadius;
   }
 
-  function setFill(Bool $fill)
+  /**
+   * Establece si debería o no llenarse el área debajo de las curvas de algunos tipos de gráficas
+   *
+   * @param bool $fill
+   * @return void
+   */
+  function setFill(bool $fill)
   {
     $this->fill = $fill;
   }
 
-  function setBorder(Float $borderWidth, Float $borderSpacing)
+  /**
+   * Establece el ancho y espaciado de las líneas de los bordes de las gráficas
+   *
+   * @param float $borderWidth
+   * @param float $borderSpacing
+   * @return void
+   */
+  function setBorder(float $borderWidth, float $borderSpacing)
   {
     $this->borderDash = [$borderWidth, $borderSpacing];
   }
 
-  private function hexToRgb(String $hexColor, Float $alpha = 1)
+  /**
+   * Convierte un color hexadecimal con transparencia a un color RGB
+   *
+   * @param string $hexColor
+   * @param integer $alpha
+   * @return string
+   */
+  private function hexToRgb(string $hexColor, float $alpha = 1)
   {
     // Elimina el "#" si está presente
     $hex = str_replace("#", "", $hexColor);
@@ -89,6 +219,11 @@ class BeeQuickChartDataset
     return "rgba($r, $g, $b, $a)";
   }
 
+  /**
+   * Genera un cólor random rgb
+   *
+   * @return string
+   */
   private function randomColor() {
     $r = mt_rand(100, 255); // R dentro del rango 100-255 para tonos más claros
     $g = mt_rand(100, 255); // G dentro del rango 100-255 para tonos más claros
@@ -97,7 +232,15 @@ class BeeQuickChartDataset
     return "rgb($r, $g, $b)";
   }
 
-  function generateShades(String $colorHex, Float $factorClaro = 1.2, Float $factorOscuro = 0.8)
+  /**
+   * Genera dos variables de un color, una más clara y otra más obscura
+   *
+   * @param string $colorHex
+   * @param float $factorClaro
+   * @param float $factorOscuro
+   * @return array
+   */
+  function generateShades(string $colorHex, float $factorClaro = 1.2, float $factorOscuro = 0.8)
   {
     // Elimina el "#" si está presente
     $colorHex     = str_replace("#", "", $colorHex);
@@ -126,6 +269,11 @@ class BeeQuickChartDataset
     return [$colorClaro, $colorHex, $colorOscuro];
   }
 
+  /**
+   * Formatea el dataset en el formato requerido para ser utilizado
+   *
+   * @return array
+   */
   private function formatDataset()
   {
     $this->dataset =
@@ -144,6 +292,11 @@ class BeeQuickChartDataset
     return $this->dataset;
   }
 
+  /**
+   * Devuelve el dataset formateado
+   *
+   * @return array
+   */
   function getDataset()
   {
     return $this->formatDataset();

@@ -10,7 +10,7 @@ class BeeHttpException extends Exception{
 
   private $statusCode = null;
 
-  public function __construct(String $message, Int $statusCode = 400, Int $code = 0, Exception $previous = null) {
+  public function __construct(string $message, int $statusCode = 400, int $code = 0, Exception $previous = null) {
     $this->statusCode = (int) $statusCode;
 
     parent::__construct($message, $code, $previous);

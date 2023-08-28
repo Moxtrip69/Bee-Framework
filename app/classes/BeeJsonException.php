@@ -11,7 +11,7 @@ class BeeJsonException extends Exception {
   private $statusCode = null;
   private $errorCode  = null;
 
-  public function __construct(String $message, Int $statusCode = 400, Mixed $errorCode = null) {
+  public function __construct(string $message, int $statusCode = 400, mixed $errorCode = null) {
     
     $this->statusCode = (int) $statusCode;
     $this->errorCode  = $errorCode;

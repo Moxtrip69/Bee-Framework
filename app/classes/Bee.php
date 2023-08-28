@@ -1,25 +1,23 @@
 <?php
 
+/**
+ * Propiedades del framework
+ * Desarrollado por el equipo de Joystick para todos
+ * 
+ * Sugerencias o pullrequest a:
+ * soporte@joystick.com.mx
+ * 
+ * Roberto Orozco / roborozco@joystick.com.mx
+ * 
+ * Creado en nuestro curso dentro de la Academia:
+ * https://www.academy.joystick.com.mx/bundles/pack-desarrollo-web-full-stack
+ * 
+ * ¡Gracias por todo su apoyo!
+ *
+ * Julio 2019 - Septiembre 2023 y actualizando
+ */
 class Bee
 {
-
-  /**
-   * Propiedades del framework
-   * Desarrollado por el equipo de Joystick
-   * Sugerencias o pullrequest a:
-   * soporte@joystick.com.mx
-   * 
-   * Roberto Orozco / roborozco@joystick.com.mx
-   * Yoshio Mrtz / yosmartinez@joystick.com.mx
-   * Jorge Maldonado / jormaldonado@joystick.com.mx
-   * 
-   * Creado en nuestro curso dentro de la Academia:
-   * https://www.academy.joystick.com.mx/bundles/pack-desarrollo-web-full-stack
-   * 
-   * ¡Gracias por todo su apoyo!
-   *
-   */
-
   /**
    * Nombre del framework
    * @var string
@@ -49,13 +47,15 @@ class Bee
    * La URL completa que se recibe para procesar las peticiones
    * @var array
    */
-  private $uri          = [];
+  private $uri                 = [];
 
   /**
    * Define si es requerido el uso de librerías externas en el proyecto
    * @var boolean
+   * @deprecated 1.5.8
+   * 
    */
-  private $use_composer = true;
+  private $use_composer        = true;
 
   /**
    * @since 1.1.4
@@ -79,13 +79,17 @@ class Bee
   {
   }
 
+  function __destruct()
+  {
+  }
+
   /**
    * Agrega un nuevo endpoint a la lista
    *
-   * @param String $endpoint
+   * @param string $endpoint
    * @return void
    */
-  function addEndpoint(String $endpoint)
+  function addEndpoint(string $endpoint)
   {
     $this->endpoints[] = $endpoint;
   }
@@ -132,6 +136,7 @@ class Bee
     /**
      * Se hace ejecución de todo nuestro framework
      */
+    BeeHookManager::runHook('before_init_dispatch');
     $this->init_dispatch();
   }
 
@@ -184,6 +189,7 @@ class Bee
     $this->framework = 'Bee Framework';
     $this->version   = '1.5.8';
     $this->logo      = 'bee_logo.png';
+    $this->lng       = 'es';
 
     define('BEE_NAME'      , $this->framework);
     define('BEE_VERSION'   , $this->version);
@@ -223,10 +229,6 @@ class Bee
    */
   private function init_load_composer()
   {
-    if (!$this->use_composer) {
-      return;
-    }
-
     $file = 'app/vendor/autoload.php';
     if (!is_file($file)) {
       die(sprintf('El archivo %s no se encuentra, es requerido para que el sitio funcione.', $file));

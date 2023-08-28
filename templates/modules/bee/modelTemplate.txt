@@ -23,7 +23,7 @@ class [[REPLACE]]Model extends Model {
     // Constructor general
   }
 
-  static function insertOne(Array $data)
+  static function insertOne(array $data)
   {
     return parent::add(self::$t1, $data);
   }

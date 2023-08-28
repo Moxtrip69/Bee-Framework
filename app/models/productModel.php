@@ -23,7 +23,7 @@ class productModel extends Model {
     // Constructor general
   }
 
-  static function insertOne(Array $data)
+  static function insertOne(array $data)
   {
     return parent::add(self::$t1, $data);
   }
@@ -42,26 +42,26 @@ class productModel extends Model {
     return PaginationHandler::paginate($sql);
   }
 
-  static function by_id(Int $id)
+  static function by_id(int $id)
   {
     // Un registro con $id
     $sql = sprintf('SELECT * FROM %s WHERE id = :id LIMIT 1', self::$t1);
     return ($rows = parent::query($sql, ['id' => $id])) ? $rows[0] : [];
   }
 
-  static function by_slug(String $slug)
+  static function by_slug(string $slug)
   {
     // Un registro con $id
     $sql = sprintf('SELECT * FROM %s WHERE slug = :slug LIMIT 1', self::$t1);
     return ($rows = parent::query($sql, ['slug' => $slug])) ? $rows[0] : [];
   }
 
-  static function update_by_id(Int $id, Array $params)
+  static function update_by_id(int $id, array $params)
   {
     return parent::update(self::$t1, ['id' => $id], $params);
   }
 
-  static function delete_by_id(Int $id)
+  static function delete_by_id(int $id)
   {
     return parent::remove(self::$t1, ['id' => $id]);
   }

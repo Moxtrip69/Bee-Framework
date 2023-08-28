@@ -1,19 +1,19 @@
 <?php 
 
 class Controller {
-  protected String $controllerType = 'regular'; // regular | ajax | endpoint
-  protected ?String $controller    = null;
-  protected ?String $method        = null;
-  protected ?String $viewName      = 'index';
-  protected String $engine         = 'bee';
-  protected ?Array $data           = [];
-  protected ?Array $files          = [];
+  protected string $controllerType = 'regular'; // regular | ajax | endpoint
+  protected ?string $controller    = null;
+  protected ?string $method        = null;
+  protected ?string $viewName      = 'index';
+  protected string $engine         = 'bee';
+  protected ?array $data           = [];
+  protected ?array $files          = [];
 
   protected $http                  = null;
   protected $request               = null;
 
 
-  function __construct(String $controllerType = 'regular')
+  function __construct(string $controllerType = 'regular')
   {
     $this->controllerType = $controllerType;
     $this->handleControllerType();
@@ -129,17 +129,17 @@ class Controller {
     }
   }
 
-  protected function setTitle(String $pageTitle)
+  protected function setTitle(string $pageTitle)
   {
     $this->data['title'] = $pageTitle;
   }
 
-  protected function addToData(String $key, Mixed $value)
+  protected function addToData(string $key, $value)
   {
     $this->data[$key] = $value;
   }
 
-  protected function setData(Array $data)
+  protected function setData(array $data)
   {
     $this->data = $data;
   }
@@ -149,12 +149,12 @@ class Controller {
     return $this->data;
   }
 
-  protected function setEngine(String $engine)
+  protected function setEngine(string $engine)
   {
     $this->engine = $engine;
   }
 
-  protected function setView(String $viewName)
+  protected function setView(string $viewName)
   {
     $this->viewName = $viewName;
   }

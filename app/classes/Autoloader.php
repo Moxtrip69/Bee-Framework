@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class Autoloader
 {
@@ -12,16 +12,20 @@ class Autoloader
     spl_autoload_register([__CLASS__, 'autoload']);
   }
 
+  /**
+   * Se ejecuta cada que se requiere cargar una clase
+   *
+   * @param string $class_name
+   * @return void
+   */
   private static function autoload($class_name)
   {
-    if(is_file(CLASSES.$class_name.'.php')) {
-      require_once CLASSES.$class_name.'.php';
-    } elseif(is_file(CONTROLLERS.$class_name.'.php')) {
-      require_once CONTROLLERS.$class_name.'.php';
-    } elseif(is_file(MODELS.$class_name.'.php')) {
-      require_once MODELS.$class_name.'.php';
+    if (is_file(CLASSES . $class_name . '.php')) {
+      require_once CLASSES . $class_name . '.php';
+    } elseif (is_file(CONTROLLERS . $class_name . '.php')) {
+      require_once CONTROLLERS . $class_name . '.php';
+    } elseif (is_file(MODELS . $class_name . '.php')) {
+      require_once MODELS . $class_name . '.php';
     }
-
-    return;
   }
 }
