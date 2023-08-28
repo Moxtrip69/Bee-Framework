@@ -8,7 +8,7 @@ use Cocur\Slugify\Slugify;
  *
  * Controlador de admin
  */
-class adminController extends Controller {
+class adminController extends Controller implements ControllerInterface {
   function __construct()
   {
     // Validación de sesión de usuario, descomentar si requerida

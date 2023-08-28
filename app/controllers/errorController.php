@@ -1,6 +1,6 @@
 <?php 
 
-class errorController extends Controller {
+class errorController extends Controller implements ControllerInterface {
   function __construct()
   {
     http_response_code(404);

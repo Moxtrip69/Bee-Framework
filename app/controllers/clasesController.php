@@ -18,7 +18,7 @@ use Dompdf\Options;
  *
  * Controlador de clases
  */
-class clasesController extends Controller {
+class clasesController extends Controller implements ControllerInterface {
   function __construct()
   {
     // Prevenir el ingreso si nos encontramos en producción y esta ruta es sólo para desarrollo o pruebas

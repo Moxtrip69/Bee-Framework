@@ -1,6 +1,6 @@
 <?php 
 
-class loginController extends Controller {
+class loginController extends Controller implements ControllerInterface {
   function __construct()
   {
     if (Auth::validate()) {

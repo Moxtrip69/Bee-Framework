@@ -6,7 +6,7 @@
  *
  * Controlador de vuejs
  */
-class vuejsController extends Controller {
+class vuejsController extends Controller implements ControllerInterface {
   function __construct()
   {
     // Validación de sesión de usuario, descomentar si requerida

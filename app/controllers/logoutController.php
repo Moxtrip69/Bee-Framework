@@ -1,6 +1,6 @@
 <?php 
 
-class logoutController extends Controller {
+class logoutController extends Controller implements ControllerInterface {
   function __construct()
   {
     // Validar la sesión del usuario
