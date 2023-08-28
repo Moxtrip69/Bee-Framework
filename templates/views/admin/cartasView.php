@@ -1,5 +1,6 @@
 <?php require_once INCLUDES . 'admin/dashboardTop.php'; ?>
 
+<!-- Content Row -->
 <div class="row">
 
   <!-- Earnings (Monthly) Card Example -->

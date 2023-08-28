@@ -26,6 +26,7 @@ class productosController extends Controller implements ControllerInterface {
 - Nueva clase **BeeHooksManager** para crear y administrar ganchos o hooks a lo largo del flujo de ejecución del framework, aumentando las posibilidades y configuraciones de manera exponencial sin la necesidad de modificar archivos de configuración o del core.
 ```php
 // classes/Bee.php
+
 class Bee {
   // ..............
   private function init()

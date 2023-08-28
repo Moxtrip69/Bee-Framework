@@ -1,5 +1,6 @@
 <?php require_once INCLUDES . 'admin/dashboardTop.php'; ?>
 
+<!-- Content Row -->
 <div class="row">
 
   <div class="col-lg-6">
