@@ -14,7 +14,55 @@ Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y 
 ## Changelog
 ### v 1.5.8
 - El controlador principal **Controller.php** se ha mejorado y hemos ampliado la forma en que se usa, ahora es posible usarlo para configurar cada nuevo controlador de diferentes maneras, puede ser un *endpoint* para talvez una API, *ajax* o *regular* como un controlador común, ahora tenemos a nuestra disposición nuevos métodos para trabajar de forma orientada a objetos la implementación, el renderizado de la vista, asignación de **$data** pasada a la vista y mucho más, haciendo todo más mantenible y escalable.
+```php
+class productosController extends Controller implements ControllerInterface {
+
+  function __construct()
+  {
+    parent::__construct('endpoint'); // Define que es un endpoint
+  }
+}
+```
 - Nueva clase **BeeHooksManager** para crear y administrar ganchos o hooks a lo largo del flujo de ejecución del framework, aumentando las posibilidades y configuraciones de manera exponencial sin la necesidad de modificar archivos de configuración o del core.
+```php
+// classes/Bee.php
+class Bee {
+  // ..............
+  private function init()
+  {
+    // Todos los métodos que queremos ejecutar consecutivamente
+    $this->init_session();
+    $this->init_load_config();
+    $this->init_framework_properties();
+    $this->init_load_composer(); // Carga las dependencias de composer
+    $this->init_autoload(); // Inicializa el cargador de nuestras clases
+    $this->init_load_functions();
+    BeeHookManager::runHook('init_set_up', $this);
+    BeeHookManager::runHook('after_functions_loaded'); // Gancho o Hook definido
+  }
+  // ..............
+}
+```
+
+```php
+// bee_custom_functions.php
+
+/**
+ * Carga el archivo de funciones para las clases en vivo, tutoriales y streams de Joystick
+ * Puedes borrar todo esto sin problema alguno o usarlo cómo referencia para tus proyectos
+ *
+ * @return void
+ */
+function load_joystick_functions()
+{
+  require_once FUNCTIONS . 'puedes_borrarlas.php';
+}
+
+/**
+ * Se ejecuta el hook después de la carga de todas las funciones del core
+ */
+BeeHookManager::registerHook('after_functions_loaded', 'load_joystick_functions');
+```
 - Se han hecho mejoras al archivo de **settings.php** y al flujo de carga y ejecución del framework, ahora con el sistema de hooks es posible crear nuevas constantes y configuraciones sin necesidad de tocar los archivos **settings.php** y **bee_config.php**.
 - Nuevas mejoras en la interfaz y en la pantalla de bienvenida del framework, con base a su feedback se re-acomodaron los elementos de navegación.
 - Nueva clase **BeeCartHandler** y sub-clases que permiten la creación de carritos de compra persistentes para la sesión del usuario, totalmente funcional y dinámico, puede ser usado desde el inicio para procesos de tiendas en línea, junto con esto viene un nuevo controlador llamado **tiendaController** dónde se listan todos los productos de la base de datos (nueva tabla *products*) en el esquema inicial, y nuevo controlador **carritoController** para mostrar el carrito y proceso de *Checkout* de forma profesional, puede ser editado y alterado a necesidad.
