@@ -7,3 +7,4 @@ app/composer.lock
 # You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
 # composer.lock
 prepros.config
+app/config/config.php
