@@ -11,7 +11,7 @@
   RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 
   # Descomentar para forzar HTTPS
-  #RewriteCond %{HTTPS} off 
+  #RewriteCond %{HTTPS} !=on
   #RewriteRule ^(.*)$ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 </IfModule>
 

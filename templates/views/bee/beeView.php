@@ -118,8 +118,8 @@
             <div class="d-flex flex-column align-items-center border rounded p-4 shadow">
               <i class="fas fa-heart fs-1 text-danger mb-2"></i>
               <h3 class="fw-bold">Donaciones</h3>
-              <p>¿Me ayudas?.</p>
-              <a class="btn btn-light btn-sm" href="https://www.joystick.com.mx/donar/" target="_blank">Donar</a>
+              <p>¿Me ayudarías?</p>
+              <a class="btn btn-light btn-sm" href="https://www.paypal.com/donate/?hosted_button_id=UBQCUXS8JU38W" target="_blank">Donar</a>
             </div>
           </div>
         </div>

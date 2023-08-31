@@ -55,37 +55,112 @@ class testController extends Controller implements ControllerInterface
 
   function menus()
   {
-    // TODO: Asignar clases al elemento wrapper de cada enlace y al enlace por si mismo
-    // TODO: Asignar clases al wrapper general o UL que encápsula el menú
-    // TODO: Separar los enlaces de los items, un item puede contener un itemlink o de otro tipo cómo un botón
-    
-    $classes = ['nav-item'];
+    $link = new BeeMenuItemLink;
+    $link->setIcon('<i class="fas fa-eye fa-fw me-1"></i>');
+    $link->setText('Home');
+    $link->setUrl(CUR_PAGE);
+    $link->setClasses('nav-link');
+
     $item = new BeeMenuItem();
-    $item->setSlug('inicio');
-    $item->setText('Un enlace cool');
-    $item->setUrl(URL);
-    $item->setIcon('<i class="fas fa-fw fa-cog"></i>');
-    $item->setClasses($classes);
+    $item->setSlug('home');
+    $item->setLink($link);
+    $item->setClasses('nav-item');
+
+    $link2 = new BeeMenuItemLink;
+    $link2->setIcon('<i class="fas fa-check fa-fw me-1"></i>');
+    $link2->setText('Tienda');
+    $link2->setUrl(CUR_PAGE);
+    $link2->setClasses('nav-link');
 
     $item2 = new BeeMenuItem();
     $item2->setSlug('admin');
-    $item2->setText('Otro enlace nice');
-    $item2->setUrl('bee/info');
-    $item2->setIcon('<i class="fas fa-fw fa-eye"></i>');
-    $item2->setClasses($classes);
+    $item2->setLink($link2);
+    $item2->setClasses('nav-item');
+
+    $link3 = new BeeMenuItemLink;
+    $link3->setIcon('<i class="fas fa-heart fa-fw me-1"></i>');
+    $link3->setText('Carrito');
+    $link3->setUrl(CUR_PAGE);
+    $link3->setClasses('nav-link');
 
     $item3 = new BeeMenuItem();
     $item3->setSlug('dashboard');
-    $item3->setText('Ver twig');
-    $item3->setUrl('bee/twig');
-    $item3->setIcon('<i class="fas fa-fw fa-eye"></i>');
-    $item3->setClasses($classes);
+    $item3->setLink($link3);
+    $item3->setClasses('nav-item');
+
+    $link4 = new BeeMenuItemLink;
+    $link4->setIcon('<i class="fas fa-list fa-fw me-1"></i>');
+    $link4->setText('Listado');
+    $link4->setUrl(CUR_PAGE);
+    $link4->setClasses('nav-link');
+
+    $item4 = new BeeMenuItem();
+    $item4->setSlug('listado');
+    $item4->setLink($link4);
+    $item4->setClasses('nav-item');
+
+    $link5 = new BeeMenuItemLink;
+    $link5->setText('Ingresar');
+    $link5->setUrl(CUR_PAGE);
+    $link5->setClasses('btn btn-success btn-sm');
+
+    $item5 = new BeeMenuItem();
+    $item5->setSlug('listado');
+    $item5->setLink($link5);
+    $item5->setClasses('nav-item d-flex align-items-center');
+
+    // Elementos del menú
+    $menuLinks =
+    [
+      [
+        'text'  => 'Home',
+        'url'   => URL,
+        'slug'  => 'home',
+        'admin' => false
+      ],
+      [
+        'text'  => 'Tienda',
+        'url'   => URL,
+        'slug'  => 'tienda',
+        'admin' => false
+      ],
+      [
+        'text'  => 'Carrito',
+        'url'   => URL,
+        'slug'  => 'carrito',
+        'admin' => false
+      ],
+      [
+        'text'  => 'Administración',
+        'url'   => URL,
+        'slug'  => 'admin',
+        'admin' => true
+      ],
+    ];
+
+    /// Crear el menú de forma dinámica
+    $items = [];
+    foreach ($menuLinks as $menuLink) {
+      if ($menuLink['admin'] === true && !is_logged()) continue;
+
+      // Visualizar el link en el menú si no es sólo para admins
+      $link = new BeeMenuItemLink;
+      // $link->setIcon('<i class="fas fa-eye fa-fw me-1"></i>');
+      $link->setText($menuLink['text']);
+      $link->setUrl($menuLink['url']);
+      $link->setClasses('nav-link');
+
+      $item = new BeeMenuItem();
+      $item->setSlug($menuLink['slug']);
+      $item->setLink($link);
+      $item->setClasses('nav-item');
+
+      $items[] = $item;
+    }
 
     $menu = new BeeMenuBuilder('myNavbar', 'ul', 'navbar-nav', 'active');
-    $menu->setCurrentSlug('admin');
-    $menu->addItem($item);
-    $menu->addItem($item2);
-    $menu->addItem($item3);
+    $menu->setCurrentSlug('tienda');
+    $menu->addItems($items);
 
     $this->setTitle('Título de pruebas');
     $this->addToData('menu', $menu->getMenu());

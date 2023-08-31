@@ -2,71 +2,114 @@
 
 class BeeMenuItem
 {
-  private $item;
-  private $text;
-  private $url;
-  private $icon;
-  private $class;
-  private $id;
-  private $slug;
-  private $subItems = [];
+  /**
+   * El item completo y su información
+   *
+   * @var array
+   */
+  private $item    = [];
+
+  /**
+   * El elemento link
+   *
+   * @var array
+   */
+  private $link    = [];
+
+  /**
+   * Las clases del item
+   *
+   * @var string
+   */
+  private $classes = '';
+
+  /**
+   * El ID del item
+   *
+   * @var string
+   */
+  private $id      = '';
+
+  /**
+   * El slug del item
+   *
+   * @var string
+   */
+  private $slug    = '';
 
   function __construct()
   {
   }
 
-  function setText($text)
+  /**
+   * Establace el link que contendrá el item
+   *
+   * @param BeeMenuItemLink $link
+   * @return void
+   */
+  function setLink(BeeMenuItemLink $link)
   {
-    $this->text = $text;  
+    $this->link = $link->getLink();
   }
 
-  function setUrl($url)
+  /**
+   * Establece las clases del item
+   *
+   * @param string $classes
+   * @return void
+   */
+  function setClasses(string $classes)
   {
-    $this->url = $url;  
+    $this->classes = $classes;
   }
 
-  function setIcon($icon)
-  {
-    $this->icon = $icon;
-  }
-
-  function setClasses(array $classes)
-  {
-    $this->class = implode(' ', $classes);
-  }
-
-  function setId($id)
+  /**
+   * Establece el ID del item
+   *
+   * @param string $id
+   * @return void
+   */
+  function setId(string $id)
   {
     $this->id = $id;  
   }
 
-  function setSlug($slug)
+  /**
+   * Establece el slug para determinar si el item será activo o no
+   *
+   * @param string $slug
+   * @return void
+   */
+  function setSlug(string $slug)
   {
     $this->slug = $slug;
   }
 
-  function setSubItem(BeeMenuItem $item)
-  {
-    $this->subItems[] = $item->getItem();
-  }
-
+  /**
+   * Procesa y formatea el item
+   *
+   * @return void
+   */
   private function process()
   {
     $this->item =
     [
-      'text'    => $this->text,
       'id'      => $this->id,
-      'class'   => $this->class,
+      'classes' => $this->classes,
       'slug'    => $this->slug,
-      'icon'    => $this->icon, // para prevenir el sobre complicar las cosas
-      'url'     => $this->url,
-      'sub'     => $this->subItems
+      'link'    => $this->link
     ];
+
+    return $this->item;
   }
 
+  /**
+   * Regresa el item formateado y sus elementos
+   *
+   * @return array
+   */
   function getItem()
   {
-    $this->process();
-    return $this->item;
+    return $this->process();
   }
 }
