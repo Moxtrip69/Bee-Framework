@@ -230,4 +230,21 @@ class beeController extends Controller implements ControllerInterface
       Redirect::back();
     }
   }
+
+  /**
+   * @since 1.5.5
+   * 
+   * Prueba general de uso de Twig
+   *
+   * @return void
+   */
+  function twig()
+  {
+    // Renderizar la plantilla
+    $this->setTitle('Mi página con Twig');
+    $this->addToData('name', 'Usuario bien Cool');
+    $this->setView('test');
+    $this->setEngine('twig');
+    $this->render();
+  }
 }

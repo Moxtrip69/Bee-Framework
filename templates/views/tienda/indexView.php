@@ -21,27 +21,27 @@
     <div class="container">
       <?php echo Flasher::flash(); ?>
 
-      <?php if (!empty($d->products->rows)) : ?>
+      <?php if (!empty($d->productos->rows)) : ?>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 g-4">
-          <?php foreach ($d->products->rows as $p) : ?>
+          <?php foreach ($d->productos->rows as $p) : ?>
             <div class="col">
               <div class="card shadow-sm">
                 <div class="product-feed-image aspect-ratio-16-9">
                   <a href="<?php echo sprintf('tienda/producto/%s', $p->slug); ?>">
-                    <?php if (is_file(UPLOADS . $p->image)) : ?>
-                      <img src="<?php echo get_uploaded_image($p->image); ?>" alt="<?php echo $p->name; ?>" class="card-img-top">
+                    <?php if (is_file(UPLOADS . $p->imagen)) : ?>
+                      <img src="<?php echo get_uploaded_image($p->imagen); ?>" alt="<?php echo $p->nombre; ?>" class="card-img-top">
                     <?php else : ?>
-                      <img src="<?php echo get_image('broken.png'); ?>" alt="<?php echo $p->name; ?>" class="card-img-top ">
+                      <img src="<?php echo get_image('broken.png'); ?>" alt="<?php echo $p->nombre; ?>" class="card-img-top ">
                     <?php endif; ?>
                   </a>
                 </div>
                 <div class="card-body">
-                  <p class="card-text fw-bold"><?php echo $p->name; ?></p>
+                  <p class="card-text fw-bold"><?php echo $p->nombre; ?></p>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <a href="<?php echo build_url(sprintf('carrito/agregar/%s', $p->id), [], true, false); ?>" class="btn btn-sm btn-warning"><i class="fas fa-plus me-2"></i>Agregar al carrito</a>
                     </div>
-                    <h3 class="text-body-secondary"><?php echo money($p->price < $p->compare_price ? $p->price : $p->compare_price); ?></h3>
+                    <h3 class="text-body-secondary"><?php echo money($p->precio < $p->precio_comparacion ? $p->precio : $p->precio_comparacion); ?></h3>
                   </div>
                 </div>
               </div>
@@ -50,7 +50,7 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <?php echo $d->products->pagination; ?>
+            <?php echo $d->productos->pagination; ?>
           </div>
         </div>
       <?php else : ?>

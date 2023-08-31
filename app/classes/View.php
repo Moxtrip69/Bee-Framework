@@ -10,7 +10,7 @@ use Twig\Error\LoaderError;
 class View {
 
   /**
-   * El path a la carpeta de vistas del controladores actual
+   * El path a la carpeta de vistas del controlador actual
    *
    * @var string
    */
@@ -64,6 +64,13 @@ class View {
    * @var string
    */
   private $templateEngine = 'bee';
+
+  /**
+   * La vista a ser renderizada
+   *
+   * @var string
+   */
+  private $currentView    = null;
   
   function __construct($engine = null)
   {
@@ -93,6 +100,11 @@ class View {
     }
   }
 
+  /**
+   * Registra todas las funciones creadas por el usuario
+   *
+   * @return void
+   */
   private function registerFunctions()
   {
     // Todas las funciones definidas y cargadas en Bee framework
@@ -101,8 +113,6 @@ class View {
       $twigFunction = new TwigFunction($function, $function);
       $this->twigIntance->addFunction($twigFunction);
     }
-
-    return true;
   }
 
   /**
@@ -112,15 +122,18 @@ class View {
    * @param array $data
    * @return void
    */
-  function renderBeeTemplate($view, $data = [])
+  function renderBeeTemplate(string $view, array $data = [])
   {
+    // Vista actual a renderizar
+    $this->currentView = sprintf('%sView.php', $view);
+
     // Validar si existe el folder del controlador
     if (!is_dir($this->viewsDir . $this->controller)) {
       die(sprintf('No existe la carpeta de vistas del controlador "%s".', $this->controller));
     }
 
     // Validar si existe la vista solicitada
-    if (!is_file($this->viewsDir . $this->DS . $this->controller . $this->DS . $view . 'View.php')) {
+    if (!is_file($this->viewsDir . $this->DS . $this->controller . $this->DS . $this->currentView)) {
       die(sprintf('No existe la vista "%sView" en la carpeta "%s".', $view, $this->controller));
     }
 
@@ -129,7 +142,7 @@ class View {
       $d = to_object($data); // $data en array assoc o $d en objectos
     }
 
-    require_once $this->viewsDir . $this->DS . $this->controller . $this->DS . $view . 'View.php';
+    require_once $this->viewsDir . $this->DS . $this->controller . $this->DS . $this->currentView;
   }
 
   /**
@@ -139,17 +152,20 @@ class View {
    * @param array $data
    * @return void
    */
-  function renderTwigTemplate($view, $data = [])
+  function renderTwigTemplate(string $view, array $data = [])
   {
+    // TODO: Implementar que si es pasado un path completo a una vista, se busque dentro del directorio de vistas y no sólo en la carpeta del controlador
     try {
+      // Vista actual a renderizar
+      $this->currentView = sprintf('%sView.twig', $view);
+
       // Validar si existe el folder del controlador
       if (!is_dir($this->viewsDir . $this->controller)) {
         die(sprintf('No existe la carpeta de vistas del controlador "%s".', $this->controller));
       }
   
       // Validar si existe la vista solicitada
-      $file = $view . "View.twig";
-      if (!is_file($this->viewsDir . $this->controller . $this->DS . $file)) {
+      if (!is_file($this->viewsDir . $this->controller . $this->DS . $this->currentView)) {
         die(sprintf('No existe la vista "%s" en la carpeta "%s".', $view, $this->controller));
       }
 
@@ -157,7 +173,7 @@ class View {
       $this->getTwigFilters();
       $this->getTwigFunctions();
 
-      echo $this->twigIntance->render(sprintf('%s%sView.twig', $this->path, $view), $data);
+      echo $this->twigIntance->render(sprintf('%s%s', $this->path, $this->currentView), $data);
 
     } catch (LoaderError $e) {
       die("Hay un error del cargador: " . $e->getMessage());
@@ -170,6 +186,22 @@ class View {
     }
   }
 
+  private function viewExists()
+  {
+    // Validar si existe la vista pasada con el PATH completo
+    // Validar si existe la vista dentro del folder de vistas
+    // Validar si exista la vista dentro de su carpeta de controlador
+    if (is_file($this->currentView)) {
+      return $this->currentView;
+    } else if (is_file($this->viewsDir . $this->currentView)) {
+      return $this->viewsDir . $this->currentView;
+    } else if (is_file($this->viewsDir . $this->controller . $this->DS . $this->currentView)) {
+      return $this->viewsDir . $this->controller . $this->DS . $this->currentView;
+    } else {
+      return false;
+    }
+  }
+
   /**
    * Carga los filtros registros para usar dentro de twig
    *
@@ -177,6 +209,9 @@ class View {
    */
   function getTwigFilters()
   {
+    BeeHookManager::runHook('on_get_twig_filters', $this->twigIntance); // Permite registrar nuevos filtros
+    
+    // Regresa el hash md5 del string pasado
     $this->twigIntance->addFilter(
       new TwigFilter('md5', function($arg) { 
         return md5($arg); 
@@ -191,6 +226,8 @@ class View {
    */
   function getTwigFunctions()
   {
+    BeeHookManager::runHook('on_get_twig_functions', $this->twigIntance); // Permite registrar nuevas funciones
+
     // $this->twigIntance->addFunction(
     //   new TwigFunction('get_base_url', 'get_base_url')
     // );
@@ -215,7 +252,7 @@ class View {
    * @param string $templateEngine
    * @return mixed
    */
-  public static function render($view, $data = [], $templateEngine = null)
+  public static function render(string $view, array $data = [], ?string $templateEngine = null)
   {
     // Inicializar la instancia de nuestra clase
     $engine = new self($templateEngine);
@@ -243,7 +280,7 @@ class View {
    * @param array $data
    * @return mixed
    */
-  public static function render_twig($view, $data = [])
+  public static function render_twig(string $view, array $data = [])
   {
     // Inicializar la instancia de nuestra clase
     $engine = new self('twig');

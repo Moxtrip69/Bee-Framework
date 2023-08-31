@@ -19,7 +19,7 @@ class tiendaController extends Controller implements ControllerInterface {
   function index()
   {
     $this->setTitle('Bienvenido a la tienda');
-    $this->addToData('products', productModel::all_paginated());
+    $this->addToData('productos', productoModel::all_paginated());
     $this->setView('index');
     $this->render();
   }
@@ -27,7 +27,7 @@ class tiendaController extends Controller implements ControllerInterface {
   function producto($slug)
   {
     try {
-      if (!$product = productModel::by_slug($slug)) {
+      if (!$producto = productoModel::by_slug($slug)) {
         throw new Exception('No existe el producto que buscas.');
       }
 
@@ -36,8 +36,8 @@ class tiendaController extends Controller implements ControllerInterface {
        */
       register_styles([CSS . 'store.css'], 'Estilos de la página de detalles del producto');
 
-      $this->setTitle($product['name']);
-      $this->addToData('p', $product);
+      $this->setTitle($producto['nombre']);
+      $this->addToData('p', $producto);
       $this->setView('producto');
       $this->render();
 

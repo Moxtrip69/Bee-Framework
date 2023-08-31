@@ -28,9 +28,12 @@
           <li class="mb-1"><b>100%</b> personalizable y escalable</li>
         </ul>
 
-        <a href="<?php echo 'https://github.com/Moxtrip69/Bee-Framework/tree/' . get_bee_version(); ?>" class="btn btn-success btn-lg mt-3 col-12 col-sm-6 col-md-6 col-lg-4" target="_blank">
-          <i class="fas fa-download me-2"></i>Descargar
-        </a>
+        <div class="d-flex flex-row gap-2 mt-3">
+          <a href="<?php echo 'https://github.com/Moxtrip69/Bee-Framework/tree/' . get_bee_version(); ?>" class="btn btn-success px-4" target="_blank">
+            <i class="fas fa-download me-2"></i>Descargar
+          </a>
+          <a href="documentacion" class="btn btn-primary px-4">Documentación</a>
+        </div>
       </div>
       <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
         <img src="<?php echo get_image('bee-framework-academia-de-joystick-roberto-orozco-aviles.png'); ?>" alt="<?php echo get_bee_name(); ?>" class="img-fluid" style="width: 80%;">
@@ -38,75 +41,85 @@
     </div>
     <div class="row my-5">
       <div class="col-12 mt-5">
-        <div class="d-flex flex-column flex-md-row justify-content-between alight-items-center">
-          <div class="d-flex flex-column align-items-center mb-3">
-            <i class="fas fa-book fs-1 text-warning mb-2"></i>
-            <h3 class="fw-bold">Creator</h3>
-            <p>Crea un nuevo controlador o modelo.</p>
-            <a class="btn btn-light btn-sm" href="creator">Ver más</a>
-          </div>
-
-          <?php if (!Auth::validate()) : ?>
-            <div class="d-flex flex-column align-items-center mb-3">
-              <i class="fas fa-user fs-1 text-info mb-2"></i>
-              <h3 class="fw-bold">Mi cuenta</h3>
-              <p>Accede a la cuenta de pruebas.</p>
-              <a class="btn btn-light btn-sm" href="login">Ingresar</a>
+        <div class="row g-3">
+          <div class="col-12 col-md-3">
+            <div class="d-flex flex-column align-items-center border rounded p-4 shadow">
+              <i class="fas fa-book fs-1 text-warning mb-2"></i>
+              <h3 class="fw-bold">Creator</h3>
+              <p>Crea un controlador, modelo o vista.</p>
+              <a class="btn btn-light btn-sm" href="creator">Ver más</a>
             </div>
-          <?php else : ?>
-            <div class="d-flex flex-column align-items-center mb-3">
-              <i class="fas fa-user fs-1 text-info mb-2"></i>
-              <h3 class="fw-bold">Mi cuenta</h3>
-              <p>Mira la información de la cuenta actual.</p>
-              <a class="btn btn-light btn-sm" href="bee/perfil">Mi cuenta</a>
+          </div>
+          
+          <div class="col-12 col-md-3">
+            <?php if (!Auth::validate()) : ?>
+              <div class="d-flex flex-column align-items-center border rounded p-4 shadow">
+                <i class="fas fa-user fs-1 text-info mb-2"></i>
+                <h3 class="fw-bold">Mi cuenta</h3>
+                <p>Accede a la cuenta de pruebas.</p>
+                <a class="btn btn-light btn-sm" href="login">Ingresar</a>
+              </div>
+            <?php else : ?>
+              <div class="d-flex flex-column align-items-center border rounded p-4 shadow">
+                <i class="fas fa-user fs-1 text-info mb-2"></i>
+                <h3 class="fw-bold">Mi cuenta</h3>
+                <p>Mira la información de la cuenta actual.</p>
+                <a class="btn btn-light btn-sm" href="bee/perfil">Mi cuenta</a>
+              </div>
+            <?php endif; ?>
+          </div>
+
+          <div class="col-12 col-md-3">
+            <div class="d-flex flex-column align-items-center border rounded p-4 shadow">
+              <i class="fab fa-vuejs fs-1 text-success mb-2"></i>
+              <h3 class="fw-bold">Vue JS</h3>
+              <p>Mira el ejemplo de integración.</p>
+              <a class="btn btn-light btn-sm" href="vuejs">Ver más</a>
             </div>
-          <?php endif; ?>
-
-          <div class="d-flex flex-column align-items-center mb-3">
-            <i class="fab fa-vuejs fs-1 text-success mb-2"></i>
-            <h3 class="fw-bold">Vue JS</h3>
-            <p>Mira el ejemplo de integración.</p>
-            <a class="btn btn-light btn-sm" href="vuejs">Ver más</a>
           </div>
 
-          <div class="d-flex flex-column align-items-center mb-3">
-            <i class="fab fa-github fs-1 mb-2"></i>
-            <h3 class="fw-bold">Github</h3>
-            <p>Sígueme en Github.</p>
-            <a class="btn btn-light btn-sm" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.5.5">Ver más</a>
+          <div class="col-12 col-md-3">
+            <div class="d-flex flex-column align-items-center border rounded p-4 shadow">
+              <i class="fab fa-github fs-1 mb-2"></i>
+              <h3 class="fw-bold">Github</h3>
+              <p>Sígueme en Github.</p>
+              <a class="btn btn-light btn-sm" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.5.5">Ver más</a>
+            </div>
           </div>
 
-          <div class="d-flex flex-column align-items-center mb-3">
-            <i class="fas fa-play fs-1 text-danger mb-2"></i>
-            <h3 class="fw-bold">El curso oficial</h3>
-            <p>Mira cómo nació Bee framework.</p>
-            <a class="btn btn-light btn-sm" href="https://www.academy.joystick.com.mx/courses/crea-tu-propio-framework-profesional-mvc-con-php-poo-mysql" target="_blank">Ver curso</a>
+          <div class="col-12 col-md-3">
+            <div class="d-flex flex-column align-items-center border rounded p-4 shadow">
+              <i class="fas fa-play fs-1 text-danger mb-2"></i>
+              <h3 class="fw-bold">El curso oficial</h3>
+              <p>Mira cómo nació Bee framework.</p>
+              <a class="btn btn-light btn-sm" href="https://www.academy.joystick.com.mx/courses/crea-tu-propio-framework-profesional-mvc-con-php-poo-mysql" target="_blank">Ver curso</a>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Bloque de documentación general -->
-  <section class="bg-light py-5">
-    <div class="container py-5">
-      <div class="row">
-        <div class="col-12 col-md-3">
-          <div class="list-group sticky-top" style="top: 25px;" id="scrollSpyDoc">
-            <a class="list-group-item disabled" aria-disabled="true">Documentación</a>
-            <a href="<?php echo new_anchor('instalacion'); ?>" class="list-group-item list-group-item-action">Instalación</a>
-            <a href="<?php echo new_anchor('prepros'); ?>" class="list-group-item list-group-item-action">Prepros</a>
-            <a href="<?php echo new_anchor('db'); ?>" class="list-group-item list-group-item-action">Base de datos</a>
-            <a href="<?php echo new_anchor('routing'); ?>" class="list-group-item list-group-item-action">Routing</a>
-            <a href="<?php echo new_anchor('modelos'); ?>" class="list-group-item list-group-item-action">Modelos</a>
-            <a href="<?php echo new_anchor('coreFunc'); ?>" class="list-group-item list-group-item-action">Funciones del core</a>
-            <a href="<?php echo new_anchor('customFunc'); ?>" class="list-group-item list-group-item-action">Funciones personalizadas</a>
+          <div class="col-12 col-md-3">
+            <div class="d-flex flex-column align-items-center border rounded p-4 shadow">
+              <i class="fab fa-discord fs-1 text-discord mb-2"></i>
+              <h3 class="fw-bold">Discord</h3>
+              <p>Úneta gratis a la comunidad.</p>
+              <a class="btn btn-light btn-sm" href="https://discord.gg/wTzhKrg" target="_blank">Unirme</a>
+            </div>
           </div>
-        </div>
-        <div class="col-12 col-md-6">
-          <div class="card shadow-sm" >
-            <div class="card-body">
-              <?php echo get_module('bee/doc'); ?>
+
+          <div class="col-12 col-md-3">
+            <div class="d-flex flex-column align-items-center border rounded p-4 shadow">
+              <i class="fab fa-whatsapp fs-1 text-success mb-2"></i>
+              <h3 class="fw-bold">WhatsApp</h3>
+              <p>Úneta gratis al grupo.</p>
+              <a class="btn btn-light btn-sm" href="https://chat.whatsapp.com/GX86T4pVIFvCdMyovY5UgP" target="_blank">Unirme</a>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-3">
+            <div class="d-flex flex-column align-items-center border rounded p-4 shadow">
+              <i class="fas fa-heart fs-1 text-danger mb-2"></i>
+              <h3 class="fw-bold">Donaciones</h3>
+              <p>¿Me ayudas?.</p>
+              <a class="btn btn-light btn-sm" href="https://www.joystick.com.mx/donar/" target="_blank">Donar</a>
             </div>
           </div>
         </div>

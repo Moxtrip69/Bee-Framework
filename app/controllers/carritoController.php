@@ -56,14 +56,14 @@ class carritoController extends Controller implements ControllerInterface {
   {
     try {
       // Validar que exista el producto en la base de datos
-      if (!$product = productModel::by_id($itemId)) {
+      if (!$producto = productoModel::by_id($itemId)) {
         throw new Exception('No existe el producto o no está disponible.');
       }
 
       // Verificar si se rastrea el stock y está disponible para la compra
-      $stock      = (int) $product['stock'];
-      $trackStock = (int) $product['trackStock'] === 1;
-      $price      = $product['compare_price'] < $product['price'] ? $product['compare_price'] : $product['price'];
+      $stock      = (int) $producto['stock'];
+      $trackStock = (int) $producto['rastrear_stock'] === 1;
+      $price      = $producto['precio_comparacion'] < $producto['precio'] ? $producto['precio_comparacion'] : $producto['precio'];
 
       // TODO: Verificar cuantas unidades hay del mismo producto en carrito, sumar las que se quieren anexar y validar que no excedan del stock disponible
 
@@ -76,12 +76,12 @@ class carritoController extends Controller implements ControllerInterface {
       }
 
       // Agregar al carrito de compras
-      $item = new BeeCartItem($itemId, $product['name'], $price, $quantity, $product['description'], $product['image']);
+      $item = new BeeCartItem($itemId, $producto['nombre'], $price, $quantity, $producto['descripcion'], $producto['imagen']);
 
       // Agregar el item
       $this->cartHandler->addItem($item);
       
-      Flasher::success(sprintf('Producto <b>%s</b> agregado al carrito de compras con éxito.', $product['name']));
+      Flasher::success(sprintf('Producto <b>%s</b> agregado al carrito de compras con éxito.', $producto['nombre']));
       Redirect::back('carrito');
       
     } catch (Exception $e) {
@@ -94,8 +94,10 @@ class carritoController extends Controller implements ControllerInterface {
   {
     try {
       // Validar que exista el producto en la base de datos
-      if (!$product = productModel::by_id($itemId)) {
-        throw new Exception('No existe el producto o no está disponible.');
+      $found = true;
+      if (!$product = productoModel::by_id($itemId)) {
+        $found = false; // no existe en la base de datos
+        Flasher::error('No existe el producto o no está disponible ya en la tienda.');
       }
 
       // Inicializar el carrito de compras
@@ -108,11 +110,11 @@ class carritoController extends Controller implements ControllerInterface {
       }
       
       // Remover del carrito de compras
-      if ($this->cartHandler->removeItem($product['id']) === false) {
+      if ($this->cartHandler->removeItem($itemId) === false) {
         throw new Exception('Hubo un problema al remover el producto de tu carrito.');
       }
 
-      Flasher::success(sprintf('Producto <b>%s</b> removido del carrito de compras con éxito.', $product['name']));
+      Flasher::success(sprintf('Producto <b>%s</b> removido del carrito de compras con éxito.', $found ? $product['nombre'] : 'no existente'));
       Redirect::to('carrito');
       
     } catch (Exception $e) {

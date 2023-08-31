@@ -10,13 +10,13 @@ class testController extends Controller implements ControllerInterface
 {
   function __construct()
   {
-    // Ejecutar la funcionalidad del Controller padre
-    parent::__construct();
-
     // Prevenir el ingreso en Producción
     if (!is_local()) {
       Redirect::to(DEFAULT_CONTROLLER);
     }
+
+    // Ejecutar la funcionalidad del Controller padre
+    parent::__construct();
   }
 
   function index()
@@ -31,11 +31,11 @@ class testController extends Controller implements ControllerInterface
   {
     $chart = new BeeQuickChart('bar');
     $chart->setSize(500, 300);
-    $chart->setLabels(['Enero', 'Febrero', 'Marzo', 'Abril']);
+    $chart->setLabels(['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo']);
 
     $dataset1 = new BeeQuickChartDataset();
     $dataset1->setLabel('Ventas');
-    $dataset1->setData([10, 20, 30, 25]);
+    $dataset1->setData([10, 20, 30, 25, 12]);
     $dataset1->setBaseColor('#e84118', 0.75);
     $dataset1->setBorder(10, 5);
     $dataset1->setPointRadius(3);
@@ -43,7 +43,7 @@ class testController extends Controller implements ControllerInterface
 
     $dataset2 = new BeeQuickChartDataset();
     $dataset2->setLabel('Compras');
-    $dataset2->setData([28, 22, 35, 49]);
+    $dataset2->setData([28, 22, 35, 49, 84]);
     $dataset2->setBaseColor('#273c75', 0.4);
     $chart->addDataset($dataset2);
 
@@ -55,30 +55,42 @@ class testController extends Controller implements ControllerInterface
 
   function menus()
   {
+    // TODO: Asignar clases al elemento wrapper de cada enlace y al enlace por si mismo
+    // TODO: Asignar clases al wrapper general o UL que encápsula el menú
+    // TODO: Separar los enlaces de los items, un item puede contener un itemlink o de otro tipo cómo un botón
+    
+    $classes = ['nav-item'];
     $item = new BeeMenuItem();
     $item->setSlug('inicio');
     $item->setText('Un enlace cool');
     $item->setUrl(URL);
     $item->setIcon('<i class="fas fa-fw fa-cog"></i>');
+    $item->setClasses($classes);
 
     $item2 = new BeeMenuItem();
     $item2->setSlug('admin');
     $item2->setText('Otro enlace nice');
-    $item2->setUrl(URL);
+    $item2->setUrl('bee/info');
     $item2->setIcon('<i class="fas fa-fw fa-eye"></i>');
+    $item2->setClasses($classes);
 
     $item3 = new BeeMenuItem();
     $item3->setSlug('dashboard');
-    $item3->setText('Tercer enlace');
-    $item3->setUrl(URL);
+    $item3->setText('Ver twig');
+    $item3->setUrl('bee/twig');
     $item3->setIcon('<i class="fas fa-fw fa-eye"></i>');
+    $item3->setClasses($classes);
 
-    $menu = new BeeMenuBuilder();
+    $menu = new BeeMenuBuilder('myNavbar', 'ul', 'navbar-nav', 'active');
     $menu->setCurrentSlug('admin');
     $menu->addItem($item);
     $menu->addItem($item2);
     $menu->addItem($item3);
-    debug($menu->getMenu());
+
+    $this->setTitle('Título de pruebas');
+    $this->addToData('menu', $menu->getMenu());
+    $this->setView('menus');
+    $this->render();
   }
 
   function three()
@@ -315,24 +327,5 @@ class testController extends Controller implements ControllerInterface
     } catch (Exception $e) {
       echo $e->getMessage();
     }
-  }
-
-  /**
-   * @since 1.5.5
-   * 
-   * Prueba general de uso de Twig
-   *
-   * @return void
-   */
-  function twig()
-  {
-    // Datos que se pasan a la plantilla
-    $data = [
-      'title' => 'Mi Página',
-      'name'  => 'Usuario',
-    ];
-
-    // Renderizar la plantilla
-    View::render_twig('test', $data);
   }
 }

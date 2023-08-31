@@ -1,4 +1,5 @@
 <?php 
+// TODO: Documentar la clase
 
 final class BeeMenuBuilder
 {

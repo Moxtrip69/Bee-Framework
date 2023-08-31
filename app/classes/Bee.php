@@ -136,7 +136,7 @@ class Bee
     /**
      * Se hace ejecución de todo nuestro framework
      */
-    BeeHookManager::runHook('before_init_dispatch');
+    BeeHookManager::runHook('before_init_dispatch', $this->current_controller, $this->current_method, $this->params);
     $this->init_dispatch();
   }
 

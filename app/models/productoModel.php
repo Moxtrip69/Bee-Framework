@@ -3,13 +3,13 @@
  * Plantilla general de modelos
  * @version 1.1.8
  *
- * Modelo de product
+ * Modelo de producto
  */
-class productModel extends Model {
+class productoModel extends Model {
   /**
   * Nombre de la tabla
   */
-  public static $t1 = 'products';
+  public static $t1 = 'productos';
   
   // Nombre de tablas secundarias
   //public static $t2 = '__tabla 2__'; 

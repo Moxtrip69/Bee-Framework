@@ -2022,23 +2022,23 @@ function get_bee_info()
 			'URL de recursos'      => ASSETS,
 			'URL de subidas'       => UPLOADED,
 			'URL de imágenes'      => IMAGES,
-			'Sal de seguridad'     => AUTH_SALT,
+			'Sal de seguridad'     => IS_LOCAL ? AUTH_SALT : '*****',
 			'DB Engine (local)'    => LDB_ENGINE,
 			'DB Host (local)'      => LDB_HOST,
 			'DB Nombre (local)'    => LDB_NAME,
 			'DB Usuario (local)'   => LDB_USER,
 			'DB Charset (local)'   => LDB_CHARSET,
 			'DB Engine'            => DB_ENGINE,
-			'DB Host'              => DB_HOST,
-			'DB Nombre'            => DB_NAME,
-			'DB Usuario'           => DB_USER,
+			'DB Host'              => IS_LOCAL ? DB_HOST : '***',
+			'DB Nombre'            => IS_LOCAL ? DB_NAME : '***',
+			'DB Usuario'           => IS_LOCAL ? DB_USER : '***',
 			'DB Charset'           => DB_CHARSET,
 			'Plantilla de correos' => PHPMAILER_TEMPLATE,
 			'Nombre del sitio'     => SITE_NAME,
 			'Versión del sitio'    => SITE_VERSION,
 			'Favicon del sitio'    => SITE_FAVICON,
 			'Logotipo del sitio'   => SITE_LOGO,
-			'Google Maps'          => GMAPS,
+			'Google Maps'          => IS_LOCAL ? GMAPS : '***',
 		];
 
 	return get_module('bee/info', $data);
@@ -2641,6 +2641,8 @@ function get_site_charset()
  */
 function get_referer_url($fallbackUrl = null)
 {
+	// TODO: Implementar al inicio de la carga del sitio para almacenarla y tenerla disponible
+	
 	// Verificar si el encabezado 'Referer' está presente
 	if (isset($_SERVER['HTTP_REFERER'])) {
 		// Obtener la URL de referencia
@@ -2733,14 +2735,3 @@ function remove_accents(string $string) {
 	
 	return strtr($string, array_combine($accents, $substitutes));
 }
-
-/**
- * Ejemplo de uso de hooks para registrar endpoints para la API
- *
- * @param Bee $instance
- * @return void
- */
-function addEndpoints(Bee $instance)
-{
-}
-BeeHookManager::registerHook('init_set_up', 'addEndpoints');

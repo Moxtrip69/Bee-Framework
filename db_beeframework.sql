@@ -107,3 +107,30 @@ CREATE TABLE `pruebas` (
 -- ----------------------------
 INSERT INTO `pruebas` VALUES ('1', 'John Doe', 'Un post de prueba', 'Lorem ipsum dolorem.', '2021-12-10 10:55:41');
 INSERT INTO `pruebas` VALUES ('2', 'Pancho Villa', 'Otro post nuevo', 'Lorem ipsum dolorem.', '2021-12-10 11:02:01');
+
+-- ----------------------------
+-- Table structure for products
+-- ----------------------------
+DROP TABLE IF EXISTS `productos`;
+CREATE TABLE `productos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sku` varchar(100) DEFAULT NULL,
+  `nombre` varchar(255) DEFAULT '',
+  `slug` varchar(255) DEFAULT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `precio` decimal(10,2) DEFAULT NULL,
+  `precio_comparacion` decimal(10,2) DEFAULT NULL,
+  `stock` int(10) DEFAULT NULL,
+  `rastrear_stock` tinyint(5) DEFAULT 0,
+  `imagen` varchar(255) DEFAULT NULL,
+  `creado` datetime DEFAULT NULL,
+  `actualizado` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- ----------------------------
+-- Records of products
+-- ----------------------------
+INSERT INTO `productos` VALUES ('1', null, 'Pack de desarrollo web Full Stack', 'pack-de-desarrollo-full-stack', 'Un paquete con más de 20 cursos premium.', '300.00', '1000.00', '10', '1', 'packfullstack.png', '2023-08-10 07:52:50', '2023-08-11 09:37:31');
+INSERT INTO `productos` VALUES ('2', null, 'Emprendepack', 'emprendepack', 'Paquete de cursos para emprendedores', '199.00', '500.00', null, '0', 'testimage.jpg', '2023-08-10 08:18:34', '2023-08-11 09:36:06');
+INSERT INTO `productos` VALUES ('3', null, 'Curso crea un sistema escolar con PHP y MySQL', 'curso-crea-un-sistema-escolar', 'Lorel ipsum dolorem etsem.', '150.00', '799.00', null, '0', 'sistemaescolar.jpg', '2023-08-11 09:40:26', '2023-08-11 09:42:50');

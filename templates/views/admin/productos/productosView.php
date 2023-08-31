@@ -33,14 +33,14 @@
               </tr>
             </thead>
             <tbody>
-              <?php if (!empty($d->products->rows)): ?>
-                <?php foreach ($d->products->rows as $p) : ?>
+              <?php if (!empty($d->productos->rows)): ?>
+                <?php foreach ($d->productos->rows as $p) : ?>
                   <tr>
-                    <td width="30%"><?php echo add_ellipsis($p->name, 50); ?></td>
-                    <td class="text-center"><?php echo _e(money($p->price)); ?></td>
-                    <td class="text-center"><?php echo _e(money($p->compare_price)); ?></td>
+                    <td width="30%"><?php echo add_ellipsis($p->nombre, 50); ?></td>
+                    <td class="text-center"><?php echo _e(money($p->precio)); ?></td>
+                    <td class="text-center"><?php echo _e(money($p->precio_comparacion)); ?></td>
                     <td class="text-center"><?php echo _e($p->stock); ?></td>
-                    <td class="text-end"><?php echo format_date($p->created); ?></td>
+                    <td class="text-end"><?php echo format_date($p->creado); ?></td>
                     <td class="text-end">
                       <div class="dropdown">
                         <a class="btn btn-sm btn-secondary" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -63,7 +63,7 @@
         </div>
       </div>
       <div class="card-body">
-        <?php echo $d->products->pagination; ?>
+        <?php echo $d->productos->pagination; ?>
       </div>
     </div>
   </div>

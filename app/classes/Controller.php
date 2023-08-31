@@ -1,15 +1,68 @@
 <?php 
 
 class Controller {
+  /**
+   * Tipo de controlador, puede ser regular para controladores con función general, ajax para el controlador de AJAX, y tipo
+   * endpoint para puntos de acceso a la API autorizados, funcionan de manera diferente cada uno
+   *
+   * @var string
+   */
   protected string $controllerType = 'regular'; // regular | ajax | endpoint
+
+  /**
+   * El controlador actual ejecutado
+   *
+   * @var string|null
+   */
   protected ?string $controller    = null;
+
+  /**
+   * El método solicitado
+   *
+   * @var string|null
+   */
   protected ?string $method        = null;
-  protected ?string $viewName      = 'index';
+
+  /**
+   * La vista a renderizar
+   *
+   * @var string
+   */
+  protected string $viewName      = 'index';
+
+  /**
+   * El motor de renderizado, puede ser bee o twig
+   *
+   * @var string
+   */
   protected string $engine         = 'bee';
+
+  /**
+   * Toda la información que será pasada a la vista o a la ruta para ser procesada en caso de ser ajax o endpoint
+   *
+   * @var array
+   */
   protected ?array $data           = [];
+
+  /**
+   * Los archivos enviados en la petición
+   *
+   * @var array
+   */
   protected ?array $files          = [];
 
+  /**
+   * La instancia de la clase BeeHttp
+   *
+   * @var BeeHttp
+   */
   protected $http                  = null;
+
+  /**
+   * La información de la solicitud
+   *
+   * @var array|null
+   */
   protected $request               = null;
 
 
@@ -83,6 +136,8 @@ class Controller {
     // Carrito de compras
     // TODO: Configurar si se usarán o no carritos de compras
     $this->addToData('cart'       , BeeCartHandler::get());
+
+    BeeHookManager::runHook('is_regular_controller', $this);
   }
 
   /**
@@ -106,6 +161,7 @@ class Controller {
       $this->request = $this->http->get_request();
       $this->data    = $this->request['data'];
       $this->files   = $this->request['files'];
+      BeeHookManager::runHook('is_ajax_controller', $this);
     } catch (BeeHttpException $e) {
       http_response_code($e->getStatusCode());
       json_output(json_build($e->getStatusCode(), [], $e->getMessage()));
@@ -135,10 +191,12 @@ class Controller {
       $this->http    = new BeeHttp();
       $this->http->setCallType($this->controllerType);
       $this->http->registerDomain('*'); // Recomiendo cambiar a un dominio específico por seguridad
+      BeeHookManager::runHook('before_process_request_endpoint', $this->http);
       $this->http->process();
       $this->request = $this->http->get_request();
       $this->data    = $this->request['data'];
       $this->files   = $this->request['files'];
+      BeeHookManager::runHook('is_endpoint_controller', $this);
     } catch (BeeHttpException $e) {
       http_response_code($e->getStatusCode());
       json_output(json_build($e->getStatusCode(), [], $e->getMessage()));
@@ -156,7 +214,7 @@ class Controller {
    * @param string $pageTitle
    * @return void
    */
-  protected function setTitle(string $pageTitle)
+  function setTitle(string $pageTitle)
   {
     $this->data['title'] = $pageTitle;
   }
@@ -168,7 +226,7 @@ class Controller {
    * @param mixed $value
    * @return void
    */
-  protected function addToData(string $key, $value)
+  function addToData(string $key, $value)
   {
     $this->data[$key] = $value;
   }
@@ -179,7 +237,7 @@ class Controller {
    * @param array $data
    * @return void
    */
-  protected function setData(array $data)
+  function setData(array $data)
   {
     $this->data = $data;
   }
@@ -189,7 +247,7 @@ class Controller {
    *
    * @return array
    */
-  protected function getData()
+  function getData()
   {
     return $this->data;
   }
@@ -200,7 +258,7 @@ class Controller {
    * @param string $engine
    * @return void
    */
-  protected function setEngine(string $engine)
+  function setEngine(string $engine)
   {
     $this->engine = $engine;
   }
@@ -211,7 +269,7 @@ class Controller {
    * @param string $viewName
    * @return void
    */
-  protected function setView(string $viewName)
+  function setView(string $viewName)
   {
     $this->viewName = $viewName;
   }
@@ -221,8 +279,18 @@ class Controller {
    *
    * @return void
    */
-  protected function render()
+  function render()
   {
     View::render($this->viewName, $this->data, $this->engine);
+  }
+  
+  /**
+   * Regresa la petición procesada
+   *
+   * @return array
+   */
+  function getRequest()
+  {
+    return $this->request;
   }
 }

@@ -238,25 +238,25 @@ class adminController extends Controller implements ControllerInterface {
     
     // Inputs
     $form->addCustomFields(insert_inputs());
-    $form->addTextField('name', 'Nombre del producto', ['form-control'], 'product-name', true);
+    $form->addTextField('nombre', 'Nombre del producto', ['form-control'], 'product-name', true);
     $form->addTextField('sku', 'SKU o número de rastreo', ['form-control'], 'product-sku');
-    $form->addTextareaField('description', 'Descripción del producto', 4, 5, ['form-control'], 'product-description', true);
-    $form->addNumberField('price', 'Precio principal', 1, 999999999, 'any', null, ['form-control'], 'product-price', true);
-    $form->addNumberField('compare_price', 'Precio de comparación', 1, 999999999, 'any', null, ['form-control'], 'product-compare-price');
+    $form->addTextareaField('descripcion', 'Descripción del producto', 4, 5, ['form-control'], 'product-description');
+    $form->addNumberField('precio', 'Precio principal', 1, 999999999, 'any', null, ['form-control'], 'product-price', true);
+    $form->addNumberField('precio_comparacion', 'Precio de comparación', 1, 999999999, 'any', null, ['form-control'], 'product-compare-price');
 
-    $form->addFileField('image', 'Imagen principal del producto', ['form-control'], 'product-imagen', true);
+    $form->addFileField('imagen', 'Imagen principal del producto', ['form-control'], 'product-imagen', true);
 
     $form->addCustomFields('<hr>');
 
-    $form->addCheckboxField('trackStock', 'Seguimiento de stock', 'true', ['form-check-input'], 'trackStock', false);
+    $form->addCheckboxField('rastrear_stock', 'Seguimiento de stock', 'true', ['form-check-input'], 'trackStock', false);
     $form->addNumberField('stock', 'Unidades disponibles', 1, 999999999, 1, null, ['form-control'], 'stock', false);
 
     $form->addButton('submit', 'submit', 'Agregar producto', ['btn btn-success'], 'submit-button');
 
     $this->setTitle('Productos');
-    $this->addToData('form'    , $form->getFormHtml());
-    $this->addToData('products', productModel::all_paginated());
-    $this->addToData('slug'    , 'productos');
+    $this->addToData('form'     , $form->getFormHtml());
+    $this->addToData('productos', productoModel::all_paginated());
+    $this->addToData('slug'     , 'productos');
     $this->setView('productos/productos');
     $this->render();
   }
@@ -264,7 +264,7 @@ class adminController extends Controller implements ControllerInterface {
   function post_productos()
   {
     try {
-      if (!check_posted_data(['name','sku','description','price','compare_price','image','stock'], $_POST)) {
+      if (!check_posted_data(['nombre','sku','descripcion','precio','precio_comparacion','stock'], $_POST)) {
         throw new Exception('Por favor completa el formulario.');
       }
 
@@ -274,37 +274,93 @@ class adminController extends Controller implements ControllerInterface {
 
       // Definición de variables
       array_map('sanitize_input', $_POST);
-      $name          = $_POST['name'];
-      $sku           = $_POST["sku"];
-      $description   = $_POST["description"];
-      $price         = (float) $_POST["price"];
-      $compare_price = (float) $_POST["compare_price"];
-      $trackStock    = isset($_POST["trackStock"]) ? 1 : 0;
-      $stock         = (int) $_POST["stock"];
-      $image         = $_FILES["image"];
-      $errorMessage  = '';
-      $errors        = 0;
+      $nombre             = $_POST['nombre'];
+      $sku                = $_POST["sku"];
+      $descripcion        = $_POST["descripcion"];
+      $precio             = (float) $_POST["precio"];
+      $precio_comparacion = (float) $_POST["precio_comparacion"];
+      $rastrear_stock     = isset($_POST["rastrear_stock"]) ? 1 : 0;
+      $stock              = (int) $_POST["stock"];
+      $imagen             = $_FILES["imagen"];
+      $errorMessage       = '';
+      $errors             = 0;
 
       // Crear slug con base al nombre del producto
       $slugify = new Slugify();
-      $slug    = $slugify->slugify($name);
+      $slug    = $slugify->slugify($nombre);
 
       // Verificar que no exista ya un producto con el sku si es que no está vacío
-      $sql = 'SELECT * FROM products WHERE sku = :sku OR `name` = `:name` OR slug = :slug';
-      if (productModel::query($sql, ['sku' => $sku, 'name' => $name, 'slug' => $slug])) {
+      $sql = 'SELECT * FROM productos WHERE sku = :sku OR nombre = :nombre OR slug = :slug';
+      if (productoModel::query($sql, ['sku' => $sku, 'nombre' => $nombre, 'slug' => $slug])) {
         throw new Exception('Ya existe un producto registrado con el mismo SKU o nombre.');
       }
 
-      // TODO: Validar que no exista uno con el mismo sku
-      // TODO: Validar que no exista uno con el mismo nombre
+      // Validar longitud del nombre, no mayor a 150 caracteres
+      if (strlen($nombre) > 150) {
+        $errorMessage .= '- El nombre del producto debe ser menor a 150 caracteres.' . PHP_EOL;
+        $errors++;
+      }
 
+      // Validar el precio regular del producto
+      if ($precio == 0) {
+        $errorMessage .= '- Ingresa un precio mayor a 0.' . PHP_EOL;
+        $errors++;
+      }
 
+      // Validar el precio de comparación si no es igual a 0
+      if ($precio_comparacion != 0 && $precio_comparacion < $precio) {
+        $errorMessage .= '- El precio de comparación debe ser mayor al precio principal del producto.' . PHP_EOL;
+        $errors++;
+      }
+
+      // Validación de la imagen
+      if ($imagen['error'] !== 0) {
+        $errorMessage .= '- Selecciona una imagen de producto válida por favor.' . PHP_EOL;
+        $errors++;
+      }
+
+      // Procesar imagen
+      $tmp_name = $imagen['tmp_name'];
+      $filename = $imagen['name'];
+      $type     = $imagen['type'];
+      $ext      = pathinfo($filename, PATHINFO_EXTENSION);
+      $new_name = generate_filename() . '.' . $ext;
+
+      if (!move_uploaded_file($tmp_name, UPLOADS . $new_name)) {
+        $errorMessage .= '- Hubo un problema al subir el archivo de imagen.' . PHP_EOL;
+        $errors++;
+      }
 
       if ($errors > 0) {
+        if (is_file(UPLOADS . $new_name)) {
+          unlink(UPLOADS . $new_name);
+        }
         throw new Exception($errorMessage);
       }
 
-      Flasher::success('Nuevo producto agregado con éxito.');
+      // Array de información del producto
+      $data =
+      [
+        'nombre'             => $nombre,
+        'slug'               => $slug,
+        'sku'                => empty($sku) ? random_password(8, 'numeric') : $sku,
+        'descripcion'        => $descripcion,
+        'precio'             => $precio,
+        'precio_comparacion' => $precio_comparacion,
+        'rastrear_stock'     => $rastrear_stock,
+        'stock'              => empty($stock) ? 0 : $stock,
+        'imagen'             => $new_name,
+        'creado'             => now()
+      ];
+
+      // Agregar producto a la base de datos
+      if (!$id = productoModel::insertOne($data)) {
+        throw new Exception('Hubo un error, intenta de nuevo.');
+      }
+
+      $producto = productoModel::by_id($id);
+
+      Flasher::success(sprintf('Nuevo producto <b>%s</b> agregado con éxito.', $producto['nombre']));
       Redirect::back();
 
     } catch (Exception $e) {

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  * Calcula la iluminación de un color y decide el mejor color de contraste para el texto
@@ -31,3 +31,10 @@ function decideTextColor($backgroundColor)
     return "#000000"; // Negro para colores oscuros
   }
 }
+
+function testing($param)
+{
+
+}
+
+BeeHookManager::registerHook('on_get_twig_filters', 'testing');

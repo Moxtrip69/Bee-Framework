@@ -5,11 +5,11 @@
   <div class="row">
     <div class="col-md-5">
       <div class="main-img">
-        <img class="img-fluid rounded" src="<?php echo get_uploaded_image($d->p->image); ?>" alt="<?php echo $d->p->name; ?>">
+        <img class="img-fluid rounded" src="<?php echo get_uploaded_image($d->p->imagen); ?>" alt="<?php echo $d->p->nombre; ?>">
         <div class="row my-3 previews">
           <?php foreach ([1,2,3,4] as $img): ?>
             <div class="col-md-3">
-              <img class="img-fluid h-100 rounded" src="<?php echo get_uploaded_image($d->p->image); ?>" alt="<?php echo $d->p->name; ?>">
+              <img class="img-fluid h-100 rounded" src="<?php echo get_uploaded_image($d->p->imagen); ?>" alt="<?php echo $d->p->nombre; ?>">
             </div>
           <?php endforeach; ?>
         </div>
@@ -21,16 +21,16 @@
           Categoría de ejemplo
         </div>
         <div class="product-title text-bold my-3">
-          <?php echo $d->p->name; ?>
+          <?php echo $d->p->nombre; ?>
         </div>
 
         <div class="price-area my-4">
-          <?php if ($d->p->price < $d->p->compare_price): ?>
-            <?php $discount = round(100 - (100 * $d->p->price / $d->p->compare_price)); ?>
-            <p class="old-price mb-1"><del><?php echo money($d->p->compare_price) ?></del> <span class="text-danger"><?php echo sprintf('(%s%% OFF)', $discount); ?></span></p>
-            <p class="new-price text-bold mb-1"><?php echo money($d->p->price); ?></p>
+          <?php if ($d->p->precio < $d->p->precio_comparacion): ?>
+            <?php $discount = round(100 - (100 * $d->p->precio / $d->p->precio_comparacion)); ?>
+            <p class="old-price mb-1"><del><?php echo money($d->p->precio_comparacion) ?></del> <span class="text-danger"><?php echo sprintf('(%s%% OFF)', $discount); ?></span></p>
+            <p class="new-price text-bold mb-1"><?php echo money($d->p->precio); ?></p>
           <?php else: ?>
-            <p class="new-price text-bold mb-1"><?php echo money($d->p->price); ?></p>
+            <p class="new-price text-bold mb-1"><?php echo money($d->p->precio); ?></p>
           <?php endif; ?>
           <p class="text-secondary mb-1">(Impuestos incluidos)</p>
         </div>
@@ -53,7 +53,7 @@
 
       <div class="product-details my-4">
         <p class="details-title text-color mb-1">Detalles del producto</p>
-        <p class="description"><?php echo $d->p->description; ?></p>
+        <p class="description"><?php echo $d->p->descripcion; ?></p>
       </div>
 
       <div class="row questions bg-light p-3">

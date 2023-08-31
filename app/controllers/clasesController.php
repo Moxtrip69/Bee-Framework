@@ -12,6 +12,15 @@
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
+use Endroid\QrCode\Label\Label;
+use Endroid\QrCode\Logo\Logo;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+
 /**
  * Plantilla general de controladores
  * @version 1.0.2
@@ -174,6 +183,11 @@ class clasesController extends Controller implements ControllerInterface {
     $this->render();
   }
 
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////// CLASE EN VIVO #7
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
   function autoguardado()
   {
     // Creamos el formulario para nuestras noticias
@@ -189,5 +203,84 @@ class clasesController extends Controller implements ControllerInterface {
     $this->addToData('form' , $form->getFormHtml());
     $this->setView('autosave');
     $this->render();
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////// CÓDIGOS QR
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function qr()
+  {
+    // Formulario
+    $form = new BeeFormBuilder('qrForm', 'qrForm', [], 'clases/post_qr');
+    $form->addCustomFields(insert_inputs());
+    $form->addTextField('nombre', 'Nombre del negocio', ['form-control'], 'nombre', true, 'Pancho Villas Inc');
+    $form->addEmailField('email', 'Correo electrónico de contacto', ['form-control'], 'email', true, 'jslocal@localhost.com');
+    $form->addTextField('url', 'Sitio web del negocio', ['form-control'], 'url', true, 'https://www.joystick.com.mx');
+    $form->addButton('submit', 'submit', 'Generar', ['btn btn-success'], 'submit');
+
+    // Información para la vista
+    $this->setTitle('Generando códigos QR');
+    $this->addToData('form', $form->getFormHtml());
+    $this->setView('qrcodes');
+    $this->render();
+  }
+
+  function post_qr()
+  {
+    try {
+      if (!check_posted_data(['nombre','email','url'], $_POST)) {
+        throw new Exception('Completa el formulario por favor.');
+      }
+
+      // Datos de contacto
+      array_map('sanitize_input', $_POST);
+      $nombre = $_POST["nombre"];
+      $email  = $_POST["email"];
+      $url    = $_POST["url"];
+
+      // Combinar los datos en una cadena de texto
+      $informacionDeContacto  = "Nombre de la empresa: $nombre\n";
+      $informacionDeContacto .= "Correo electrónico: $email\n";
+      $informacionDeContacto .= "Sitio web: $url";
+
+      // Create QR code
+      $qrCode = QrCode::create($informacionDeContacto);
+      $qrCode->setEncoding(new Encoding('UTF-8'));
+      $qrCode->setErrorCorrectionLevel(new ErrorCorrectionLevelLow());
+      $qrCode->setSize(500);
+      $qrCode->setMargin(10);
+      $qrCode->setRoundBlockSizeMode(new RoundBlockSizeModeMargin());
+      $qrCode->setForegroundColor(new Color(0, 0, 0));
+      $qrCode->setBackgroundColor(new Color(255, 255, 255));
+
+      // Agregar un logotipo
+      $logo = Logo::create(IMAGES_PATH . 'bee_logo_white.png');
+      $logo->setResizeToWidth(150);
+      $logo->setPunchoutBackground(true);
+
+      // Crear un label o etiqueta
+      $label = Label::create('Mi etiqueta cool');
+      $label->setTextColor(new Color(50, 50, 50));
+
+      $writer = new PngWriter();
+      $result = $writer->write($qrCode, $logo, $label);
+
+      // Hacer output en pantalla del resultado como imagen
+      header('Content-Type: '.$result->getMimeType());
+      echo $result->getString();
+
+      // Guardar como archivo
+      // $result->saveToFile(UPLOADS . '/qrcode.png');
+
+      // Generar un URI para incluir en una etiqueta img con base64
+      $dataUri = $result->getDataUri();
+      // echo sprintf('<img src="%s" alt="QR generado" style="border: 1px solid #ebebeb; border-radius: 20px;">', $dataUri);
+
+    } catch (Exception $e) {
+      Flasher::error($e->getMessage());
+      Redirect::back();
+    }
   }
 }
