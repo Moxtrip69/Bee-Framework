@@ -2704,11 +2704,11 @@ function is_temporary_email($email)
 	$domain = strtolower($emailParts[1]);
 
 	// buscar en el array de dominios no autorizados
-	if (in_array($domain, $temporaryDomains)) {
-		return true; // se encontró dentro de la lista
+	if (!in_array($domain, $temporaryDomains)) {
+		return false; 
 	}
 
-	return false;
+	return true; // se encontró dentro de la lista
 }
 
 /**
