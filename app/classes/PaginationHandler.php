@@ -1,17 +1,17 @@
-<?php 
+<?php
 
 /**
-* @author Joystick
-* @version 1.0.0
-*
-*/
+ * @author Joystick
+ * @version 1.0.0
+ *
+ */
 class PaginationHandler extends Model
 {
 	/**
-	* Establecimiento de parámetros necesarios
-	* @param
-	*
-	**/
+	 * Establecimiento de parámetros necesarios
+	 * @param
+	 *
+	 **/
 	private $query;
 	private $params     = [];
 	private $rows       = [];
@@ -36,7 +36,7 @@ class PaginationHandler extends Model
 		//$this->pattern = strtok(CUR_PAGE, '?');
 		$this->pattern = CUR_PAGE;
 	}
-	
+
 	public function get_total_rows()
 	{
 		$counted     = parent::query($this->query, $this->params);
@@ -52,7 +52,7 @@ class PaginationHandler extends Model
 
 	public function current_page()
 	{
-		$this->page = min($this->pages, filter_input(INPUT_GET, $this->variable , FILTER_VALIDATE_INT, array("options" => array("default" => 1 , "min" => 1))));
+		$this->page = min($this->pages, filter_input(INPUT_GET, $this->variable, FILTER_VALIDATE_INT, array("options" => array("default" => 1, "min" => 1))));
 		$this->page = ($this->page < 1) ? 1 : $this->page;
 		return $this->page;
 	}
@@ -74,24 +74,24 @@ class PaginationHandler extends Model
 
 	public function create_pagination()
 	{
-		$pagination = '<ul class="mt-5 pagination '.$this->alignment.'">';
-		$pagination .= 
-		'<li class="page-item '.($this->page == 1 ? 'disabled' : '').'">
-			<a class="page-link" href="'.buildURL($this->pattern, [$this->variable => $this->page - 1], false, false).'" title="Anterior">&laquo;</a>
+		$pagination = '<ul class="mt-5 pagination ' . $this->alignment . '">';
+		$pagination .=
+			'<li class="page-item ' . ($this->page == 1 ? 'disabled' : '') . '">
+			<a class="page-link" href="' . buildURL($this->pattern, [$this->variable => $this->page - 1], false, false) . '" title="Anterior">&laquo;</a>
 		</li>';
 
 		for ($i = 1; $i <= $this->pages; $i++) {
-				// Current page
-				$pagination .= '
-				<li class="page-item '.($this->page == $i ? 'active disabled' : '').'">
-					<a class="page-link" href="'.buildURL($this->pattern, [$this->variable => $i], false, false).'" >'.$i.'</a>
+			// Current page
+			$pagination .= '
+				<li class="page-item ' . ($this->page == $i ? 'active disabled' : '') . '">
+					<a class="page-link" href="' . buildURL($this->pattern, [$this->variable => $i], false, false) . '" >' . $i . '</a>
 				</li>
 				';
 		}
 
-		$pagination .= 
-		'<li class="page-item '.($this->page >= $this->pages ? 'disabled' : '').'">
-			<a class="page-link" href="'.buildURL($this->pattern, [$this->variable => $this->page + 1], false, false).'" title="Siguiente">&raquo;</a>
+		$pagination .=
+			'<li class="page-item ' . ($this->page >= $this->pages ? 'disabled' : '') . '">
+			<a class="page-link" href="' . buildURL($this->pattern, [$this->variable => $this->page + 1], false, false) . '" title="Siguiente">&raquo;</a>
 		</li>';
 		$pagination .= '</ul>';
 
@@ -103,7 +103,7 @@ class PaginationHandler extends Model
 
 	public function launch()
 	{
-		return 
+		return
 		[
 			'total'      => $this->get_total_rows(),
 			'pages'      => $this->calculate_pages(),

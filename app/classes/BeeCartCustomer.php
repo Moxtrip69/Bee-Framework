@@ -1,6 +1,6 @@
 <?php 
 
-final class BeeCartCustomer
+class BeeCartCustomer
 {
   /**
    * El objeto del cliente completo
