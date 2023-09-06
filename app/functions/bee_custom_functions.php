@@ -1,6 +1,9 @@
 <?php
 // Funciones directamente del proyecto en curso
 
+use Twig\Environment;
+use Twig\TwigFunction;
+
 /**
  * Carga el archivo de funciones para las clases en vivo, tutoriales y streams de Joystick
  * Puedes borrar todo esto sin problema alguno o usarlo cómo referencia para tus proyectos
@@ -12,7 +15,7 @@ function load_joystick_functions()
   require_once FUNCTIONS . 'puedes_borrarlas.php';
 }
 
-function setUpRoutes($instance)
+function setUpRoutes(Bee $instance)
 {
   $instance->addEndpoint('reportes'); // agrega el endpoint reportes como autorizado para consumirse como un endpoint, deberás crear el controlador y definirlo como endpoint también
 

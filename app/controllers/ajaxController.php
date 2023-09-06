@@ -267,7 +267,6 @@ class ajaxController extends Controller implements ControllerInterface {
         // Anexar data de nuevo registro
         $data = array_merge($data, ['creado' => now(), 'status' => 'draft']);
         $id   = Model::add('posts', $data);
-        $post = Model::list('posts', ['id' => $id], 1); // cargar el post
 
       } else {
         // En caso que ya exista, actualizar la información
@@ -277,6 +276,117 @@ class ajaxController extends Controller implements ControllerInterface {
       
       $post = Model::list('posts', ['id' => $id], 1); // cargar el post
       json_output(json_build(200, $post, 'Noticia guardada con éxito.'));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function generar_notificacion()
+  {
+    try {
+      // Inicializar el array de información a insertar o actualizar
+      $placeholders =
+      [
+        'Nuevo correo electrónico',
+        'Nueva venta recibida',
+        'Nuevo reporte generado',
+        'Nuevo anticipo solicitado'
+      ];
+      $notificacion = sprintf('%s #%s', $placeholders[rand(0, count($placeholders) - 1)], random_password(6, 'numeric'));
+
+      $data         =
+      [
+        'tipo'       => 'notificacion',
+        'id_padre'   => 0,
+        'id_usuario' => 0,
+        'id_ref'     => 0,
+        'titulo'     => $notificacion,
+        'status'     => 'pendiente',
+        'creado'     => now()
+      ];
+
+      // Verificar si ya existe el post en la base de datos
+      $id   = Model::add('posts', $data);
+      $post = Model::list('posts', ['id' => $id], 1); // cargar el post / notificación
+
+      json_output(json_build(201, $post, $notificacion));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function sse()
+  {
+    header('Content-Type: text/event-stream');
+    header('Cache-Control: no-cache');
+    header('Connection: keep-alive');
+
+    // Cargar las notificaciones que sean nuevas
+    $notificaciones = Model::list('posts', ['tipo' => 'notificacion']);
+    $notificaciones = $notificaciones === false ? [] : $notificaciones;
+    $totales        = !empty($notificaciones) ? count($notificaciones) : 0;
+    $pendientes     = 0;
+    $cargadas       = 0;
+    $vistas         = 0;
+
+    // Actualizar status de cada notificación
+    if (!empty($notificaciones)) {
+      foreach ($notificaciones as $notificacion) {
+        switch ($notificacion['status']) {
+          case 'pendiente':
+            $pendientes++;
+            Model::update('posts', ['id' => $notificacion['id']], ['status' => 'cargada']);
+            break;
+
+          case 'cargada':
+            $cargadas++;
+            break;
+          
+          case 'vista':
+            $vistas++;
+            break;
+        }
+      }
+    }
+
+    $data =
+    [
+      'totales'        => $totales, 
+      'pendientes'     => $pendientes, 
+      'cargadas'       => $cargadas,
+      'vistas'         => $vistas, 
+      'notificaciones' => $notificaciones
+    ];
+
+    $payload = json_build(200, $data);
+
+    // Envía la notificación al cliente
+    echo "data: $payload\n\n";
+    flush();
+  }
+
+  function actualizar_notificacion()
+  {
+    try {
+      if (!check_posted_data(['id'], $this->data)) {
+        throw new Exception('Parámetros faltantes.');
+      }
+
+      // Sanitización del input del usuario
+      array_map('sanitize_input', $this->data);
+      $id        = empty($this->data['id']) ? null : $this->data['id'];
+
+      // Verificar si existe la notificación en la base de datos
+      if (!$notificacion = Model::list('posts', ['id' => $id], 1)) {
+        throw new Exception('No existe la notificación en la base de datos.');
+      }
+
+      Model::update('posts', ['id' => $id], ['status' => 'vista']);
+      
+      $post = Model::list('posts', ['id' => $id], 1); // cargar el post
+      json_output(json_build(200, $post, 'Notificación actualizada.'));
 
     } catch (Exception $e) {
       json_output(json_build(400, null, $e->getMessage()));

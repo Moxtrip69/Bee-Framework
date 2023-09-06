@@ -44,7 +44,7 @@ class BeeHookManager
    * @param string $function
    * @return void
    */
-  public static function registerHook(string $hookName, string $function)
+  public static function registerHook(string $hookName, callable $function)
   {
     self::$hooks[$hookName][] = $function;
   }
@@ -64,11 +64,39 @@ class BeeHookManager
     // Validar si existe dentro del array de hooks para ejecutar
     if (isset(self::$hooks[$hookName])) {
       foreach (self::$hooks[$hookName] as $function) {
-        if (!function_exists($function)) continue;
+        // if (!function_exists($function)) continue; // Permitirá generar funciones anónimas de PHP
         
         call_user_func_array($function, $args);
       }
     }
+  }
+
+  public static function runOnce(string $hookName, ...$args)
+  {
+    // Registrar el hook en el listado
+    self::$hookList[] = $hookName;
+
+    // Validar si existe dentro del array de hooks para ejecutar
+    if (isset(self::$hooks[$hookName])) {
+      foreach (array_reverse(self::$hooks[$hookName]) as $function) {
+        call_user_func_array($function, $args);
+
+        break;
+      }
+    }
+  }
+
+  public static function getHookData(string $hookName, ...$args)
+  {
+    $hookData = [];
+
+    if (isset(self::$hooks[$hookName])) {
+      foreach (self::$hooks[$hookName] as $function) {
+        $hookData[] = call_user_func_array($function, $args);
+      }
+    }
+
+    return $hookData;
   }
 
   /**

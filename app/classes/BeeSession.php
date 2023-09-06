@@ -79,7 +79,7 @@ class BeeSession {
 		// Se verifica la existencia correcta de las constantes requeridas y variables
 		try {
 			if ($this->bee_cookies === false || !defined('BEE_COOKIES')) {
-				bee_die(sprintf('Es requerida la constante %s para poder trabajar con sesiones persistentes de %s', 'BEE_COOKIES', get_bee_name()));
+				bee_die(sprintf('Es requerida la constante %s para poder trabajar con sesiones persistentes de %s.', 'BEE_COOKIES', get_bee_name()));
 			} 
 
 			// Verificar que haya una conexión con la base de datos

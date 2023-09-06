@@ -46,10 +46,11 @@ class testController extends Controller implements ControllerInterface
     $dataset2->setData([28, 22, 35, 49, 84]);
     $dataset2->setBaseColor('#273c75', 0.4);
     $chart->addDataset($dataset2);
-
     //$image = $chart->saveToImage();
+
     $this->addToData('title', 'QuickCharts');
     $this->addToData('url'  , $chart->getUrl());
+    $this->setView('charts');
     $this->render();
   }
 
@@ -190,8 +191,14 @@ class testController extends Controller implements ControllerInterface
     $form->addHiddenField('id', 'El ID del usuario', ['form-control'], 'id', true, 123);
 
     // Nombre y apellidos
+    $form->addCustomFields('<div class="row">');
+    $form->addCustomFields('<div class="col-6">');
     $form->addTextField('nombre', 'Tu nombre', ['form-control'], 'nombre', true, 'Pancho');
+    $form->addCustomFields('</div>');
+    $form->addCustomFields('<div class="col-6">');
     $form->addTextField('apellido', 'Tu apellido', ['form-control'], 'apellido', true, 'Villa');
+    $form->addCustomFields('</div>');
+    $form->addCustomFields('</div>');
 
     // Correo electrónico
     $form->addEmailField('email', 'Correo electrónico', ['form-control'], 'email', true, 'pancho@doe.com');
@@ -227,24 +234,21 @@ class testController extends Controller implements ControllerInterface
 
     // Color
     $form->addColorField('color', 'Tu color favorito', ['form-control form-control-color'], 'color', false, 'fff');
-
-    // Agregando botones
-    $form->addButton('submit', 'submit', 'Enviar formulario', ['btn btn-success me-2'], 'submit-button');
-
+    
     // Fechas
     $form->addDateField('fecha', 'La fecha', date('Y-m-d'), ['form-control'], 'fecha', true);
+    
+    // Agregando botones
+    $form->addButton('submit', 'submit', 'Enviar formulario', ['btn btn-success me-2'], 'submit-button');
 
     $html   = $form->getFormHtml(); // El formulario en sí
     $script = $form->generateFetchScript(URL . 'api/form-builder', API_PRIVATE_KEY); // Script generado automaticamente para enviar los datos con AJAX
 
-    $data   =
-      [
-        'title'  => 'Vista de prueba',
-        'form'   => $html,
-        'script' => $script
-      ];
-
-    View::render('index', $data);
+    $this->setTitle('FormBuilder');
+    $this->addToData('form', $html);
+    $this->addToData('script', $script);
+    $this->setView('forms');
+    $this->render();
   }
 
   function db_user()
@@ -281,7 +285,7 @@ class testController extends Controller implements ControllerInterface
     try {
       // Si es requerido podemos hacer un drop table if exists
       // Model::drop($table_name); // Para borrar una tabla de la base de datos
-      $table_name = 'usuarios';
+      $table_name = 'panchoVilla';
 
       // Creamos un TableSchema
       $table      = new TableSchema($table_name);
@@ -296,7 +300,7 @@ class testController extends Controller implements ControllerInterface
       $res = Model::createTable($table);
       debug($res);
     } catch (PDOException $e) {
-      echo $e->getMessage();
+      echo 'Error' . $e->getMessage();
     } catch (Exception $e) {
       echo 'Error: ' . $e->getMessage();
     }

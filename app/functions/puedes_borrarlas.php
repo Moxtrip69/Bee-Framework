@@ -31,10 +31,3 @@ function decideTextColor($backgroundColor)
     return "#000000"; // Negro para colores oscuros
   }
 }
-
-function testing($param)
-{
-
-}
-
-BeeHookManager::registerHook('on_get_twig_filters', 'testing');

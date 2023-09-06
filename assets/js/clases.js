@@ -75,8 +75,10 @@ async function loadMemes() {
 
 const autosaveForm    = document.getElementById('autosaveForm');
 const btnSubmit       = document.getElementById('btnSubmit');
+const timerWrapper    = document.getElementById('timer');
 const statusMessage   = document.getElementById('statusMessage');
 const saving          = '<i class="fas fa-save fa-fw"></i> Guardando...';
+const autosaveIn      = 5000; // milisegundos
 
 const responseWrapper = document.getElementById('responseWrapper');
 
@@ -85,6 +87,37 @@ const titulo          = autosaveForm.querySelector('#titulo');
 const contenido       = autosaveForm.querySelector('#contenido');
 
 let autosaveTimer; // Variable para almacenar el temporizador
+let timer = 0; // Segundos transcurridos
+
+// Función para guardar un registro en la db
+async function save(payload) {
+  return await fetch('ajax/save', {
+    method: 'POST',
+    body  : JSON.stringify(payload)
+  })
+  .then(res => res.json())
+  .catch(error => alert(error));
+}
+
+// Mostrar el tiempo transcurrido
+function showTimer() {
+  setInterval(() => {
+    timer++;
+    timerWrapper.innerHTML = timer;
+  }, 1000);
+}
+showTimer();
+
+// Reiniciar el temporizador cada vez que el usuario interactúa
+function resetAutosaveTimer() {
+  clearTimeout(autosaveTimer);
+  autosaveTimer = setTimeout(autoSave, autosaveIn); // Guardar después de xyz segundos de inactividad
+  timer         = 0; // reiniciar el reloj
+}
+
+// Escuchar eventos de entrada en los campos
+titulo.addEventListener('input', resetAutosaveTimer);
+contenido.addEventListener('input', resetAutosaveTimer);
 
 // Función para guardar automáticamente
 async function autoSave() {
@@ -102,11 +135,14 @@ async function autoSave() {
   statusMessage.classList.remove('d-none', 'text-danger', 'text-muted');
   statusMessage.classList.add('text-muted');
 
-  // Guardar la noticia en la base de datos
-  const res = await saveEntry(payload);
+  // Desactivar el botón
+  btnSubmit.disabled = true;
 
-  responseWrapper.innerHTML = `<code>${JSON.stringify(res, null, 2)}</code>`;
-  responseWrapper.classList.remove('d-none');
+  // Guardar la noticia en la base de datos
+  const res = await save(payload);
+
+  // Activar el botón
+  btnSubmit.disabled = false;
 
   if (res.status !== 200) {
     toastr.error(res.msg);
@@ -114,6 +150,10 @@ async function autoSave() {
     statusMessage.classList.add('d-none');
     return;
   }
+
+  // Mostrar el bloque de código
+  responseWrapper.innerHTML = `<code>${JSON.stringify(res, null, 2)}</code>`;
+  responseWrapper.classList.remove('d-none');
 
   // Establecer el ID del registro
   id.value = res.data.id;
@@ -130,6 +170,7 @@ async function autoSave() {
   return true;
 }
 
+// Guardar al presionar el botón de guardado
 autosaveForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   
@@ -146,14 +187,11 @@ autosaveForm.addEventListener('submit', async (e) => {
     return;
   };
 
-  // Reiniciar el contador de autoguardado
-  resetAutosaveTimer();
-  
   // Desactivar el botón de guardado
   btnSubmit.disabled = true;
 
   // Guardar el registro en la base de datos
-  const res = await saveEntry(payload);
+  const res = await save(payload);
 
   if (res.status !== 200) {
     toastr.error(res.msg);
@@ -163,25 +201,8 @@ autosaveForm.addEventListener('submit', async (e) => {
   toastr.success(res.msg);
   btnSubmit.disabled = false;
 
-  // Volver a reiniciar hasta que se vuelva a estar inactivo
-  resetAutosaveTimer();
-})
+  // Borrar el timeout para que sólo empiece a contar de nuevo hasta que se haga input
+  clearInterval(autosaveTimer);
 
-async function saveEntry(payload) {
-  return await fetch('ajax/save', {
-    method: 'POST',
-    body  : JSON.stringify(payload)
-  })
-  .then(res => res.json())
-  .catch(error => alert(error));
-}
-
-// Reiniciar el temporizador cada vez que el usuario interactúa
-function resetAutosaveTimer() {
-  clearTimeout(autosaveTimer);
-  autosaveTimer = setTimeout(autoSave, 5000); // Guardar después de 5 segundos de inactividad
-}
-
-// Escuchar eventos de entrada en los campos
-titulo.addEventListener('input', resetAutosaveTimer);
-contenido.addEventListener('input', resetAutosaveTimer);
+  return true;
+});

@@ -56,7 +56,7 @@ class Db
         throw new Exception($e->getMessage());
       }
 
-      die(sprintf('No  hay conexión a la base de datos, hubo un error: %s', $e->getMessage()));
+      bee_db_die($e->getMessage()); // Muestra la vista especial para error de conexión
     }
   }
 

@@ -2071,7 +2071,7 @@ function get_new_password($password = null)
  * @param array $headers
  * @return mixed
  */
-function bee_die(string $message, $headers = [])
+function bee_die(string $error, $headers = [])
 {
 	if (empty($headers)) {
 		header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
@@ -2079,7 +2079,36 @@ function bee_die(string $message, $headers = [])
 		header("Pragma: no-cache");
 	}
 
-	die($message);
+	$data =
+	[
+		'title' => 'Hubo un error',
+		'error' => $error
+	];
+
+	$html = get_module('bee/generalError', $data);
+	die($html);
+}
+
+/**
+ * Nueva función para mostrar una vista especial para errores de conexión a la base de datos
+ *
+ * @param string $error
+ * @return void
+ */
+function bee_db_die(string $error)
+{
+	header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+	header("Cache-Control: post-check=0, pre-check=0", false);
+	header("Pragma: no-cache");
+
+	$data =
+	[
+		'title' => 'Error en la base de datos',
+		'error' => $error
+	];
+
+	echo get_module('bee/dbError', $data);
+	die();
 }
 
 /**

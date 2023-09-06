@@ -46,8 +46,14 @@ class clasesController extends Controller implements ControllerInterface {
 
     register_scripts([JS . 'clases.js?v=' . get_asset_version()], 'Scripts para las clases en vivo');
   }
-  
+
   function index()
+  {
+    $this->setTitle('Clases en vivo');
+    $this->render();
+  }
+  
+  function pdf()
   {
     $conceptos =
     [
@@ -84,7 +90,7 @@ class clasesController extends Controller implements ControllerInterface {
 
     $this->setTitle('Clases en vivo');
     $this->addToData('concepts', $conceptos);
-    $this->setView('index');
+    $this->setView('pdf');
     $this->render();
   }
 
@@ -192,11 +198,11 @@ class clasesController extends Controller implements ControllerInterface {
   {
     // Creamos el formulario para nuestras noticias
     $form = new BeeFormBuilder('autosave-form', 'autosaveForm');
-    $form->addTextField('titulo', 'Título de la noticia', ['form-control'], 'titulo');
+    $form->addTextField('titulo', 'Título de la noticia <i class="fas fa-check"></i>', ['form-control'], 'titulo');
     $form->addHiddenField('id', 'ID', ['form-control'], 'id');
     $form->addTextareaField('contenido', 'Cuerpo de la noticia', 5, 10, ['form-control'], 'contenido');
     $form->addCustomFields(insert_inputs());
-    $form->addButton('submit', 'submit', 'Guardar noticia', ['btn btn-success'], 'btnSubmit');
+    $form->addButton('submit', 'submit', '<i class="fas fa-save"></i> Guardar noticia', ['btn btn-success'], 'btnSubmit');
 
     // Nueva forma de trabajar la lógica de las rutas
     $this->addToData('title', 'Autoguardado');
@@ -282,5 +288,12 @@ class clasesController extends Controller implements ControllerInterface {
       Flasher::error($e->getMessage());
       Redirect::back();
     }
+  }
+
+  function notificaciones()
+  {
+    $this->setTitle('Notificaciones con SSE');
+    $this->setView('ssenots');
+    $this->render();
   }
 }

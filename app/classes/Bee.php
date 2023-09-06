@@ -108,36 +108,41 @@ class Bee
     $this->init_load_composer(); // Carga las dependencias de composer
     $this->init_autoload(); // Inicializa el cargador de nuestras clases
     $this->init_load_functions();
-    BeeHookManager::runHook('init_set_up', $this);
-    BeeHookManager::runHook('after_functions_loaded');
-
-    /**
-     * Se ha actualizado el orden de ejecución para poder
-     * filtrar las peticiones en caso de ser necesario
-     * como un middleware, así se tiene ya disponible desde el inicio que controlador, método y parámetros
-     * pasa el usuario, y pueden ser usados desde antes
-     * @since 1.1.4
-     */
-    $this->init_filter_url();
-    $this->init_set_defaults();
-
-    /**
-     * Inicialización de globales del framework, token csrf y autentificación
-     */
-    $this->init_csrf();
-    $this->init_globals();
-    BeeHookManager::runHook('after_init_globals');
-    $this->init_authentication();
-    $this->init_set_globals();
-    BeeHookManager::runHook('after_set_globals');
-    $this->init_custom();
-    BeeHookManager::runHook('after_init_custom');
-
-    /**
-     * Se hace ejecución de todo nuestro framework
-     */
-    BeeHookManager::runHook('before_init_dispatch', $this->current_controller, $this->current_method, $this->params);
-    $this->init_dispatch();
+    
+    try {
+      BeeHookManager::runHook('init_set_up', $this);
+      BeeHookManager::runHook('after_functions_loaded');
+      /**
+       * Se ha actualizado el orden de ejecución para poder
+       * filtrar las peticiones en caso de ser necesario
+       * como un middleware, así se tiene ya disponible desde el inicio que controlador, método y parámetros
+       * pasa el usuario, y pueden ser usados desde antes
+       * @since 1.1.4
+       */
+      $this->init_filter_url();
+      BeeHookManager::runHook('after_init_filter_url', $this->uri);
+      $this->init_set_defaults();
+  
+      /**
+       * Inicialización de globales del framework, token csrf y autentificación
+       */
+      $this->init_csrf();
+      $this->init_globals();
+      BeeHookManager::runHook('after_init_globals');
+      $this->init_authentication();
+      $this->init_set_globals();
+      BeeHookManager::runHook('after_set_globals');
+      $this->init_custom();
+      BeeHookManager::runHook('after_init_custom');
+  
+      /**
+       * Se hace ejecución de todo nuestro framework
+       */
+      BeeHookManager::runHook('before_init_dispatch', $this->current_controller, $this->current_method, $this->params);
+      $this->init_dispatch();
+    } catch (Exception $e) {
+      bee_die($e->getMessage());
+    }
   }
 
   /**
@@ -405,7 +410,6 @@ class Bee
       $this->uri = rtrim($this->uri, '/');
       $this->uri = filter_var($this->uri, FILTER_SANITIZE_URL);
       $this->uri = explode('/', $this->uri);
-      return $this->uri;
     }
 
     return $this->uri;

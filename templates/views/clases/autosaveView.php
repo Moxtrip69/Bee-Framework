@@ -6,7 +6,7 @@
     <div class="col-12 col-md-6 col-lg-12">
       <div class="card">
         <div class="card-header d-flex flex-row justify-content-between align-items-center">
-          <h5 class="m-0"><?php echo $d->title; ?></h5>
+          <h5 class="m-0"><?php echo $d->title; ?> <span id="timer"></span></h5>
           <span id="statusMessage" class="d-none"></span>
         </div>
         <div class="card-body">
