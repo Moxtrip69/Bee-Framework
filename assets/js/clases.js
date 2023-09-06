@@ -3,12 +3,12 @@
  * @returns void
  */
 async function loadMemes() {
-  const loading      = '<i class="fas fa-spinner fa-spin"></i> Cargando...';
+  const loading = '<i class="fas fa-spinner fa-spin"></i> Cargando...';
   const memesWrapper = document.getElementById('memesWrapper');
-  const memesBtn     = document.getElementById('loadMemes');
+  const memesBtn = document.getElementById('loadMemes');
   const memesBtnText = memesBtn.innerHTML;
-  const page         = parseInt(memesBtn.dataset.page);
-  const payload      = {
+  const page = parseInt(memesBtn.dataset.page);
+  const payload = {
     csrf: Bee.csrf,
     page,
     query: 'memes gym'
@@ -16,7 +16,7 @@ async function loadMemes() {
 
   // Primero vamos a probar como es cargada la información
   memesBtn.innerHTML = loading;
-  memesBtn.disabled  = true;
+  memesBtn.disabled = true;
   const memes = await fetch('ajax/load-memes', {
     method: 'POST',
     body: JSON.stringify(payload)
@@ -34,20 +34,20 @@ async function loadMemes() {
   row.classList.add('row', 'g-3');
 
   memes.data.forEach((meme) => {
-    const img          = document.createElement('img');
+    const img = document.createElement('img');
     img.classList.add('w-100');
-    img.src            = meme;
+    img.src = meme;
 
-    const link         = document.createElement('a');
+    const link = document.createElement('a');
     link.classList.add('border', 'rounded', 'overflow-hidden', 'd-flex', 'align-items-center', 'bg-white');
-    link.href          = meme;
-    link.target        = '_blank';
+    link.href = meme;
+    link.target = '_blank';
     link.style.display = 'block';
-    link.style.width   = '100%';
-    link.style.height  = '100%';
+    link.style.width = '100%';
+    link.style.height = '100%';
     link.appendChild(img);
 
-    const div          = document.createElement('div');
+    const div = document.createElement('div');
     div.classList.add('col-6', 'col-md-3', 'col-xl-2');
     div.appendChild(link);
 
@@ -58,7 +58,7 @@ async function loadMemes() {
 
   memesBtn.setAttribute('data-page', page + 1);
   memesBtn.innerHTML = `Siguiente página ${memesBtn.dataset.page}`;
-  memesBtn.disabled  = false;
+  memesBtn.disabled = false;
 }
 
 // loadMemes();
@@ -68,141 +68,115 @@ async function loadMemes() {
 //////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
-////////////////// CLASE EN VIVO 7: AUTOGUARDADO
+////////////////// CLASES EN VIVO
 //////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
 
-const autosaveForm    = document.getElementById('autosaveForm');
-const btnSubmit       = document.getElementById('btnSubmit');
-const timerWrapper    = document.getElementById('timer');
-const statusMessage   = document.getElementById('statusMessage');
-const saving          = '<i class="fas fa-save fa-fw"></i> Guardando...';
-const autosaveIn      = 5000; // milisegundos
+const generarNot  = document.getElementById('generarNot');
+const notWrapper  = document.getElementById('notWrapper');
+const notTotal    = document.getElementById('notTotal');
+const notList     = document.getElementById('notList');
+const eventSource = new EventSource('ajax/sse');
+const audio       = new Audio(`${Bee.uploaded}alerta.mp3`);
 
-const responseWrapper = document.getElementById('responseWrapper');
+eventSource.onmessage = event => {
+  const res            = JSON.parse(event.data);
+  const totales        = res.data.totales;
+  const pendientes     = res.data.pendientes;
+  const cargadas       = res.data.cargadas;
+  const vistas         = res.data.vistas;
+  const notificaciones = res.data.notificaciones;
 
-const id              = autosaveForm.querySelector('#id');
-const titulo          = autosaveForm.querySelector('#titulo');
-const contenido       = autosaveForm.querySelector('#contenido');
+  if (res.status !== 200) {
+    notTotal.innerHTML = 0;
+    notList.innerHTML = `<li class="dropdown-item">${res.msg}</li>`;
+    return;
+  }
 
-let autosaveTimer; // Variable para almacenar el temporizador
-let timer = 0; // Segundos transcurridos
+  // Si no hay notificaciones
+  if (totales === 0) {
+    notTotal.innerHTML = 0;
+    notList.innerHTML = `<li class="dropdown-item">No hay notificaciones.</li>`;
+    return;
+  }
 
-// Función para guardar un registro en la db
-async function save(payload) {
-  return await fetch('ajax/save', {
+  // Muestra la notificación en un elemento HTML
+  notList.innerHTML = '';
+  notificaciones.forEach(notificacion => {
+    // Crear un elemento HTML para la notificación
+    const notificacionElemento = document.createElement("li");
+    notificacionElemento.classList.add('dropdown-item');
+
+    // Agregar el contenido de la notificación
+    notificacionElemento.innerHTML = notificacion.titulo;
+
+    // Si no ha sido vista aún
+    if (notificacion.status !== 'vista') {
+      notificacionElemento.classList.add('bg-light', 'text-dark');
+
+      // Agrega un manejador de eventos para el hover
+      notificacionElemento.addEventListener("mouseenter", async function (e) {
+        // Actualiza el estado de la notificación en la base de datos
+        const res = await actualizarNotificacion(notificacion.id);
+        if (res.status !== 200) {
+          return;
+        }
+
+        // Actualizar los estilos del elemento
+        notificacionElemento.classList.remove('bg-light', 'text-dark');
+
+        // Restar uno al total de notificaciones
+        notTotal.innerHTML = parseInt(notTotal.innerHTML) - 1;
+      });
+    }
+
+    // Agregar la notificación al contenedor de notificaciones
+    notList.appendChild(notificacionElemento);
+  });
+
+  // Actualizar la burbuja de nuevas notificaciones
+  notTotal.innerHTML = totales - vistas;
+
+  // Reproducir el sonido de notificaciones sólo si hay nuevas
+  if (pendientes > 0) {
+    audio.play();
+  }
+};
+
+async function actualizarNotificacion(id) {
+  const payload = {
+    csrf: Bee.csrf,
+    id: id
+  }
+  return await fetch('ajax/actualizar-notificacion', {
     method: 'POST',
-    body  : JSON.stringify(payload)
+    body: JSON.stringify(payload)
   })
-  .then(res => res.json())
-  .catch(error => alert(error));
+    .then(res => res.json())
+    .catch(err => alert(err));
 }
 
-// Mostrar el tiempo transcurrido
-function showTimer() {
-  setInterval(() => {
-    timer++;
-    timerWrapper.innerHTML = timer;
-  }, 1000);
-}
-showTimer();
-
-// Reiniciar el temporizador cada vez que el usuario interactúa
-function resetAutosaveTimer() {
-  clearTimeout(autosaveTimer);
-  autosaveTimer = setTimeout(autoSave, autosaveIn); // Guardar después de xyz segundos de inactividad
-  timer         = 0; // reiniciar el reloj
-}
-
-// Escuchar eventos de entrada en los campos
-titulo.addEventListener('input', resetAutosaveTimer);
-contenido.addEventListener('input', resetAutosaveTimer);
-
-// Función para guardar automáticamente
-async function autoSave() {
+generarNot.addEventListener('click', generarNotificacion);
+async function generarNotificacion(e) {
   const payload = {
-    csrf     : Bee.csrf,
-    id       : id.value.trim(),
-    titulo   : titulo.value.trim(),
-    contenido: contenido.value.trim()
+    csrf: Bee.csrf
   };
 
-  // Validar que haya contenido
-  if (payload.titulo == '' && payload.contenido == '') return;
+  generarNot.disabled = true;
+  const res = await fetch('ajax/generar-notificacion', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  })
+    .then(res => res.json())
+    .catch(err => alert(err));
 
-  statusMessage.innerHTML = saving;
-  statusMessage.classList.remove('d-none', 'text-danger', 'text-muted');
-  statusMessage.classList.add('text-muted');
-
-  // Desactivar el botón
-  btnSubmit.disabled = true;
-
-  // Guardar la noticia en la base de datos
-  const res = await save(payload);
-
-  // Activar el botón
-  btnSubmit.disabled = false;
-
-  if (res.status !== 200) {
-    toastr.error(res.msg);
-    statusMessage.innerHTML = '';
-    statusMessage.classList.add('d-none');
-    return;
-  }
-
-  // Mostrar el bloque de código
-  responseWrapper.innerHTML = `<code>${JSON.stringify(res, null, 2)}</code>`;
-  responseWrapper.classList.remove('d-none');
-
-  // Establecer el ID del registro
-  id.value = res.data.id;
-
-  // Mensajes de éxito
-  toastr.success(res.msg, 'Autoguardado');
-  statusMessage.innerHTML = `<i class="fas fa-check fa-fw"></i> ${res.msg}`;
-  statusMessage.classList.add('text-success');
-  setTimeout(() => {
-    statusMessage.innerHTML = '';
-    statusMessage.classList.add('d-none');
-  }, 2500);
-  
-  return true;
-}
-
-// Guardar al presionar el botón de guardado
-autosaveForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  
-  const payload = {
-    csrf     : Bee.csrf,
-    id       : id.value.trim(),
-    titulo   : titulo.value.trim(),
-    contenido: contenido.value.trim()
-  };
-
-  // Validar que haya contenido
-  if (payload.titulo == '') {
-    toastr.error('Completa el título de la noticia por favor.');
-    return;
-  };
-
-  // Desactivar el botón de guardado
-  btnSubmit.disabled = true;
-
-  // Guardar el registro en la base de datos
-  const res = await save(payload);
-
-  if (res.status !== 200) {
+  if (res.status !== 201) {
     toastr.error(res.msg);
     return;
   }
 
-  toastr.success(res.msg);
-  btnSubmit.disabled = false;
-
-  // Borrar el timeout para que sólo empiece a contar de nuevo hasta que se haga input
-  clearInterval(autosaveTimer);
-
-  return true;
-});
+  generarNot.disabled = false;
+  toastr.success(res.msg, 'Notificación generada');
+  return;
+}
