@@ -15,7 +15,7 @@ class TableSchema
 
   public function __construct(string $table_name, string $engine = null, string $charset = null)
   {
-    $this->table_name = $table_name;
+    $this->table_name = strtolower(str_replace(' ', '_', $table_name));
     $this->engine     = $engine !== null ? $engine : $this->engine;
     $this->charset    = $charset !== null ? $charset : $this->charset;
   }
@@ -230,5 +230,15 @@ class TableSchema
   public function get_sql()
   {
     return $this->build();
+  }
+
+  /**
+   * Regresa el nombre de la tabla
+   *
+   * @return void
+   */
+  public function getTableName()
+  {
+    return $this->table_name;  
   }
 }

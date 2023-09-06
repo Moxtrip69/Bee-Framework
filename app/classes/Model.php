@@ -180,10 +180,10 @@ class Model extends Db {
 	 * @param string $table
 	 * @return bool
 	 */
-	public static function truncateTable($table)
+	public static function truncateTable(string $table)
 	{
-		$sql = sprintf('TRUNCATE TABLE %s', clean($table, true));
-		return parent::query($sql);
+		$sql = sprintf('TRUNCATE TABLE %s', $table);
+		return parent::query($sql, [], ['transaction' => false]);
 	}
 
 	/**
@@ -195,8 +195,12 @@ class Model extends Db {
 	 */
 	public static function createTable(TableSchema $schema)
 	{
+		if (self::table_exists($schema->getTableName())) {
+			throw new Exception(sprintf('La tabla %s ya existe.', $schema->getTableName()));
+		}
+		
 		$sql = $schema->get_sql();
-		return parent::query($sql);
+		return parent::query($sql, [], ['transaction' => false]);
 	}
 
 	/**

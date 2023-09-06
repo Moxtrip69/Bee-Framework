@@ -140,6 +140,28 @@ class BeePdf
 	}
 
 	/**
+	 * Establece el tamaño del documento
+	 *
+	 * @param string $size
+	 * @return void
+	 */
+	function setSize(string $size)
+	{
+		$this->size = $size;
+	}
+
+	/**
+	 * Establece la orientación del documento disponible portrait y landscape
+	 *
+	 * @param string $orientation
+	 * @return void
+	 */
+	function setOrientation(string $orientation)
+	{
+		$this->orientation = $orientation;
+	}
+
+	/**
 	 * Método setter para las propiedades
 	 *
 	 * @param string $key

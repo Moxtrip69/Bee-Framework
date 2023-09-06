@@ -285,7 +285,7 @@ class testController extends Controller implements ControllerInterface
     try {
       // Si es requerido podemos hacer un drop table if exists
       // Model::drop($table_name); // Para borrar una tabla de la base de datos
-      $table_name = 'panchoVilla';
+      $table_name = 'reportes';
 
       // Creamos un TableSchema
       $table      = new TableSchema($table_name);
@@ -352,11 +352,13 @@ class testController extends Controller implements ControllerInterface
       $content = sprintf($content, get_bee_logo(), get_bee_name(), get_bee_name(), get_bee_version());
 
       // Método 1
-      $pdf = new BeePdf($content); // Se muestra directo en navegador, para descargar pasar en parámetro 2 true y para guardar en parámetro 3 true
+      // $pdf = new BeePdf($content); // Se muestra directo en navegador, para descargar pasar en parámetro 2 true y para guardar en parámetro 3 true
 
       // Método 2
-      //$pdf = new BeePdf();
-      //$pdf->create('bee_pdfs', $content);
+      $pdf = new BeePdf();
+      $pdf->setOrientation('landscape'); // Nuevos método para establecer la orientación
+      $pdf->setSize('A6'); // Nuevo método para establecer el tamaño
+      $pdf->create('bee_pdfs', $content);
 
     } catch (Exception $e) {
       Flasher::new($e->getMessage(), 'danger');

@@ -41,7 +41,7 @@ class Db
    *
    * @return mixed
    */
-  public static function connect($throw_exception = false) 
+  public static function connect(bool $throw_exception = false) 
   {
     try {
       $self       = new self();
@@ -68,7 +68,7 @@ class Db
    * @param integer $transaction
    * @return mixed
    */
-  public static function query($sql, $params = [], $options = [])
+  public static function query(string $sql, array $params = [], array $options = [])
   {
     $id          = null;
     $last_id     = false;
