@@ -13,6 +13,7 @@ Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y 
 
 ## Changelog
 ### v 1.5.8
+- Revisa el curso oficial sobre esta versión de **Bee framework 1.5.8** dando clic [aquí](https://www.academy.joystick.com.mx/courses/novedades-bee-framework-1-5-8-mejoras-y-actualizaciones).
 - El controlador principal **Controller.php** se ha mejorado y hemos ampliado la forma en que se usa, ahora es posible usarlo para configurar cada nuevo controlador de diferentes maneras, puede ser un *endpoint* para talvez una API, *ajax* o *regular* como un controlador común, ahora tenemos a nuestra disposición nuevos métodos para trabajar de forma orientada a objetos la implementación, el renderizado de la vista, asignación de **$data** pasada a la vista y mucho más, haciendo todo más mantenible y escalable.
 ```php
 class productosController extends Controller implements ControllerInterface {
