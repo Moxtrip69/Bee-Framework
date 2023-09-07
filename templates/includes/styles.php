@@ -6,6 +6,9 @@
 
 <!-- Todo plugin adicional debe ir debajo de está línea -->
 
+<!-- Sweet alert 2 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.27/dist/sweetalert2.min.css">
+
 <!-- Toastr css -->
 <?php echo get_toastr('styles'); ?>
 

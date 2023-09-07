@@ -1896,7 +1896,7 @@ function get_sweetalert2()
 	}
 
 	$placeholder = '<script src="%s"></script>';
-	$cdn         = '//cdn.jsdelivr.net/npm/sweetalert2@11';
+	$cdn         = 'https://cdn.jsdelivr.net/npm/sweetalert2@11.7.27/dist/sweetalert2.all.min.js';
 
 	return SWEETALERT2 === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
 }
