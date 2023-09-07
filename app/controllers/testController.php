@@ -46,7 +46,13 @@ class testController extends Controller implements ControllerInterface
     $dataset2->setData([28, 22, 35, 49, 84]);
     $dataset2->setBaseColor('#273c75', 0.4);
     $chart->addDataset($dataset2);
-    //$image = $chart->saveToImage();
+
+    $dataset3 = new BeeQuickChartDataset();
+    $dataset3->setLabel('Utilidades');
+    $dataset3->setData([15, 18, 30, 38, 55]);
+    $dataset3->setBaseColor('#273c75', 0.8);
+    $chart->addDataset($dataset3);
+    // $image = $chart->saveToImage();
 
     $this->addToData('title', 'QuickCharts');
     $this->addToData('url'  , $chart->getUrl());

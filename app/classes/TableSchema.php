@@ -235,7 +235,7 @@ class TableSchema
   /**
    * Regresa el nombre de la tabla
    *
-   * @return void
+   * @return string
    */
   public function getTableName()
   {

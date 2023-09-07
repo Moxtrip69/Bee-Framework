@@ -359,6 +359,12 @@ class BeeHttp
     $this->csrf = isset($this->data['csrf']) ? $this->data['csrf'] : null;
   }
 
+  /**
+   * Establece el tipo de llamada o petición realizada
+   *
+   * @param string $callType
+   * @return void
+   */
   function setCallType(string $callType)
   {
     $this->call = $callType;

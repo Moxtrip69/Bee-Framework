@@ -15,7 +15,7 @@ class Model extends Db {
    * @param integer $limit
    * @return mixed
    */
-	public static function list($table, $params = [], $limit = null)
+	public static function list(string $table, array $params = [], ?int $limit = null)
 	{	
 		// It creates the col names and values to bind
 		$cols_values = "";
@@ -51,7 +51,7 @@ class Model extends Db {
 	* @var string | array
 	* @return bool
 	**/
-	public static function add($table, $params)
+	public static function add(string $table, array $params)
 	{	
 		$cols         = "";
 		$placeholders = "";
@@ -84,7 +84,7 @@ class Model extends Db {
 	* @var string | array
 	* @return bool
 	**/
-	public static function update($table, $haystack = [] , $params = [])
+	public static function update(string $table, array $haystack = [] , array $params = [])
 	{	
 		$placeholders = "";
 		$col          = "";
@@ -128,7 +128,7 @@ class Model extends Db {
    * @param integer $limit
    * @return void
    */
-  public static function remove($table, $params = [], $limit = null)
+  public static function remove(string $table, array $params = [], ?int $limit = null)
 	{	
 		// It creates the col names and values to bind
 		$cols_values = "";
@@ -170,7 +170,7 @@ class Model extends Db {
 	public static function dropTable(string $table, bool $if_exists = true)
 	{
 		$sql = sprintf('DROP TABLE %s %s', $if_exists === true ? 'IF EXISTS' : null, $table);
-		return parent::query($sql);
+		return parent::query($sql, [], ['transaction' => false]);
 	}
 
 	/**
@@ -251,7 +251,7 @@ class Model extends Db {
 	 * @param string $table
 	 * @return bool
 	 */
-	public static function table_exists($table)
+	public static function table_exists(string $table)
 	{
 		$tables = self::list_tables();
 
