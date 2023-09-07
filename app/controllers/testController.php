@@ -27,6 +27,16 @@ class testController extends Controller implements ControllerInterface
     $this->render();
   }
 
+  function paginacion()
+  {
+    $pag = new PaginationHandler;
+    $pag->setBaseQuery('SELECT * FROM pruebas ORDER BY id');
+    $pag->setRecordsPerPage(2);
+    $pag->setGetVariable('p');
+    $pag->setDirection('ASC');
+    debug($pag->launch());
+  }
+
   function quickcharts()
   {
     $chart = new BeeQuickChart('bar');

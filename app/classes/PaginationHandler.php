@@ -16,7 +16,7 @@ class PaginationHandler extends Model
 	private $params     = [];
 	private $rows       = [];
 	private $offset;
-	private $limit      = 25;
+	private $limit      = 20;
 	private $pattern    = '';
 	private $pages      = 0;
 	private $page       = 0;
@@ -37,6 +37,55 @@ class PaginationHandler extends Model
 		$this->pattern = CUR_PAGE;
 	}
 
+	/**
+	 * Establece el query base para la base de datos
+	 *
+	 * @param string $query
+	 * @return void
+	 */
+	function setBaseQuery(string $query)
+	{
+		$this->query = $query;	
+	}
+
+	/**
+	 * Establece el límite de registros
+	 *
+	 * @param integer $rpp
+	 * @return void
+	 */
+	function setRecordsPerPage(int $rpp)
+	{
+		$this->limit = $rpp;
+	}
+
+	/**
+	 * Establece el valor de la variable usada en los parámetros GET de la petición
+	 *
+	 * @param string $variable
+	 * @return void
+	 */
+	function setGetVariable(string $variable)
+	{
+		$this->variable = $variable;
+	}
+
+	/**
+	 * Establece la dirección de los resultados regresados
+	 *
+	 * @param string $direction
+	 * @return void
+	 */
+	function setDirection(string $direction)
+	{
+		$this->direction = strtoupper($direction);
+	}
+
+	/**
+	 * Regresa el total de filas encontradas
+	 *
+	 * @return int
+	 */
 	public function get_total_rows()
 	{
 		$counted     = parent::query($this->query, $this->params);
@@ -44,12 +93,22 @@ class PaginationHandler extends Model
 		return $this->total;
 	}
 
+	/**
+	 * Calcula el total de páginas necesarias
+	 *
+	 * @return int
+	 */
 	public function calculate_pages()
 	{
 		$this->pages = ceil($this->total / $this->limit);
 		return $this->pages;
 	}
 
+	/**
+	 * Regresa la página actual
+	 *
+	 * @return int
+	 */
 	public function current_page()
 	{
 		$this->page = min($this->pages, filter_input(INPUT_GET, $this->variable, FILTER_VALIDATE_INT, array("options" => array("default" => 1, "min" => 1))));
@@ -57,6 +116,11 @@ class PaginationHandler extends Model
 		return $this->page;
 	}
 
+	/**
+	 * Calcula el offset necesario basado en el límite y total de registros por página
+	 *
+	 * @return int
+	 */
 	public function calculate_offset()
 	{
 		$this->offset = ($this->page - 1) * $this->limit; // 1 - 1 = 0 * 5 = 0
@@ -65,14 +129,25 @@ class PaginationHandler extends Model
 		return $this->offset;
 	}
 
+	/**
+	 * Regresa las filas encontradas
+	 *
+	 * @return mixed
+	 */
 	public function get_rows()
 	{
+		$this->query .= strpos($this->query, 'ASC') === false && strpos($this->query, 'DESC') === false ? " {$this->direction}" : '';
 		$this->query .= " LIMIT {$this->offset}, {$this->limit}";
 		$this->rows   = parent::query($this->query, $this->params);
 		return $this->rows;
 	}
 
-	public function create_pagination()
+	/**
+	 * Crea la navegación para paginar
+	 *
+	 * @return string
+	 */
+	private function create_pagination()
 	{
 		$pagination = '<ul class="mt-5 pagination ' . $this->alignment . '">';
 		$pagination .=
@@ -101,6 +176,11 @@ class PaginationHandler extends Model
 		return $this->pagination;
 	}
 
+	/**
+	 * Regresa el array con información de registros, páginas y navegación
+	 *
+	 * @return array
+	 */
 	public function launch()
 	{
 		return
@@ -114,7 +194,16 @@ class PaginationHandler extends Model
 		];
 	}
 
-	public static function paginate($sql, $params = [], $rpp = 20)
+	/**
+	 * Genera un query de paginación y procesa los elementos regresando
+	 * la navegación y registros encontrados
+	 *
+	 * @param string $sql
+	 * @param array $params
+	 * @param integer $rpp
+	 * @return array
+	 */
+	public static function paginate(string $sql, array $params = [], int $rpp = 20)
 	{
 		$self         = new self();
 		$self->query  = $sql;
