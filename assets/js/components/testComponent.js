@@ -17,11 +17,11 @@ export const testComponent = {
         method: 'GET'
       }).then(res => res.json());
 
-      if (res.status === 200) {
-        this.post = res.data;
-      } else {
+      if (res.status !== 200) {
         toastr.error(res.msg);
       }
+      
+      this.post = res.data;
     }
   },
   template:

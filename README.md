@@ -14,6 +14,18 @@ Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y 
 ## Changelog
 ### v 1.5.8
 - Revisa el curso oficial sobre esta versión de **Bee framework 1.5.8** dando clic [aquí](https://www.academy.joystick.com.mx/courses/novedades-bee-framework-1-5-8-mejoras-y-actualizaciones).
+- Nueva clase **BeeRoleManager** para gestión de roles y permisos, un sistema muy flexible y escalable para gestionar el acceso de usuarios con diferentes roles y permisos asignados por role. Es necesario *actualizar la base de datos* con un nuevo esquema que incluye *3 tablas nuevas*: **bee_roles, bee_permisos y bee_roles_permisos**, requiere usar el archivo *db_beeframework.sql*.
+```php
+// El uso es muy sencillo, todo se basa en el slug del role y los permisos asignados al role, con el handler puedes hacer todas las tareas necesarias, desde agregar nuevos, roles, actualizar, borrar, asignar permisos, crear permisos, borrar permisos.
+$userRole = 'vendedor';
+$role     = new BeeRoleManager($userRole);
+
+if ($role->can('agregar-ventas')) {
+  echo '¡Bienvenido, puedes agregar ventas!';
+} else {
+  echo 'No puedes agregar más ventas.';
+}
+```
 - El controlador principal **Controller.php** se ha mejorado y hemos ampliado la forma en que se usa, ahora es posible usarlo para configurar cada nuevo controlador de diferentes maneras, puede ser un *endpoint* para talvez una API, *ajax* o *regular* como un controlador común, ahora tenemos a nuestra disposición nuevos métodos para trabajar de forma orientada a objetos la implementación, el renderizado de la vista, asignación de **$data** pasada a la vista y mucho más, haciendo todo más mantenible y escalable.
 ```php
 class productosController extends Controller implements ControllerInterface {

@@ -273,6 +273,8 @@ class ajaxController extends Controller implements ControllerInterface {
         Model::update('posts', ['id' => $id], $data);
 
       }
+
+      
       
       $post = Model::list('posts', ['id' => $id], 1); // cargar el post
       json_output(json_build(200, $post, 'Noticia guardada con éxito.'));
@@ -282,6 +284,15 @@ class ajaxController extends Controller implements ControllerInterface {
     }
   }
 
+  
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////// INSERTA TUS MÉTODOS DESPUÉS DE ESTE BLOQUE
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
   function generar_notificacion()
   {
     try {
@@ -311,6 +322,32 @@ class ajaxController extends Controller implements ControllerInterface {
       $post = Model::list('posts', ['id' => $id], 1); // cargar el post / notificación
 
       json_output(json_build(201, $post, $notificacion));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function actualizar_notificacion()
+  {
+    try {
+      if (!check_posted_data(['id'], $this->data)) {
+        throw new Exception('Parámetros faltantes.');
+      }
+
+      // Sanitización del input del usuario
+      array_map('sanitize_input', $this->data);
+      $id        = empty($this->data['id']) ? null : $this->data['id'];
+
+      // Verificar si existe la notificación en la base de datos
+      if (!$notificacion = Model::list('posts', ['id' => $id], 1)) {
+        throw new Exception('No existe la notificación en la base de datos.');
+      }
+
+      Model::update('posts', ['id' => $id], ['status' => 'vista']);
+      
+      $post = Model::list('posts', ['id' => $id], 1); // cargar el post
+      json_output(json_build(200, $post, 'Notificación actualizada.'));
 
     } catch (Exception $e) {
       json_output(json_build(400, null, $e->getMessage()));
@@ -367,37 +404,131 @@ class ajaxController extends Controller implements ControllerInterface {
     flush();
   }
 
-  function actualizar_notificacion()
+  function cargar_reportes()
+  {
+    $sql = 'SELECT * FROM posts WHERE tipo IN("reporte") ORDER BY id DESC';
+    $reportes = Model::query($sql);
+    
+    json_output(json_build(200, $reportes));
+  }
+
+  function levantar_reporte()
   {
     try {
-      if (!check_posted_data(['id'], $this->data)) {
-        throw new Exception('Parámetros faltantes.');
+      // Validar que recibimos los parámetros necesarios
+      if (!check_posted_data(['nombre','email','problema'], $this->data)) {
+        throw new Exception('Completa el formulario por favor.');
       }
 
-      // Sanitización del input del usuario
+      // Inicializar el array de información a insertar o actualizar
       array_map('sanitize_input', $this->data);
-      $id        = empty($this->data['id']) ? null : $this->data['id'];
+      $folio    = uniqid();
+      $nombre   = $this->data['nombre'];
+      $email    = $this->data['email'];
+      $problema = $this->data['problema'];
+      $imagen   = $this->files['imagen'];
 
-      // Verificar si existe la notificación en la base de datos
-      if (!$notificacion = Model::list('posts', ['id' => $id], 1)) {
-        throw new Exception('No existe la notificación en la base de datos.');
+      // Validar imagen en general
+      if ($imagen['error'] !== 0) {
+        throw new Exception('Selecciona una imagen válida para continuar.');
       }
 
-      Model::update('posts', ['id' => $id], ['status' => 'vista']);
-      
-      $post = Model::list('posts', ['id' => $id], 1); // cargar el post
-      json_output(json_build(200, $post, 'Notificación actualizada.'));
+      // Guardar imagen en el servidor
+      $tmp     = $imagen['tmp_name'];
+      $ext     = pathinfo($imagen['name'], PATHINFO_EXTENSION);
+      $nImagen = generate_filename() . '.' . $ext;
+
+      if (!move_uploaded_file($tmp, UPLOADS . $nImagen)) {
+        throw new Exception('Hubo un error al subir la imagen.');
+      }
+
+      $data     =
+      [
+        'tipo'       => 'reporte',
+        'titulo'     => sprintf('Reporte #%s', $folio),
+        'permalink'  => $folio,
+        'contenido'  => sprintf('Nombre: %s, Correo electrónico: %s, Reporte del problema: %s', $nombre, $email, $problema),
+        'mime_type'  => $nImagen,
+        'status'     => 'pendiente',
+        'creado'     => now()
+      ];
+
+      // Verificar si ya existe el post en la base de datos
+      $id      = Model::add('posts', $data);
+      $reporte = Model::list('posts', ['id' => $id], 1); // cargar el post
+
+      json_output(json_build(201, $reporte, 'Nuevo reporte levantado con éxito.'));
 
     } catch (Exception $e) {
       json_output(json_build(400, null, $e->getMessage()));
     }
   }
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //////////// INSERTA TUS MÉTODOS DESPUÉS DE ESTE BLOQUE
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function resolver_reporte()
+  {
+    try {
+      // Validar que recibimos los parámetros necesarios
+      if (!check_posted_data(['id'], $this->data)) {
+        throw new Exception('El ID del reporte no es válido.');
+      }
+
+      // Inicializar el array de información a insertar o actualizar
+      array_map('sanitize_input', $this->data);
+      $id = $this->data['id'];
+
+      if (!$reporte = Model::list('posts', ['id' => $id], 1)) {
+        throw new Exception('No existe el reporte en la base de datos.');
+      }
+
+      // Verificar el estado del reporte
+      if ($reporte['status'] !== 'pendiente') {
+        throw new Exception('El estado del reporte no es válido.');
+      }
+
+      // Actualizar
+      Model::update('posts', ['id' => $id], ['status' => 'resuelto']);
+
+      // Cargar de nuevo
+      $reporte = Model::list('posts', ['id' => $id], 1); // cargar el post
+
+      json_output(json_build(200, $reporte, sprintf('Reporte #%s resuelto con éxito.', $reporte['permalink'])));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function pendiente_reporte()
+  {
+    try {
+      // Validar que recibimos los parámetros necesarios
+      if (!check_posted_data(['id'], $this->data)) {
+        throw new Exception('El ID del reporte no es válido.');
+      }
+
+      // Inicializar el array de información a insertar o actualizar
+      array_map('sanitize_input', $this->data);
+      $id = $this->data['id'];
+
+      if (!$reporte = Model::list('posts', ['id' => $id], 1)) {
+        throw new Exception('No existe el reporte en la base de datos.');
+      }
+
+      // Verificar el estado del reporte
+      if ($reporte['status'] !== 'resuelto') {
+        throw new Exception('El estado del reporte no es válido.');
+      }
+
+      // Actualizar
+      Model::update('posts', ['id' => $id], ['status' => 'pendiente']);
+
+      // Cargar de nuevo
+      $reporte = Model::list('posts', ['id' => $id], 1); // cargar el post
+
+      json_output(json_build(200, $reporte, sprintf('Reporte #%s marcado como pendiente con éxito.', $reporte['permalink'])));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
 }

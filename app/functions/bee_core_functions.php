@@ -568,7 +568,7 @@ function arrenge_posted_files($files)
 /**
  * Genera un string o password
  *
- * @param integer $tamano
+ * @param integer $length
  * @param string $type
  * @return string
  */
@@ -589,6 +589,26 @@ function random_password($length = 8, $type = 'default')
 	}
 
 	return str_shuffle(implode($pass)); //turn the array into a string
+}
+
+/**
+ * Genera un string o password
+ *
+ * @param integer $length
+ * @return int
+ */
+function random_number(int $length = 8)
+{
+	$alphabet    = '1234567890';
+	$pass        = []; //remember to declare $pass as an array
+	$alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+
+	for ($i = 0; $i < $length; $i++) {
+		$n      = rand(0, $alphaLength);
+		$pass[] = $alphabet[$n];
+	}
+
+	return (int) str_shuffle(implode($pass)); //turn the array into a string
 }
 
 /**
@@ -1039,6 +1059,7 @@ function generate_key()
  */
 function check_posted_data($required_params = [], $posted_data = [])
 {
+	$posted_data = isset($_POST) ? $_POST : $posted_data;
 
 	if (!is_array($required_params)) {
 		return false;
@@ -1077,6 +1098,7 @@ function check_posted_data($required_params = [], $posted_data = [])
  */
 function check_get_data($required_params = [], $get_data = [])
 {
+	$get_data = isset($_GET) ? $_GET : $get_data;
 
 	if (!is_array($required_params)) {
 		return false;
@@ -2763,4 +2785,14 @@ function remove_accents(string $string) {
 	$substitutes = array('a', 'e', 'i', 'o', 'u', 'u', 'A', 'E', 'I', 'O', 'U', 'U', 'n', 'N');
 	
 	return strtr($string, array_combine($accents, $substitutes));
+}
+
+/**
+ * Retorna la URL de la página actual completa
+ *
+ * @return string
+ */
+function get_cur_page()
+{
+	return CUR_PAGE;	
 }

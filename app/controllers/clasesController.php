@@ -44,7 +44,7 @@ class clasesController extends Controller implements ControllerInterface {
     //  Redirect::to('login');
     // }
 
-    register_scripts([JS . 'clases.js?v=' . get_asset_version()], 'Scripts para las clases en vivo');
+    register_scripts([JS . 'clases/clases.js?v=' . get_asset_version()], 'Scripts para las clases en vivo');
   }
 
   function index()
@@ -273,6 +273,20 @@ class clasesController extends Controller implements ControllerInterface {
       $writer = new PngWriter();
       $result = $writer->write($qrCode, $logo, $label);
 
+      $data         =
+      [
+        'tipo'       => 'notificacion',
+        'id_padre'   => 0,
+        'id_usuario' => 0,
+        'id_ref'     => 0,
+        'titulo'     => 'NUEVO QR GENERADO',
+        'status'     => 'pendiente',
+        'creado'     => now()
+      ];
+
+      // Verificar si ya existe el post en la base de datos
+      $id   = Model::add('posts', $data);
+
       // Hacer output en pantalla del resultado como imagen
       header('Content-Type: '.$result->getMimeType());
       echo $result->getString();
@@ -290,10 +304,27 @@ class clasesController extends Controller implements ControllerInterface {
     }
   }
 
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////// NOTIFICACIONES SSE
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
   function notificaciones()
   {
     $this->setTitle('Notificaciones con SSE');
     $this->setView('ssenots');
+    $this->render();
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////// CRUD DE REPORTES CON VUEJS
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function reportes() {
+    register_scripts([JS . 'clases/crudReportes.js?v=' . get_asset_version()], 'Script para el CRUD de reportes');
+    $this->setTitle('CRUD de reportes');
+    $this->setView('crudReportes');
     $this->render();
   }
 }

@@ -134,3 +134,60 @@ CREATE TABLE `productos` (
 INSERT INTO `productos` VALUES ('1', null, 'Pack de desarrollo web Full Stack', 'pack-de-desarrollo-full-stack', 'Un paquete con más de 20 cursos premium.', '300.00', '1000.00', '10', '1', 'packfullstack.png', '2023-08-10 07:52:50', '2023-08-11 09:37:31');
 INSERT INTO `productos` VALUES ('2', null, 'Emprendepack', 'emprendepack', 'Paquete de cursos para emprendedores', '199.00', '500.00', null, '0', 'testimage.jpg', '2023-08-10 08:18:34', '2023-08-11 09:36:06');
 INSERT INTO `productos` VALUES ('3', null, 'Curso crea un sistema escolar con PHP y MySQL', 'curso-crea-un-sistema-escolar', 'Lorel ipsum dolorem etsem.', '150.00', '799.00', null, '0', 'sistemaescolar.jpg', '2023-08-11 09:40:26', '2023-08-11 09:42:50');
+
+-- ----------------------------
+-- Table structure for bee_permisos
+-- ----------------------------
+DROP TABLE IF EXISTS `bee_permisos`;
+CREATE TABLE `bee_permisos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) DEFAULT NULL,
+  `slug` varchar(100) DEFAULT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `creado` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- ----------------------------
+-- Records of bee_permisos
+-- ----------------------------
+INSERT INTO `bee_permisos` VALUES ('1', 'Acceso de administrador', 'admin-access', 'Acceso general de administración', '2023-09-08 11:55:59');
+INSERT INTO `bee_permisos` VALUES ('2', 'Listar productos', 'list-all-products', 'Listar todos los productos de la base de datos.', '2023-09-08 12:01:07');
+INSERT INTO `bee_permisos` VALUES ('3', 'Agregar nuevos productos', 'add-products', 'Agregar productos a la base de datos.', '2023-09-08 12:28:40');
+
+-- ----------------------------
+-- Table structure for bee_roles
+-- ----------------------------
+DROP TABLE IF EXISTS `bee_roles`;
+CREATE TABLE `bee_roles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) DEFAULT NULL,
+  `slug` varchar(100) DEFAULT NULL,
+  `creado` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- ----------------------------
+-- Records of bee_roles
+-- ----------------------------
+INSERT INTO `bee_roles` VALUES ('1', 'Administrador general', 'admin', '2023-09-08 11:55:12');
+INSERT INTO `bee_roles` VALUES ('2', 'Trabajador', 'worker', '2023-09-08 11:55:22');
+INSERT INTO `bee_roles` VALUES ('3', 'Role de prueba', 'test', '2023-09-08 12:38:32');
+
+-- ----------------------------
+-- Table structure for bee_roles_permisos
+-- ----------------------------
+DROP TABLE IF EXISTS `bee_roles_permisos`;
+CREATE TABLE `bee_roles_permisos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_role` int(11) NOT NULL,
+  `id_permiso` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- ----------------------------
+-- Records of bee_roles_permisos
+-- ----------------------------
+INSERT INTO `bee_roles_permisos` VALUES ('1', '1', '1');
+INSERT INTO `bee_roles_permisos` VALUES ('2', '2', '2');
+INSERT INTO `bee_roles_permisos` VALUES ('3', '2', '3');

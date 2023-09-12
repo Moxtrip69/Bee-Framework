@@ -38,6 +38,7 @@
         <a class="list-group-item list-group-item-action" href="clases/qr">Generación de QRs</a>
         <a class="list-group-item list-group-item-action" href="clases/autoguardado">Autoguardado</a>
         <a class="list-group-item list-group-item-action" href="clases/notificaciones">Notificaciones con SSE</a>
+        <a class="list-group-item list-group-item-action" href="clases/reportes">CRUD de reportes</a>
       </ul>
     </div>
   </div>

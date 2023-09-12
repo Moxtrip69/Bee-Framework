@@ -6,8 +6,7 @@
  *
  * Controlador de test
  */
-class testController extends Controller implements ControllerInterface
-{
+class testController extends Controller implements ControllerInterface {
   function __construct()
   {
     // Prevenir el ingreso en Producción
@@ -25,6 +24,16 @@ class testController extends Controller implements ControllerInterface
     $this->addToData('algo', 123);
     $this->setView('index');
     $this->render();
+  }
+
+  function funciones()
+  {
+    get_cur_page(); // Url actual
+    get_base_url(); // url base
+    get_basepath(); // el basepath
+    _e('Algo'); // placeholder si el valor no existe o es vacío
+    get_image('miimagen.png'); // carga una imagen
+    get_uploaded_image('imagensubida.png'); // carga una imagen subida
   }
 
   function paginacion()

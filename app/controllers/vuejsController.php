@@ -18,13 +18,13 @@ class vuejsController extends Controller implements ControllerInterface {
     // Ejecutar la funcionalidad del Controller padre
     parent::__construct();
   }
-  
+
   function index()
   {
     /**
      * Registro de scripts para solo está ruta
      */
-    register_scripts([JS.'vueApp.min.js'], 'Bee framework vuejs 3');
+    register_scripts([JS . 'vueApp.min.js'], 'Bee framework vuejs 3');
 
     $this->setTitle('Ejemplo de administrador de tareas');
     $this->setView('index');
@@ -36,7 +36,7 @@ class vuejsController extends Controller implements ControllerInterface {
     /**
      * Registro de scripts para solo está ruta
      */
-    register_scripts([JS.'vueApp.min.js'], 'Bee framework vuejs 3');
+    register_scripts([JS . 'vueApp.min.js'], 'Bee framework vuejs 3');
 
     $this->setTitle('Componente de prueba');
     $this->setView('test');

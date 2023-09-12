@@ -77,6 +77,45 @@ const generarNot  = document.getElementById('generarNot');
 const notWrapper  = document.getElementById('notWrapper');
 const notTotal    = document.getElementById('notTotal');
 const notList     = document.getElementById('notList');
+
+generarNot.addEventListener('click', generarNotificacion);
+async function generarNotificacion(e) {
+  const payload = {
+    csrf: Bee.csrf
+  };
+
+  generarNot.disabled = true;
+  const res = await fetch('ajax/generar-notificacion', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  })
+    .then(res => res.json())
+    .catch(err => alert(err));
+
+  if (res.status !== 201) {
+    toastr.error(res.msg);
+    return;
+  }
+
+  generarNot.disabled = false;
+  toastr.success(res.msg, 'Notificación generada');
+  return;
+}
+
+// Actualizar el estado de una notificación
+async function actualizarNotificacion(id) {
+  const payload = {
+    csrf: Bee.csrf,
+    id: id
+  }
+  return await fetch('ajax/actualizar-notificacion', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  })
+    .then(res => res.json())
+    .catch(err => alert(err));
+}
+
 const eventSource = new EventSource('ajax/sse');
 const audio       = new Audio(`${Bee.uploaded}alerta.mp3`);
 
@@ -90,14 +129,14 @@ eventSource.onmessage = event => {
 
   if (res.status !== 200) {
     notTotal.innerHTML = 0;
-    notList.innerHTML = `<li class="dropdown-item">${res.msg}</li>`;
+    notList.innerHTML  = `<li class="dropdown-item">${res.msg}</li>`;
     return;
   }
 
   // Si no hay notificaciones
   if (totales === 0) {
     notTotal.innerHTML = 0;
-    notList.innerHTML = `<li class="dropdown-item">No hay notificaciones.</li>`;
+    notList.innerHTML  = `<li class="dropdown-item">No hay notificaciones.</li>`;
     return;
   }
 
@@ -127,7 +166,8 @@ eventSource.onmessage = event => {
         notificacionElemento.classList.remove('bg-light', 'text-dark');
 
         // Restar uno al total de notificaciones
-        notTotal.innerHTML = parseInt(notTotal.innerHTML) - 1;
+        let notTotalPendientes = parseInt(notTotal.innerHTML);
+        notTotal.innerHTML     = notTotalPendientes > 0 ? notTotalPendientes - 1 : 0;
       });
     }
 
@@ -143,40 +183,3 @@ eventSource.onmessage = event => {
     audio.play();
   }
 };
-
-async function actualizarNotificacion(id) {
-  const payload = {
-    csrf: Bee.csrf,
-    id: id
-  }
-  return await fetch('ajax/actualizar-notificacion', {
-    method: 'POST',
-    body: JSON.stringify(payload)
-  })
-    .then(res => res.json())
-    .catch(err => alert(err));
-}
-
-generarNot.addEventListener('click', generarNotificacion);
-async function generarNotificacion(e) {
-  const payload = {
-    csrf: Bee.csrf
-  };
-
-  generarNot.disabled = true;
-  const res = await fetch('ajax/generar-notificacion', {
-    method: 'POST',
-    body: JSON.stringify(payload)
-  })
-    .then(res => res.json())
-    .catch(err => alert(err));
-
-  if (res.status !== 201) {
-    toastr.error(res.msg);
-    return;
-  }
-
-  generarNot.disabled = false;
-  toastr.success(res.msg, 'Notificación generada');
-  return;
-}
