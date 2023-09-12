@@ -21,6 +21,8 @@ Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y 
  * Con el handler puedes hacer todas las tareas necesarias:
  * Desde agregar roles, actualizar, borrar, asignar permisos, crear permisos, borrar permisos.
  */
+
+// Validar un permiso
 $userRole = 'vendedor';
 $role     = new BeeRoleManager($userRole);
 
@@ -29,6 +31,28 @@ if ($role->can('agregar-ventas')) {
 } else {
   echo 'No puedes agregar más ventas.';
 }
+
+// Crear un role nuevo
+$role = new BeeRoleManager();
+$role->addRole('Diseñador Gráfico', 'dg');
+
+// Editar un role
+$role->updateRole(3, 'Diseñador Gráfico Editado', 'dge');
+
+// Borrar un role
+$role->removeRole('dge');
+
+// Crear permisos
+$permiso = new BeeRoleManager();
+$permiso->addPermission('Crear imágenes', 'crear-imagenes', 'Puede crear imágenes y descargarlas.');
+
+// Asignar permisos a un role
+$role = new BeeRoleManager('dg');
+$role->allow('crear-imagenes');
+
+// O quitar permisos a un role
+$role = new BeeRoleManager('dg');
+$role->deny('crear-imagenes');
 ```
 - El controlador principal **Controller.php** se ha mejorado y hemos ampliado la forma en que se usa, ahora es posible usarlo para configurar cada nuevo controlador de diferentes maneras, puede ser un *endpoint* para talvez una API, *ajax* o *regular* como un controlador común, ahora tenemos a nuestra disposición nuevos métodos para trabajar de forma orientada a objetos la implementación, el renderizado de la vista, asignación de **$data** pasada a la vista y mucho más, haciendo todo más mantenible y escalable.
 ```php
