@@ -16,7 +16,11 @@ Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y 
 - Revisa el curso oficial sobre esta versión de **Bee framework 1.5.8** dando clic [aquí](https://www.academy.joystick.com.mx/courses/novedades-bee-framework-1-5-8-mejoras-y-actualizaciones).
 - Nueva clase **BeeRoleManager** para gestión de roles y permisos, un sistema muy flexible y escalable para gestionar el acceso de usuarios con diferentes roles y permisos asignados por role. Es necesario *actualizar la base de datos* con un nuevo esquema que incluye *3 tablas nuevas*: **bee_roles, bee_permisos y bee_roles_permisos**, requiere usar el archivo *db_beeframework.sql*.
 ```php
-// El uso es muy sencillo, todo se basa en el slug del role y los permisos asignados al role, con el handler puedes hacer todas las tareas necesarias, desde agregar nuevos, roles, actualizar, borrar, asignar permisos, crear permisos, borrar permisos.
+/**
+ * El uso es muy sencillo, todo se basa en el slug del role y los permisos asignados al role.
+ * Con el handler puedes hacer todas las tareas necesarias:
+ * Desde agregar roles, actualizar, borrar, asignar permisos, crear permisos, borrar permisos.
+ */
 $userRole = 'vendedor';
 $role     = new BeeRoleManager($userRole);
 
