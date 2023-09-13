@@ -26,6 +26,63 @@ class testController extends Controller implements ControllerInterface {
     $this->render();
   }
 
+  function roles()
+  {
+    // Pruebas de roles
+    // Tienda de ropa
+    // 2 roles
+    // vendedor
+    // almacenista
+
+    $role = new BeeRoleManager();
+    // $role->addRole('Vendedor de ropa', 'vendedor-ropa');
+    // $role->addRole('Almacenista de ropa', 'almacenista');
+    // debug($role->getRoles());
+
+    // acomodar-ropa
+    // vender
+    // empacar
+    // cobrar
+
+    // $permiso = new BeeRoleManager();
+    // $permiso->addPermission('Acomodar la ropa', 'acomodar-ropa', 'Puede acomodar toda la mercancía en los estantes.');
+    // $permiso->addPermission('Vender', 'vender', 'Puede realizar ventas en mostrador.');
+    // $permiso->addPermission('Empacar', 'empacar', 'Puede empacar las ventas para envío.');
+    // $permiso->addPermission('Cobrar', 'cobrar', 'Puede cobrar dinero de los clientes.');
+
+    // $role = new BeeRoleManager('almacenista');
+
+    // $role->allow('empacar');
+    // $role->allow('acomodar-ropa');
+
+    // debug($role->getRole());
+
+    $soy = 'almacenista';
+
+    $role = new BeeRoleManager($soy);
+    debug($role->getRole());
+
+    if ($role->can('vender')) {
+      echo 'Estas generando una nueva venta.';
+    } else {
+      echo 'No tienes permisos para vender.';
+    }
+
+    if ($role->can('acomodar-ropa')) {
+      echo 'Puedes acomodar la ropa en los estantes.';
+    } else {
+      echo 'No puedes acomodar la ropa en los estantes.';
+    }
+
+    if ($role->can('empacar')) {
+      echo 'Puedes empacar las ventas para envío.';
+    } else {
+      echo 'No puedes empacar las ventas para envío.';
+    }
+
+
+  }
+
   function funciones()
   {
     get_cur_page(); // Url actual
@@ -44,6 +101,8 @@ class testController extends Controller implements ControllerInterface {
     $pag->setGetVariable('p');
     $pag->setDirection('ASC');
     debug($pag->launch());
+
+    // PaginationHandler::paginate($sql, [], 20);
   }
 
   function quickcharts()
