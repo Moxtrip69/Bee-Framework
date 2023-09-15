@@ -1059,8 +1059,6 @@ function generate_key()
  */
 function check_posted_data($required_params = [], $posted_data = [])
 {
-	$posted_data = isset($_POST) ? $_POST : $posted_data;
-
 	if (!is_array($required_params)) {
 		return false;
 	}
@@ -1098,8 +1096,6 @@ function check_posted_data($required_params = [], $posted_data = [])
  */
 function check_get_data($required_params = [], $get_data = [])
 {
-	$get_data = isset($_GET) ? $_GET : $get_data;
-
 	if (!is_array($required_params)) {
 		return false;
 	}

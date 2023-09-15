@@ -95,14 +95,15 @@ class testController extends Controller implements ControllerInterface {
 
   function paginacion()
   {
+    $sql = 'SELECT * FROM productos ORDER BY id';
     $pag = new PaginationHandler;
-    $pag->setBaseQuery('SELECT * FROM pruebas ORDER BY id');
-    $pag->setRecordsPerPage(2);
+    $pag->setBaseQuery($sql);
+    $pag->setRecordsPerPage(1);
     $pag->setGetVariable('p');
     $pag->setDirection('ASC');
     debug($pag->launch());
 
-    // PaginationHandler::paginate($sql, [], 20);
+    debug(PaginationHandler::paginate($sql, [], 3));
   }
 
   function quickcharts()

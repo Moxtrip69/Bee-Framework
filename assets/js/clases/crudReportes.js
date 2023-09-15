@@ -1,3 +1,15 @@
+/**
+ * Estructura para organizar las propiedades de un componente
+ * 
+ * data
+ * todos los hooks del lifecycle (created, mounted, updated, beforeMount, beforeCreate, etc)
+ * methods
+ * computed
+ * props
+ * emits
+ * components
+ * template
+ */
 const formularioComponent = {
   data() {
     return {
@@ -159,11 +171,6 @@ const reporteComponent = {
     reporte: Object,
     procesando: Boolean
   },
-  computed: {
-    formatearUrlImagen(reporteImagen) {
-      console.log(reporteImagen)
-    }
-  },
   emits: ['resolver-reporte','pendiente-reporte'],
   template:
   /*html*/
@@ -248,7 +255,7 @@ const mainComponent = {
       procesando: false
     }
   },
-  created() {
+  mounted() {
     this.cargarReportes();
   },
   methods: {
@@ -325,8 +332,6 @@ const mainComponent = {
       this.procesando = false;
       this.cargarReportes();
     }
-  },
-  computed: {
   },
   components: {
     'formulario-component': formularioComponent,

@@ -406,7 +406,7 @@ class ajaxController extends Controller implements ControllerInterface {
 
   function cargar_reportes()
   {
-    $sql = 'SELECT * FROM posts WHERE tipo IN("reporte") ORDER BY id DESC';
+    $sql = 'SELECT * FROM posts WHERE tipo = "reporte" ORDER BY id DESC';
     $reportes = Model::query($sql);
     
     json_output(json_build(200, $reportes));

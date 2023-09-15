@@ -323,6 +323,7 @@ class clasesController extends Controller implements ControllerInterface {
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
   function reportes() {
     register_scripts([JS . 'clases/crudReportes.js?v=' . get_asset_version()], 'Script para el CRUD de reportes');
+    
     $this->setTitle('CRUD de reportes');
     $this->setView('crudReportes');
     $this->render();
