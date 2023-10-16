@@ -2215,7 +2215,7 @@ function new_cookie($name, $value, $lifetime = null, $path = '', $domain = '')
 }
 
 /**
- * Carga la información de un cookie en caso de existir
+ * Verifica si existe un determinado cookie creado
  *
  * @param string $cookie
  * @return bool | true si existe | false si no
@@ -2256,7 +2256,7 @@ function destroy_cookie($cookie, $path = '', $domain = '')
 }
 
 /**
- * Verifica si existe un determinado cookie creado
+ * Carga la información de un cookie en caso de existir
  *
  * @param string $cookie_name
  * @return mixed
