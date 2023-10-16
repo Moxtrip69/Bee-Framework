@@ -20,8 +20,43 @@ class testController extends Controller implements ControllerInterface {
 
   function index()
   {
+    // Slider
+    $slider = new Bs5Slider;
+    $slider->setId('slider-1');
+    $slider->setClasses('shadow-lg rounded-3');
+    $slider->setInterval(2000);
+    $slider->setControls(true);
+    $slider->setTransition('slide');
+    $slider->setAutoplay(false);
+    $slider->setImages(
+      [
+      UPLOADED . 'slide01.jpg',
+      UPLOADED . 'slide02.jpg',
+      UPLOADED . 'slide03.jpg',
+      ]
+    );
+
+    // Card
+    $card = new Bs5Card;
+    $card->setImage(UPLOADED . 'slide01.jpg');
+    $card->setHeader('Una nueva carta');
+    $card->addHeaderButton('Botón 1', '#', 'btn-primary');
+    $card->addHeaderButton('Botón 2', '#', 'btn-secondary');
+    $card->setTitle('El título');
+    $card->setBody('Contenido de la tarjeta.<br><button class="btn btn-success">Ingresar</button>');
+    $card->setFooter('Pie de la Tarjeta');
+
+    // Accordion
+    $accordion = new Bs5Accordion();
+    $accordion->addItem('Item 1', 'Contenido del ítem 1.');
+    $accordion->addItem('Item 2', 'Contenido del ítem 2.', false);
+    $accordion->addItem('Item 3', 'Contenido del ítem 3.');
+
     $this->setTitle('Título de pruebas');
     $this->addToData('algo', 123);
+    $this->addToData('slider', $slider->render());
+    $this->addToData('card', $card->render());
+    $this->addToData('accordion', $accordion->render());
     $this->setView('index');
     $this->render();
   }

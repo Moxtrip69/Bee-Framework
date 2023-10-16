@@ -6,7 +6,15 @@
     <div class="col-6 offset-xl-3 py-5">
       <!-- contenido -->
       <div class="border rounded shadow p-3">
-        <img src="<?php echo $d->url; ?>" alt="" class="img-fluid">
+        <?php echo $d->slider; ?>
+
+        <br>
+
+        <?php echo $d->card; ?>
+
+        <br>
+
+        <?php echo $d->accordion; ?>
       </div>
     </div>
   </div>

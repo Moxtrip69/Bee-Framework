@@ -283,9 +283,15 @@ function buildURL($url, $params = [], $redirection = true, $csrf = true)
 function build_url($url, $params = [], $redirection = true, $csrf = true)
 {
 	// Formateo y parseo inicial de la URL pasada descomponiendo sus elementos
-	$raw_url     = parse_url($url, PHP_URL_PATH);
-	$query       = parse_url($url, PHP_URL_QUERY); // extraer parámetros existentes
 	$query_array = [];
+	$raw_url     = parse_url($url);
+	$query       = parse_url($url, PHP_URL_QUERY); // extraer parámetros existentes
+
+	// Verificar si la URL ya incluye un host de lo contrario anexarlo y volver a extraer las partes
+	if (!isset($raw_url['host'])) {
+		$url     = URL . $url; // se concatena el URL por defecto de bee si no existe un host ya en la URL
+		$raw_url = parse_url($url);
+	}
 
 	// Sólo si ya hay parámetros existentes en la URL
 	if (!empty($query)) {
@@ -315,9 +321,10 @@ function build_url($url, $params = [], $redirection = true, $csrf = true)
 	}
 
 	// Sólo si no está vacía la lista de parámetros para URL
+	// ejemplo http://localhost:8848/Bee-Framework/test
 	if (!empty($query_array)) {
 		$args = http_build_query($query_array);
-		$url  = sprintf("%s?%s", $raw_url, $args);
+		$url  = sprintf("%s?%s", sprintf('%s://%s%s', $raw_url['scheme'], $raw_url['host'], $raw_url['path']), $args);
 	}
 
 	return $url;

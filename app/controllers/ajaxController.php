@@ -284,15 +284,6 @@ class ajaxController extends Controller implements ControllerInterface {
     }
   }
 
-  
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //////////// INSERTA TUS MÉTODOS DESPUÉS DE ESTE BLOQUE
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
   function generar_notificacion()
   {
     try {
@@ -531,4 +522,205 @@ class ajaxController extends Controller implements ControllerInterface {
       json_output(json_build(400, null, $e->getMessage()));
     }
   }
+
+  function datatables()
+  {
+    try {
+      $_GET['page']             = $this->data['page']; // es requerido para paginationhandler
+      $registrosPorPagina       = $this->data['per_page']; // el parámetro que recibimos de javascript para cuántos registros por página
+      $posts                    = PaginationHandler::paginate('SELECT * FROM pruebas ORDER BY id', [], $registrosPorPagina); // cargamos todo de la db
+      $posts['recordsTotal']    = $posts['total']; // necesitamos esto para crear una paginación correcta
+      $posts['recordsFiltered'] = $posts['total']; // necesitamos esto para crear una paginación correcta
+      json_output(json_encode($posts));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function listar_clientes()
+  {
+    $sEcho                     = $this->data['sEcho'];
+    $iDisplayStart             = $this->data['iDisplayStart']; // Registro para comenzar la paginación
+    $iDisplayLength            = $this->data['iDisplayLength']; // Cantidad de registros por página
+
+    // Cuenta el total de registros en la db
+    $iTotalRecords             = Model::query('SELECT COUNT(id) AS total FROM clientes')[0]['total']; // Records totales en la db
+
+    // Carga los registros paginados
+    $sql                       = 'SELECT id, nombre, apellidos, colonia, mac FROM clientes ORDER BY id DESC LIMIT %s OFFSET %s';
+    $rows                      = Model::query(sprintf($sql, $iDisplayLength, $iDisplayStart));
+
+    // https://legacy.datatables.net/release-datatables/examples/data_sources/server_side.html
+    $iTotalDisplayRecords      = 0; // Records encontrados para mostrar filtrados en caso de tener filtros
+
+    // Procesar las columnas para que sean aceptadas correctamente en el frontend
+    $aaData = array_map(function ($cliente) {
+      return [
+        0 => $cliente['id'],
+        1 => $cliente['nombre'],
+        2 => $cliente['apellidos'],
+        3 => $cliente['colonia'],
+        4 => $cliente['mac']
+      ];
+    }, $rows);
+
+    $result = array(
+      "sEcho"                => $sEcho,
+      "iTotalRecords"        => $iTotalRecords,
+      "iTotalDisplayRecords" => $iTotalRecords,
+      "aaData"               => $aaData
+    );
+
+    json_output(json_encode($result)); // Sólo es para sacar con Content-Type application/json el contenido
+  }
+
+  function eventos()
+  {
+    try {
+      $start   = isset($_GET["start"]) ? date('Y-m-d', strtotime($_GET["start"])) : null;
+      $end     = isset($_GET["end"]) ? date('Y-m-d', strtotime($_GET["end"])) : null;
+
+      // Aplicar filtros si existen
+      if ($start !== null && $end !== null) {
+        $sql     = 'SELECT * FROM posts WHERE tipo = "evento" AND DATE(creado) BETWEEN :inicio AND :fin ORDER BY id';
+        $eventos = Model::query($sql, ['inicio' => $start, 'fin' => $end]);
+      } else {
+        $sql     = 'SELECT * FROM posts WHERE tipo = "evento" ORDER BY id';
+        $eventos = Model::query($sql);
+      }
+
+      if (!empty($eventos)) {
+        $eventos = array_map(function($evento) {
+          return [
+            'id'     => $evento['id'],
+            'title'  => $evento['titulo'],
+            'start'  => date('Y-m-d', strtotime($evento['creado'])),
+            'color'  => $evento['status'],
+            'allDay' => true
+          ];
+        }, $eventos);
+      } else {
+        $eventos = [];
+      }
+
+      json_output(json_encode($eventos));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function evento($id)
+  {
+    try {
+      $evento = Model::list('posts', ['id' => $id, 'tipo' => 'evento'], 1);
+
+      if (!$evento) {
+        throw new Exception('No existe el evento en la base de datos.');
+      }
+
+      $evento['fecha'] = format_date($evento['creado']);
+
+      json_output(json_build(200, $evento));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function agregar_evento()
+  {
+    try {
+      // Validar que recibimos los parámetros necesarios
+      if (!check_posted_data(['titulo','fecha','color'], $this->data)) {
+        throw new Exception('Completa el formulario por favor.');
+      }
+
+      // Inicializar el array de información a insertar o actualizar
+      array_map('sanitize_input', $this->data);
+      $titulo   = $this->data['titulo'];
+      $fecha    = $this->data['fecha'];
+      $color    = $this->data['color'];
+
+      $data     =
+      [
+        'tipo'       => 'evento',
+        'titulo'     => $titulo,
+        'status'     => $color,
+        'creado'     => $fecha
+      ];
+
+      // Verificar si ya existe el post en la base de datos
+      $id      = Model::add('posts', $data);
+      $evento  = Model::list('posts', ['id' => $id], 1); // cargar el post
+
+      json_output(json_build(201, $evento, 'Nuevo evento registrado con éxito.'));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function actualizar_evento()
+  {
+    try {
+      // Validar que recibimos los parámetros necesarios
+      if (!check_posted_data(['id','fecha'], $this->data)) {
+        throw new Exception('Parámetros incompletos.');
+      }
+
+      // Inicializar el array de información a insertar o actualizar
+      array_map('sanitize_input', $this->data);
+      $id       = $this->data['id'];
+      $fecha    = date('Y-m-d H:i:s', strtotime($this->data['fecha']));
+
+      // Validar que exista el evento
+      $evento = Model::list('posts', ['id' => $id, 'tipo' => 'evento'], 1);
+
+      if (!$evento) {
+        throw new Exception('No existe el evento en la base de datos.');
+      }
+
+      // Verificar si ya existe el post en la base de datos
+      $res     = Model::update('posts', ['id' => $id], ['creado' => $fecha]);
+      $evento  = Model::list('posts', ['id' => $id], 1); // cargar el post
+
+      json_output(json_build(200, $evento, 'Evento actualizado con éxito.'));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function eliminar_evento()
+  {
+    try {
+      if (!check_posted_data(['id'], $this->data)) {
+        throw new Exception('Parámetros faltantes.');
+      }
+      $id     = $this->data['id'];
+      $evento = Model::list('posts', ['id' => $id, 'tipo' => 'evento'], 1);
+
+      if (!$evento) {
+        throw new Exception('No existe el evento en la base de datos.');
+      }
+
+      // Borrar el evento
+      Model::remove('posts', ['id' => $id], 1);
+
+      json_output(json_build(200, $evento, 'Evento eliminado con éxito.'));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+  
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////// INSERTA TUS MÉTODOS DESPUÉS DE ESTE BLOQUE
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

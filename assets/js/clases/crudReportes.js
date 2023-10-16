@@ -108,6 +108,8 @@ const formularioComponent = {
       return true;
     },
     imagenUrl() {
+      if (this.imagen == '') return '';
+      
       return URL.createObjectURL(this.imagen);
     }
   },
@@ -118,7 +120,7 @@ const formularioComponent = {
   <div className="card">
     <div className="card-header">Reportar falla</div>
     <div className="card-body">
-      <form v-on:submit.prevent="levantarReporte">
+      <form @submit.prevent="levantarReporte">
         <div className="mb-2 row">
           <div className="col-12 col-md-6">
             <label htmlFor="nombre" className="form-label">Tu nombre completo <span className="text-danger">*</span></label>
@@ -216,7 +218,7 @@ const listadoComponent = {
     reportes: Array, // agregar procensado
     procesando: Boolean
   },
-  emits: ['mostrar-reporte'],
+  emits: ['mostrar-reporte','cargar-reportes'],
   template:
   /*html*/
   `

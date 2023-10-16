@@ -328,4 +328,52 @@ class clasesController extends Controller implements ControllerInterface {
     $this->setView('crudReportes');
     $this->render();
   }
+
+  function datatables()
+  {
+    register_styles(['//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css'], 'Estilso Datatables');
+    register_scripts(['//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js', JS . 'clases/datatables.js'], 'Datatables');
+
+    $this->setTitle('Datatables');
+    $this->setView('datatables');
+    $this->render();
+  }
+
+  function datatablesold()
+  {
+    register_styles(['//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css'], 'Estilso Datatables');
+    register_scripts([JS . 'dtold.min.js', JS . 'clases/datatables.js'], 'Datatables');
+
+    $this->setTitle('Datatables Old');
+    $this->setView('datatablesold');
+    $this->render();
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////// FULLCALENDAR.JS
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function fullcalendar()
+  {
+    register_scripts(['https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'], 'Fullcalendar.js');
+    register_styles(['https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css'], 'Iconos de Bootstrap 5');
+    register_scripts([JS . 'clases/fullcalendar.js?v=' . get_asset_version()], 'Script de la clase');
+
+    $this->setTitle('Fullcalendar Js');
+    $this->setView('fullcalendar');
+    $this->render();
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////// COMPONENTES CON PHP
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function componentes()
+  {
+    $this->setTitle('Componentes');
+    $this->setView('componentes');
+    $this->render();
+  }
 }
