@@ -12,6 +12,10 @@
     <div class="offset-3 col-6 border rounded p-3">
       <h5><?php echo $d->title; ?></h5>
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, consequatur temporibus animi deleniti accusantium vitae commodi tempore eius nam neque?
+
+      <?php echo $d->slider; ?>
+
+      <?php echo $d->productos; ?>
     </div>
   </div>
 </div>

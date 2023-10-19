@@ -372,8 +372,33 @@ class clasesController extends Controller implements ControllerInterface {
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
   function componentes()
   {
+
+    $slider = new Bs5Slider;
+    $slider->setId('miPrimerSlider');
+    $slider->setClasses('border shadow-lg rounded-3');
+    $slider->setTransition('slide');
+    $slider->setShowControls(true);
+    $slider->setAutoplay(true);
+    $slider->setInterval(2000);
+    $imagenes =
+    [
+      UPLOADED . 'slide01.jpg',
+      UPLOADED . 'slide02.jpg',
+      UPLOADED . 'slide03.jpg'
+    ];
+
+    $slider->setImages($imagenes);
+
+    $slider2 = new Bs5Slider;
+    $slider2->setClasses('mt-3');
+    $slider2->setInterval(500);
+    $slider2->setShowControls(false);
+    $slider2->setImages([ UPLOADED . 'slide01.jpg', UPLOADED . 'slide03.jpg']);
+
     $this->setTitle('Componentes');
     $this->setView('componentes');
+    $this->addToData('slider', $slider->render());
+    $this->addToData('productos', $slider2->render());
     $this->render();
   }
 }
