@@ -25,8 +25,8 @@
 <!-- Objeto Bee Javascript registrado -->
 <?php echo load_bee_obj(); ?>
 
-<!-- Scripts personalizados Bee Framework -->
-<script src="<?php echo JS . 'main.min.js?v=' . get_asset_version(); ?>"></script>
-
 <!-- Scripts registrados manualmente -->
 <?php echo load_scripts(); ?>
+
+<!-- Scripts personalizados Bee Framework -->
+<script src="<?php echo JS . 'main.min.js?v=' . get_asset_version(); ?>"></script>

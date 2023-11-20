@@ -372,7 +372,6 @@ class clasesController extends Controller implements ControllerInterface {
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
   function componentes()
   {
-
     $slider = new Bs5Slider;
     $slider->setId('miPrimerSlider');
     $slider->setClasses('border shadow-lg rounded-3');
@@ -395,10 +394,198 @@ class clasesController extends Controller implements ControllerInterface {
     $slider2->setShowControls(false);
     $slider2->setImages([ UPLOADED . 'slide01.jpg', UPLOADED . 'slide03.jpg']);
 
+    // Card
+    $card = new Bs5Card;
+    $card->setId('miPrimeraCarta');
+    $card->setClasses('mb-5 shadow-lg rounded-0');
+    $card->setImage(UPLOADED . 'slide01.jpg');
+    $card->setHeader('Hola mundo');
+    $card->setTitle('Título del contenido');
+    $card->setBody('Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus, debitis non totam distinctio repellendus illo cupiditate? Quasi tempora repellat odio.' . $slider->render());
+    $card->setFooter('<a href="#" class="btn btn-success">Ir al sitio</a>');
+    $card->addHeaderButton('Agregar', '#', 'btn-danger');
+    $card->addHeaderButton('Agregar', '#', 'btn-danger');
+
+    // Accordion
+    $ac = new Bs5Accordion;
+    $ac->setId('miPrimerAcordion');
+    $ac->setClasses('mb-5 border shadow-lg');
+    $ac->addItem('Mi primer elemento', $slider->render());
+    $ac->addItem('Mi segundo elemento', $card->render());
+
     $this->setTitle('Componentes');
     $this->setView('componentes');
     $this->addToData('slider', $slider->render());
     $this->addToData('productos', $slider2->render());
+    $this->addToData('card', $card->render());
+    $this->addToData('ac', $ac->render());
+    $this->render();
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////// NOTIFICACIONES POR CORREO ELECTRÓNICO
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function correos_notificaciones()
+  {
+    $this->setTitle('Sistema de notificaciones por correo electrónico');
+    $this->setView('correosNots');
+    $this->render();
+  }
+
+  function enviar_notificacion()
+  {
+    try {
+      // Validar que recibimos los parámetros necesarios
+      if (!check_get_data(['tipo'], $_GET)) {
+        throw new Exception('Tipo de notificación no válido.');
+      }
+
+      $tipo = sanitize_input($_GET['tipo']);
+
+      // Información de venta falsa, aquí se podría cargar de la db el registro al pasar un ID o similar
+      $venta =
+      [
+        'id'           => 123,
+        'numero'       => '2000006694231890',
+        'cliente'      => 'Pancho Villa',
+        'email'        => 'jslocal@localhost.com',
+        'telefono'     => '5521009922',
+        'direccion'    => 'Una calle en México #123, Colonia Cool, CP 25896',
+        'status'       => 'completada',
+        'total'        => 1257,
+        'rastreo'      => 'MEL42713867021LMXDF01',
+        'productos'    => 
+        [
+          [
+            'id'       => 1,
+            'nombre'   => 'Playera de Vital Army',
+            'cantidad' => 2,
+            'precio'   => 399
+          ],
+          [
+            'id'       => 2,
+            'nombre'   => 'Pack Full Stack',
+            'cantidad' => 1,
+            'precio'   => 459
+          ]
+        ]
+      ];
+
+      // Enviar notificación según el tipo
+      switch ($tipo) {
+        case 'new':
+          $email = new BeeMailerSales;
+          $email->setSale($venta);
+          $email->setCompanyEmail('ventas@joystick.com.mx');
+          $email->newSaleToCustomer();
+          $email->clearList();
+
+          $email->newSaleToCompany();
+          $email->clearList();
+          break;
+
+        case 'shipped':
+          $email = new BeeMailer;
+          $email->disableSmtp();
+          $email->useTemplate(true);
+
+          // Al comprador
+          $email->sendTo($venta['email']);
+          $email->setSubject(sprintf('¡Tu compra está en camino! #%s', $venta['numero']));
+          $email->setAlt(sprintf('Despachamos tu compra #%s', $venta['numero']));
+
+          // Crear el cuerpo
+          $body = '<h3>Tu compra está en camino %s</h3>';
+          $body .= '<p>Despachamos tu compra y la recibirás en la dirección <b>%s</b> muy pronto.</p>';
+          $body .= '<p>Puedes rastrear tu paquete usando el siguiente número de seguimiento: <a href="#">%s</a></p>';
+          $body .= '<p>Agradecemos tu confianza.</p>';
+          $body = sprintf(
+            $body, 
+            $venta['cliente'], 
+            $venta['direccion'],
+            $venta['rastreo']
+          );
+          $body .= $htmlTable;
+
+          $email->setBody($body);
+          $email->send();
+
+          // Al vendedor
+          $email->sendTo('jslocal@localhost.com');
+          $email->setSubject(sprintf('Comprobante de despacho #%s', $venta['numero']));
+          $email->setAlt(sprintf('Despachaste tu venta #%s', $venta['numero']));
+          $email->setBody(sprintf(
+            '<p>Envío en camino para <b>%s</b>, despachaste con éxito la venta <b>%s</b>.</p><br>%s', 
+            $venta['cliente'], 
+            $venta['numero'],
+            $htmlTable)
+          );
+          $email->send();
+          break;
+        
+        case 'delivered':
+          $email = new BeeMailer;
+          $email->disableSmtp();
+          $email->useTemplate(true);
+
+          // Al comprador
+          $email->sendTo($venta['email']);
+          $email->setSubject(sprintf('¡Recibiste tu compra, que la disfrutes! #%s', $venta['numero']));
+          $email->setAlt(sprintf('Recibiste tu compra #%s', $venta['numero']));
+
+          // Crear el cuerpo
+          $body = '<h3>Recibiste tu compra %s</h3>';
+          $body .= '<p>Tu compra ha sido completada con éxito, fue entregada hoy en la dirección <b>%s</b>.</p>';
+          $body .= '<p>Agradecemos tu confianza.</p>';
+          $body = sprintf(
+            $body, 
+            $venta['cliente'], 
+            $venta['direccion']
+          );
+          $body .= $htmlTable;
+
+          $email->setBody($body);
+          $email->send();
+
+          // Al vendedor
+          $email->sendTo('jslocal@localhost.com');
+          $email->setSubject(sprintf('Venta entregada #%s', $venta['numero']));
+          $email->setAlt(sprintf('Entregaste la venta #%s', $venta['numero']));
+          $email->setBody(sprintf(
+            '<p>Paquete entregado a <b>%s</b> de la venta <b>%s</b> el día de hoy.</p><br>%s', 
+            $venta['cliente'], 
+            $venta['numero'],
+            $htmlTable)
+          );
+          $email->send();
+          break;
+        
+        default:
+          throw new Exception('Tipo de notificación desconocido.');
+      }
+
+      Flasher::success('Notificación enviada con éxito.');
+      Redirect::back();
+
+    } catch (Exception $e) {
+      Flasher::error($e->getMessage());
+      Redirect::back();
+    }
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////// George
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function george()
+  {
+    register_scripts([JS . 'documentos.js?v=' . get_asset_version()], 'George documentos');
+
+    $this->setTitle('Proyecto de George');
+    $this->setView('george');
     $this->render();
   }
 }

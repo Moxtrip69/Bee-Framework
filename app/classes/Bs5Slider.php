@@ -1,5 +1,8 @@
 <?php 
 
+/**
+ * Esta clase es sólo educativa, no aporta nada al Framework, puede ser borrada
+ */
 class Bs5Slider
 {
   private $id           = 'Bs5Slider';

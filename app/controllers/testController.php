@@ -20,12 +20,29 @@ class testController extends Controller implements ControllerInterface {
 
   function index()
   {
+    $to      = 'jslocal@localhost.com';
+    $subject = 'Este es el asunto del correo.';
+    $alt     = 'Soy el alt del correo electrónico.';
+    $body    = '<h1>Lorem ipsum, dolor sit</h1><p>Amet consectetur adipisicing elit. Facere, et sunt autem temporibus possimus molestias corrupti ab hic reiciendis. Doloremque!</p>';
+
+    $email = new BeeMailer;
+    $email->disableSmtp();
+    $email->sendTo($to);
+    $email->setSubject($subject);
+    $email->setAlt($alt);
+    $email->setBody($body);
+    $email->useTemplate(true);
+    $email->send();
+  }
+
+  function componentesbs5()
+  {
     // Slider
     $slider = new Bs5Slider;
     $slider->setId('slider-1');
     $slider->setClasses('shadow-lg rounded-3');
     $slider->setInterval(2000);
-    $slider->setControls(true);
+    $slider->setShowControls(true);
     $slider->setTransition('slide');
     $slider->setAutoplay(false);
     $slider->setImages(
@@ -58,6 +75,14 @@ class testController extends Controller implements ControllerInterface {
     $this->addToData('card', $card->render());
     $this->addToData('accordion', $accordion->render());
     $this->setView('index');
+    $this->render();
+  }
+
+  function particulas()
+  {
+    register_scripts(['https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js'], 'Particles js');
+    $this->setTitle('Partículas');
+    $this->setView('particulas');
     $this->render();
   }
 

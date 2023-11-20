@@ -116,7 +116,7 @@ class BeePdf
 		}
 
 		// Output the generated PDF to Browser
-		$dompdf->stream($this->filename, ["Attachment" => ($download === true ? true : false)]);
+		// $dompdf->stream($this->filename, ["Attachment" => ($download === true ? true : false)]);
 	}
 
 	/**

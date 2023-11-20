@@ -21,6 +21,7 @@
         <a class="list-group-item list-group-item-action" href="clases/reportes">CRUD de reportes</a>
         <a class="list-group-item list-group-item-action" href="clases/fullcalendar">Fullcalendar.js</a>
         <a class="list-group-item list-group-item-action" href="clases/componentes">Componentes</a>
+        <a class="list-group-item list-group-item-action" href="clases/correos-notificaciones">Correos electrónicos</a>
       </ul>
     </div>
   </div>

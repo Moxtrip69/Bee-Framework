@@ -13,6 +13,10 @@
       <h5><?php echo $d->title; ?></h5>
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, consequatur temporibus animi deleniti accusantium vitae commodi tempore eius nam neque?
 
+      <?php echo $d->ac; ?>
+
+      <?php echo $d->card; ?>
+
       <?php echo $d->slider; ?>
 
       <?php echo $d->productos; ?>
