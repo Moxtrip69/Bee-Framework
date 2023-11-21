@@ -74,7 +74,7 @@
               <i class="fab fa-vuejs fs-1 text-success mb-2"></i>
               <h3 class="fw-bold">Vue JS</h3>
               <p>Mira el ejemplo de integración.</p>
-              <a class="btn btn-light btn-sm" href="vuejs">Ver más</a>
+              <a class="btn btn-light btn-sm" href="bee/vuejs">Ver más</a>
             </div>
           </div>
 

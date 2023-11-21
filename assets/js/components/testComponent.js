@@ -30,7 +30,7 @@ export const testComponent = {
   <div className="p-5 bg-light border rounded shadow mt-5">
     <div className="text-center">
       <p>Componente <code>testComponent.js</code> cargado con éxito</p>
-      <a href="vuejs" className="text-muted">Regresar</a>
+      <a href="bee/vuejs" className="text-muted">Regresar</a>
     </div>
 
     <div className="row mt-3" v-if="post">

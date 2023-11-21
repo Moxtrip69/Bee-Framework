@@ -247,4 +247,38 @@ class beeController extends Controller implements ControllerInterface
     $this->setEngine('twig');
     $this->render();
   }
+
+  /**
+   * Ejemplo de uso con vuejs3
+   *
+   * @return void
+   */
+  function vuejs()
+  {
+    /**
+     * Registro de scripts para solo está ruta
+     */
+    register_scripts([JS . 'vueApp.min.js'], 'Bee framework vuejs 3');
+
+    $this->setTitle('Ejemplo de administrador de tareas');
+    $this->setView('vuejs');
+    $this->render();
+  }
+
+  /**
+   * Ejemplo de componente individual con Vuejs3
+   *
+   * @return void
+   */
+  function test_component()
+  {
+    /**
+     * Registro de scripts para solo está ruta
+     */
+    register_scripts([JS . 'vueApp.min.js'], 'Bee framework vuejs 3');
+
+    $this->setTitle('Componente de prueba');
+    $this->setView('testVuejs');
+    $this->render();
+  }
 }

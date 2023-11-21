@@ -218,7 +218,7 @@ export const postsListComponent = {
       <li class="list-group-item" v-for="(post, index) in posts" :key="post.id">
         {{post.titulo}} <span className="text-muted">por</span> {{post.nombre}}
         <div className="btn-group float-end">
-          <a :href="'vuejs/test/' + post.id" className="btn btn-sm btn-primary"><span className="fas fa-eye"></span></a>
+          <a :href="'bee/test-component/' + post.id" className="btn btn-sm btn-primary"><span className="fas fa-eye"></span></a>
           <button @click="openEdit(post.id)" class="btn btn-sm btn-success" :disabled="post.id == postEdit.id"><i class="fas fa-edit"></i></button>
           <button @click="removePost(post.id)" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
         </div>
