@@ -62,6 +62,13 @@ class BeePdf
 	 */
 	private $path_to_file = null;
 
+	/**
+	 * Define si se hará por defecto stream de información en el explorador
+	 *
+	 * @var boolean
+	 */
+	private $streamPdf   = false;
+
 
 	public function __construct(string $content = null, bool $download = false, bool $save_to_file = false)
 	{
@@ -116,7 +123,9 @@ class BeePdf
 		}
 
 		// Output the generated PDF to Browser
-		// $dompdf->stream($this->filename, ["Attachment" => ($download === true ? true : false)]);
+		if ($this->streamPdf === true) {
+			$dompdf->stream($this->filename, ["Attachment" => ($download === true ? true : false)]);
+		}
 	}
 
 	/**
@@ -159,6 +168,18 @@ class BeePdf
 	function setOrientation(string $orientation)
 	{
 		$this->orientation = $orientation;
+	}
+
+	/**
+	 * Define si se hará stream de la información del pdf
+	 * en el explorador por defecto al crearse el PDF
+	 *
+	 * @param boolean $stream
+	 * @return void
+	 */
+	function streamPdf(bool $stream)
+	{
+		$this->streamPdf = $stream;
 	}
 
 	/**
