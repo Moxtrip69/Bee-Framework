@@ -2680,7 +2680,7 @@ function get_site_lang()
 /**
  * Regresa el valor del charset por defecto del sistema, configurado en settings.php
  *
- * @return void
+ * @return string
  */
 function get_site_charset()
 {
