@@ -378,23 +378,29 @@ class beeController extends Controller implements ControllerInterface
       $filesToUpdate = array_merge($filesToUpdate, glob('app' . DS . 'models' . DS . '*Model.php'));
 
       // Testing
-      $filesToUpdate = [ 'app' . DS . 'core' . DS . 'update.txt' ];
-
-      // Iteración y sustitución de archivos
-      $copied = 0;
-      $errors = 0;
+      // $filesToUpdate = [ 'app' . DS . 'core' . DS . 'update.txt' ];
 
       // Verificar la versión remota del core
       $newCoreVersion = require $origen . 'app' . DS . 'core' . DS . 'bee_core_version.php';
-      logger($newCoreVersion);
+      logger(sprintf('Versión actual: %s | Versión remota: %s', $coreVersion, $newCoreVersion));
 
-      if (version_compare($coreVersion, $newCoreVersion, '>=')) {
+      if (version_compare($coreVersion, $newCoreVersion, '=')) {
         // Borrar la carpeta duplicada
         remove_dir(UPLOADS . $tmp);
         throw new Exception('La versión del core remota es igual a la versión actual de tu instancia.');
       }
 
+      if (version_compare($coreVersion, $newCoreVersion, '>')) {
+        // Borrar la carpeta duplicada
+        remove_dir(UPLOADS . $tmp);
+        throw new Exception('La versión del core remota es menor a la versión actual de tu instancia.');
+      }
+
       logger('Comenzando actualización de archivos...');
+
+      // Iteración y sustitución de archivos
+      $copied = 0;
+      $errors = 0;
 
       foreach ($filesToUpdate as $f) {
         if (!is_file($origen . $f)) {
