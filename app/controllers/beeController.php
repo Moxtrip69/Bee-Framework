@@ -339,6 +339,9 @@ class beeController extends Controller implements ControllerInterface
 
       logger('Eliminando repositorio temporal...');
 
+      // Path de origen de la actualización
+      $origen          = UPLOADS . $tmp . DS . sprintf('%s-%s', $repoName, $beeVersion) . DS;
+
       // Sustituir archivos necesarios
       $filesToUpdate   = [];
 
@@ -375,12 +378,21 @@ class beeController extends Controller implements ControllerInterface
       $filesToUpdate = array_merge($filesToUpdate, glob('app' . DS . 'models' . DS . '*Model.php'));
 
       // Testing
-      // $filesToUpdate = [ 'app' . DS . 'core' . DS . 'update.txt' ];
+      $filesToUpdate = [ 'app' . DS . 'core' . DS . 'update.txt' ];
 
       // Iteración y sustitución de archivos
-      $origen = UPLOADS . $tmp . DS . sprintf('%s-%s', $repoName, $beeVersion) . DS;
       $copied = 0;
       $errors = 0;
+
+      // Verificar la versión remota del core
+      $newCoreVersion = require $origen . 'app' . DS . 'core' . DS . 'bee_core_version.php';
+      logger($newCoreVersion);
+
+      if (version_compare($coreVersion, $newCoreVersion, '>=')) {
+        // Borrar la carpeta duplicada
+        remove_dir(UPLOADS . $tmp);
+        throw new Exception('La versión del core remota es igual a la versión actual de tu instancia.');
+      }
 
       logger('Comenzando actualización de archivos...');
 
@@ -410,8 +422,6 @@ class beeController extends Controller implements ControllerInterface
       logger(sprintf('Se actualizaron %s archivos con éxito.', $copied));
       logger(sprintf('Hubo errores en %s archivos.', $errors));
       logger(sprintf('Tiempo transcurrido: %ss.', $end - $start));
-
-      $newCoreVersion = function_exists('get_core_version') ? get_core_version() : '1.0.0';
       logger(sprintf('Versión actual: %s | Versión actualizada: %s', $coreVersion, $newCoreVersion));
 
       if ($errors > 0) {
