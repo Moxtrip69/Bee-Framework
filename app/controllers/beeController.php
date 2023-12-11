@@ -345,14 +345,21 @@ class beeController extends Controller implements ControllerInterface
       // Htaccess general
       $filesToUpdate[] = '.htaccess';
 
+      // Composer json
+      $filesToUpdate[] = 'app' . DS . 'composer.json';
+
       // Versión del core remota
       $filesToUpdate[] = 'app' . DS . 'core' . DS . 'bee_core_version.php';
       $filesToUpdate[] = 'app' . DS . 'core' . DS . 'update.txt';
+      // $filesToUpdate[] = 'app' . DS . 'core' . DS . 'settings.php'; // Próximamente
+
+      // Config y settings
+      // $filesToUpdate[] = 'app' . DS . 'config' . DS . 'bee_config.php';
 
       // Clases
       $filesToUpdate = array_merge($filesToUpdate, glob('app' . DS . 'classes' . DS . '*.php'));
 
-      // Funciones
+      // Funciones del core
       $filesToUpdate[] = 'app' . DS . 'functions' . DS . 'bee_core_functions.php';
 
       // Controladores
@@ -368,16 +375,7 @@ class beeController extends Controller implements ControllerInterface
       $filesToUpdate = array_merge($filesToUpdate, glob('app' . DS . 'models' . DS . '*Model.php'));
 
       // Testing
-      $filesToUpdate = [ 'app' . DS . 'core' . DS . 'update.txt' ];
-
-      // Controladores
-      // 'app' . DS . 'core' . DS . 'update.txt',
-      // 'app' . DS . 'controllers' . DS . 'beeController.php',
-      // 'app' . DS . 'controllers' . DS . 'adminController.php',
-      // 'app' . DS . 'controllers' . DS . 'creatorController.php',
-
-      // // Funciones
-      // 'app' . DS . 'functions' . DS . 'bee_core_functions.php',
+      // $filesToUpdate = [ 'app' . DS . 'core' . DS . 'update.txt' ];
 
       // Iteración y sustitución de archivos
       $origen = UPLOADS . $tmp . DS . sprintf('%s-%s', $repoName, $beeVersion) . DS;
