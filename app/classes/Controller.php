@@ -239,7 +239,7 @@ class Controller {
    */
   function setData(array $data)
   {
-    $this->data = $data;
+    $this->data = array_merge($this->data, $data);
   }
 
   /**
@@ -292,5 +292,15 @@ class Controller {
   function getRequest()
   {
     return $this->request;
+  }
+
+  /**
+   * Regresa el valor del tipo de controladores
+   *
+   * @return string
+   */
+  function getControllerType()
+  {
+    return $this->controllerType;
   }
 }

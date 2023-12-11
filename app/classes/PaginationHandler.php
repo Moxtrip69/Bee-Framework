@@ -2,7 +2,7 @@
 
 /**
  * @author Joystick
- * @version 1.0.0
+ * @version 1.0.2
  *
  */
 class PaginationHandler extends Model
@@ -149,30 +149,36 @@ class PaginationHandler extends Model
 	 */
 	private function create_pagination()
 	{
-		$pagination = '<ul class="mt-5 pagination ' . $this->alignment . '">';
+		$pagination  = '<ul class="mt-5 pagination bee-pagination-wrapper ' . $this->alignment . '">';
 		$pagination .=
-			'<li class="page-item ' . ($this->page == 1 ? 'disabled' : '') . '">
-			<a class="page-link" href="' . buildURL($this->pattern, [$this->variable => $this->page - 1], false, false) . '" title="Anterior">&laquo;</a>
+		'<li class="page-item ' . ($this->page == 1 ? 'disabled' : '') . '">
+			<a class="page-link" href="' . build_url($this->pattern, [$this->variable => $this->page - 1], false, false) . '" title="Anterior">&laquo;</a>
 		</li>';
 
+		// Current page
 		for ($i = 1; $i <= $this->pages; $i++) {
-			// Current page
-			$pagination .= '
-				<li class="page-item ' . ($this->page == $i ? 'active disabled' : '') . '">
-					<a class="page-link" href="' . buildURL($this->pattern, [$this->variable => $i], false, false) . '" >' . $i . '</a>
-				</li>
-				';
+			$pagination .= 
+			'<li class="page-item bee-pagination-item ' . ($this->page == $i ? 'active disabled' : '') . '" data-page="' . $this->page . '">
+				<a class="page-link" href="' . build_url($this->pattern, [$this->variable => $i], false, false) . '" >' . $i . '</a>
+			</li>';
 		}
 
 		$pagination .=
-			'<li class="page-item ' . ($this->page >= $this->pages ? 'disabled' : '') . '">
-			<a class="page-link" href="' . buildURL($this->pattern, [$this->variable => $this->page + 1], false, false) . '" title="Siguiente">&raquo;</a>
+		'<li class="page-item ' . ($this->page >= $this->pages ? 'disabled' : '') . '">
+			<a class="page-link" href="' . build_url($this->pattern, [$this->variable => $this->page + 1], false, false) . '" title="Siguiente">&raquo;</a>
 		</li>';
 		$pagination .= '</ul>';
 
 		## Links de paginación dinámicos
-		$this->pagination = $pagination;
-		$this->pagination .= sprintf('<small class="text-muted">Página %s de %s, mostrando %s-%s de %s resultados.</small>', $this->page, $this->pages, $this->start, $this->end, $this->total);
+		$this->pagination  = $pagination;
+		$this->pagination .= sprintf(
+			'<small class="text-muted">Página %s de %s, mostrando %s-%s de %s resultados.</small>', 
+			$this->page, 
+			$this->pages, 
+			$this->start, 
+			$this->end, 
+			$this->total
+		);
 		return $this->pagination;
 	}
 

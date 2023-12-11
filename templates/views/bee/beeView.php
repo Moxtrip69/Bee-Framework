@@ -33,6 +33,7 @@
             <i class="fas fa-download me-2"></i>Descargar
           </a>
           <a href="documentacion" class="btn btn-primary px-4">Documentación</a>
+          <a href="<?php echo build_url('bee/upgrade-core'); ?>" class="btn btn-danger px-4 confirmar"><i class="fas fa-fw fa-refresh"></i> Actualizar core</a>
         </div>
       </div>
       <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
@@ -119,7 +120,7 @@
               <i class="fas fa-heart fs-1 text-danger mb-2"></i>
               <h3 class="fw-bold">Donaciones</h3>
               <p>¿Me ayudarías?</p>
-              <a class="btn btn-light btn-sm" href="https://www.paypal.com/donate/?hosted_button_id=UBQCUXS8JU38W" target="_blank">Donar</a>
+              <a class="btn btn-light btn-sm" href="https://bit.ly/aportar-un-poco" target="_blank">Donar</a>
             </div>
           </div>
         </div>

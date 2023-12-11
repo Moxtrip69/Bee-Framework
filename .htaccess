@@ -68,9 +68,7 @@
   mod_gzip_item_exclude rspheader ^Content-Encoding:.*gzip.*
 </IfModule>
 
-# BEGIN WP-HUMMINGBIRD-CACHING
-# Las directivas (líneas) entre «BEGIN WP-HUMMINGBIRD-CACHING» y «END WP-HUMMINGBIRD-CACHING» son
-# generadas dinámicamente y solo deberían ser modificadas mediante filtros de WordPress.
+# BEGIN BEE-CACHING
 # Cualquier cambio en las directivas que hay entre esos marcadores serán sobrescritas.
 <IfModule mod_expires.c>
 ExpiresActive On
@@ -110,4 +108,4 @@ ExpiresDefault A31536000
    Header set Cache-Control "max-age=31536000"
   </FilesMatch>
 </IfModule>
-# END WP-HUMMINGBIRD-CACHING
+# END BEE-CACHING

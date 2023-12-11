@@ -45,9 +45,9 @@ class Bee
 
   /**
    * La URL completa que se recibe para procesar las peticiones
-   * @var array
+   * @var string
    */
-  private $uri                 = [];
+  private $uri                 = '';
 
   /**
    * Define si es requerido el uso de librerías externas en el proyecto
@@ -73,6 +73,7 @@ class Bee
   private $is_ajax             = false;
   private $is_endpoint         = false;
   private $endpoints           = ['api']; // Rutas o endpoints autorizados de la API por defecto
+  private $ajaxes              = ['ajax']; // Rutas o controladores para procesar peticiones asíncronas o AJAX
 
   // La función principal que se ejecuta al instanciar nuestra clase
   function __construct()
@@ -86,12 +87,23 @@ class Bee
   /**
    * Agrega un nuevo endpoint a la lista
    *
-   * @param string $endpoint
+   * @param string $endpoint Nombre del controlador a agregar
    * @return void
    */
   function addEndpoint(string $endpoint)
   {
     $this->endpoints[] = $endpoint;
+  }
+
+  /**
+   * Agrega un nuevo controlador ajax a la lista de autorización
+   *
+   * @param string $controller Nombre del controlador a agregar
+   * @return void
+   */
+  function addAjax(string $ajax)
+  {
+    $this->ajaxes[] = $ajax;
   }
 
   /**
@@ -443,7 +455,7 @@ class Bee
     $this->requestedController = $this->current_controller;
     
     // Validando si la petición entrante original es ajax, ajaxController es el único controlador aceptado para AJAX
-    if (in_array($this->current_controller, ['ajax'])) {
+    if (in_array($this->current_controller, $this->ajaxes)) {
       $this->is_ajax            = true; // Lo usaremos para filtrar más adelante nuestro tipo de respuesta al usuario
     }
 
@@ -562,6 +574,12 @@ class Bee
   {
     // Ejecutando controlador y método según se haga la petición
     $this->controller = new $this->controller;
+    $controllerType   = 'regular';
+
+    // Verificar el tipo de controlador
+    if (method_exists($this->controller, 'getControllerType')) {
+      $controllerType = $this->controller->getControllerType();
+    }
 
     // Llamada al método que solicita el usuario en curso
     if (empty($this->params)) {

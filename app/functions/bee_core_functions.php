@@ -58,13 +58,32 @@ function get_bee_version()
 }
 
 /**
+ * Regresa la versión actual del core de Bee framework
+ *
+ * @return string
+ */
+function get_core_version()
+{
+	$file = 'bee_core_version.php';
+
+	if (!is_file(CORE . $file)) {
+		return '1.0.0'; // Valor por defecto si aún no existe el archivo versionador
+	}
+
+	// Cargar información
+	$version = require CORE . $file;
+
+	return $version;
+}
+
+/**
  * Devuelve el email general del sistema
  *
  * @return string
  */
 function get_siteemail()
 {
-	return 'jslocal@localhost.com';
+	return PHPMAILER_USERNAME;
 }
 
 /**
@@ -104,7 +123,7 @@ function now()
  * @param boolean $die
  * @return string|bool
  */
-function json_output($json, $die = true)
+function json_output(string $json, bool $die = true)
 {
 	header('Access-Control-Allow-Origin: *');
 	header('Content-Type: application/json;charset=utf-8');
@@ -124,31 +143,16 @@ function json_output($json, $die = true)
 
 /**
  * Construye un nuevo string json
- 	200 OK
-	201 Created
-	300 Multiple Choices
-	301 Moved Permanently
-	302 Found
-	304 Not Modified
-	307 Temporary Redirect
-	400 Bad Request
-	401 Unauthorized
-	403 Forbidden
-	404 Not Found
-	410 Gone
-	500 Internal Server Error
-	501 Not Implemented
-	503 Service Unavailable
-	550 Permission denied
  *
  * @param integer $status
- * @param array $data
+ * @param mixed $data
  * @param string $msg
+ * @param mixed $error_code
  * @return string
  */
-function json_build($status = 200, $data = [], $msg = '', $error_code = null)
+function json_build(int $status = 200, $data = [], string $msg = '', $error_code = null)
 {
-	if (empty($msg) || $msg == '') {
+	if (empty($msg)) {
 		switch ($status) {
 			case 200:
 				$msg = 'OK';
@@ -186,13 +190,13 @@ function json_build($status = 200, $data = [], $msg = '', $error_code = null)
 	}
 
 	$json =
-		[
-			'status'     => $status,
-			'error'      => false,
-			'error_code' => $error_code,
-			'msg'        => $msg,
-			'data'       => $data
-		];
+	[
+		'status'     => $status,
+		'error'      => false,
+		'error_code' => $error_code,
+		'msg'        => $msg,
+		'data'       => $data
+	];
 
 	if (in_array($status, [400, 403, 404, 405, 500])) {
 		$json['error'] = true;
@@ -212,7 +216,7 @@ function json_build($status = 200, $data = [], $msg = '', $error_code = null)
  * @param array $data
  * @return bool|string
  */
-function get_module($view, $data = [])
+function get_module(string $view, array $data = [])
 {
 	$file_to_include = MODULES . $view . 'Module.php';
 	$output = '';
@@ -280,7 +284,7 @@ function buildURL($url, $params = [], $redirection = true, $csrf = true)
  * 
  * @return string
  */
-function build_url($url, $params = [], $redirection = true, $csrf = true)
+function build_url(string $url, array $params = [], bool $redirection = true, bool $csrf = true)
 {
 	// Formateo y parseo inicial de la URL pasada descomponiendo sus elementos
 	$query_array = [];
@@ -835,7 +839,7 @@ function insert_inputs()
  * @param integer $span
  * @return string
  */
-function generate_filename($size = 12, $span = 3)
+function generate_filename(int $size = 12, int $span = 3)
 {
 	if (!is_integer($size)) {
 		$size = 6;
@@ -934,7 +938,7 @@ function set_session($key, $value)
  * @param array $attachments
  * @return mixed
  */
-function send_email($from, $to, $subject, $body, $alt = null, $bcc = null, $reply_to = null, $attachments = [])
+function send_email(string $from, string $to, string $subject, string $body, $alt = null, $bcc = null, $reply_to = null, array $attachments = [])
 {
 	try {
 		$mail     = new PHPMailer(PHPMAILER_EXCEPTIONS); // Para desactivar Excepciones pasar false al constructor
@@ -1026,7 +1030,7 @@ function debug($data, $var_dump_mode = false)
  * @param integer $length
  * @return string
  */
-function generate_token($length = 32)
+function generate_token(int $length = 32)
 {
 	if (function_exists('random_bytes')) {
 		$token = bin2hex(random_bytes($length));
@@ -1139,7 +1143,7 @@ function check_get_data($required_params = [], $get_data = [])
  * @param string $icon La clase para el icono de fontawesome 5
  * @return string
  */
-function more_info($content, $color = 'text-info', $icon = 'fas fa-exclamation-circle')
+function more_info(string $content, string $color = 'text-info', string $icon = 'fas fa-exclamation-circle')
 {
 	$str    = clean($content);
 	$output = '<span class="%s" %s><i class="%s"></i></span>';
@@ -2798,4 +2802,56 @@ function remove_accents(string $string) {
 function get_cur_page()
 {
 	return CUR_PAGE;	
+}
+
+/**
+ * Remueve un directorio y todo su contenido de forma recursiva
+ *
+ * @param string $dir
+ * @return void
+ */
+function remove_dir(string $dir)
+{
+	if (is_dir($dir)) {
+		$objects = scandir($dir);
+		
+		foreach ($objects as $object) {
+			if ($object != "." && $object != "..") {
+				if (is_dir($dir . DIRECTORY_SEPARATOR . $object) && !is_link($dir . "/" . $object)) {
+					remove_dir($dir . DIRECTORY_SEPARATOR . $object);
+				} else {
+					unlink($dir . DIRECTORY_SEPARATOR . $object);
+				}
+			}
+		}
+
+		rmdir($dir);
+	}
+}
+
+/**
+ * Verifica si un determinado role puede hacer una acción específica
+ *
+ * @param string $role el slug del role del usuario
+ * @param string $slug el slug del permiso buscado
+ * @return boolean
+ */
+function can_user(string $role, string $permission)
+{
+	try {
+		$role = new BeeRoleManager($role);
+		return $role->can($permission);
+		
+	} catch (Exception $e) {
+		return false;
+	}
+}
+
+/**
+ * Verifica si la petición recibida es asíncrona o no
+ *
+ * @return boolean
+ */
+function is_ajax() {
+	return defined('DOING_AJAX') && DOING_AJAX === true;
 }

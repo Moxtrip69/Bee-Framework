@@ -2,20 +2,28 @@ $(document).ready(function () {
   /**
    * Alerta para confirmar una acción establecida en un link o ruta específica
    */
-  $('body').on('click', '.confirmar', function (e) {
+  $('body').on('click', '.confirmar', async function (e) {
     e.preventDefault();
 
-    let url = $(this).attr('href'),
-      ok = confirm('¿Estás seguro?');
+    const url    = $(this).attr('href');
+    const result = await Swal.fire({
+      title: "¿Estás seguro?",
+      showCancelButton: true,
+      confirmButtonText: "Si, está bien",
+    }).then((result) => result);
 
-    // Redirección a la URL del enlace
-    if (ok) {
-      window.location = url;
-      return true;
+    if (result.isConfirmed == false) {
+      console.log('Acción cancelada.');
+      return;
     }
 
-    console.log('Acción cancelada.');
-    return true;
+    // Confirmar acción
+    Swal.fire('¡Confirmado!', 'Redirigiendo...', "success");
+
+    setTimeout(() => {
+      window.location = url;
+      return;
+    }, 1500);
   });
 
   /**

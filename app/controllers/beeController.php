@@ -14,10 +14,9 @@ class beeController extends Controller implements ControllerInterface
     parent::__construct();
 
     // Validación de sesión de usuario, descomentar si requerida
-    // if (!Auth::validate()) {
-    //   Flasher::new('Debes iniciar sesión primero.', 'danger');
-    //   Redirect::to('login');
-    // }
+    if (!is_local()) {
+      die(get_bee_message(0));
+    }
   }
 
   function index()
@@ -130,7 +129,7 @@ class beeController extends Controller implements ControllerInterface
 
       // En caso de que no se lea contenido
       if (empty($contenido)) {
-        throw new Exception(sprintf('Hubo un problema y no pudimos generar las credenciales de %s.', get_bee_name()));
+        throw new Exception(sprintf('Hubo un problema y no pudimos generar las credenciales de %s, el contenido del archivo está vacío.', get_bee_name()));
       }
 
       foreach ($newSettings as $k => $v) {
@@ -280,5 +279,155 @@ class beeController extends Controller implements ControllerInterface
     $this->setTitle('Componente de prueba');
     $this->setView('testVuejs');
     $this->render();
+  }
+
+  /**
+   * Funció para actualizar el core del framework
+   * @since 1.5.81
+   *
+   * @return void
+   */
+  function upgrade_core()
+  {
+    try {
+      if (!check_get_data(['_t'], $_GET) || !Csrf::validate($_GET["_t"])) {
+        throw new Exception('Acción no autorizada.');
+      }
+
+      $coreVersion = function_exists('get_core_version') ? get_core_version() : '1.0.0';
+      $beeVersion  = get_bee_version();
+      $gitUser     = 'Moxtrip69';
+      $repoName    = 'Bee-Framework';
+      $repoUrl     = sprintf('https://github.com/%s/%s/archive/refs/heads/%s.zip', $gitUser, $repoName, $beeVersion);
+      $tmp         = 'BeeDownloaded';
+      $file        = sprintf('%s.zip', $tmp);
+      $start       = time();
+      $end         = 0;
+
+      logger('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
+      logger('---------- Inicia la actualización del core de Bee framework ----------');
+
+      // Descargar el archivo Zip del repositorio oficial
+      if (file_put_contents(UPLOADS . $file, file_get_contents($repoUrl)) === false) {
+        throw new Exception('Hubo un problema al descargar la actualización desde Github.');
+      }
+
+      // Verificar si la descarga fue exitosa
+      if (!is_file(UPLOADS . $file)) {
+        throw new Exception('Error al descargar el archivo zip.');
+      }
+
+      logger(sprintf('Repositorio descargado con éxito: %s', UPLOADS . $file));
+
+      // Abrir el archivo Zip descargado
+      $zip = new ZipArchive;
+      $res = $zip->open(UPLOADS . $file);
+
+      if ($res !== true) {
+        throw new Exception('Error al extraer el contenido del archivo zip.');
+      }
+
+      logger('Extrayendo repositorio temporal...');
+
+      $zip->extractTo(UPLOADS . $tmp);
+      $zip->close();
+
+      // Eliminar el Zip después de la extracción completada
+      if (!unlink(UPLOADS . $file)) {
+        throw new Exception(sprintf('Error al borrar el archivo descargado en: %s.', UPLOADS . $file));
+      }
+
+      logger('Eliminando repositorio temporal...');
+
+      // Sustituir archivos necesarios
+      $filesToUpdate   = [];
+
+      // Htaccess general
+      $filesToUpdate[] = '.htaccess';
+
+      // Versión del core remota
+      $filesToUpdate[] = 'app' . DS . 'core' . DS . 'bee_core_version.php';
+      $filesToUpdate[] = 'app' . DS . 'core' . DS . 'update.txt';
+
+      // Clases
+      $filesToUpdate = array_merge($filesToUpdate, glob('app' . DS . 'classes' . DS . '*.php'));
+
+      // Funciones
+      $filesToUpdate[] = 'app' . DS . 'functions' . DS . 'bee_core_functions.php';
+
+      // Controladores
+      $elements = ['bee','creator','admin'];
+      foreach ($elements as $el) {
+        $filesToUpdate[] = 'app' . DS . 'controllers' . DS . $el . 'Controller.php';
+      }
+
+      // Vistas
+      $filesToUpdate = array_merge($filesToUpdate, glob('templates' . DS . 'views' . DS . '*' . DS . '*View.php'));
+
+      // Modelos
+      $filesToUpdate = array_merge($filesToUpdate, glob('app' . DS . 'models' . DS . '*Model.php'));
+
+      // Testing
+      $filesToUpdate = [ 'app' . DS . 'core' . DS . 'update.txt' ];
+
+      // Controladores
+      // 'app' . DS . 'core' . DS . 'update.txt',
+      // 'app' . DS . 'controllers' . DS . 'beeController.php',
+      // 'app' . DS . 'controllers' . DS . 'adminController.php',
+      // 'app' . DS . 'controllers' . DS . 'creatorController.php',
+
+      // // Funciones
+      // 'app' . DS . 'functions' . DS . 'bee_core_functions.php',
+
+      // Iteración y sustitución de archivos
+      $origen = UPLOADS . $tmp . DS . sprintf('%s-%s', $repoName, $beeVersion) . DS;
+      $copied = 0;
+      $errors = 0;
+
+      logger('Comenzando actualización de archivos...');
+
+      foreach ($filesToUpdate as $f) {
+        if (!is_file($origen . $f)) {
+          $errors++;
+          logger(sprintf('Hubo un error con el archivo: %s', $origen . $f));
+        }
+        
+        copy($origen . $f, ROOT . $f);
+        $copied++;
+        logger(sprintf('Archivo actualizado: %s', ROOT . $f));
+      }
+
+      // Borrar la carpeta duplicada
+      remove_dir(UPLOADS . $tmp);
+      
+      // Termina el proceso
+      $end = time();
+
+      logger(sprintf('Se ha borrado la carpeta temporal: %s', UPLOADS . $tmp));
+      
+      $msg = sprintf('Hemos actualizado el core de tu instancia de Bee framework %s con éxito.', $beeVersion);
+      
+      Flasher::success($msg, 'Actualización completada');
+      logger($msg);
+      logger(sprintf('Se actualizaron %s archivos con éxito.', $copied));
+      logger(sprintf('Hubo errores en %s archivos.', $errors));
+      logger(sprintf('Tiempo transcurrido: %ss.', $end - $start));
+
+      $newCoreVersion = function_exists('get_core_version') ? get_core_version() : '1.0.0';
+      logger(sprintf('Versión actual: %s | Versión actualizada: %s', $coreVersion, $newCoreVersion));
+
+      if ($errors > 0) {
+        Flasher::error(sprintf('Hubo <b>%s</b> errores en la actualización del core.', $errors));
+      }
+
+    } catch (Exception $e) {
+      Flasher::error($e->getMessage());
+    }
+
+    logger('---------- Termina la actualización del core de Bee framework ----------');
+    logger('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
+    logger('');
+    
+    Redirect::back();
   }
 }

@@ -46,7 +46,7 @@ class ajaxController extends Controller implements ControllerInterface {
   function test()
   {
     try {
-      json_output(json_build(200, null, 'Prueba de AJAX realizada con éxito.'));
+      json_output(json_build(200, is_ajax(), 'Prueba de AJAX realizada con éxito.'));
     } catch (Exception $e) {
       json_output(json_build(400, null, $e->getMessage()));
     }

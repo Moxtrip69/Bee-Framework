@@ -67,6 +67,18 @@ class BeeRoleManager extends Model
   }
 
   /**
+   * Establece el slug del role en cuestión
+   *
+   * @param string $role El slug del role
+   * @return void
+   */
+  function setRole(string $role)
+  {
+    $this->roleSlug = $role;
+    $this->loadRole();
+  }
+
+  /**
    * Carga la información del role pasado en la instancia
    *
    * @return void
