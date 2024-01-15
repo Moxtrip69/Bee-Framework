@@ -480,10 +480,8 @@ class clasesController extends Controller implements ControllerInterface {
           $email->setSale($venta);
           $email->setCompanyEmail('ventas@joystick.com.mx');
           $email->newSaleToCustomer();
-          $email->clearList();
 
           $email->newSaleToCompany();
-          $email->clearList();
           break;
 
         case 'shipped':
@@ -507,7 +505,7 @@ class clasesController extends Controller implements ControllerInterface {
             $venta['direccion'],
             $venta['rastreo']
           );
-          $body .= $htmlTable;
+          $body .= '';
 
           $email->setBody($body);
           $email->send();
@@ -520,7 +518,7 @@ class clasesController extends Controller implements ControllerInterface {
             '<p>Envío en camino para <b>%s</b>, despachaste con éxito la venta <b>%s</b>.</p><br>%s', 
             $venta['cliente'], 
             $venta['numero'],
-            $htmlTable)
+            '')
           );
           $email->send();
           break;
@@ -544,7 +542,7 @@ class clasesController extends Controller implements ControllerInterface {
             $venta['cliente'], 
             $venta['direccion']
           );
-          $body .= $htmlTable;
+          $body .= '';
 
           $email->setBody($body);
           $email->send();
@@ -557,7 +555,7 @@ class clasesController extends Controller implements ControllerInterface {
             '<p>Paquete entregado a <b>%s</b> de la venta <b>%s</b> el día de hoy.</p><br>%s', 
             $venta['cliente'], 
             $venta['numero'],
-            $htmlTable)
+            '')
           );
           $email->send();
           break;
@@ -573,19 +571,5 @@ class clasesController extends Controller implements ControllerInterface {
       Flasher::error($e->getMessage());
       Redirect::back();
     }
-  }
-
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-  /////////// George
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-  function george()
-  {
-    register_scripts([JS . 'documentos.js?v=' . get_asset_version()], 'George documentos');
-
-    $this->setTitle('Proyecto de George');
-    $this->setView('george');
-    $this->render();
   }
 }
