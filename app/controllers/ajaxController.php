@@ -47,7 +47,7 @@ class ajaxController extends Controller implements ControllerInterface {
   {
     try {
       json_output(json_build(200, null, 'Prueba de AJAX realizada con éxito.'));
-    } catch (Exception $e) {
+    } catch (Exception $e) {    
       json_output(json_build(400, null, $e->getMessage()));
     }
   }
@@ -777,6 +777,37 @@ class ajaxController extends Controller implements ControllerInterface {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function cargar_reportes_sse()
+  {
+    try {
+      // Cabeceras para SSE
+      header('Content-Type: text/event-stream');
+      header('Cache-Control: no-cache');
 
-  
+      // Último ID enviado al cliente
+      $lastSentId = 0;
+
+      while (true) {
+        // Obtener nuevos datos desde la db
+        $sql     = 'SELECT * FROM posts WHERE tipo = "reporte" AND id > :id ORDER BY id ASC';
+        $newData = Model::query($sql, ['id' => $lastSentId]);
+
+        if (!$newData) {
+          sleep(5); // Dormir por 5 segundos antes de enviar otra actualización
+          continue; // Continuar al siguiente ciclo
+        }
+
+        // Actualizar el último ID enviado al cliente
+        $lastSentId = max(array_column($newData, 'id')); // el último ID con el máximo valor del array de datos
+
+        // Si hay nuevos registros en la base de datos, regresarlos
+        echo 'data: ' . json_encode($newData) . "\n\n";
+        ob_flush();
+        flush();
+      }
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
 }
