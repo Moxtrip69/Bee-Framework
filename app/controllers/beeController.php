@@ -377,6 +377,9 @@ class beeController extends Controller implements ControllerInterface
       // Modelos
       $filesToUpdate = array_merge($filesToUpdate, glob('app' . DS . 'models' . DS . '*Model.php'));
 
+      // Temas de Bootstrap 5
+      $filesToUpdate = array_merge($filesToUpdate, glob('assets' . DS . 'css' . DS . 'bs_themes' . DS . '*.css'));
+      
       // Testing
       // $filesToUpdate = [ 'app' . DS . 'core' . DS . 'update.txt' ];
 
