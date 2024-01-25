@@ -49,8 +49,21 @@ define('SITE_LANG'               , 'es');
 define('PREPROS'                 , true);              // Activar en caso de trabajar el desarrollo en prepros como servidor local
 define('PORT'                    , '8848');            // Puerto por defecto de Prepros 2020 >
 
+/**
+ * @since 1.6.0
+ * 
+ * Temas disponibles para bootstrap 5 solamente
+ * bs_darkly
+ * bs_flatly
+ * bs_lux
+ * bs_lumen
+ * bs_litera
+ * bs_vapor
+ * bs_zephyr
+ */
+define('CSS_FRAMEWORK'           , 'bs_flatly'); // opciones disponibles: bs o bs5 = Bootstrap 5 | bl = Bulma | fn = Foundation
+
 // Utilidades
-define('CSS_FRAMEWORK'           , 'bs_lumen'); // opciones disponibles: bs o bs5 = Bootstrap 5 | bl = Bulma | fn = Foundation
 define('JQUERY'                  , true);  // define si es requerido jQuery para el sitio
 define('VUEJS'                   , true);  // define si es requerido Vue js 3 para el sitio | CDN
 define('AXIOS'                   , false); // define si es requerido Axios para peticiones HTTP

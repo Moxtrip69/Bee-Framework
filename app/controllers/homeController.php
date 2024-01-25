@@ -1,6 +1,7 @@
-<?php 
+<?php
 
-class homeController extends Controller implements ControllerInterface {
+class homeController extends Controller implements ControllerInterface
+{
   function __construct()
   {
     // Ejecutar la funcionalidad del Controller padre

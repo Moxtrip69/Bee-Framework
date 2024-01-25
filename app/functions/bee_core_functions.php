@@ -1759,6 +1759,14 @@ function get_css_framework()
 			$cdn = $bs_themes . 'zephyr.min.css';
 			break;
 
+		case 'bs_flatly':
+			$cdn = $bs_themes . 'flatly.min.css';
+			break;
+
+		case 'bs_darkly':
+			$cdn = $bs_themes . 'darkly.min.css';
+			break;
+
 		case 'bs':
 		case 'bs5':
 		default:

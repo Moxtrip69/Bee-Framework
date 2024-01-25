@@ -1,7 +1,7 @@
 <?php 
 
-class ajaxController extends Controller implements ControllerInterface {
-
+class ajaxController extends Controller implements ControllerInterface 
+{
   function __construct()
   {
     parent::__construct('ajax');

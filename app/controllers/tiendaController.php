@@ -5,7 +5,8 @@
  *
  * Controlador de tienda
  */
-class tiendaController extends Controller implements ControllerInterface {
+class tiendaController extends Controller implements ControllerInterface
+{
 
   private $cartHandler;
   private $cart;

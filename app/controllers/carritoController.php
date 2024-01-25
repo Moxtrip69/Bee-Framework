@@ -5,7 +5,8 @@
  *
  * Controlador de carrito
  */
-class carritoController extends Controller implements ControllerInterface {
+class carritoController extends Controller implements ControllerInterface
+{
 
   private $cartHandler;
   private $cart;

@@ -3,7 +3,8 @@
 /**
  * Controlador para generar modelos y controladores de forma dinámica
  */
-class creatorController extends Controller implements ControllerInterface {
+class creatorController extends Controller implements ControllerInterface 
+{
   function __construct()
   {
     // Prevenir el ingreso en Producción

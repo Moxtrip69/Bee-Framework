@@ -6,7 +6,8 @@
  *
  * Controlador de api
  */
-class apiController extends Controller implements ControllerInterface {
+class apiController extends Controller implements ControllerInterface 
+{
 
   /**
    * Versión de la API actual de Bee framework
