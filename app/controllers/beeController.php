@@ -101,14 +101,14 @@ class beeController extends Controller implements ControllerInterface
 
       // Validar nombre de archivo
       $filename = 'settings.php';
-      $backup   = 'settings-backup.php';
+      $backup   = 'settings-backup.php'; // deprecado
       $updated  = 0;
       $errors   = 0;
 
       // Validar que existe el archivo settings-backup.php por seguridad
-      if (!is_file(CORE . $backup)) {
-        throw new Exception(sprintf('El archivo <b>%s</b> no existe, recomendamos crear un backup de <b>%s</b> antes de proceder.', $backup, $filename));
-      }
+      // if (!is_file(CORE . $backup)) {
+      //   throw new Exception(sprintf('El archivo <b>%s</b> no existe, recomendamos crear un backup de <b>%s</b> antes de proceder.', $backup, $filename));
+      // }
 
       // Validar la existencia del archivo de settings.php | solo por seguridad, en teoría esta validación ya se ha hecho anteriormente
       if (!is_file(CORE . $filename)) {

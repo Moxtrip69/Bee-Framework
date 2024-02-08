@@ -68,7 +68,7 @@ class TableSchema
    * @param mixed $value
    * @return void
    */
-  private function validate_datatype($type, $value = null)
+  private function validate_datatype(string $type, $value = null)
   {
     $output = '';
 
