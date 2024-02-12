@@ -316,7 +316,7 @@ final class BeeCartHandler
   function restartCart()
   {
     unset($_SESSION[$this->sessionName]);
-    $_SESSION[$this->sessionName] = $this->newCart();
+    // $_SESSION[$this->sessionName] = $this->newCart();
   }
 
   /**

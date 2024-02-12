@@ -1,6 +1,6 @@
 <?php 
 
-class TableSchema
+class BeeTableSchema
 {
   private $sql        = null;
   private $table_name = null;
@@ -146,44 +146,11 @@ class TableSchema
   }
 
   /**
-   * Método getter
-   *
-   * @param string $property
-   * @return mixed
-   */
-  public function get($property)
-  {
-    if (!isset($this->{$property})) {
-      throw new Exception(sprintf('No se reconoce la propiedad %s', $property));
-    }
-
-    return $this->{$property};
-  }
-
-  /**
-   * Método setter
-   *
-   * @param string $property
-   * @param mixed $value
-   * @return mixed
-   */
-  public function set($property, $value)
-  {
-    if (!isset($this->{$property})) {
-      throw new Exception(sprintf('No se reconoce la propiedad %s', $property));
-    }
-
-    $this->{$property} = $value;
-
-    return $this->{$property};
-  }
-
-  /**
    * Construye el query completo para crear la tabla de la base de datos
    *
    * @return string
    */
-  private function build()
+  private function buildQuery()
   {
     if (empty($this->columns)) {
       throw new Exception('No hay columnas para crear la tabla.');
@@ -227,9 +194,9 @@ class TableSchema
    *
    * @return string
    */
-  public function get_sql()
+  public function getQuery()
   {
-    return $this->build();
+    return $this->buildQuery();
   }
 
   /**

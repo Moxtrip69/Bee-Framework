@@ -414,10 +414,12 @@ class BeeHttp
             $this->data   = json_decode($this->body, true);
           } else if (strpos($contentType, 'multipart/form-data') !== false) {
             // El cuerpo de la solicitud está en formato form-data o similar
-            $this->data   = $_POST;
+            $this->data   = $this->body = $_POST;
           } else if (strpos($contentType, 'text/plain') !== false) {
             $this->body   = file_get_contents('php://input');
             $this->data   = json_decode($this->body, true);
+          } else if (isset($_POST)) {
+            $this->data   = $this->body = $_POST;
           }
         } else if ($this->r_type === 'PUT') {
           // Cargamos todo el contenido del cuerpo de la solicitud
