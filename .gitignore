@@ -8,3 +8,5 @@ app/composer.lock
 # composer.lock
 prepros.config
 app/config/config.php
+
+app/controllers/pruebasController.php
