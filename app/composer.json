@@ -5,6 +5,7 @@
 		"twig/twig": "^3.0",
 		"cocur/slugify": "^4.4",
 		"endroid/qr-code": "^4.8",
-		"dompdf/dompdf": "^2.0"
+		"dompdf/dompdf": "^2.0",
+		"vlucas/phpdotenv": "^5.6"
 	}
 }

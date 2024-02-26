@@ -10,3 +10,4 @@ prepros.config
 app/config/config.php
 
 app/controllers/pruebasController.php
+.env
