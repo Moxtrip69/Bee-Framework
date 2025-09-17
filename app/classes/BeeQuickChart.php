@@ -214,7 +214,7 @@ class BeeQuickChart
    *
    * @return bool
    */
-  function saveToImage(string $filename = null)
+  function saveToImage(?string $filename = null)
   {
     // URL del recurso
     $url      = $this->getUrl();

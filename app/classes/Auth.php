@@ -1,6 +1,7 @@
 <?php 
 /**
  * Clase para crear sesiones seguras de usuarios
+ * Ahora se usa BeeSessions
  */ 
 class Auth
 {
@@ -67,7 +68,7 @@ class Auth
 
   /**
    * Crea la sesión de un usuario
-   *
+   * @deprecated 1.6.0
    * @param mixed $user_id
    * @param array $user_data
    * @return bool
@@ -79,7 +80,7 @@ class Auth
     $session      =
     [
       'logged' => $self->logged,
-      'token'  => generate_token(),
+      'token'  => generate_token(), // TODO: Esto ya no será necesario con el nuevo sistema de sesiones ajustar después
       'id'     => $user_id,
       'ssid'   => session_id(),
       'user'   => $user_data
@@ -96,20 +97,15 @@ class Auth
    */
   public static function validate()
   {
-    $self = new self();
-
-    // Si no existe siquiera la variable de sesión en el sistema
-    if (!isset($_SESSION[$self->var])) {
-      return false;
-    }
+    global $Bee_User;
 
     // Validar la sesión
-    return $_SESSION[$self->var]['logged'] === true && $_SESSION[$self->var]['ssid'] === session_id() && $_SESSION[$self->var]['token'] !== null;
+    return !empty($Bee_User) ? true : false;
   }
 
   /**
    * Cierra la sesión del usuario en curso
-   *
+   * @deprecated 1.6.0
    * @return bool
    */
   public static function logout()

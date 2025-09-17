@@ -84,7 +84,7 @@
               <i class="fab fa-github fs-1 mb-2"></i>
               <h3 class="fw-bold">Github</h3>
               <p>Sígueme en Github.</p>
-              <a class="btn btn-light btn-sm" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.5.5">Ver más</a>
+              <a class="btn btn-light btn-sm" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.6.0">Ver más</a>
             </div>
           </div>
 
@@ -111,7 +111,7 @@
               <i class="fab fa-whatsapp fs-1 text-success mb-2"></i>
               <h3 class="fw-bold">WhatsApp</h3>
               <p>Úneta gratis al grupo.</p>
-              <a class="btn btn-light btn-sm" href="https://chat.whatsapp.com/GX86T4pVIFvCdMyovY5UgP" target="_blank">Unirme</a>
+              <a class="btn btn-light btn-sm" href="https://chat.whatsapp.com/FFwAr7qwwAO5KS9Y92AI2G" target="_blank">Unirme</a>
             </div>
           </div>
 
@@ -120,7 +120,7 @@
               <i class="fas fa-heart fs-1 text-danger mb-2"></i>
               <h3 class="fw-bold">Donaciones</h3>
               <p>¿Me ayudarías?</p>
-              <a class="btn btn-light btn-sm" href="https://bit.ly/aportar-un-poco" target="_blank">Donar</a>
+              <a class="btn btn-light btn-sm" href="https://buymeacoffee.com/joystickmx" target="_blank">Apoyar</a>
             </div>
           </div>
         </div>

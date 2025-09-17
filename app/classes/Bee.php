@@ -114,16 +114,17 @@ class Bee
   private function init()
   {
     // Todos los métodos que queremos ejecutar consecutivamente
-    $this->init_session();
-    $this->init_load_config();
     $this->init_framework_properties();
+    $this->init_session();
     $this->init_load_composer(); // Carga las dependencias de composer
+    $this->init_load_config();
     $this->init_autoload(); // Inicializa el cargador de nuestras clases
     $this->init_load_functions();
     
     try {
       BeeHookManager::runHook('init_set_up', $this);
       BeeHookManager::runHook('after_functions_loaded');
+
       /**
        * Se ha actualizado el orden de ejecución para poder
        * filtrar las peticiones en caso de ser necesario
@@ -152,6 +153,7 @@ class Bee
        */
       BeeHookManager::runHook('before_init_dispatch', $this->current_controller, $this->current_method, $this->params);
       $this->init_dispatch();
+
     } catch (Exception $e) {
       bee_die($e->getMessage());
     }
@@ -186,13 +188,14 @@ class Bee
     // Cargando el archivo de configuración
     require_once 'app/config/' . $file;
 
-    $file = 'settings.php';
-    if (!is_file('app/core/' . $file)) {
-      die(sprintf('El archivo %s no se encuentra, es requerido para que el sitio funcione.', $file));
-    }
+    // @deprecated 1.6.0
+    // $file = 'settings.php';
+    // if (!is_file('app/core/' . $file)) {
+    //   die(sprintf('El archivo %s no se encuentra, es requerido para que el sitio funcione.', $file));
+    // }
 
-    // Cargando el archivo de configuración
-    require_once 'app/core/' . $file;
+    // // Cargando el archivo de configuración
+    // require_once 'app/core/' . $file;
   }
 
   /**
@@ -204,7 +207,7 @@ class Bee
   private function init_framework_properties()
   {
     $this->framework = 'Bee Framework';
-    $this->version   = '1.5.8';
+    $this->version   = '1.6.0';
     $this->logo      = 'bee_logo.png';
     $this->lng       = 'es';
 
@@ -213,7 +216,7 @@ class Bee
     define('BEE_LOGO'      , $this->logo);
     define('BEE_DEVS'      , 'J. Roberto Orozco Aviles');
     define('BEE_SUPPORT'   , 'soporte@joystick.com.mx');
-    define('BEE_DONATIONS' , 'https://www.joystick.com.mx/donar/');
+    define('BEE_DONATIONS' , 'https://buymeacoffee.com/joystickmx');
     define('BEE_URL'       , 'https://github.com/Moxtrip69/Bee-Framework');
   }
 
@@ -327,43 +330,18 @@ class Bee
     global $Bee_User;
 
     // Para mantener abierta una sesión de usuario al ser persistente
-    if (persistent_session()) {
-      try {
-        // Autenticamos al usuario en caso de existir los cookies
-        // y de que sean válidos
-        $user = BeeSession::authenticate();
+    try {
+      // Autenticamos al usuario en caso de existir los cookies y de que sean válidos
+      $Bee_User = BeeSession::authenticate();
 
-        // En caso de que validación sea negativa y exista una sesión en curso abierta
-        // se destruye para prevenir cualquier error o ataque
-        if ($user === false && Auth::validate()) {
-          Auth::logout();
-
-          return true; // para prevenir que siga ejecutando
-        }
-
-        // En esta parte se puede cargar información diferente o adicional del usuario
-        // ya que sabemos que su autenticación es válida
-        ////////////////////////////////////
-
-        $Bee_User = !empty($user) ? $user : [];
-        // ---> $user = usuarioModel::by_id($id);
-
-        ////////////////////////////////////
-        // Se agrega la información del usuario a sesión
-        if (!empty($Bee_User)) {
-          /**
-           * Para prevenir la regeneración del token e id de sesión
-           * en caso de que ya haya ocurrido un inicio de sesión previo
-           */
-          if (!Auth::validate()) {
-            Auth::login($Bee_User['id'], $Bee_User);
-          }
-        }
-
-        return true;
-      } catch (Exception $e) {
-        bee_die($e->getMessage());
+      if ($Bee_User === false) {
+        $Bee_User = [];
       }
+
+      return true;
+
+    } catch (Exception $e) {
+      bee_die($e->getMessage());
     }
   }
 

@@ -57,7 +57,7 @@ class Flasher
    * @param string $type
    * @return void
    */
-  public static function new(string $msg, string $type = null, string $heading = null, bool $icon = true)
+  public static function new(string $msg, ?string $type = null, ?string $heading = null, bool $icon = true)
   {
     $self = new self();
 
@@ -91,7 +91,7 @@ class Flasher
    * @param string $heading
    * @return void
    */
-  static function error(string $msg, string $heading = null)
+  static function error(string $msg, ?string $heading = null)
   {
     self::new($msg, 'danger', $heading);
     return true;
@@ -104,7 +104,7 @@ class Flasher
    * @param string $heading
    * @return void
    */
-  static function info(string $msg, string $heading = null)
+  static function info(string $msg, ?string $heading = null)
   {
     self::new($msg, 'info', $heading);
     return true;
@@ -117,7 +117,7 @@ class Flasher
    * @param string $heading
    * @return void
    */
-  static function success(string $msg, string $heading = null)
+  static function success(string $msg, ?string $heading = null)
   {
     self::new($msg, 'success', $heading);
     return true;
@@ -130,7 +130,7 @@ class Flasher
    * @param string $heading
    * @return void
    */
-  static function warn(string $msg, string $heading = null)
+  static function warn(string $msg, ?string $heading = null)
   {
     self::new($msg, 'warning', $heading);
     return true;
@@ -143,7 +143,7 @@ class Flasher
    * @param string $heading
    * @return void
    */
-  static function primary(string $msg, string $heading = null)
+  static function primary(string $msg, ?string $heading = null)
   {
     self::new($msg, 'primary', $heading);
     return true;
@@ -156,7 +156,7 @@ class Flasher
    * @param string $heading
    * @return void
    */
-  static function dark(string $msg, string $heading = null)
+  static function dark(string $msg, ?string $heading = null)
   {
     self::new($msg, 'dark', $heading);
     return true;
@@ -270,7 +270,7 @@ class Flasher
    *
    * @return void
    */
-  public static function deny($messageType = 0)
+  public static function deny(int $messageType = 0)
   {
     $types =
     [
@@ -291,7 +291,7 @@ class Flasher
    * @param string $type
    * @return string
    */
-  private function format_type($type)
+  private function format_type(string $type)
   {
     if ($this->framework == 'fn' && $type === 'danger') {
       return 'alert';

@@ -2,7 +2,6 @@
 
 class Csrf
 {
-  
   private $length = 32; // longitud de nuestro token
   private $token; // token
   private $token_expiration; // tiempo de expiración

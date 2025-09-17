@@ -359,7 +359,7 @@ class PaginationHandler extends Model
 	 * @param int $maxItems
 	 * @return array
 	 */
-	public static function paginate(string $sql, array $params = [], int $rpp = 20, string $selector = null, bool $isAjax = false, bool $shorten = false, int $maxItems = null)
+	public static function paginate(string $sql, array $params = [], int $rpp = 20, ?string $selector = null, bool $isAjax = false, bool $shorten = false, ?int $maxItems = null)
 	{
 		$self         = new self();
 		$self->query  = $sql;

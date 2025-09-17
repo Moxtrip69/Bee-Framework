@@ -16,13 +16,12 @@ class logoutController extends Controller implements ControllerInterface
 
   function index()
   {
-    // Si las sesiones son persistentes es requerido borrar cookies
-    if (persistent_session() === true) {
-      BeeSession::destroy_session();
-    }
+    // Destruir la sesión de la DB y borrar cookies
+    BeeSession::destroy_session();
 
     // Borrar toda la información de $_SESSION
-    Auth::logout();
+    session_destroy();
+
     Redirect::to('login');
   }
 }

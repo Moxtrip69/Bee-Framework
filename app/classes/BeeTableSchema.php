@@ -13,7 +13,7 @@ class BeeTableSchema
   private $auto_inc   = 1;        // por defecto
   private $ph         = '`%s`';   // placeholder
 
-  public function __construct(string $table_name, string $engine = null, string $charset = null)
+  public function __construct(string $table_name, ?string $engine = null, ?string $charset = null)
   {
     $this->table_name = strtolower(str_replace(' ', '_', $table_name));
     $this->engine     = $engine !== null ? $engine : $this->engine;
@@ -68,7 +68,7 @@ class BeeTableSchema
    * @param mixed $value
    * @return void
    */
-  private function validate_datatype(string $type, $value = null)
+  private function validate_datatype(string $type, mixed $value = null)
   {
     $output = '';
 

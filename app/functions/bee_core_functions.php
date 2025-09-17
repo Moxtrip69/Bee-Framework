@@ -1259,15 +1259,9 @@ function get_favicon()
  * @param string $key Es el nombre de la columna en la base de datos
  * @return array|false
  */
-function get_user($key = null)
+function get_user(?string $key = null)
 {
 	global $Bee_User; // Información persistente del usuario
-
-	if (!isset($_SESSION['user_session'])) return false;
-
-	$session = $_SESSION['user_session']; // información de la sesión del usuario actual, regresará siempre falso si no hay dicha sesión
-
-	if (!isset($session['user']) || empty($session['user'])) return false;
 
 	/**
 	 * Se insertaba la información en sesión lo cual generaba un problema ya que solo se recargaba dicha información
@@ -1277,10 +1271,12 @@ function get_user($key = null)
 	 * @version 1.5.5
 	 */
 	// $user = $session['user']; // información de la base de datos o directamente insertada del usuario
-	$user = $Bee_User;
+	// if (!isset($_SESSION['user_session'])) return false;
+	// $session = $_SESSION['user_session']; // información de la sesión del usuario actual, regresará siempre falso si no hay dicha sesión
+	// if (!isset($session['user']) || empty($session['user'])) return false;
 
 	// Regresa la información del usuario o de la clave pasada
-	return $key === null ? $user : (isset($user[$key]) ? $user[$key] : false);
+	return $key === null ? $Bee_User : (isset($Bee_User[$key]) ? $Bee_User[$key] : false);
 }
 
 /**
@@ -2001,8 +1997,7 @@ function get_bee_info()
 			'Vistas'               => VIEWS,
 			'Imágenes'             => IMAGES_PATH,
 			'Subidas'              => UPLOADS,
-			'Usando Prepros'       => PREPROS === true ? 'Si' : 'No',
-			'Puerto Prepros'       => PORT,
+			'Puerto personalizado' => PORT,
 			'URL de recursos'      => ASSETS,
 			'URL de subidas'       => UPLOADED,
 			'URL de imágenes'      => IMAGES,
@@ -2022,7 +2017,6 @@ function get_bee_info()
 			'Versión del sitio'    => SITE_VERSION,
 			'Favicon del sitio'    => SITE_FAVICON,
 			'Logotipo del sitio'   => SITE_LOGO,
-			'Google Maps'          => IS_LOCAL ? GMAPS : '***',
 		];
 
 	return get_module('bee/info', $data);
@@ -2098,15 +2092,11 @@ function bee_db_die(string $error)
 /**
  * Determina si el framework va a trabajar o no con sesiones persistentes
  * basadas en Cookies en el exploral del usuario
- *
+ * @deprecated 1.6.0
  * @return bool
  */
 function persistent_session()
 {
-	if (!defined('BEE_COOKIES') || BEE_COOKIES !== true) {
-		return false;
-	}
-
 	return true;
 }
 

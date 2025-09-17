@@ -58,7 +58,7 @@ class BeeRoleManager extends Model
    */
   private $permissions               = [];
 
-  function __construct(string $roleSlug = null)
+  function __construct(?string $roleSlug = null)
   {
     if ($roleSlug !== null) {
       $this->roleSlug = $roleSlug;
@@ -362,7 +362,7 @@ class BeeRoleManager extends Model
    * @param string|null $description
    * @return bool
    */
-  function addPermission(string $name, string $slug, string $description = null)
+  function addPermission(string $name, string $slug, ?string $description = null)
   {
     $permission =
     [
