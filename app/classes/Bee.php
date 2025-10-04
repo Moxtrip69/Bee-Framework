@@ -74,6 +74,7 @@ class Bee
   private $is_endpoint         = false;
   private $endpoints           = ['api']; // Rutas o endpoints autorizados de la API por defecto
   private $ajaxes              = ['ajax']; // Rutas o controladores para procesar peticiones asíncronas o AJAX
+  private $settings            = []; // Cargados desde .env
 
   // La función principal que se ejecuta al instanciar nuestra clase
   function __construct()
@@ -124,6 +125,9 @@ class Bee
     try {
       BeeHookManager::runHook('init_set_up', $this);
       BeeHookManager::runHook('after_functions_loaded');
+      
+      // Añadir valores de configuraciós propios y estén disponibles
+      BeeHookManager::runHook('settings_loaded', $this->settings);
 
       /**
        * Se ha actualizado el orden de ejecución para poder

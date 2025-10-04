@@ -28,8 +28,9 @@ class loginController extends Controller implements ControllerInterface
       }
   
       // Data pasada del formulario
-      $usuario  = sanitize_input($_POST['usuario']);
-      $password = sanitize_input($_POST['password']);
+      array_map('sanitize_input', $_POST);
+      $usuario  = $_POST['usuario'];
+      $password = $_POST['password'];
   
       // Verificar información del usuario
       if (!$user = Model::list(BEE_USERS_TABLE, ['username' => $usuario], 1)) {

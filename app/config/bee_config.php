@@ -39,6 +39,9 @@ define('IMAGES_PATH'             , ROOT . 'assets' . DS . 'images' . DS);
 $dotenv = Dotenv::createImmutable(CONFIG);
 $dotenv->safeLoad();
 
+// Guardar todos los valores de configuración en settings
+$this->settings = $_ENV;
+
 // Puerto y la URL del sitio
 /**
  * Define si es requerida autenticación para consumir los recursos de la API
@@ -62,7 +65,7 @@ define('API_AUTH'                , filter_var($_ENV['API_PROTECTED'], FILTER_VAL
 define('IS_LOCAL'                , in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1']));
 define('PORT'                    , $_ENV['APP_PORT']); // Puerto personalizado
 define('PROTOCOL'                , isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http"); // Detectar si está en HTTPS o HTTP
-define('HOST'                    , sprintf('%s%s', IS_LOCAL ? 'localhost' : $_SERVER['HTTP_HOST'], !empty(PORT) ? ':' . PORT : '')); // Dominio o host localhost.com tudominio.com
+define('HOST'                    , sprintf('%s%s', IS_LOCAL ? 'localhost' : $_SERVER['HTTP_HOST'], !empty(PORT) && IS_LOCAL ? ':' . PORT : '')); // Dominio o host localhost.com tudominio.com
 define('REQUEST_URI'             , $_SERVER["REQUEST_URI"]);               // Parámetros y ruta requerida
 define('DEV_PATH'                , $_ENV['APP_DEV_PATH']); // Ruta del proyecto en desarrollo después de htdocs o www
 define('LIVE_PATH'               , $_ENV['APP_LIVE_PATH']); // Ruta del proyecto en producción
@@ -99,16 +102,16 @@ define('IS_DEMO'                 , filter_var($_ENV['IS_DEMO'], FILTER_VALIDATE_
  * puedes regenerarlas en bee/generate
  * @since 1.1.4
  */
-define('API_PUBLIC_KEY'          , '03d427-c4034c-d2dc71-373b10-36da67');
-define('API_PRIVATE_KEY'         , '51362e-0cb1b9-f9c183-17b0a3-1a002e');
+define('API_PUBLIC_KEY'          , $_ENV['API_PUBLIC_KEY']);
+define('API_PRIVATE_KEY'         , $_ENV['API_PRIVATE_KEY']);
 
 /**
  * Migrados desde config/bee_config.php a core/settings.php
  * 
  * Salt utilizada para agregar seguridad al hash de contraseñas dependiendo el uso requerido
  */
-define('AUTH_SALT'               , '$2y$10$WNRjHI4M7E/rMJlKYj2Im.0Pv5qlhoRTeT6jCoFzDAAHx69gyAMS.');
-define('NONCE_SALT'              , '');
+define('AUTH_SALT'               , $_ENV['AUTH_SALT']);
+define('NONCE_SALT'              , $_ENV['NONCE_SALT']);
 
 /**
  * @since 1.6.0
