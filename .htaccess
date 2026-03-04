@@ -13,6 +13,12 @@
   # Descomentar para forzar HTTPS
   #RewriteCond %{HTTPS} !=on
   #RewriteRule ^(.*)$ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Bloquear acceso directo a archivos .env
+  RewriteRule ^\.env - [F,L]
+
+  # Opcional: bloquear cualquier archivo oculto que comience con "."
+  RewriteRule /^\..* - [F,L]
 </IfModule>
 
 <FilesMatch "\.(?i:pdf)$">
@@ -30,6 +36,10 @@
 <FilesMatch "(?i).png$">
   ForceType application/octet-stream
   ForceType image/png
+</FilesMatch>
+# Bloquear acceso a archivos de entorno y configuración
+<FilesMatch "^(?:\.env|\.env\..*|composer\.json|composer\.lock|package\.json|webpack\.config\.js)$">
+  Require all denied
 </FilesMatch>
 
 # Enable Compression
@@ -68,7 +78,9 @@
   mod_gzip_item_exclude rspheader ^Content-Encoding:.*gzip.*
 </IfModule>
 
-# BEGIN BEE-CACHING
+# BEGIN WP-HUMMINGBIRD-CACHING
+# Las directivas (líneas) entre «BEGIN WP-HUMMINGBIRD-CACHING» y «END WP-HUMMINGBIRD-CACHING» son
+# generadas dinámicamente y solo deberían ser modificadas mediante filtros de WordPress.
 # Cualquier cambio en las directivas que hay entre esos marcadores serán sobrescritas.
 <IfModule mod_expires.c>
 ExpiresActive On
@@ -108,4 +120,4 @@ ExpiresDefault A31536000
    Header set Cache-Control "max-age=31536000"
   </FilesMatch>
 </IfModule>
-# END BEE-CACHING
+# END WP-HUMMINGBIRD-CACHING

@@ -1752,7 +1752,7 @@ function get_css_framework_scripts()
 		case 'bs':
 		case 'bs5':
 		default:
-			$cdn = 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js';
+			$cdn = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js';
 			break;
 	}
 
@@ -1772,7 +1772,7 @@ function get_jquery()
 	}
 
 	$placeholder = '<script src="%s"></script>';
-	$cdn         = 'https://code.jquery.com/jquery-3.6.0.min.js';
+	$cdn         = 'https://code.jquery.com/jquery-4.0.0.min.js';
 
 	return JQUERY === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
 }
@@ -1856,7 +1856,7 @@ function get_toastr($type = 'script')
 		case 'script':
 		default:
 			$placeholder = '<script src="%s"></script>';
-			$cdn         = '//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js';
+			$cdn         = 'https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js';
 			break;
 	}
 
@@ -2797,6 +2797,119 @@ function can_user(string $role, string $permission)
  *
  * @return boolean
  */
-function is_ajax() {
+function is_ajax() 
+{
 	return defined('DOING_AJAX') && DOING_AJAX === true;
+}
+
+/**
+ * Valida que el string sea alfabético con o sin espacios
+ *
+ * @param string $name
+ * @param boolean $spaces
+ * @return bool
+ */
+function validate_alphabetical(string $name, bool $spaces = false)
+{
+	if (!$spaces) {
+		return preg_match("/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/", trim($name));
+	}
+
+	// Regex: solo letras (mayúsculas/minúsculas) con acentos y ñ, espacios simples entre palabras
+  return preg_match("/^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$/", trim($name));
+}
+
+/**
+ * Válida si es un correo válido
+ *
+ * @param string $email
+ * @return bool
+ */
+function validate_email($email)
+{
+	return filter_var(trim($email), FILTER_VALIDATE_EMAIL) !== false;
+}
+
+/**
+ * Función para validar si el string tiene uppercases
+ *
+ * @param string $password
+ * @return boolean
+ */
+function has_uppercase(string $password)
+{
+	return preg_match('/[A-ZÁÉÍÓÚÑ]/', $password);
+}
+
+/**
+ * Función para validar si el string tiene lowercases
+ *
+ * @param string $password
+ * @return boolean
+ */
+function has_lowercase(string $password)
+{
+	return preg_match('/[a-záéíóúñ]/', $password);
+}
+
+/**
+ * Función para validar si el string tiene números integros
+ *
+ * @param string $password
+ * @return boolean
+ */
+function has_numbers(string $password)
+{
+	return preg_match('/\d/', $password);
+}
+
+/**
+ * Función para validar si el string tiene caracteres especiales
+ *
+ * @param string $password
+ * @return boolean
+ */
+function has_special_chars(string $password)
+{
+	return preg_match('/[\W_]/', $password);
+}
+
+/**
+ * Función para validar la longitud de un string
+ *
+ * @param string $password
+ * @param integer $min
+ * @return bool
+ */
+function validate_len(string $password, int $min = 8)
+{
+	return mb_strlen($password) >= $min;
+}
+
+/**
+ * Valida que sea un password o contraseña segura con base a diferentes criterios
+ *
+ * @param string $password
+ * @return array
+ */
+function validate_password($password)
+{
+	return [
+		'uppercases' => has_uppercase($password),
+		'lowercases' => has_lowercase($password),
+		'numbers'    => has_numbers($password),
+		'special'    => has_special_chars($password),
+		'length'     => validate_len($password)
+	];
+}
+
+/**
+ * Genera un UUID criptograficamente seguro
+ *
+ * @param integer $length
+ * @return string
+ */
+function generate_uuid(int $length = 16)
+{
+  return bin2hex(random_bytes($length));
 }

@@ -32,8 +32,8 @@
           <a href="<?php echo 'https://github.com/Moxtrip69/Bee-Framework/tree/' . get_bee_version(); ?>" class="btn btn-success px-4" target="_blank">
             <i class="fas fa-download me-2"></i>Descargar
           </a>
-          <a href="documentacion" class="btn btn-primary px-4">Documentación</a>
-          <a href="<?php echo build_url('bee/upgrade-core'); ?>" class="btn btn-danger px-4 confirmar"><i class="fas fa-fw fa-refresh"></i> Actualizar core</a>
+          <a href="<?php echo 'https://github.com/Moxtrip69/Bee-Framework/tree/' . get_bee_version(); ?>" class="btn btn-primary px-4">Documentación</a>
+          <a href="<?php echo build_url('bee/upgrade-core'); ?>" class="btn btn-danger px-4 confirmar d-none"><i class="fas fa-fw fa-refresh"></i> Actualizar core</a>
         </div>
       </div>
       <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">

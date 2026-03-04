@@ -159,6 +159,66 @@ class Model extends Db {
 	}
 
 	/**
+	 * Inserción masiva estática usando VALUES (...),(...),(...)
+	 *
+	 * @param string $table
+	 * @param array $rows
+	 * @return int
+	 * @throws Exception
+ */
+	public static function insertMany(string $table, array $rows): int
+	{
+		if (empty($rows)) {
+			throw new Exception("insertMany: El array de datos está vacío.");
+		}
+
+		// Obtener columnas desde la primera fila
+		$columns = array_keys($rows[0]);
+
+		// Armar lista de columnas: `col1`,`col2`,`col3`
+		$colsSql = "`" . implode("`,`", $columns) . "`";
+
+		$placeholders = [];
+		$values = [];
+
+		foreach ($rows as $row) {
+
+			// Validar que todas las filas tengan mismas keys
+			if (array_keys($row) !== $columns) {
+				throw new Exception("insertMany: Todas las filas deben tener las mismas columnas.");
+			}
+
+			// (? , ?, ?) ...
+			$placeholders[] = "(" . rtrim(str_repeat("?,", count($columns)), ",") . ")";
+
+			foreach ($columns as $col) {
+				$values[] = $row[$col];
+			}
+		}
+
+		$sql = "INSERT INTO `{$table}` ({$colsSql}) VALUES " . implode(",", $placeholders);
+
+		$pdo = Db::link(); // conexión estática
+
+		try {
+			$pdo->beginTransaction();
+
+			$stmt = $pdo->prepare($sql);
+			$stmt->execute($values);
+
+			$pdo->commit();
+
+			return count($rows);
+		} catch (Exception $e) {
+			if ($pdo->inTransaction()) {
+				$pdo->rollBack();
+			}
+
+			throw new Exception("insertMany error: " . $e->getMessage());
+		}
+	}
+
+	/**
 	 * Elimina o hace drop de una tabla
 	 * pasando el segundo parámetro en false podrá regresar una excepción si no existe la tabla
 	 * de lo contrario siempre será true la respuesta
