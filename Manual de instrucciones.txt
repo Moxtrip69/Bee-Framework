@@ -1,15 +1,18 @@
 ¡Gracias por apoyarnos!
 
 1.- Descomprime y coloca el código en tu servidor local
-2.- Actualiza el BASEPATH apuntando a tu proyecto dentro de bee_config.php
-3.- Si no usarás Prepros actualiza PREPROS en settings.php a false
-4.- Crea tu base de datos y ejecuta el SQL dentro de db_sistema_gastos.sql
+2.- Actualiza tus configuraciones dentro de .env (crea una copía de .env.example, nunca publiques tu .env)
+3.- Si no usarás Prepros deja APP_PORT sin valor
+4.- Crea tu base de datos y ejecuta el SQL dentro de database.sql
 6.- Instala las dependencias con Composer usando el comando "composer install"
 6.- Accede a tu proyecto e ingresa las credenciales bee y 123456
 7.- ¡Listo!
 
-Ingresa a tus cursos en la Academia:
+Ingresa a tus cursos del Pack Full Stack en la Academia de Joystick 2.0:
 https://www.academy.joystick.com.mx/enrollments
+
+Ingresa a tus cursos en la Academia de Joystick 3.0:
+https://joystick.aprendelms.com/
 
 Si necesitas soporte puedes escribirnos a:
 Discord 👉 https://discord.gg/wTzhKrg
