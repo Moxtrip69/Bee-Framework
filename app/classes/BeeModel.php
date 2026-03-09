@@ -128,14 +128,25 @@ abstract class BeeModel
   protected function update(): bool
   {
     $setColumns = array_diff(array_keys($this->attributes), $this->primaryKeys);
-    $set        = implode(', ', array_map(fn($c) => "{$c} = :{$c}", $setColumns));
 
-    $where      = $this->buildWhere($this->primaryKeys);
+    $set   = implode(', ', array_map(fn($c) => "{$c} = :{$c}", $setColumns));
+    $where = $this->buildWhere($this->primaryKeys);
 
-    $sql        = "UPDATE {$this->table} SET {$set} WHERE {$where}";
-    $stmt       = $this->pdo()->prepare($sql);
+    $sql   = "UPDATE {$this->table} SET {$set} WHERE {$where}";
+    $stmt  = $this->pdo()->prepare($sql);
 
-    return $stmt->execute($this->attributes);
+    // Parámetros solo necesarios
+    $params = [];
+
+    foreach ($setColumns as $col) {
+      $params[$col] = $this->attributes[$col];
+    }
+
+    foreach ($this->primaryKeys as $pk) {
+      $params[$pk] = $this->attributes[$pk];
+    }
+
+    return $stmt->execute($params);
   }
 
   public function delete(): bool
@@ -145,10 +156,18 @@ abstract class BeeModel
     }
 
     $where = $this->buildWhere($this->primaryKeys);
+
     $sql   = "DELETE FROM {$this->table} WHERE {$where}";
     $stmt  = $this->pdo()->prepare($sql);
 
-    return $stmt->execute($this->attributes);
+    // Solo PK
+    $params = [];
+
+    foreach ($this->primaryKeys as $pk) {
+      $params[$pk] = $this->attributes[$pk];
+    }
+
+    return $stmt->execute($params);
   }
 
   /** =========================
