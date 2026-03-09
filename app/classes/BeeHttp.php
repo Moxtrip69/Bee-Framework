@@ -392,58 +392,76 @@ class BeeHttp
    */
   private function parse_body()
   {
-    // Leer el ouput del cuerpo dependiendo el verbo o petición
-    switch (strtolower($this->r_type)) {
-      case 'get':
-        $this->body  = $_GET;
-        $this->data  = $this->body;
-        break;
-      case 'post':
-      case 'put':
-      case 'delete':
-      case 'headers':
-      case 'options':
-        // Accedemos al content type definido por la petición
-        $contentType = isset($this->headers['CONTENT_TYPE']) ? $this->headers['CONTENT_TYPE'] : '';
+    $method      = strtoupper($this->r_type);
+    $contentType = $this->headers['CONTENT_TYPE'] ?? ($_SERVER['CONTENT_TYPE'] ?? '');
+    $contentType = strtolower($contentType);
 
-        // Dependiendo el tipo de petición accedemos de forma diferente al cuerpo de la petición y la data en él
-        if ($this->r_type === 'POST') {
-          if ($contentType === 'application/json' || strpos($contentType, 'application/json') !== false) {
-            // El cuerpo de la solicitud está en formato JSON
-            $this->body   = file_get_contents('php://input');
-            $this->data   = json_decode($this->body, true);
-          } else if (strpos($contentType, 'multipart/form-data') !== false) {
-            // El cuerpo de la solicitud está en formato form-data o similar
-            $this->data   = $this->body = $_POST;
-          } else if (strpos($contentType, 'text/plain') !== false) {
-            $this->body   = file_get_contents('php://input');
-            $this->data   = json_decode($this->body, true);
-          } else if (isset($_POST)) {
-            $this->data   = $this->body = $_POST;
-          }
-        } else if ($this->r_type === 'PUT') {
-          // Cargamos todo el contenido del cuerpo de la solicitud
-          $this->body     = file_get_contents('php://input');
+    $this->body  = null;
+    $this->data  = [];
+    $this->files = $_FILES ?? [];
 
-          // Verificar el tipo de contenido del cuerpo de la solicitud
-          if ($contentType === 'application/json' || strpos($contentType, 'application/json') !== false) {
-            // El cuerpo de la solicitud está en formato JSON
-            $this->data   = json_decode($this->body, true);
-          } else if (strpos($contentType, 'multipart/form-data') !== false) {
-            // El cuerpo de la solicitud está en formato form-data o similar
-            // Puedes usar parse_str para analizar los datos de form-data en un array asociativo
-            parse_str($this->body, $this->parsed);
-            $this->data = $this->parsed;
-          }
-        } else {
-          $this->body   = file_get_contents('php://input');
-          $this->data   = json_decode($this->body, true);
-        }
-
-        // Anexamos todos los archivos encontrados
-        $this->files  = isset($_FILES) ? $_FILES : [];
-        break;
+    // GET es trivial
+    if ($method === 'GET') {
+      $this->body = $_GET;
+      $this->data = $_GET;
+      return;
     }
+
+    // Leer raw body solo una vez
+    $rawBody = file_get_contents('php://input');
+    $this->body = $rawBody;
+
+    // JSON
+    if (strpos($contentType, 'application/json') !== false) {
+
+      $decoded = json_decode($rawBody, true);
+      $this->data = is_array($decoded) ? $decoded : [];
+
+      return;
+    }
+
+    // multipart/form-data
+    if (strpos($contentType, 'multipart/form-data') !== false) {
+
+      // PHP ya lo parsea automáticamente en POST
+      if ($method === 'POST') {
+        $this->data = $_POST ?? [];
+        return;
+      }
+
+      // multipart en PUT/PATCH/DELETE no lo maneja PHP
+      // aquí normalmente necesitarías un parser manual
+      $this->data = $_POST ?? [];
+
+      return;
+    }
+
+    // application/x-www-form-urlencoded
+    if (strpos($contentType, 'application/x-www-form-urlencoded') !== false) {
+
+      parse_str($rawBody, $parsed);
+      $this->data = $parsed;
+
+      return;
+    }
+
+    // text/plain (intentamos json)
+    if (strpos($contentType, 'text/plain') !== false) {
+
+      $decoded = json_decode($rawBody, true);
+
+      if (is_array($decoded)) {
+        $this->data = $decoded;
+      } else {
+        $this->data = ['raw' => $rawBody];
+      }
+
+      return;
+    }
+
+    // fallback
+    $decoded = json_decode($rawBody, true);
+    $this->data = is_array($decoded) ? $decoded : [];
   }
 
   /**
