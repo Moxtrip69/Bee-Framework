@@ -1,6 +1,6 @@
-<?php 
+<?php
 
-class ajaxController extends Controller implements ControllerInterface 
+class ajaxController extends Controller implements ControllerInterface
 {
   function __construct()
   {
@@ -63,7 +63,6 @@ class ajaxController extends Controller implements ControllerInterface
     try {
       $posts = Model::list('pruebas');
       json_output(json_build(200, $posts));
-
     } catch (Exception $e) {
       json_output(json_build(400, null, $e->getMessage()));
     }
@@ -86,7 +85,6 @@ class ajaxController extends Controller implements ControllerInterface
       }
 
       json_output(json_build(200, $post));
-
     } catch (Exception $e) {
       json_output(json_build(400, null, $e->getMessage()));
     }
@@ -100,7 +98,7 @@ class ajaxController extends Controller implements ControllerInterface
   function test_add_post()
   {
     try {
-      if (!check_posted_data(['titulo','contenido','nombre'], $this->data)) {
+      if (!check_posted_data(['titulo', 'contenido', 'nombre'], $this->data)) {
         throw new Exception('Parámetros faltantes.');
       }
 
@@ -114,21 +112,20 @@ class ajaxController extends Controller implements ControllerInterface
       $contenido = clean($this->data['contenido']);
 
       $data =
-      [
-        'nombre'    => $nombre,
-        'titulo'    => $titulo,
-        'contenido' => $contenido,
-        'creado'    => now()
-      ];
+        [
+          'nombre'    => $nombre,
+          'titulo'    => $titulo,
+          'contenido' => $contenido,
+          'creado'    => now()
+        ];
 
       if (!$id = Model::add('pruebas', $data)) {
         throw new Exception(get_bee_message('not_added'));
       }
 
       $post = Model::list('pruebas', ['id' => $id], 1);
-      
-      json_output(json_build(201, $post, get_bee_message('added')));
 
+      json_output(json_build(201, $post, get_bee_message('added')));
     } catch (Exception $e) {
       json_output(json_build(400, null, $e->getMessage()));
     }
@@ -142,7 +139,7 @@ class ajaxController extends Controller implements ControllerInterface
   function test_update_post()
   {
     try {
-      if (!check_posted_data(['id','titulo','contenido','nombre'], $this->data)) {
+      if (!check_posted_data(['id', 'titulo', 'contenido', 'nombre'], $this->data)) {
         throw new Exception('Parámetros faltantes.');
       }
 
@@ -156,20 +153,19 @@ class ajaxController extends Controller implements ControllerInterface
       }
 
       $data =
-      [
-        'nombre'    => $nombre,
-        'titulo'    => $titulo,
-        'contenido' => $contenido
-      ];
+        [
+          'nombre'    => $nombre,
+          'titulo'    => $titulo,
+          'contenido' => $contenido
+        ];
 
       if (!Model::update('pruebas', ['id' => $id], $data)) {
         throw new Exception(get_bee_message('not_updated'));
       }
 
       $post = Model::list('pruebas', ['id' => $id], 1);
-      
-      json_output(json_build(200, $post, get_bee_message('updated')));
 
+      json_output(json_build(200, $post, get_bee_message('updated')));
     } catch (Exception $e) {
       json_output(json_build(400, null, $e->getMessage()));
     }
@@ -195,9 +191,8 @@ class ajaxController extends Controller implements ControllerInterface
       if (!Model::remove('pruebas', ['id' => $post['id']])) {
         throw new Exception(get_bee_message('not_deleted'));
       }
-      
-      json_output(json_build(200, $post, 'Post borrado con éxito.'));
 
+      json_output(json_build(200, $post, 'Post borrado con éxito.'));
     } catch (Exception $e) {
       json_output(json_build(400, null, $e->getMessage()));
     }
