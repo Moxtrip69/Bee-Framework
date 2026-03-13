@@ -1772,7 +1772,7 @@ function get_jquery()
 	}
 
 	$placeholder = '<script src="%s"></script>';
-	$cdn         = 'https://code.jquery.com/jquery-4.0.0.min.js';
+	$cdn         = 'https://code.jquery.com/jquery-3.6.0.min.js';
 
 	return JQUERY === true ? sprintf($placeholder, $cdn) : '<!-- Desactivado en settings -->';
 }
