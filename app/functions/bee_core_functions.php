@@ -2913,3 +2913,23 @@ function generate_uuid(int $length = 16)
 {
   return bin2hex(random_bytes($length));
 }
+
+/**
+ * Genera un uuid estandarizado
+ *
+ * @return string
+ */
+function uuidv4()
+{
+	return sprintf(
+		'%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+		random_int(0, 0xffff),
+		random_int(0, 0xffff),
+		random_int(0, 0xffff),
+		random_int(0, 0x0fff) | 0x4000,
+		random_int(0, 0x3fff) | 0x8000,
+		random_int(0, 0xffff),
+		random_int(0, 0xffff),
+		random_int(0, 0xffff)
+	);
+}
