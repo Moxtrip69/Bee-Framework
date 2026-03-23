@@ -174,7 +174,7 @@ abstract class BeeModel
    * Consultas clásicas
    * ========================= */
 
-  public static function all(): array
+  public static function fetchAll(): array
   {
     $instance = new static;
     $sql      = "SELECT * FROM {$instance->table}";
@@ -184,8 +184,8 @@ abstract class BeeModel
   public static function find(array $keys): ?static
   {
     $instance = new static;
-
     $where    = $instance->buildWhere(array_keys($keys));
+
     $sql      = "SELECT * FROM {$instance->table} WHERE {$where} LIMIT 1";
 
     $stmt     = $instance->pdo()->prepare($sql);
@@ -202,6 +202,7 @@ abstract class BeeModel
     $conditions = $instance->buildWhere(array_keys($keys));
 
     $sql        = "SELECT * FROM {$instance->table} WHERE {$conditions} LIMIT 1";
+
     $stmt       = $instance->pdo()->prepare($sql);
     $stmt->execute($keys);
 
@@ -216,6 +217,7 @@ abstract class BeeModel
     $conditions = $instance->buildWhere(array_keys($keys));
 
     $sql        = "SELECT {$column} FROM {$instance->table} WHERE {$conditions} LIMIT 1";
+
     $stmt       = $instance->pdo()->prepare($sql);
     $stmt->execute($keys);
 
@@ -225,8 +227,10 @@ abstract class BeeModel
   public static function query(string $sql, array $params = []): PDOStatement
   {
     $instance = new static;
+
     $stmt     = $instance->pdo()->prepare($sql);
     $stmt->execute($params);
+    
     return $stmt;
   }
 
