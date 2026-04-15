@@ -356,7 +356,35 @@ class BeeHttp
    */
   private function check_csrf()
   {
-    $this->csrf = isset($this->data['csrf']) ? $this->data['csrf'] : null;
+    $token = null;
+
+    // 1. Body (JSON / form)
+    if (isset($this->data['csrf'])) {
+      $token = $this->data['csrf'];
+    }
+
+    // 2. Headers (RECOMENDADO)
+    if (!$token) {
+      $headerKeys = [
+        'HTTP_X_CSRF_TOKEN',
+        'X-CSRF-TOKEN',
+        'HTTP_X_XSRF_TOKEN'
+      ];
+
+      foreach ($headerKeys as $key) {
+        if (isset($this->headers[$key])) {
+          $token = $this->headers[$key];
+          break;
+        }
+      }
+    }
+
+    // 3. Query param (fallback opcional)
+    if (!$token && isset($_GET['csrf'])) {
+      $token = $_GET['csrf'];
+    }
+
+    $this->csrf = $token;
   }
 
   /**
@@ -378,8 +406,18 @@ class BeeHttp
    */
   private function validate_csrf()
   {
-    if ($this->call === 'ajax' && in_array(strtolower($this->r_type), ['post', 'put', 'delete']) && !Csrf::validate($this->csrf)) {
-      throw new BeeHttpException('Autorización no válida.', 401); // 401
+    if ($this->call !== 'ajax') return;
+
+    $method = strtolower($this->r_type);
+
+    if (!in_array($method, ['post', 'put', 'patch', 'delete'])) return;
+
+    if (empty($this->csrf)) {
+      throw new BeeHttpException('CSRF token requerido.', 401);
+    }
+
+    if (!Csrf::validate($this->csrf)) {
+      throw new BeeHttpException('CSRF inválido.', 401);
     }
   }
 
@@ -407,16 +445,27 @@ class BeeHttp
       return;
     }
 
-    // Leer raw body solo una vez
+    // 🔥 SOLO AJUSTE: detectar binarios y NO consumir php://input
+    $isBinaryStream = (
+      strpos($contentType, 'application/octet-stream') !== false ||
+      strpos($contentType, 'video/') !== false
+    );
+
+    if ($isBinaryStream) {
+      // No leer php://input para no romper el stream
+      $this->body = null;
+      $this->data = [];
+      return;
+    }
+
+    // Leer raw body (solo si NO es binario)
     $rawBody = file_get_contents('php://input');
     $this->body = $rawBody;
 
     // JSON
     if (strpos($contentType, 'application/json') !== false) {
-
       $decoded = json_decode($rawBody, true);
       $this->data = is_array($decoded) ? $decoded : [];
-
       return;
     }
 
@@ -429,23 +478,19 @@ class BeeHttp
         return;
       }
 
-      // multipart en PUT/PATCH/DELETE no lo maneja PHP
-      // aquí normalmente necesitarías un parser manual
+      // fallback (mantiene comportamiento previo)
       $this->data = $_POST ?? [];
-
       return;
     }
 
     // application/x-www-form-urlencoded
     if (strpos($contentType, 'application/x-www-form-urlencoded') !== false) {
-
       parse_str($rawBody, $parsed);
       $this->data = $parsed;
-
       return;
     }
 
-    // text/plain (intentamos json)
+    // text/plain
     if (strpos($contentType, 'text/plain') !== false) {
 
       $decoded = json_decode($rawBody, true);
