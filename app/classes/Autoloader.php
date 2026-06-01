@@ -20,12 +20,20 @@ class Autoloader
    */
   private static function autoload($class_name)
   {
-    if (is_file(CLASSES . $class_name . '.php')) {
-      require_once CLASSES . $class_name . '.php';
-    } elseif (is_file(CONTROLLERS . $class_name . '.php')) {
-      require_once CONTROLLERS . $class_name . '.php';
-    } elseif (is_file(MODELS . $class_name . '.php')) {
-      require_once MODELS . $class_name . '.php';
+    $filename = sprintf('%s.php', $class_name);
+    $paths    =
+    [
+      CLASSES,
+      CONTROLLERS,
+      MODELS,
+      APP . 'services' . DS,
+      APP . 'utils' . DS
+    ];
+
+    foreach ($paths as $path) {
+      if (is_file($path . $filename)) {
+        require_once $path . $filename;
+      }
     }
   }
 }
