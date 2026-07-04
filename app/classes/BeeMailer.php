@@ -134,6 +134,13 @@ class BeeMailer
    */
   private $attachments = [];
 
+  /**
+   * Control de conexión persistente
+   *
+   * @var boolean
+   */
+  private $connected   = false;
+
   function __construct()
   {
     $this->mailer   = new PHPMailer(PHPMAILER_EXCEPTIONS);
@@ -177,7 +184,7 @@ class BeeMailer
 
   function setFrom(string $email)
   {
-    $this->from     = $email;
+    $this->from = $email;
   }
   
   function setFromName(string $name)
@@ -226,6 +233,46 @@ class BeeMailer
   }
 
   /**
+   * Conectar una sola vez (persistente)
+   */
+  public function connect()
+  {
+    if ($this->connected) return;
+
+    if ($this->smtp === true) {
+      $this->mailer->isSMTP();
+      $this->mailer->SMTPAuth   = true;
+      $this->mailer->Host       = $this->host;
+      $this->mailer->Username   = $this->username;
+      $this->mailer->Password   = $this->password;
+      $this->mailer->SMTPSecure = $this->security === 'ssl'
+        ? PHPMailer::ENCRYPTION_SMTPS
+        : PHPMailer::ENCRYPTION_STARTTLS;
+      $this->mailer->Port       = $this->port;
+
+      if ($this->debug === true) {
+        $this->mailer->SMTPDebug = SMTP::DEBUG_SERVER;
+      }
+
+      $this->mailer->smtpConnect();
+      $this->connected = true;
+      logger('Conexión SMTP realizada con éxito.');
+    }
+  }
+
+  /**
+   * Cerrar conexión manualmente
+   */
+  public function disconnect()
+  {
+    if ($this->connected) {
+      $this->mailer->smtpClose();
+      $this->connected = false;
+      logger('Conexión SMTP cerrada con éxito.');
+    }
+  }
+
+  /**
    * Envía el correo electrónico completamente con todas las configuraciones actuales
    *
    * @return void
@@ -233,25 +280,8 @@ class BeeMailer
   function send()
   {
     try {
-      // Conexión SMTP y settings del servidor
-      if ($this->smtp === true) {
-        $this->mailer->isSMTP();
-
-        // Modo verboso de conexión
-        if ($this->debug === true) {
-          $this->mailer->SMTPDebug = SMTP::DEBUG_SERVER;
-        }
-
-        // Credenciales de conexión SMTP
-        $this->mailer->SMTPAuth   = $this->smtp;
-        $this->mailer->Host       = $this->host;
-        $this->mailer->Username   = $this->username;
-        $this->mailer->Password   = $this->password;
-        $this->mailer->SMTPSecure = $this->security === 'ssl' ?
-          PHPMailer::ENCRYPTION_SMTPS :
-          PHPMailer::ENCRYPTION_STARTTLS;
-        $this->mailer->Port       = $this->port;
-      }
+      // Reusar conexión
+      $this->connect();
 
       // Charset del contenido
       $this->mailer->CharSet = $this->charset;
@@ -295,7 +325,14 @@ class BeeMailer
 
       // Enviar el correo electrónico
       $this->mailer->send();
+
+      // Limpiar pero NO cerrar conexión
       $this->mailer->clearAllRecipients();
+      $this->mailer->clearAttachments();
+
+      // reset destinatarios internos
+      $this->to = [];
+
       return true;
 
     } catch (EmailException $e) {
