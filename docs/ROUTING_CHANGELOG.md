@@ -29,3 +29,17 @@ Un path sin registro devuelve estado `NotFound`; esta señal será utilizada par
 - Parámetros opcionales.
 - Grupos y middleware.
 - Duplicados y rutas desconocidas.
+
+## Incremento 2 — API declarativa estilo Laravel
+
+### Añadido
+
+- Fachada `Route` con métodos por verbo, `match()` y `any()`.
+- Registro directo en archivos PHP sin `return` ni función contenedora.
+- Grupos encadenables con `prefix()`, `name()` y `middleware()`.
+- Limpieza explícita de la fachada para evitar estado residual en workers y pruebas.
+- Generador de URLs para rutas nombradas, parámetros opcionales y query strings.
+
+### Diseño
+
+La fachada sólo delega al objeto `Router` del contenedor. El motor, colección y generación de URLs siguen siendo objetos inyectables y comprobables.
