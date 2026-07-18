@@ -1,7 +1,7 @@
 # Changelog técnico — Fase 1: estabilización del núcleo
 
-Fecha de inicio: 2026-07-18  
-Estado: en progreso
+Fecha de inicio: 2026-07-18
+Estado: finalizada
 
 Este documento registra los cambios realizados para que HTTP, CLI, cron, pruebas y updater compartan configuración y servicios sin simular una petición web.
 
@@ -57,10 +57,6 @@ Este documento registra los cambios realizados para que HTTP, CLI, cron, pruebas
 - El bootstrap de pruebas admite overrides sin simular una petición.
 - La suite hostil del updater continúa aprobando sus 19 escenarios.
 
-## Incrementos pendientes
-
-- Entrada CLI y prueba integral del criterio de salida.
-
 ## Incremento 3 — Servicios, logging y errores
 
 ### Añadido
@@ -83,3 +79,36 @@ Este documento registra los cambios realizados para que HTTP, CLI, cron, pruebas
 - Conversión de errores PHP en `ErrorException`.
 - Redacción comprobada de contraseñas y otros campos sensibles en logs.
 - Suites de Core y updater aprobadas tras la integración.
+
+## Incremento 4 — CLI y cierre de fase
+
+### Añadido
+
+- Entrypoint `bee` independiente del front controller HTTP.
+- Contratos de comando y aplicación CLI con excepción específica para comandos desconocidos.
+- Comando `core:status` para verificar configuración, servicios, raíz y aislamiento HTTP.
+- Bootstrap de cron construido sobre la misma capa segura de CLI.
+- Prueba de proceso real que ejecuta la CLI desde otro CWD y valida su salida JSON.
+- Documento de arquitectura y checklist `PHASE_1_CORE_STABILIZATION.md`.
+
+### Cambiado
+
+- `Bee` toma su versión desde la identidad autoritativa.
+- `get_core_version()` queda como alias de compatibilidad de `BEE_VERSION`.
+- `.env.example` deja de declarar una versión duplicada y referencia `identity.php`.
+
+### Verificación
+
+- `php bee core:status` carga configuración y servicios sin sesión, HTTP, controladores ni `Bee::fly()`.
+- Cron carga los mismos servicios sin constantes de petición.
+- Todos los bootstraps, servicios y componentes nuevos pasan validación de sintaxis.
+- Las suites de Core y updater permanecen aprobadas.
+- `composer.json` y `composer.lock` son consistentes y Composer valida sin errores de esquema.
+
+### Deuda de dependencias detectada
+
+`composer audit --locked` reportó 19 avisos existentes en tres dependencias: `twig/twig`, `phenx/php-svg-lib` y `verot/class.upload.php`. No se actualizaron dentro de esta fase porque hacerlo cambia librerías runtime y requiere una matriz de regresión específica. Deben corregirse antes de construir o publicar un release de producción.
+
+## Incrementos pendientes
+
+Ninguno dentro del alcance aprobado para fase 1.

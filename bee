@@ -1,0 +1,24 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Bee\Core\Cli\CliApplication;
+use Bee\Core\Cli\CoreStatusCommand;
+
+$arguments = array_slice($argv ?? [], 1);
+$applicationRoot = __DIR__;
+
+foreach ($arguments as $index => $argument) {
+    if (str_starts_with($argument, '--root=')) {
+        $applicationRoot = substr($argument, 7);
+        unset($arguments[$index]);
+    }
+}
+$arguments = array_values($arguments);
+
+$application = require $applicationRoot . '/app/bootstrap/cli.php';
+$cli = new CliApplication();
+$cli->add(new CoreStatusCommand($application));
+
+exit($cli->run($arguments));

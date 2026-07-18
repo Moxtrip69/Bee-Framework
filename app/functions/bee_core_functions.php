@@ -64,16 +64,8 @@ function get_bee_version()
  */
 function get_core_version()
 {
-	$file = 'bee_core_version.php';
-
-	if (!is_file(CORE . $file)) {
-		return '1.0.0'; // Valor por defecto si aún no existe el archivo versionador
-	}
-
-	// Cargar información
-	$version = require CORE . $file;
-
-	return $version;
+	// @deprecated 1.6.0 La versión de core es la versión autoritativa de Bee.
+	return BEE_VERSION;
 }
 
 /**

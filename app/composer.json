@@ -1,4 +1,7 @@
 {
+	"name": "joystick/bee-framework",
+	"description": "Bee Framework application core and runtime.",
+	"license": "GPL-3.0-only",
 	"autoload": {
 		"psr-4": {
 			"Bee\\Core\\": "src/Core/",

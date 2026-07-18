@@ -199,7 +199,7 @@ class Bee
   private function init_framework_properties()
   {
     $this->framework = 'Bee Framework';
-    $this->version   = '1.6.0';
+    $this->version   = BEE_VERSION;
     $this->logo      = 'bee_logo.png';
     $this->lng       = 'es';
 
