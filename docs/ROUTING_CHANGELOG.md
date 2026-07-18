@@ -43,3 +43,15 @@ Un path sin registro devuelve estado `NotFound`; esta señal será utilizada par
 ### Diseño
 
 La fachada sólo delega al objeto `Router` del contenedor. El motor, colección y generación de URLs siguen siendo objetos inyectables y comprobables.
+
+## Incremento 3 — Request, middleware y despacho
+
+### Añadido
+
+- Request HTTP tipado con método, path relativo al base path, query, body y headers.
+- Override seguro `_method` para formularios `POST` hacia `PUT`, `PATCH` o `DELETE`.
+- Respuestas HTTP tipadas, JSON, `204` y emisor con soporte para `HEAD`.
+- Registro de middleware por alias y pipeline por ruta/grupo.
+- Dispatcher para closures, funciones, controladores y clases invocables.
+- Inyección de request, match, servicios y parámetros nombrados con conversión escalar.
+- Excepciones HTTP con status y headers integradas al manejador central.

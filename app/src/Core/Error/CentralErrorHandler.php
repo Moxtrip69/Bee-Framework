@@ -7,6 +7,7 @@ namespace Bee\Core\Error;
 use Bee\Core\Foundation\ExecutionMode;
 use Bee\Core\Logging\Logger;
 use Bee\Core\Logging\LogLevel;
+use Bee\Core\Http\Exception\HttpException;
 use ErrorException;
 use Throwable;
 
@@ -58,8 +59,14 @@ final readonly class CentralErrorHandler implements ThrowableHandler
             return;
         }
 
+        $status = $throwable instanceof HttpException ? $throwable->status : 500;
         if (!headers_sent()) {
-            http_response_code(500);
+            http_response_code($status);
+            if ($throwable instanceof HttpException) {
+                foreach ($throwable->headers as $name => $value) {
+                    header($name . ': ' . $value, true);
+                }
+            }
             header('Content-Type: text/plain; charset=UTF-8');
         }
         echo $message;
