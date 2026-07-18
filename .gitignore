@@ -13,3 +13,7 @@ app/config/config.php
 app/controllers/pruebasController.php
 templates/views/pruebas/
 .env
+
+# Internal development context (kept locally, never published)
+/AGENTS.md
+/docs/*.md
