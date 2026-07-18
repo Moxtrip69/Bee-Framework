@@ -120,6 +120,40 @@ $slug = sanitize_slug($_POST['title'] ?? '');
 
 También está disponible `sanitize_string()` para texto general. La sanitización debe combinarse con validación de negocio, consultas preparadas y escape contextual al generar HTML.
 
+### Modelos y consultas ORM
+
+`BeeModel` conserva sus APIs anteriores y añade consultas fluidas, hidratación de modelos, asignación masiva controlada, casts, timestamps y seguimiento de cambios:
+
+```php
+final class ArticleModel extends BeeModel
+{
+    protected string $table = 'articles';
+    protected array $fillable = ['title', 'status', 'views'];
+    protected array $casts = ['views' => 'integer'];
+    protected bool $timestamps = true;
+}
+
+$article = ArticleModel::create([
+    'title' => 'Bee moderno',
+    'status' => 'draft',
+    'views' => 0,
+]);
+
+$published = ArticleModel::where('status', 'published')
+    ->where('views', '>=', 100)
+    ->orderBy('created_at', 'desc')
+    ->limit(10)
+    ->get();
+
+$article = ArticleModel::find(10);
+$article->status = 'published';
+$article->save();
+```
+
+También están disponibles `whereIn()`, `whereNull()`, `first()`, `value()`, `count()`, `exists()`, `paginate()`, actualizaciones y eliminaciones masivas condicionadas. Estas últimas exigen al menos una cláusula `WHERE` para evitar cambios accidentales sobre toda la tabla.
+
+Los métodos históricos `fetchAll()`, `find(array)`, `first(array)`, `column()` y `query()` permanecen compatibles.
+
 ### Actualizaciones seguras
 
 El inspector de paquetes valida manifiestos, compatibilidad, hashes y firmas Ed25519 mediante Sodium antes de aceptar una actualización. La instalación permanece separada de la inspección para reducir efectos laterales y permitir su uso desde HTTP o CLI.
@@ -130,6 +164,7 @@ El inspector de paquetes valida manifiestos, compatibilidad, hashes y firmas Ed2
 php tests/Core/services.php
 php tests/Core/configuration_access.php
 php tests/Core/sanitizers.php
+php tests/Core/bee_model.php
 php tests/Core/routing.php
 php tests/Core/route_facade.php
 php tests/Core/route_dispatcher.php
