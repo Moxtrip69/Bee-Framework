@@ -1,52 +1,30 @@
 <?php require_once INCLUDES . 'header.php'; ?>
 <?php require_once INCLUDES . 'bee_navbar.php'; ?>
 
-<div class="container py-5 main-wrapper">
-  <div class="row">
-    <div class="col-12">
-      <?php echo Flasher::flash(); ?>
+<main class="container bee-section main-wrapper">
+  <header class="bee-page-header">
+    <span class="bee-eyebrow">Herramienta local</span>
+    <h1>Generador de contraseñas</h1>
+    <p>Crea una contraseña y su hash compatible con la autenticación actual de Bee.</p>
+  </header>
+  <?= Flasher::flash(); ?>
+  <div class="row g-4">
+    <div class="col-12 col-lg-4">
+      <form class="bee-card" action="bee/password" method="post">
+        <label for="password" class="form-label">Contraseña personalizada</label>
+        <input class="form-control" type="text" id="password" name="password" minlength="8" autocomplete="new-password" placeholder="Mínimo 8 caracteres">
+        <p class="small text-secondary mt-2">Déjala vacía para generar una automáticamente.</p>
+        <button class="btn btn-primary w-100 mt-3">Generar credencial</button>
+      </form>
+    </div>
+    <div class="col-12 col-lg-8">
+      <section class="bee-card bee-credential" aria-labelledby="credential-title">
+        <h2 id="credential-title" class="h4">Resultado</h2>
+        <div class="bee-data-row"><span>Contraseña</span><code><?= htmlspecialchars($d->pw->password, ENT_QUOTES, 'UTF-8') ?></code></div>
+        <div class="bee-data-row"><span>Hash</span><code class="text-break"><?= htmlspecialchars($d->pw->hash, ENT_QUOTES, 'UTF-8') ?></code></div>
+      </section>
     </div>
   </div>
-  <div class="row">
-    <div class="col-12 text-center mb-5">
-      <h2><a href="<?php echo get_base_url(); ?>"><img src="<?php echo get_bee_logo(); ?>" alt="Bee framework" class="img-fluid" style="width: 100px;"></a></h2>
-    </div>
-
-    <div class="col-12">
-      <p>La contraseña ha sido generada con éxito, debes editarla dentro de <code>loginController.php</code> en el método <code>post_login()</code> si no usarás <b>sesiones de usuario persistentes</b> (Con Cookies).</p>
-      <div class="row">
-        <div class="col-12 col-md-4">
-          <div class="card">
-            <div class="card-body">
-              <form action="bee/password" method="post">
-                <div class="mb-3">
-                  <label for="password" class="form-label">Contraseña deseada <span class="text-danger">*</span></label>
-                  <input class="form-control" type="text" id="password" name="password" required>
-                </div>
-
-                <button class="btn btn-success">Generar</button>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12 col-md-8">
-          <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-              <tr>
-                <th class="bg-light">Contraseña</th>
-                <td><?php echo $d->pw->password; ?></td>
-              </tr>
-              <tr>
-                <th class="bg-light">Hash</th>
-                <td><?php echo $d->pw->hash; ?></td>
-              </tr>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+</main>
 
 <?php require_once INCLUDES . 'footer.php'; ?>

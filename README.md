@@ -206,6 +206,8 @@ npx sass assets/scss/main.scss assets/css/main.min.css --style=compressed --no-s
 
 Las plantillas cargan exclusivamente `assets/css/main.min.css`; los cambios en parciales nunca deben editar directamente el archivo compilado.
 
+Las vistas locales incluidas con `beeController` comparten esta identidad visual: inicio, generador de contraseñas, perfil, diagnósticos, demos de Vue y Twig, así como las pantallas generales de error. Sus estilos viven en `assets/scss/_bee.scss`; las demos conservan sus puntos de montaje (`#mainApp` y `#testApp`) y los valores variables se escapan antes de renderizarse.
+
 Ejemplo de consulta:
 
 ```php
@@ -243,6 +245,7 @@ composer --working-dir=app audit
 ## Changelog
 ### v 1.6.0
 
+- Rediseño integral y adaptable de las vistas locales de `beeController`, navegación Bee, herramientas, demos, diagnóstico y errores.
 - Núcleo compartido con bootstraps independientes para HTTP, CLI, cron, pruebas y updater.
 - Configuración tipada, servicios reutilizables, logging estándar y manejo centralizado de errores.
 - Autoload PSR-4 para componentes nuevos, manteniendo constantes y APIs globales como compatibilidad temporal.

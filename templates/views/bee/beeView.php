@@ -1,132 +1,62 @@
 <?php require_once INCLUDES . 'header.php'; ?>
 <?php require_once INCLUDES . 'bee_navbar.php'; ?>
 
-<div id="test_ajax"></div>
-<div id="test_api"></div>
-
-<div class="main-wrapper">
-  <section class="container py-5">
-    <div class="row">
-      <div class="col-12 col-md-6 d-flex flex-column justify-content-center">
-        <small class="d-block text-muted mb-3"><?php echo sprintf('Versión %s', get_bee_version()); ?></small>
-
-        <h1 class="fw-bold">Un framework hecho en casa, con pasión y mucho cariño</h1>
-        <h5 class="text-muted">Ligero, rápido y personalizable, úsalo como gustes, en tus proyectos personales o comerciales.</h5>
-
-        <?php echo Flasher::flash(); ?>
-
-        <div class="mt-3 wrapper_db_test" style="display: none;">
-          <div class="alert"><!-- Ajax --></div>
+<main class="main-wrapper bee-home">
+  <section class="bee-hero">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-12 col-lg-7">
+          <span class="bee-eyebrow"><span class="bee-status-dot"></span> Bee Framework <?= htmlspecialchars(get_bee_version()) ?></span>
+          <h1>Construye productos claros.<br><span class="text-bee">Hazlos volar.</span></h1>
+          <p class="bee-hero-copy">Un framework PHP ligero y modular para aplicaciones web, APIs, CLI y procesos programados, con una arquitectura que puede crecer contigo.</p>
+          <?= Flasher::flash(); ?>
+          <div class="d-flex flex-wrap gap-2 mt-4">
+            <a href="documentacion" class="btn btn-primary">Explorar documentación</a>
+            <a href="creator" class="btn btn-outline-secondary">Crear componente</a>
+            <a href="https://github.com/Moxtrip69/Bee-Framework/tree/<?= rawurlencode(get_bee_version()) ?>" class="btn btn-link" target="_blank" rel="noopener noreferrer">Ver en GitHub ↗</a>
+          </div>
+          <dl class="bee-stats mt-5">
+            <div><dt>PHP</dt><dd>8.2+</dd></div>
+            <div><dt>Core</dt><dd><?= htmlspecialchars(get_core_version()) ?></dd></div>
+            <div><dt>Arquitectura</dt><dd>Modular</dd></div>
+          </dl>
         </div>
-
-        <ul class="m-0 ps-4">
-          <li class="mb-1">Desarrollado con <b>PHP, Javascript</b> y <b>HTML5</b></li>
-          <li class="mb-1">Listo para <code>Bootstrap 5, Bulma y Foundation</code></li>
-          <li class="mb-1">Funciona utilizando el patrón <b>MVC</b></li>
-          <li class="mb-1">Sistema de sesiones de usuario persistentes con Cookies</li>
-          <li class="mb-1"><b>ORM</b> sencillo incluido para manipulación de bases de datos</li>
-          <li class="mb-1"><b>100%</b> personalizable y escalable</li>
-        </ul>
-
-        <div class="d-flex flex-row gap-2 mt-3">
-          <a href="<?php echo 'https://github.com/Moxtrip69/Bee-Framework/tree/' . get_bee_version(); ?>" class="btn btn-success px-4" target="_blank">
-            <i class="fas fa-download me-2"></i>Descargar
-          </a>
-          <a href="<?php echo 'https://github.com/Moxtrip69/Bee-Framework/tree/' . get_bee_version(); ?>" class="btn btn-primary px-4">Documentación</a>
-          <a href="<?php echo build_url('bee/upgrade-core'); ?>" class="btn btn-danger px-4 confirmar d-none"><i class="fas fa-fw fa-refresh"></i> Actualizar core</a>
-        </div>
-      </div>
-      <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
-        <img src="<?php echo get_image('bee-framework-academia-de-joystick-roberto-orozco-aviles.png'); ?>" alt="<?php echo get_bee_name(); ?>" class="img-fluid" style="width: 80%;">
-      </div>
-    </div>
-    <div class="row my-5">
-      <div class="col-12 mt-5">
-        <div class="row g-3">
-          <div class="col-12 col-md-3">
-            <div class="d-flex flex-column align-items-center border rounded p-4 shadow">
-              <i class="fas fa-book fs-1 text-warning mb-2"></i>
-              <h3 class="fw-bold">Creator</h3>
-              <p>Crea un controlador, modelo o vista.</p>
-              <a class="btn btn-light btn-sm" href="creator">Ver más</a>
-            </div>
-          </div>
-          
-          <div class="col-12 col-md-3">
-            <?php if (!Auth::validate()) : ?>
-              <div class="d-flex flex-column align-items-center border rounded p-4 shadow">
-                <i class="fas fa-user fs-1 text-info mb-2"></i>
-                <h3 class="fw-bold">Mi cuenta</h3>
-                <p>Accede a la cuenta de pruebas.</p>
-                <a class="btn btn-light btn-sm" href="login">Ingresar</a>
-              </div>
-            <?php else : ?>
-              <div class="d-flex flex-column align-items-center border rounded p-4 shadow">
-                <i class="fas fa-user fs-1 text-info mb-2"></i>
-                <h3 class="fw-bold">Mi cuenta</h3>
-                <p>Mira la información de la cuenta actual.</p>
-                <a class="btn btn-light btn-sm" href="bee/perfil">Mi cuenta</a>
-              </div>
-            <?php endif; ?>
-          </div>
-
-          <div class="col-12 col-md-3">
-            <div class="d-flex flex-column align-items-center border rounded p-4 shadow">
-              <i class="fab fa-vuejs fs-1 text-success mb-2"></i>
-              <h3 class="fw-bold">Vue JS</h3>
-              <p>Mira el ejemplo de integración.</p>
-              <a class="btn btn-light btn-sm" href="bee/vuejs">Ver más</a>
-            </div>
-          </div>
-
-          <div class="col-12 col-md-3">
-            <div class="d-flex flex-column align-items-center border rounded p-4 shadow">
-              <i class="fab fa-github fs-1 mb-2"></i>
-              <h3 class="fw-bold">Github</h3>
-              <p>Sígueme en Github.</p>
-              <a class="btn btn-light btn-sm" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.6.0">Ver más</a>
-            </div>
-          </div>
-
-          <div class="col-12 col-md-3">
-            <div class="d-flex flex-column align-items-center border rounded p-4 shadow">
-              <i class="fas fa-play fs-1 text-danger mb-2"></i>
-              <h3 class="fw-bold">El curso oficial</h3>
-              <p>Mira cómo nació Bee framework.</p>
-              <a class="btn btn-light btn-sm" href="https://www.academy.joystick.com.mx/courses/crea-tu-propio-framework-profesional-mvc-con-php-poo-mysql" target="_blank">Ver curso</a>
-            </div>
-          </div>
-
-          <div class="col-12 col-md-3">
-            <div class="d-flex flex-column align-items-center border rounded p-4 shadow">
-              <i class="fab fa-discord fs-1 text-discord mb-2"></i>
-              <h3 class="fw-bold">Discord</h3>
-              <p>Úneta gratis a la comunidad.</p>
-              <a class="btn btn-light btn-sm" href="https://discord.gg/wTzhKrg" target="_blank">Unirme</a>
-            </div>
-          </div>
-
-          <div class="col-12 col-md-3">
-            <div class="d-flex flex-column align-items-center border rounded p-4 shadow">
-              <i class="fab fa-whatsapp fs-1 text-success mb-2"></i>
-              <h3 class="fw-bold">WhatsApp</h3>
-              <p>Úneta gratis al grupo.</p>
-              <a class="btn btn-light btn-sm" href="https://chat.whatsapp.com/FFwAr7qwwAO5KS9Y92AI2G" target="_blank">Unirme</a>
-            </div>
-          </div>
-
-          <div class="col-12 col-md-3">
-            <div class="d-flex flex-column align-items-center border rounded p-4 shadow">
-              <i class="fas fa-heart fs-1 text-danger mb-2"></i>
-              <h3 class="fw-bold">Donaciones</h3>
-              <p>¿Me ayudarías?</p>
-              <a class="btn btn-light btn-sm" href="https://buymeacoffee.com/joystickmx" target="_blank">Apoyar</a>
-            </div>
+        <div class="col-12 col-lg-5">
+          <div class="bee-hero-mark" aria-hidden="true">
+            <span class="bee-wing bee-wing-left"></span><span class="bee-body-mark"></span><span class="bee-wing bee-wing-right"></span>
           </div>
         </div>
       </div>
     </div>
   </section>
-</div>
+
+  <section class="container bee-section">
+    <div class="bee-section-heading">
+      <span class="bee-eyebrow">Tu espacio de trabajo</span>
+      <h2>Todo lo necesario, sin ruido.</h2>
+      <p>Accede a las herramientas principales y ejemplos incluidos en esta instalación.</p>
+    </div>
+    <div class="row g-3">
+      <?php
+      $items = [
+        ['Creator', 'Genera controladores, modelos y vistas.', 'creator', 'fa-wand-magic-sparkles'],
+        ['Artículos', 'Prueba el router y ORM modernos.', 'examples/articles', 'fa-route'],
+        ['Vue JS', 'Explora la integración reactiva.', 'bee/vuejs', 'fa-bolt'],
+        ['Información', 'Consulta versiones y configuración.', 'bee/info', 'fa-sliders'],
+        ['Contraseñas', 'Genera credenciales seguras.', 'bee/password', 'fa-key'],
+        [is_logged() ? 'Administración' : 'Ingresar', is_logged() ? 'Gestiona la aplicación.' : 'Accede a tu cuenta.', is_logged() ? 'admin' : 'login', 'fa-user'],
+      ];
+      foreach ($items as [$title, $description, $href, $icon]): ?>
+        <div class="col-12 col-md-6 col-xl-4">
+          <a class="bee-tool-card" href="<?= htmlspecialchars($href, ENT_QUOTES, 'UTF-8') ?>">
+            <span class="bee-tool-icon"><i class="fas <?= htmlspecialchars($icon) ?>"></i></span>
+            <span><strong><?= htmlspecialchars($title) ?></strong><small><?= htmlspecialchars($description) ?></small></span>
+            <span class="bee-tool-arrow">→</span>
+          </a>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  </section>
+</main>
 
 <?php require_once INCLUDES . 'footer.php'; ?>

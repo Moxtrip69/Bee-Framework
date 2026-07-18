@@ -1,41 +1,36 @@
 <?php require_once INCLUDES . 'header.php'; ?>
 <?php require_once INCLUDES . 'bee_navbar.php'; ?>
 
-<div class="container py-5 main-wrapper">
-  <div class="row">
-    <div class="col-12 col-md-4 text-center offset-md-4 mb-5">
-      <a href="<?php echo get_base_url(); ?>"><img src="<?php echo get_bee_logo() ?>" alt="<?php echo get_sitename(); ?>" class="img-fluid" style="width: 150px;"></a>
+<?php
+$username = isset($d->user->username) ? (string) $d->user->username : 'Usuario';
+$initial = function_exists('mb_substr')
+  ? mb_strtoupper(mb_substr($username, 0, 1, 'UTF-8'), 'UTF-8')
+  : strtoupper(substr($username, 0, 1));
+?>
+
+<main class="container bee-section main-wrapper">
+  <header class="bee-page-header">
+    <span class="bee-eyebrow">Cuenta local</span>
+    <h1>Hola, <?= htmlspecialchars($username, ENT_QUOTES, 'UTF-8') ?></h1>
+    <p>Consulta la información disponible para tu sesión actual.</p>
+  </header>
+  <?= Flasher::flash(); ?>
+  <section class="bee-card bee-profile" aria-labelledby="profile-title">
+    <div class="bee-card-heading">
+      <div class="bee-avatar" aria-hidden="true"><?= htmlspecialchars($initial, ENT_QUOTES, 'UTF-8') ?></div>
+      <div><span class="bee-eyebrow">Perfil</span><h2 id="profile-title"><?= htmlspecialchars($username, ENT_QUOTES, 'UTF-8') ?></h2></div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <?php echo Flasher::flash(); ?>
-    </div>
-    <div class="col-12 col-md-8 offset-md-2">
-      <div class="card">
-        <div class="card-header">Información del usuario</div>
-        <div class="card-body">
-          <?php echo sprintf('<p>Bienvenido a %s, usuario <b>%s</b>, esta es tu información.</p>', get_bee_name(), $d->user->username); ?>
-          <div class="table-responsive rounded">
-            <table class="table table-sm table-striped table-hover table-bordered">
-              <tbody>
-                <?php foreach ($d->user as $k => $v) : ?>
-                  <tr>
-                    <th><?php echo $k; ?></th>
-                    <td><?php echo $v; ?></td>
-                  </tr>
-                <?php endforeach; ?>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="card-footer clearfix">
-          <a href="bee" class="btn btn-outline-success float-start"><i class="fas fa-home fa-fw"></i> Inicio</a>
-          <a href="logout" class="btn btn-danger float-end confirmar">Cerrar sesión</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+    <dl class="bee-data-list">
+      <?php foreach ($d->user as $key => $value) : ?>
+        <?php $displayValue = is_scalar($value) || $value === null ? (string) $value : (string) json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>
+        <div><dt><?= htmlspecialchars((string) $key, ENT_QUOTES, 'UTF-8') ?></dt><dd><?= htmlspecialchars($displayValue, ENT_QUOTES, 'UTF-8') ?></dd></div>
+      <?php endforeach; ?>
+    </dl>
+    <footer class="bee-card-actions">
+      <a href="bee" class="btn btn-outline-secondary">Volver al inicio</a>
+      <a href="logout" class="btn btn-danger confirmar">Cerrar sesión</a>
+    </footer>
+  </section>
+</main>
 
 <?php require_once INCLUDES . 'footer.php'; ?>

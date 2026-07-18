@@ -3,10 +3,17 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-  <h1>¡Hola, {{ name }}!</h1>
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur, maxime.</p>
-  <p>{{ insert_inputs() | raw }}</p>
-  <p>{{ money(123) }}</p>
-  <p>{{ Bienvenido | md5 }}</p>
-  <a href="{{ get_base_url() }}">Función en Twig</a>
+  <main class="container bee-section main-wrapper">
+    <section class="bee-card bee-twig-demo">
+      <span class="bee-eyebrow">Motor Twig</span>
+      <h1>¡Hola, {{ name }}!</h1>
+      <p>Esta vista demuestra que Bee puede utilizar Twig sin mezclar la presentación con el controlador.</p>
+      <div class="bee-code-samples">
+        <div><span>Campos dinámicos</span>{{ insert_inputs() | raw }}</div>
+        <div><span>Formato monetario</span><code>{{ money(123) }}</code></div>
+        <div><span>Filtro personalizado</span><code>{{ 'Bienvenido' | md5 }}</code></div>
+      </div>
+      <a class="btn btn-primary" href="{{ get_base_url() }}">Volver al inicio</a>
+    </section>
+  </main>
 {% endblock %}

@@ -1,29 +1,22 @@
 <?php require_once INCLUDES . 'header.php'; ?>
 <?php require_once INCLUDES . 'bee_navbar.php'; ?>
 
-<div class="container py-5 main-wrapper">
-  <div class="row">
-    <div class="col-12">
-      <?php echo Flasher::flash(); ?>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12 text-center mb-5">
-      <h2><a href="<?php echo get_base_url(); ?>"><img src="<?php echo get_bee_logo(); ?>" alt="Bee framework" class="img-fluid" style="width: 100px;"></a></h2>
-    </div>
-
-    <div class="col-12">
-      <p>Todos los parámetros mostrados a continuación son la configuración actual de tu instancia de Bee framework, puedes encontrar más información en <code>beeController.php</code></p>
-      <table class="table table-striped table-hover table-bordered">
-        <?php foreach ($d as $k => $v) : ?>
-          <tr>
-            <th class="bg-light"><?php echo $k; ?></th>
-            <td><?php echo $v; ?></td>
-          </tr>
-        <?php endforeach; ?>
-      </table>
-    </div>
-  </div>
-</div>
+<main class="container bee-section main-wrapper">
+  <header class="bee-page-header">
+    <span class="bee-eyebrow">Diagnóstico local</span>
+    <h1>Información de Bee</h1>
+    <p>Versiones, rutas y parámetros activos en esta instancia. Esta pantalla solo está disponible en entorno local.</p>
+  </header>
+  <?= Flasher::flash(); ?>
+  <section class="bee-card" aria-labelledby="info-title">
+    <div class="bee-card-heading"><div><span class="bee-eyebrow">Configuración efectiva</span><h2 id="info-title">Estado del framework</h2></div></div>
+    <dl class="bee-data-list bee-info-list">
+      <?php foreach ($d as $key => $value) : ?>
+        <?php $displayValue = is_scalar($value) || $value === null ? (string) $value : (string) json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>
+        <div><dt><?= htmlspecialchars((string) $key, ENT_QUOTES, 'UTF-8') ?></dt><dd><code><?= htmlspecialchars($displayValue, ENT_QUOTES, 'UTF-8') ?></code></dd></div>
+      <?php endforeach; ?>
+    </dl>
+  </section>
+</main>
 
 <?php require_once INCLUDES . 'footer.php'; ?>

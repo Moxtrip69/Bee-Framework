@@ -1,42 +1,27 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg bee-navbar sticky-top">
   <div class="container">
-    <a class="navbar-brand" href="<?php echo get_base_url(); ?>">
-      <img src="<?php echo get_bee_logo(); ?>" alt="<?php echo get_bee_name(); ?>" width="100px">
+    <a class="navbar-brand" href="bee" aria-label="Bee Framework, inicio">
+      <span class="bee-brand-symbol" aria-hidden="true"></span>
+      <span>Bee<span class="text-bee">.</span></span>
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#beeNavigation" aria-controls="beeNavigation" aria-expanded="false" aria-label="Abrir navegación">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="bee">Inicio</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="tienda">Tienda</a>
-        </li>
+    <div class="collapse navbar-collapse" id="beeNavigation">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+        <li class="nav-item"><a class="nav-link" href="bee">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" href="examples/articles">Ejemplos</a></li>
+        <li class="nav-item"><a class="nav-link" href="documentacion">Documentación</a></li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="utilidades" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Herramientas
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="utilidades">
-            <li><a class="dropdown-item" href="https://github.com/Moxtrip69/Bee-Framework/tree/1.5.8" target="_blank">Changelog</a></li>
-            <li><a class="dropdown-item" href="documentacion">Documentación</a></li>
-            <li><a class="dropdown-item" href="bee/info">Bee info</a></li>
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Herramientas</a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="creator">Creator</a></li>
+            <li><a class="dropdown-item" href="bee/info">Información de Bee</a></li>
             <li><a class="dropdown-item" href="bee/password">Generar contraseña</a></li>
-            <li><a class="dropdown-item" href="<?php echo build_url('bee/generate-user'); ?>">Crear nuevo usuario</a></li>
-            <li><a class="dropdown-item" href="<?php echo build_url('bee/regenerate'); ?>">Regenerar credenciales</a></li>
-            <li><a class="dropdown-item" href="https://bit.ly/cursos-gratuitos-ajs">Cursos Gratuitos</a></li>
+            <li><a class="dropdown-item" href="<?= htmlspecialchars(build_url('bee/generate-user'), ENT_QUOTES, 'UTF-8') ?>">Crear usuario local</a></li>
           </ul>
         </li>
-        <?php if (is_logged()): ?>
-          <li class="nav-item">
-            <a class="nav-link" href="admin">Administración</a>
-          </li>
-        <?php else: ?>
-          <li class="nav-item ms-2">
-            <a class="btn btn-primary" href="login">Ingresar</a>
-          </li>
-        <?php endif; ?>
+        <li class="nav-item ms-lg-2"><a class="btn btn-sm btn-primary" href="<?= is_logged() ? 'admin' : 'login' ?>"><?= is_logged() ? 'Administrar' : 'Ingresar' ?></a></li>
       </ul>
     </div>
   </div>
