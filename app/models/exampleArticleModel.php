@@ -36,4 +36,23 @@ final class exampleArticleModel extends BeeModel
     {
         return static::where('status', 'published');
     }
+
+    public static function uniqueSlug(string $value, ?int $ignoreId = null): string
+    {
+        $base = mb_substr(sanitize_slug($value) ?: 'article', 0, 170, 'UTF-8');
+        $slug = $base;
+        $suffix = 2;
+
+        while (true) {
+            $query = static::where('slug', $slug);
+            if ($ignoreId !== null) {
+                $query = $query->where('id', '!=', $ignoreId);
+            }
+            if (!$query->exists()) {
+                return $slug;
+            }
+
+            $slug = $base . '-' . $suffix++;
+        }
+    }
 }

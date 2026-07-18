@@ -19,5 +19,7 @@
 #articles-crud .card { overflow: hidden; }
 #articles-crud #article-form-title, #articles-crud #articles-list-title { display: flex; gap: .55rem; align-items: center; margin-bottom: 1.25rem; }
 #articles-crud #article-form-title::after, #articles-crud #articles-list-title::after { width: 2rem; height: .2rem; background: var(--bee-honey); border-radius: 99px; content: ''; }
+.bee-article { max-width: 52rem; margin-inline: auto; }
+.bee-not-found { max-width: 38rem; margin-inline: auto; }
 
 @media (max-width: 47.998rem) { .previews img { height: auto; } }

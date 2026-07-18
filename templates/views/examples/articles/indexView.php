@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-/** @var array{title: string, applicationName: string, apiUrl: string} $data */
+/** @var array{title: string, applicationName: string, apiUrl: string, articleUrlTemplate: string} $data */
 $escape = static fn (string $value): string => htmlspecialchars(
     $value,
     ENT_QUOTES | ENT_SUBSTITUTE,
@@ -23,6 +23,7 @@ $escape = static fn (string $value): string => htmlspecialchars(
     id="articles-crud"
     class="container py-5"
     data-api-url="<?= $escape($data['apiUrl']) ?>"
+    data-article-url-template="<?= $escape($data['articleUrlTemplate']) ?>"
   >
     <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
       <div>

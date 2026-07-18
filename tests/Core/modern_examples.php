@@ -7,6 +7,7 @@ use Bee\Core\Routing\HttpMethod;
 use Bee\Core\Routing\Route;
 use Bee\Core\Routing\RouteMatch;
 use Bee\Core\Routing\Router;
+use Bee\Core\Routing\UrlGenerator;
 
 require __DIR__ . '/bootstrap.php';
 require_once dirname(__DIR__, 2) . '/app/src/Core/Support/sanitizers.php';
@@ -62,5 +63,12 @@ coreAssert($router->resolve('DELETE', '/api/examples/articles/abc')->match === n
 $web = $router->resolve('GET', '/examples/articles')->match;
 coreAssert($web instanceof RouteMatch, 'Example web CRUD route must be registered when examples are enabled.');
 coreAssert($web->route->routeName() === 'examples.articles.index', 'Example web route must have a stable name.');
+$articlePage = $router->resolve('GET', '/examples/article/bee-modern-routing')->match;
+coreAssert($articlePage instanceof RouteMatch, 'Published articles must have a web route by slug.');
+coreAssert($articlePage->parameters['slug'] === 'bee-modern-routing', 'Article route must bind the slug.');
+coreAssert($router->resolve('GET', '/examples/article/Unsafe_Slug')->match === null, 'Article route must reject unsafe slugs.');
+$articleUrl = (new UrlGenerator($router->routes()))
+    ->route('examples.article.show', ['slug' => 'bee-modern-routing']);
+coreAssert($articleUrl === '/examples/article/bee-modern-routing', 'Named article route must generate its slug URL.');
 
 echo "PASS: modern controller, model and route examples work\n";

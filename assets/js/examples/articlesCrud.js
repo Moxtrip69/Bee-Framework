@@ -5,6 +5,7 @@
   if (!root) return;
 
   const apiUrl = root.dataset.apiUrl;
+  const articleUrlTemplate = root.dataset.articleUrlTemplate;
   const form = document.querySelector('#article-form');
   const elements = {
     id: document.querySelector('#article-id'),
@@ -94,7 +95,15 @@
       const status = document.createElement('td');
       const views = document.createElement('td');
       const actions = document.createElement('td');
-      title.textContent = article.title;
+      if (article.status === 'published') {
+        const articleLink = document.createElement('a');
+        articleLink.className = 'fw-semibold text-decoration-none';
+        articleLink.href = articleUrlTemplate.replace('article-slug', encodeURIComponent(article.slug));
+        articleLink.textContent = article.title;
+        title.append(articleLink);
+      } else {
+        title.textContent = article.title;
+      }
       status.textContent = article.status;
       views.textContent = article.views;
       actions.className = 'text-end text-nowrap';

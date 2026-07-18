@@ -66,7 +66,7 @@ final class exampleArticleController
         if (!$article instanceof exampleArticleModel) {
             return HttpResponse::json(['message' => 'Article not found.'], 404);
         }
-        $data = $this->validatedData($request);
+        $data = $this->validatedData($request, $article);
         if ($data instanceof HttpResponse) {
             return $data;
         }
@@ -88,7 +88,10 @@ final class exampleArticleController
     }
 
     /** @return array<string, mixed>|HttpResponse */
-    private function validatedData(HttpRequest $request): array|HttpResponse
+    private function validatedData(
+        HttpRequest $request,
+        ?exampleArticleModel $article = null
+    ): array|HttpResponse
     {
         $title = sanitize_string($request->body['title'] ?? '', 160);
         $content = sanitize_string($request->body['content'] ?? '', 10000);
@@ -99,9 +102,14 @@ final class exampleArticleController
             ], 422);
         }
 
+        $slugSource = sanitize_string($request->body['slug'] ?? '', 180);
+
         return [
             'title' => $title,
-            'slug' => sanitize_slug($request->body['slug'] ?? $title),
+            'slug' => exampleArticleModel::uniqueSlug(
+                $slugSource === '' ? $title : $slugSource,
+                $article === null ? null : (int) $article->id
+            ),
             'excerpt' => sanitize_string($request->body['excerpt'] ?? '', 255),
             'content' => $content,
             'status' => $status,
