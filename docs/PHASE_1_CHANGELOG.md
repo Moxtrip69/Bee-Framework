@@ -112,3 +112,15 @@ Este documento registra los cambios realizados para que HTTP, CLI, cron, pruebas
 ## Incrementos pendientes
 
 Ninguno dentro del alcance aprobado para fase 1.
+
+## Incremento 5 — Compatibilidad con análisis estático del editor
+
+### Añadido
+
+- Stub `stubs/legacy_constants.php` con declaraciones globales estáticas y tipos inferibles.
+- Cobertura para constantes comunes, HTTP, configuración, correo y estado de petición de Bee.
+- Prueba que compara el stub con las constantes creadas por la capa de compatibilidad en runtime.
+
+### Motivo
+
+Los valores runtime se construyen desde objetos tipados mediante `LegacyConstants`. PHP los resolvía correctamente, pero los editores no podían descubrir nombres pasados a métodos auxiliares y marcaban como indefinidos los usos heredados. El stub no se incluye ni ejecuta: existe únicamente para indexación del IDE.

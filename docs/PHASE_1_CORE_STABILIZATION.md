@@ -54,6 +54,7 @@ La salida confirma de forma estructurada:
 
 - `bee_config.php` permanece como shim para integraciones heredadas.
 - Las constantes existentes se generan desde objetos tipados mediante `LegacyConstants`.
+- Los editores descubren esas constantes mediante `stubs/legacy_constants.php`, que nunca se carga en runtime.
 - La función global `logger()` delega al nuevo servicio `Logger`.
 - `Bee::fly()` permanece únicamente como adaptador HTTP y despacho heredado.
 - `get_core_version()` delega a la versión autoritativa de Bee.
