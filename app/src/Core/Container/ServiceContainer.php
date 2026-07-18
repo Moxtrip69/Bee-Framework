@@ -6,6 +6,8 @@ namespace Bee\Core\Container;
 
 use Closure;
 use Bee\Core\Exception\ServiceNotFoundException;
+use ReflectionClass;
+use ReflectionNamedType;
 
 final class ServiceContainer
 {
@@ -41,5 +43,40 @@ final class ServiceContainer
         $this->resolved[$id] = $service;
 
         return $service;
+    }
+
+    /** @param class-string $class */
+    public function make(string $class): object
+    {
+        if ($this->has($class)) {
+            return $this->get($class);
+        }
+
+        $reflection = new ReflectionClass($class);
+        $constructor = $reflection->getConstructor();
+        if ($constructor === null) {
+            return $reflection->newInstance();
+        }
+
+        $arguments = [];
+        foreach ($constructor->getParameters() as $parameter) {
+            $type = $parameter->getType();
+            if ($type instanceof ReflectionNamedType && !$type->isBuiltin() && $this->has($type->getName())) {
+                $arguments[] = $this->get($type->getName());
+                continue;
+            }
+            if ($parameter->isDefaultValueAvailable()) {
+                $arguments[] = $parameter->getDefaultValue();
+                continue;
+            }
+
+            throw new ServiceNotFoundException(sprintf(
+                'Cannot resolve constructor parameter %s::$%s.',
+                $class,
+                $parameter->getName()
+            ));
+        }
+
+        return $reflection->newInstanceArgs($arguments);
     }
 }

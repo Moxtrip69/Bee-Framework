@@ -266,7 +266,7 @@ function money($amount, $symbol = '$')
  */
 function get_option($option)
 {
-	return optionModel::search($option);
+	return option((string) $option, false);
 }
 
 /**

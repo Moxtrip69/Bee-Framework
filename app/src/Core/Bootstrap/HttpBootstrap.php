@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Bee\Core\Bootstrap;
 
 use Bee\Core\Compatibility\LegacyConstants;
+use Bee\Core\Config\OptionRepository;
+use Bee\Core\Config\PdoOptionRepository;
 use Bee\Core\Foundation\ApplicationContext;
 use Bee\Core\Foundation\ExecutionMode;
 use Bee\Core\Http\HttpConfig;
@@ -40,6 +42,10 @@ final readonly class HttpBootstrap
         $http = new HttpConfig($request, $application->configuration->application);
         $application->services->set(HttpRequestContext::class, $request);
         $application->services->set(HttpConfig::class, $http);
+        $database = $request->isLocal()
+            ? $application->configuration->developmentDatabase
+            : $application->configuration->productionDatabase;
+        $application->services->set(OptionRepository::class, new PdoOptionRepository($database));
         $httpRequest = HttpRequest::fromInput($server, $query, $body, $http);
         $router = new Router();
         $middleware = new MiddlewareRegistry();

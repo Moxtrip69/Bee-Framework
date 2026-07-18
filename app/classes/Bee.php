@@ -651,7 +651,7 @@ class Bee
     }
 
     // Ejecutando controlador y método según se haga la petición
-    $this->controller = new $this->controller;
+    $this->controller = $application->services->make($this->controller);
     $controllerType   = 'regular';
 
     // Verificar el tipo de controlador

@@ -17,6 +17,8 @@ if (!is_file($autoloadPath)) {
 }
 
 require_once $autoloadPath;
+require_once $applicationRoot . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR
+    . 'src' . DIRECTORY_SEPARATOR . 'Core' . DIRECTORY_SEPARATOR . 'Support' . DIRECTORY_SEPARATOR . 'helpers.php';
 
 if (is_string($executionMode)) {
     $executionMode = ExecutionMode::from($executionMode);

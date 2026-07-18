@@ -101,7 +101,7 @@ final readonly class RouteDispatcher
 
     private function resolveObject(string $class): object
     {
-        return $this->services->has($class) ? $this->services->get($class) : new $class();
+        return $this->services->make($class);
     }
 
     /** @return list<mixed> */

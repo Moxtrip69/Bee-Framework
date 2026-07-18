@@ -71,6 +71,36 @@ El núcleo puede cargarse sin ejecutar `Bee::fly()`, iniciar sesión ni despacha
 php bee core:status
 ```
 
+### Configuración en aplicaciones
+
+Las variables propias de cada proyecto se agregan a `app/config/.env` y pueden consultarse sin modificar el núcleo:
+
+```php
+$apiKey = config('NOTIFICATIONS_API_KEY');
+$limit = (int) config('ITEMS_PER_PAGE', '20');
+```
+
+Las configuraciones persistidas en la tabla `options` utilizan una API equivalente y se consultan bajo demanda:
+
+```php
+$color = option('site.color', '#ffcc00');
+```
+
+En controladores del router moderno también se puede inyectar la configuración:
+
+```php
+use Bee\Core\Config\Configuration;
+
+final class NotificationController
+{
+    public function __construct(private readonly Configuration $configuration)
+    {
+    }
+}
+```
+
+`get_option()` se mantiene como alias compatible para desarrollos existentes.
+
 ### Actualizaciones seguras
 
 El inspector de paquetes valida manifiestos, compatibilidad, hashes y firmas Ed25519 mediante Sodium antes de aceptar una actualización. La instalación permanece separada de la inspección para reducir efectos laterales y permitir su uso desde HTTP o CLI.
@@ -79,6 +109,7 @@ El inspector de paquetes valida manifiestos, compatibilidad, hashes y firmas Ed2
 
 ```bash
 php tests/Core/services.php
+php tests/Core/configuration_access.php
 php tests/Core/routing.php
 php tests/Core/route_facade.php
 php tests/Core/route_dispatcher.php
