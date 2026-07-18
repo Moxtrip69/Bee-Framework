@@ -101,6 +101,25 @@ final class NotificationController
 
 `get_option()` se mantiene como alias compatible para desarrollos existentes.
 
+### SanitizaciÃ³n de datos
+
+Bee incluye funciones modernas para normalizar entradas comunes. Los sanitizadores tipados retornan `null` cuando el valor no es vÃ¡lido:
+
+```php
+$name = sanitize_name($_POST['name'] ?? '');
+$phone = sanitize_phone($_POST['phone'] ?? null);
+$email = sanitize_email($_POST['email'] ?? null);
+$address = sanitize_address($_POST['address'] ?? '');
+$age = sanitize_integer($_POST['age'] ?? null, 18, 120);
+$quantity = sanitize_number($_POST['quantity'] ?? null, 0);
+$amount = sanitize_money($_POST['amount'] ?? null); // "1234.50"
+$active = sanitize_boolean($_POST['active'] ?? null);
+$website = sanitize_url($_POST['website'] ?? null);
+$slug = sanitize_slug($_POST['title'] ?? '');
+```
+
+También está disponible `sanitize_string()` para texto general. La sanitización debe combinarse con validación de negocio, consultas preparadas y escape contextual al generar HTML.
+
 ### Actualizaciones seguras
 
 El inspector de paquetes valida manifiestos, compatibilidad, hashes y firmas Ed25519 mediante Sodium antes de aceptar una actualización. La instalación permanece separada de la inspección para reducir efectos laterales y permitir su uso desde HTTP o CLI.
@@ -110,6 +129,7 @@ El inspector de paquetes valida manifiestos, compatibilidad, hashes y firmas Ed2
 ```bash
 php tests/Core/services.php
 php tests/Core/configuration_access.php
+php tests/Core/sanitizers.php
 php tests/Core/routing.php
 php tests/Core/route_facade.php
 php tests/Core/route_dispatcher.php

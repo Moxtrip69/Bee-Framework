@@ -229,18 +229,28 @@ function json_build(int $status = 200, $data = [], string $msg = '', $error_code
  */
 function get_module(string $view, array $data = [])
 {
+	if ($view === '' || preg_match('#^[A-Za-z0-9_/-]+$#D', $view) !== 1) {
+		return false;
+	}
+
 	$file_to_include = MODULES . $view . 'Module.php';
 	$output = '';
 
 	// Por si queremos trabajar con objeto
 	$d = to_object($data);
 
-	if (!is_file($file_to_include)) {
+	$modulesRoot = realpath(MODULES);
+	$modulePath = realpath($file_to_include);
+	if ($modulesRoot === false || $modulePath === false || !is_file($modulePath)) {
+		return false;
+	}
+	$modulesRoot = rtrim($modulesRoot, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+	if (!str_starts_with($modulePath, $modulesRoot)) {
 		return false;
 	}
 
 	ob_start();
-	require $file_to_include;
+	require $modulePath;
 	$output = ob_get_clean();
 
 	return $output;
@@ -495,11 +505,10 @@ function format_date($date_string, $type = 'd M, Y')
  */
 function clean($str, $cleanhtml = false)
 {
-	$str = @trim(@rtrim($str));
-	$str = filter_var($str, FILTER_UNSAFE_RAW);
+	$str = trim((string) $str);
 
 	if ($cleanhtml === true) {
-		return htmlspecialchars($str);
+		return htmlspecialchars($str, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 	}
 
 	return $str;
@@ -545,21 +554,22 @@ function arrenge_posted_files($files)
  */
 function random_password($length = 8, $type = 'default')
 {
+	$length = max(1, (int) $length);
 	$alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
 
 	if ($type === 'numeric') {
 		$alphabet = '1234567890';
 	}
 
-	$pass = array(); //remember to declare $pass as an array
-	$alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+	$pass = [];
+	$alphaLength = strlen($alphabet) - 1;
 
 	for ($i = 0; $i < $length; $i++) {
-		$n = rand(0, $alphaLength);
+		$n = random_int(0, $alphaLength);
 		$pass[] = $alphabet[$n];
 	}
 
-	return str_shuffle(implode($pass)); //turn the array into a string
+	return implode($pass);
 }
 
 /**
@@ -606,22 +616,11 @@ function add_ellipsis($string, $lng = 100)
  */
 function get_user_ip()
 {
-	$ipaddress = '';
-	if (getenv('HTTP_CLIENT_IP'))
-		$ipaddress = getenv('HTTP_CLIENT_IP');
-	else if (getenv('HTTP_X_FORWARDED_FOR'))
-		$ipaddress = getenv('HTTP_X_FORWARDED_FOR');
-	else if (getenv('HTTP_X_FORWARDED'))
-		$ipaddress = getenv('HTTP_X_FORWARDED');
-	else if (getenv('HTTP_FORWARDED_FOR'))
-		$ipaddress = getenv('HTTP_FORWARDED_FOR');
-	else if (getenv('HTTP_FORWARDED'))
-		$ipaddress = getenv('HTTP_FORWARDED');
-	else if (getenv('REMOTE_ADDR'))
-		$ipaddress = getenv('REMOTE_ADDR');
-	else
-		$ipaddress = 'UNKNOWN';
-	return $ipaddress;
+	$address = $_SERVER['REMOTE_ADDR'] ?? getenv('REMOTE_ADDR');
+
+	return is_string($address) && filter_var($address, FILTER_VALIDATE_IP) !== false
+		? $address
+		: 'UNKNOWN';
 }
 
 /**
@@ -631,8 +630,8 @@ function get_user_ip()
  */
 function get_user_os()
 {
-	if (isset($_SERVER)) {
-		$agent = $_SERVER['HTTP_USER_AGENT'];
+	if (isset($_SERVER['HTTP_USER_AGENT'])) {
+		$agent = (string) $_SERVER['HTTP_USER_AGENT'];
 	} else {
 		global $HTTP_SERVER_VARS;
 		if (isset($HTTP_SERVER_VARS)) {
@@ -742,7 +741,7 @@ function get_user_os()
  */
 function get_user_browser()
 {
-	$user_agent = (isset($_SERVER) ? $_SERVER['HTTP_USER_AGENT'] : NULL);
+	$user_agent = (string) ($_SERVER['HTTP_USER_AGENT'] ?? '');
 
 	$browser       = "Unknown Browser";
 
@@ -785,9 +784,11 @@ function insert_inputs()
 		$location = CUR_PAGE;
 	}
 
+	$location = htmlspecialchars((string) $location, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+	$csrfToken = htmlspecialchars((string) CSRF_TOKEN, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 	$output .= '<input type="hidden" name="redirect_to" value="' . $location . '" required>';
 	$output .= '<input type="hidden" name="timecheck" value="' . time() . '" required>';
-	$output .= '<input type="hidden" name="csrf" value="' . CSRF_TOKEN . '" required>';
+	$output .= '<input type="hidden" name="csrf" value="' . $csrfToken . '" required>';
 
 	return $output;
 }
