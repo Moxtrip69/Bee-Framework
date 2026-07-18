@@ -44,6 +44,7 @@ final readonly class CommonBootstrap
         $errorHandler->register();
 
         $context = new ApplicationContext($root, $mode, $configuration, $services);
+        $services->set(ApplicationContext::class, $context);
         $this->legacyConstants->defineCommon($context);
         $GLOBALS['bee.application'] = $context;
 

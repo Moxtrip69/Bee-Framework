@@ -68,10 +68,10 @@ final readonly class RouteDispatcher
     /** @return array{callable, ReflectionFunctionAbstract} */
     private function resolveAction(mixed $action): array
     {
-        if (is_array($action) && count($action) === 2 && is_string($action[0]) && is_string($action[1])) {
-            $controller = $this->resolveObject($action[0]);
+        if (is_array($action) && count($action) === 2 && (is_string($action[0]) || is_object($action[0])) && is_string($action[1])) {
+            $controller = is_object($action[0]) ? $action[0] : $this->resolveObject($action[0]);
             if (!is_callable([$controller, $action[1]])) {
-                throw new InvalidRouteException(sprintf('Route controller action is not callable: %s::%s.', $action[0], $action[1]));
+                throw new InvalidRouteException(sprintf('Route controller action is not callable: %s::%s.', get_debug_type($controller), $action[1]));
             }
             return [[$controller, $action[1]], new ReflectionMethod($controller, $action[1])];
         }

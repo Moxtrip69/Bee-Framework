@@ -65,9 +65,30 @@ final class RouteDefinition
 
     public function prefixName(string $prefix): self
     {
+        if ($prefix !== '' && preg_match('/^[A-Za-z0-9][A-Za-z0-9._-]*$/D', $prefix) !== 1) {
+            throw new InvalidRouteException(sprintf('Invalid route name prefix: %s.', $prefix));
+        }
         $this->namePrefix = $prefix;
 
         return $this;
+    }
+
+    public function whereNumber(string $parameter): self
+    {
+        return $this->where($parameter, '\d+');
+    }
+
+    public function whereAlpha(string $parameter): self
+    {
+        return $this->where($parameter, '[A-Za-z]+');
+    }
+
+    public function whereUuid(string $parameter): self
+    {
+        return $this->where(
+            $parameter,
+            '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}'
+        );
     }
 
     public function routeName(): ?string

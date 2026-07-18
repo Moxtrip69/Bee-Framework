@@ -69,6 +69,25 @@ function get_core_version()
 }
 
 /**
+ * Genera una URL para una ruta moderna nombrada.
+ *
+ * @param string $name
+ * @param array<string, scalar|null> $parameters
+ * @return string
+ */
+function route(string $name, array $parameters = []): string
+{
+	$application = $GLOBALS['bee.application'] ?? null;
+	if (!$application instanceof \Bee\Core\Foundation\ApplicationContext) {
+		throw new \Bee\Core\Routing\Exception\InvalidRouteException('Bee application has not been bootstrapped.');
+	}
+
+	$generator = $application->services->get(\Bee\Core\Routing\UrlGenerator::class);
+
+	return $generator->route($name, $parameters);
+}
+
+/**
  * Devuelve el email general del sistema
  *
  * @return string

@@ -72,6 +72,8 @@ class Bee
   private $missing_params      = false;
   private $is_ajax             = false;
   private $is_endpoint         = false;
+  private $registeredRoute     = null;
+  private $automaticOptions    = null;
   private $endpoints           = ['api']; // Rutas o endpoints autorizados de la API por defecto
   private $ajaxes              = ['ajax']; // Rutas o controladores para procesar peticiones asíncronas o AJAX
   private $settings            = []; // Cargados desde .env
@@ -138,7 +140,9 @@ class Bee
        */
       $this->init_filter_url();
       BeeHookManager::runHook('after_init_filter_url', $this->uri);
-      $this->init_set_defaults();
+      if (!$this->init_registered_route()) {
+        $this->init_set_defaults();
+      }
   
       /**
        * Inicialización de globales del framework, token csrf y autentificación
@@ -398,6 +402,87 @@ class Bee
   }
 
   /**
+   * Resuelve primero las rutas declarativas. Sólo una ruta completamente
+   * desconocida se delega al esquema heredado controlador/método/parámetros.
+   *
+   * @return bool
+   */
+  private function init_registered_route()
+  {
+    $application = $GLOBALS['bee.application'];
+    $router = $application->services->get(\Bee\Core\Routing\Router::class);
+    $request = $application->services->get(\Bee\Core\Http\HttpRequest::class);
+    $resolution = $router->resolve($request->method, $request->path);
+
+    if ($resolution->status === \Bee\Core\Routing\RouteResolutionStatus::NotFound) {
+      return false;
+    }
+
+    if ($resolution->status === \Bee\Core\Routing\RouteResolutionStatus::MethodNotAllowed) {
+      $allowed = array_map(
+        static fn (\Bee\Core\Routing\HttpMethod $method): string => $method->value,
+        $resolution->allowedMethods
+      );
+      throw new \Bee\Core\Http\Exception\MethodNotAllowedHttpException($allowed);
+    }
+
+    if ($resolution->status === \Bee\Core\Routing\RouteResolutionStatus::AutomaticOptions) {
+      $this->automaticOptions = array_map(
+        static fn (\Bee\Core\Routing\HttpMethod $method): string => $method->value,
+        $resolution->allowedMethods
+      );
+      $this->current_controller = 'route';
+      $this->requestedController = 'route';
+      $this->current_method = 'options';
+      $this->params = [];
+      $this->define_route_constants();
+
+      return true;
+    }
+
+    $this->registeredRoute = $resolution->match;
+    $action = $this->registeredRoute->route->action();
+    if (is_array($action) && isset($action[0], $action[1]) && is_string($action[0]) && is_string($action[1])) {
+      $controllerClass = class_exists($action[0]) ? (new ReflectionClass($action[0]))->getShortName() : $action[0];
+      $controller = preg_replace('/Controller$/i', '', $controllerClass);
+      $this->current_controller = strtolower((string) $controller);
+      $this->current_method = $action[1];
+    } elseif (is_string($action) && class_exists($action)) {
+      $this->current_controller = strtolower((new ReflectionClass($action))->getShortName());
+      $this->current_method = '__invoke';
+    } else {
+      $this->current_controller = $this->registeredRoute->route->routeName() ?: 'route';
+      $this->current_method = 'closure';
+    }
+
+    $this->requestedController = $this->current_controller;
+    $this->params = array_values($this->registeredRoute->parameters);
+    $middleware = $this->registeredRoute->route->middlewareNames();
+    $this->is_endpoint = in_array('api', $middleware, true);
+    $this->is_ajax = in_array('ajax', $middleware, true);
+    $this->define_route_constants();
+
+    return true;
+  }
+
+  /** @return void */
+  private function define_route_constants()
+  {
+    if ($this->is_ajax && !defined('DOING_AJAX')) {
+      define('DOING_AJAX', true);
+    }
+    if ($this->is_endpoint && !defined('DOING_API')) {
+      define('DOING_API', true);
+    }
+    if (!defined('CONTROLLER')) {
+      define('CONTROLLER', $this->current_controller);
+    }
+    if (!defined('METHOD')) {
+      define('METHOD', $this->current_method);
+    }
+  }
+
+  /**
    * Iteramos sobre los elementos de la uri
    * para descomponer los elementos que necesitamos
    * controller
@@ -542,6 +627,29 @@ class Bee
    */
   private function init_dispatch()
   {
+    $application = $GLOBALS['bee.application'];
+
+    if (is_array($this->automaticOptions)) {
+      $response = \Bee\Core\Http\HttpResponse::noContent([
+        'Allow' => implode(', ', $this->automaticOptions),
+      ]);
+      $application->services->get(\Bee\Core\Http\ResponseEmitter::class)->emit($response);
+
+      return true;
+    }
+
+    if ($this->registeredRoute instanceof \Bee\Core\Routing\RouteMatch) {
+      $request = $application->services->get(\Bee\Core\Http\HttpRequest::class);
+      $response = $application->services
+        ->get(\Bee\Core\Routing\RouteDispatcher::class)
+        ->dispatch($this->registeredRoute, $request);
+      $application->services
+        ->get(\Bee\Core\Http\ResponseEmitter::class)
+        ->emit($response, $request->method === \Bee\Core\Routing\HttpMethod::Head);
+
+      return true;
+    }
+
     // Ejecutando controlador y método según se haga la petición
     $this->controller = new $this->controller;
     $controllerType   = 'regular';

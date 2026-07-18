@@ -1,7 +1,7 @@
 # Changelog técnico — Router moderno
 
 Fecha de inicio: 2026-07-18
-Estado: en progreso
+Estado: finalizado
 
 ## Incremento 1 — Motor de resolución
 
@@ -55,3 +55,34 @@ La fachada sólo delega al objeto `Router` del contenedor. El motor, colección 
 - Dispatcher para closures, funciones, controladores y clases invocables.
 - Inyección de request, match, servicios y parámetros nombrados con conversión escalar.
 - Excepciones HTTP con status y headers integradas al manejador central.
+
+## Incremento 4 — Integración con Bee y fallback heredado
+
+### Añadido
+
+- Registro de Router, request, middleware, dispatcher, emitter y generador de URL en el bootstrap HTTP.
+- Archivos declarativos `app/routes/web.php` y `app/routes/api.php`.
+- Alias iniciales `api` y `ajax` para clasificación compatible de peticiones.
+- Resolución moderna dentro de Bee antes del análisis controlador/método heredado.
+- Respuesta automática `OPTIONS` y `405` sin permitir bypass hacia el router anterior.
+
+### Compatibilidad
+
+- `NotFound` en el router moderno conserva el despacho `/controlador/método/parámetros` sin cambios.
+- Se mantienen hooks, sesión, autenticación, CSRF, globales y constantes del ciclo Bee.
+- `CONTROLLER`, `METHOD`, `DOING_API` y `DOING_AJAX` reciben valores compatibles al usar rutas modernas.
+
+### Verificación
+
+- Una ruta moderna registrada se procesa mediante el dispatcher nuevo.
+- Una URL no registrada conserva el controlador, método y parámetros heredados.
+
+## Incremento 5 — Ergonomía y documentación
+
+### Añadido
+
+- Ruta `HEAD` explícita con prioridad sobre el fallback `GET`.
+- Restricciones `whereNumber()`, `whereAlpha()` y `whereUuid()`.
+- Archivo independiente para registrar alias de middleware.
+- Helper global `route()` para generación de URLs nombradas en vistas heredadas.
+- Guía completa de registro, grupos, middleware, respuestas y migración compatible.

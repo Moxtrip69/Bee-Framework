@@ -18,6 +18,8 @@ $router->get('/users/create', static fn (): string => 'create')
 $router->post('/users', static fn (): string => 'store')
     ->name('users.store');
 $router->get('/archive/{year?}', static fn (?string $year = null): ?string => $year);
+$router->get('/health', static fn (): string => 'get');
+$router->head('/health', static fn (): string => 'head');
 $router->group(['prefix' => '/api/v1', 'name' => 'api.', 'middleware' => ['api-auth']], static function (Router $router): void {
     $router->get('/reports/{id}', static fn (string $id): string => $id)
         ->where('id', '[a-z0-9-]+')
@@ -41,6 +43,8 @@ coreAssert(in_array(HttpMethod::Head, $wrongVerb->allowedMethods, true), 'GET ro
 
 $head = $router->resolve('HEAD', '/users/42');
 coreAssert($head->match?->headFallback === true, 'HEAD must fall back to GET when not explicitly registered.');
+$explicitHead = $router->resolve('HEAD', '/health');
+coreAssert($explicitHead->match?->headFallback === false, 'An explicit HEAD route must take precedence over GET fallback.');
 coreAssert($router->resolve('OPTIONS', '/users/42')->status === RouteResolutionStatus::AutomaticOptions, 'OPTIONS must be generated automatically.');
 coreAssert($router->resolve('GET', '/legacy/controller/action')->status === RouteResolutionStatus::NotFound, 'Unknown paths must remain available to legacy fallback.');
 

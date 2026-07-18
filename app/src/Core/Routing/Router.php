@@ -20,6 +20,11 @@ final class Router
         return $this->add([HttpMethod::Get], $path, $action);
     }
 
+    public function head(string $path, mixed $action): RouteDefinition
+    {
+        return $this->add([HttpMethod::Head], $path, $action);
+    }
+
     public function post(string $path, mixed $action): RouteDefinition
     {
         return $this->add([HttpMethod::Post], $path, $action);
@@ -84,6 +89,7 @@ final class Router
         $requestMethod = $method instanceof HttpMethod ? $method : HttpMethod::parse($method);
         $normalizedPath = $this->normalizePath($path);
         $pathMatches = [];
+        $headFallback = null;
 
         foreach ($this->routes->all() as $route) {
             $parameters = $route->matchPath($normalizedPath);
@@ -98,8 +104,12 @@ final class Router
             }
 
             if ($requestMethod === HttpMethod::Head && in_array(HttpMethod::Get, $methods, true)) {
-                return RouteResolution::matched(new RouteMatch($route, $parameters, true));
+                $headFallback ??= new RouteMatch($route, $parameters, true);
             }
+        }
+
+        if ($headFallback instanceof RouteMatch) {
+            return RouteResolution::matched($headFallback);
         }
 
         if ($pathMatches === []) {

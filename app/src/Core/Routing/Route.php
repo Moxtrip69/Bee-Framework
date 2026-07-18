@@ -25,6 +25,11 @@ final class Route
         return self::router()->get($path, $action);
     }
 
+    public static function head(string $path, mixed $action): RouteDefinition
+    {
+        return self::router()->head($path, $action);
+    }
+
     public static function post(string $path, mixed $action): RouteDefinition
     {
         return self::router()->post($path, $action);
