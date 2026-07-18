@@ -25,7 +25,7 @@ $escape = static fn (string $value): string => htmlspecialchars(
   >
     <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
       <div>
-        <h1 class="h2 mb-1">CRUD moderno de artÃ­culos</h1>
+        <h1 class="h2 mb-1">CRUD moderno de art&iacute;culos</h1>
         <p class="text-secondary mb-0">Rutas Bee, BeeModel y JavaScript con async/await.</p>
       </div>
       <div class="d-flex align-items-end gap-2">
@@ -44,11 +44,11 @@ $escape = static fn (string $value): string => htmlspecialchars(
       <section class="col-12 col-lg-4" aria-labelledby="article-form-title">
         <div class="card shadow-sm">
           <div class="card-body">
-            <h2 id="article-form-title" class="h5">Nuevo artÃ­culo</h2>
+            <h2 id="article-form-title" class="h5">Nuevo art&iacute;culo</h2>
             <form id="article-form" novalidate>
               <input id="article-id" type="hidden">
               <div class="mb-3">
-                <label class="form-label" for="article-title">TÃ­tulo</label>
+                <label class="form-label" for="article-title">T&iacute;tulo</label>
                 <input id="article-title" name="title" class="form-control" maxlength="160" required>
               </div>
               <div class="mb-3">
@@ -83,19 +83,19 @@ $escape = static fn (string $value): string => htmlspecialchars(
         <div class="card shadow-sm">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <h2 id="articles-list-title" class="h5 mb-0">ArtÃ­culos</h2>
+              <h2 id="articles-list-title" class="h5 mb-0">Art&iacute;culos</h2>
               <div id="articles-loading" class="spinner-border spinner-border-sm d-none" role="status">
                 <span class="visually-hidden">Cargando...</span>
               </div>
             </div>
             <div class="table-responsive">
               <table class="table table-hover align-middle">
-                <thead><tr><th>TÃ­tulo</th><th>Estado</th><th>Vistas</th><th class="text-end">Acciones</th></tr></thead>
+                <thead><tr><th>T&iacute;tulo</th><th>Estado</th><th>Vistas</th><th class="text-end">Acciones</th></tr></thead>
                 <tbody id="articles-table-body"></tbody>
               </table>
             </div>
-            <p id="articles-empty" class="text-secondary text-center py-4 d-none">No hay artÃ­culos para mostrar.</p>
-            <nav class="d-flex justify-content-between align-items-center" aria-label="PaginaciÃ³n de artÃ­culos">
+            <p id="articles-empty" class="text-secondary text-center py-4 d-none">No hay art&iacute;culos para mostrar.</p>
+            <nav class="d-flex justify-content-between align-items-center" aria-label="Paginaci&oacute;n de art&iacute;culos">
               <button id="articles-previous" class="btn btn-sm btn-outline-secondary" type="button">Anterior</button>
               <span id="articles-page" class="small text-secondary"></span>
               <button id="articles-next" class="btn btn-sm btn-outline-secondary" type="button">Siguiente</button>

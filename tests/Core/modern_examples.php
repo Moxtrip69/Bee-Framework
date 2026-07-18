@@ -14,6 +14,19 @@ require_once dirname(__DIR__, 2) . '/app/classes/BeeModel.php';
 require_once dirname(__DIR__, 2) . '/app/models/exampleArticleModel.php';
 require_once dirname(__DIR__, 2) . '/app/controllers/exampleArticleController.php';
 
+foreach ([
+    '/app/controllers/exampleArticlePageController.php',
+    '/templates/views/examples/articles/indexView.php',
+    '/assets/js/examples/articlesCrud.js',
+] as $relativePath) {
+    $contents = file_get_contents(dirname(__DIR__, 2) . $relativePath);
+    coreAssert(is_string($contents) && mb_check_encoding($contents, 'UTF-8'), 'Example UI files must be valid UTF-8.');
+    coreAssert(
+        !str_contains($contents, "\xC3\x83") && !str_contains($contents, "\xC3\x82"),
+        'Example UI files must not contain double-encoded UTF-8 text.'
+    );
+}
+
 $applicationRoot = dirname(__DIR__, 2);
 $executionMode = 'test';
 $environmentOverrides = ['BEE_ENABLE_EXAMPLE_ROUTES' => 'true'];
