@@ -11,7 +11,104 @@
 Mini framework desarrollado por la Academia de Joystick.
 Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y fácil de implementar para proyectos tanto pequeños como aquellos que requieren escalabilidad y visión a futuro.
 
+## Estado actual — Bee Framework 1.6.0
+
+La rama actual estabiliza el núcleo para que HTTP, CLI, cron, pruebas y el actualizador puedan compartir configuración y servicios sin simular una petición web. El sistema heredado continúa disponible como capa de compatibilidad mientras las aplicaciones migran gradualmente.
+
+### Requisitos
+
+- PHP 8.2 o superior.
+- Extensiones PHP: `json`, `mbstring`, `openssl`, `pdo`, `pdo_mysql`, `session`, `fileinfo`, `hash`, `sodium` y `zip`.
+- Composer para desarrollo, actualización del autoload en `app/` y ejecución de las herramientas del proyecto.
+
+### Documentación técnica
+
+- [Estabilización del núcleo — Fase 1](docs/PHASE_1_CORE_STABILIZATION.md)
+- [Changelog de la Fase 1](docs/PHASE_1_CHANGELOG.md)
+- [Router moderno y migración](docs/ROUTING.md)
+- [Changelog del router](docs/ROUTING_CHANGELOG.md)
+- [Arquitectura del actualizador](docs/UPDATER_ARCHITECTURE.md)
+- [Especificación de paquetes](docs/UPDATE_PACKAGE_SPEC.md)
+- [Seguridad del actualizador](docs/UPDATE_SECURITY.md)
+
+### Bootstraps por contexto
+
+Cada punto de entrada carga primero el bootstrap común y después únicamente la capa que necesita:
+
+- `app/bootstrap/common.php`: raíz del proyecto, configuración tipada, contenedor y servicios compartidos.
+- `app/bootstrap/http.php`: contexto HTTP, sesión y despacho web.
+- `app/bootstrap/cli.php`: comandos sin sesión ni controladores HTTP.
+- `app/bootstrap/cron.php`: tareas programadas sin simular `$_SERVER`.
+- `app/bootstrap/testing.php`: entorno aislado para pruebas.
+- `app/bootstrap/updater.php`: servicios necesarios para inspeccionar actualizaciones.
+
+La raíz del proyecto se resuelve desde `__DIR__`; ya no depende del directorio desde el que se ejecutó PHP.
+
+### Router moderno compatible
+
+Las rutas nuevas se declaran directamente, de forma similar a Laravel, sin envolver el archivo en un `return` ni en una función:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Bee\Core\Routing\Route;
+
+Route::get('/', [homeController::class, 'index'])->name('home');
+
+Route::get('/usuarios/{id}', [userController::class, 'show'])
+    ->whereNumber('id')
+    ->name('users.show');
+
+Route::post('/usuarios', [userController::class, 'store'])
+    ->middleware('csrf')
+    ->name('users.store');
+
+Route::put('/usuarios/{id}', [userController::class, 'update']);
+Route::delete('/usuarios/{id}', [userController::class, 'destroy']);
+```
+
+Los archivos principales están en `app/routes/web.php`, `app/routes/api.php` y `app/routes/middleware.php`. Se admiten `GET`, `HEAD`, `POST`, `PUT`, `PATCH`, `DELETE`, `OPTIONS`, rutas con parámetros y restricciones, nombres, grupos, middleware y generación de URL mediante `route()`.
+
+El router moderno se evalúa primero. Cuando ninguna ruta nueva coincide, Bee conserva el despacho heredado, por lo que las rutas existentes no necesitan migrarse de inmediato.
+
+### CLI
+
+El núcleo puede cargarse sin ejecutar `Bee::fly()`, iniciar sesión ni despachar controladores:
+
+```bash
+php bee core:status
+```
+
+### Actualizaciones seguras
+
+El inspector de paquetes valida manifiestos, compatibilidad, hashes y firmas Ed25519 mediante Sodium antes de aceptar una actualización. La instalación permanece separada de la inspección para reducir efectos laterales y permitir su uso desde HTTP o CLI.
+
+### Verificación
+
+```bash
+php tests/Core/services.php
+php tests/Core/routing.php
+php tests/Core/route_facade.php
+php tests/Core/route_dispatcher.php
+php tests/Core/modern_route_integration.php
+php tests/Core/legacy_route_fallback.php
+php tests/Updater/run.php
+php bee core:status
+composer --working-dir=app audit
+```
+
 ## Changelog
+### v 1.6.0
+
+- Núcleo compartido con bootstraps independientes para HTTP, CLI, cron, pruebas y updater.
+- Configuración tipada, servicios reutilizables, logging estándar y manejo centralizado de errores.
+- Autoload PSR-4 para componentes nuevos, manteniendo constantes y APIs globales como compatibilidad temporal.
+- Router moderno con fachada `Route`, verbos HTTP, parámetros, nombres, grupos, middleware y fallback al router heredado.
+- Comando CLI de diagnóstico y base segura para el sistema de actualizaciones.
+- Documentación técnica y changelogs específicos enlazados desde este README.
+
 ### v 1.5.8
 - Revisa el curso oficial sobre esta versión de **Bee framework 1.5.8** dando clic [aquí](https://www.academy.joystick.com.mx/courses/novedades-bee-framework-1-5-8-mejoras-y-actualizaciones).
 - Nueva clase **BeeRoleManager** para gestión de roles y permisos, un sistema muy flexible y escalable para gestionar el acceso de usuarios con diferentes roles y permisos asignados por role. Es necesario *actualizar la base de datos* con un nuevo esquema que incluye *3 tablas nuevas*: **bee_roles, bee_permisos y bee_roles_permisos**, requiere usar el archivo *db_beeframework.sql*.
