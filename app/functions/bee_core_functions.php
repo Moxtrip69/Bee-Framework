@@ -344,30 +344,32 @@ function build_url(string $url, array $params = [], bool $redirection = true, bo
  */
 function logger($message, $type = 'debug', $output = false)
 {
-	$types = ['debug', 'import', 'info', 'success', 'warning', 'error'];
-
-	if (!in_array($type, $types)) {
-		$type = 'debug';
-	}
-
-	$now_time = date("d-m-Y H:i:s");
-	$message  = is_array($message) || is_object($message) ? print_r($message, true) : $message;
-	$message  = "[" . strtoupper($type) . "] $now_time - $message";
-
-	if (!is_dir(LOGS)) {
-		mkdir(LOGS);
-	}
-
-	$filename = is_local() ? "dev_log.log" : "bee_log.log";
-	if (!$fh = fopen(LOGS . $filename, 'a')) {
-		error_log(sprintf('Can not open this file on %s', LOGS . 'bee_log.log'));
+	$application = $GLOBALS['bee.application'] ?? null;
+	if (!$application instanceof \Bee\Core\Foundation\ApplicationContext) {
 		return false;
 	}
 
-	fwrite($fh, "$message\n");
-	fclose($fh);
+	$levels = [
+		'debug' => \Bee\Core\Logging\LogLevel::Debug,
+		'import' => \Bee\Core\Logging\LogLevel::Info,
+		'info' => \Bee\Core\Logging\LogLevel::Info,
+		'success' => \Bee\Core\Logging\LogLevel::Notice,
+		'warning' => \Bee\Core\Logging\LogLevel::Warning,
+		'error' => \Bee\Core\Logging\LogLevel::Error,
+	];
+	$level = $levels[$type] ?? \Bee\Core\Logging\LogLevel::Debug;
+	$text = is_array($message) || is_object($message) ? print_r($message, true) : (string) $message;
+
+	try {
+		$standardLogger = $application->services->get(\Bee\Core\Logging\Logger::class);
+		$standardLogger->log($level, $text);
+	} catch (\Throwable $exception) {
+		error_log($exception->getMessage());
+		return false;
+	}
+
 	if ($output) {
-		print "$message\n";
+		print $text . PHP_EOL;
 	}
 
 	return true;

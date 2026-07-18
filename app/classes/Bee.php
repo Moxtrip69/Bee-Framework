@@ -158,8 +158,8 @@ class Bee
       BeeHookManager::runHook('before_init_dispatch', $this->current_controller, $this->current_method, $this->params);
       $this->init_dispatch();
 
-    } catch (Exception $e) {
-      bee_die($e->getMessage());
+    } catch (Throwable $e) {
+      throw $e;
     }
   }
 

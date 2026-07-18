@@ -59,5 +59,27 @@ Este documento registra los cambios realizados para que HTTP, CLI, cron, pruebas
 
 ## Incrementos pendientes
 
-- Logging estándar y manejo centralizado de errores.
 - Entrada CLI y prueba integral del criterio de salida.
+
+## Incremento 3 — Servicios, logging y errores
+
+### Añadido
+
+- Interfaz estándar `Logger`, niveles tipados y servicios `FileLogger`/`NullLogger`.
+- Escritura estructurada JSON Lines con bloqueo de archivo y redacción de contexto sensible.
+- Interfaz `ThrowableHandler` y manejador central para errores PHP y excepciones no capturadas.
+- Excepciones específicas de configuración, logging y resolución de servicios.
+- Contrato `ServiceProvider` para registrar servicios sin introducir lógica en controladores o vistas.
+
+### Cambiado
+
+- El bootstrap común registra logging y manejo de errores para todos los modos de ejecución.
+- La función global `logger()` delega al servicio estándar como capa temporal de compatibilidad.
+- `Bee` deja de transformar excepciones en `bee_die()` y permite que lleguen al manejador central.
+
+### Verificación
+
+- Resolución de servicios compartidos y excepción específica para servicios ausentes.
+- Conversión de errores PHP en `ErrorException`.
+- Redacción comprobada de contraseñas y otros campos sensibles en logs.
+- Suites de Core y updater aprobadas tras la integración.

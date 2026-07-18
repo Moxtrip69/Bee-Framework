@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bee\Core\Container;
 
 use Closure;
-use InvalidArgumentException;
+use Bee\Core\Exception\ServiceNotFoundException;
 
 final class ServiceContainer
 {
@@ -33,7 +33,7 @@ final class ServiceContainer
         }
 
         if (!isset($this->entries[$id])) {
-            throw new InvalidArgumentException(sprintf('Service is not registered: %s.', $id));
+            throw new ServiceNotFoundException(sprintf('Service is not registered: %s.', $id));
         }
 
         $entry = $this->entries[$id];
