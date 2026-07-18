@@ -189,6 +189,20 @@ Esta página consume los endpoints anteriores mediante `fetch`, `async/await` y 
 
 Los archivos del ejemplo usan caracteres UTF-8 reales, sin entidades HTML ni escapes Unicode para los acentos. Una prueba automática detecta texto doblemente codificado antes de publicar cambios.
 
+### Identidad visual y estilos
+
+Los estilos propios están modularizados en `assets/scss/`: tokens de marca, base tipográfica, layout, componentes, páginas y utilidades. `assets/css/` contiene únicamente el archivo compilado y las hojas de terceros que se conservan aisladas.
+
+La interfaz usa la identidad Bee —miel, carbón y superficies cálidas— sobre Bootstrap como base funcional, reduciendo su apariencia predeterminada mediante botones, tarjetas, formularios, tablas, navegación y estados propios.
+
+Para compilar el CSS minificado:
+
+```bash
+npx sass assets/scss/main.scss assets/css/main.min.css --style=compressed --no-source-map
+```
+
+Las plantillas cargan exclusivamente `assets/css/main.min.css`; los cambios en parciales nunca deben editar directamente el archivo compilado.
+
 Ejemplo de consulta:
 
 ```php

@@ -1,0 +1,23 @@
+.main-wrapper { min-height: 88vh; }
+.container { --bs-gutter-x: clamp(1.25rem, 4vw, 3rem); }
+.bee-shell { max-width: 80rem; margin-inline: auto; padding: clamp(1.5rem, 4vw, 4rem); }
+.bee-section { padding-block: clamp(3rem, 8vw, 7rem); }
+
+.navbar {
+  --bs-navbar-padding-y: .85rem;
+  background: rgb(255 255 255 / 88%);
+  border-bottom: 1px solid var(--bee-border);
+  backdrop-filter: blur(14px);
+}
+
+.navbar-brand { display: inline-flex; gap: .65rem; align-items: center; color: var(--bee-ink); font-weight: 800; }
+.navbar .nav-link { position: relative; color: var(--bee-muted); font-size: .92rem; font-weight: 650; }
+.navbar .nav-link:hover, .navbar .nav-link.active { color: var(--bee-ink); }
+.navbar .nav-link.active::after {
+  position: absolute; right: .5rem; bottom: .15rem; left: .5rem; height: .16rem;
+  background: var(--bee-honey); border-radius: 999px; content: '';
+}
+
+footer, .bee-footer { background: var(--bee-ink); border: 0; color: rgb(255 255 255 / 70%); }
+footer a, .bee-footer a { color: var(--bee-honey); }
+footer span, .bee-footer p { color: inherit; }

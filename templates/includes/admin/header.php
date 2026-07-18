@@ -42,8 +42,8 @@
   <!-- CDN Vue js 3 | definido en settings.php -->
   <?php echo get_vuejs(); ?>
 
-  <!-- Estilos personalizados deben ir en main.css o abajo de esta línea -->
-  <link href="<?php echo CSS . 'main.css?v=' . get_asset_version(); ?>" rel="stylesheet">
+  <!-- Estilos propios compilados desde assets/scss/ -->
+  <link href="<?php echo CSS . 'main.min.css?v=' . get_asset_version(); ?>" rel="stylesheet">
   
   <!-- Estilos registrados manualmente -->
   <?php echo load_styles(); ?>

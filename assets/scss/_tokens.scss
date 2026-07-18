@@ -1,0 +1,27 @@
+:root {
+  --bee-honey: #f6b900;
+  --bee-honey-strong: #d99b00;
+  --bee-honey-soft: #fff6d8;
+  --bee-ink: #191a1d;
+  --bee-ink-soft: #3d3f45;
+  --bee-muted: #73757d;
+  --bee-canvas: #f7f6f2;
+  --bee-surface: #fff;
+  --bee-border: #e8e5dc;
+  --bee-success: #18865b;
+  --bee-danger: #c43d3d;
+  --bee-warning: #b87600;
+  --bee-radius-sm: .55rem;
+  --bee-radius: .9rem;
+  --bee-radius-lg: 1.35rem;
+  --bee-shadow-sm: 0 .3rem 1.2rem rgb(25 26 29 / 6%);
+  --bee-shadow: 0 1rem 3rem rgb(25 26 29 / 9%);
+  --bee-transition: 180ms ease;
+  --bs-primary: var(--bee-ink);
+  --bs-primary-rgb: 25, 26, 29;
+  --bs-body-color: var(--bee-ink);
+  --bs-body-bg: var(--bee-canvas);
+  --bs-border-color: var(--bee-border);
+  --bs-link-color: var(--bee-ink);
+  --bs-link-hover-color: var(--bee-honey-strong);
+}

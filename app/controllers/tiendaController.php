@@ -35,7 +35,6 @@ class tiendaController extends Controller implements ControllerInterface
       /**
        * Estilos sólo para la página de producto
        */
-      register_styles([CSS . 'store.css'], 'Estilos de la página de detalles del producto');
 
       $this->setTitle($producto['nombre']);
       $this->addToData('p', $producto);

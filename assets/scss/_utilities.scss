@@ -1,0 +1,8 @@
+.text-discord { color: #5865f2; }
+.text-bold { font-weight: 800; }
+.nl2br { white-space: pre-line; }
+.text-bee { color: var(--bee-honey-strong); }
+.bg-bee-soft { background: var(--bee-honey-soft); }
+.bee-fly, .bee_fly { animation: bee-fly 5s ease-in-out infinite; }
+@keyframes bee-fly { 0%, 100% { transform: translateX(1.25rem) rotate(-4deg); } 50% { transform: translateX(-1.25rem) rotate(4deg); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }

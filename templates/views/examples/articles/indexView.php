@@ -16,8 +16,9 @@ $escape = static fn (string $value): string => htmlspecialchars(
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= $escape($data['title']) ?> - <?= $escape($data['applicationName']) ?></title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="<?= $escape(CSS . 'main.min.css?v=' . get_asset_version()) ?>" rel="stylesheet">
 </head>
-<body class="bg-light">
+<body>
   <main
     id="articles-crud"
     class="container py-5"
