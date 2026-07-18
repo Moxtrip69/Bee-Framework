@@ -58,7 +58,7 @@
   const resetForm = () => {
     form.reset();
     elements.id.value = '';
-    elements.formTitle.textContent = 'Nuevo art\u00EDculo';
+    elements.formTitle.textContent = 'Nuevo artículo';
     elements.submit.textContent = 'Guardar';
     elements.cancel.classList.add('d-none');
   };
@@ -70,7 +70,7 @@
     elements.excerpt.value = article.excerpt || '';
     elements.content.value = article.content || '';
     elements.status.value = article.status || 'draft';
-    elements.formTitle.textContent = `Editar art\u00EDculo #${article.id}`;
+    elements.formTitle.textContent = `Editar artículo #${article.id}`;
     elements.submit.textContent = 'Actualizar';
     elements.cancel.classList.remove('d-none');
     elements.title.focus();
@@ -105,7 +105,7 @@
       row.append(title, status, views, actions);
       elements.tableBody.append(row);
     });
-    elements.page.textContent = `P\u00E1gina ${state.page} de ${state.lastPage}`;
+    elements.page.textContent = `Página ${state.page} de ${state.lastPage}`;
     elements.previous.disabled = state.busy || state.page <= 1;
     elements.next.disabled = state.busy || state.page >= state.lastPage;
   };
@@ -130,12 +130,12 @@
   };
 
   const removeArticle = async (article) => {
-    if (!window.confirm(`\u00BFEliminar "${article.title}"?`)) return;
+    if (!window.confirm(`¿Eliminar "${article.title}"?`)) return;
     setBusy(true);
     try {
       const body = new URLSearchParams({ _method: 'DELETE' });
       await request(`${apiUrl}/${article.id}`, { method: 'POST', body });
-      showAlert('Art\u00EDculo eliminado.');
+      showAlert('Artículo eliminado.');
       await loadArticles();
     } catch (error) {
       showAlert(error.message, 'danger');
@@ -153,7 +153,7 @@
       const body = new URLSearchParams(new FormData(form));
       if (id) body.set('_method', 'PATCH');
       await request(id ? `${apiUrl}/${id}` : apiUrl, { method: 'POST', body });
-      showAlert(id ? 'Art\u00EDculo actualizado.' : 'Art\u00EDculo creado.');
+      showAlert(id ? 'Artículo actualizado.' : 'Artículo creado.');
       resetForm();
       state.page = id ? state.page : 1;
       await loadArticles();

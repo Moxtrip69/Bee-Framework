@@ -17,7 +17,7 @@ final class exampleArticlePageController
     public function index(): string
     {
         $data = [
-            'title' => "CRUD moderno de art\u{00ED}culos",
+            'title' => 'CRUD moderno de artículos',
             'applicationName' => $this->configuration->application->name,
             'apiUrl' => route('api.examples.articles.index'),
         ];
