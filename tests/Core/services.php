@@ -3,9 +3,11 @@
 declare(strict_types=1);
 
 use Bee\Core\Error\CentralErrorHandler;
+use Bee\Core\Error\ErrorResponseContext;
 use Bee\Core\Error\ThrowableHandler;
 use Bee\Core\Exception\ServiceNotFoundException;
 use Bee\Core\Foundation\ApplicationRoot;
+use Bee\Core\Foundation\ExecutionMode;
 use Bee\Core\Logging\FileLogger;
 use Bee\Core\Logging\Logger;
 use Bee\Core\Logging\LogLevel;
@@ -41,5 +43,18 @@ try {
     throw new RuntimeException('PHP errors must be converted to exceptions.');
 } catch (ErrorException) {
 }
+
+$responseContext = new ErrorResponseContext();
+$responseContext->expectsJson = true;
+$apiHandler = new CentralErrorHandler(new \Bee\Core\Logging\NullLogger(), ExecutionMode::Http, false, $responseContext);
+ob_start();
+$apiHandler->handle(new RuntimeException('Sensitive database detail'));
+$apiError = ob_get_clean();
+$decodedError = json_decode((string) $apiError, true, 8, JSON_THROW_ON_ERROR);
+coreAssert($decodedError === [
+    'status' => 500,
+    'error' => true,
+    'message' => 'An internal application error occurred.',
+], 'API errors must be JSON and hide internal details outside debug mode.');
 
 echo "PASS: logging and error services are standardized\n";

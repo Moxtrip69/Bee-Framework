@@ -13,11 +13,15 @@ use Throwable;
 
 final readonly class CentralErrorHandler implements ThrowableHandler
 {
+    private ErrorResponseContext $responseContext;
+
     public function __construct(
         private Logger $logger,
         private ExecutionMode $mode,
-        private bool $debug
+        private bool $debug,
+        ?ErrorResponseContext $responseContext = null
     ) {
+        $this->responseContext = $responseContext ?? new ErrorResponseContext();
     }
 
     public function register(): void
@@ -67,7 +71,21 @@ final readonly class CentralErrorHandler implements ThrowableHandler
                     header($name . ': ' . $value, true);
                 }
             }
-            header('Content-Type: text/plain; charset=UTF-8');
+            header($this->responseContext->expectsJson
+                ? 'Content-Type: application/json; charset=UTF-8'
+                : 'Content-Type: text/plain; charset=UTF-8');
+        }
+        if ($this->responseContext->expectsJson) {
+            $payload = [
+                'status' => $status,
+                'error' => true,
+                'message' => $message,
+            ];
+            if ($this->debug) {
+                $payload['exception'] = $throwable::class;
+            }
+            echo json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+            return;
         }
         echo $message;
     }

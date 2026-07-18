@@ -8,6 +8,7 @@ use Bee\Core\Compatibility\LegacyConstants;
 use Bee\Core\Config\OptionRepository;
 use Bee\Core\Config\PdoOptionRepository;
 use Bee\Core\Foundation\ApplicationContext;
+use Bee\Core\Error\ErrorResponseContext;
 use Bee\Core\Foundation\ExecutionMode;
 use Bee\Core\Http\HttpConfig;
 use Bee\Core\Http\HttpRequestContext;
@@ -47,6 +48,11 @@ final readonly class HttpBootstrap
             : $application->configuration->productionDatabase;
         $application->services->set(OptionRepository::class, new PdoOptionRepository($database));
         $httpRequest = HttpRequest::fromInput($server, $query, $body, $http);
+        $accept = strtolower($httpRequest->header('accept') ?? '');
+        $application->services->get(ErrorResponseContext::class)->expectsJson =
+            str_starts_with($httpRequest->path, '/api/')
+            || $httpRequest->path === '/api'
+            || str_contains($accept, 'application/json');
         $router = new Router();
         $middleware = new MiddlewareRegistry();
         $middleware->register('api', new PassThroughMiddleware());

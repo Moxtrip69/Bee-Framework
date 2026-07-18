@@ -11,6 +11,7 @@ use Bee\Core\Foundation\ApplicationContext;
 use Bee\Core\Foundation\ApplicationRoot;
 use Bee\Core\Foundation\ExecutionMode;
 use Bee\Core\Error\CentralErrorHandler;
+use Bee\Core\Error\ErrorResponseContext;
 use Bee\Core\Error\ThrowableHandler;
 use Bee\Core\Logging\FileLogger;
 use Bee\Core\Logging\Logger;
@@ -38,7 +39,14 @@ final readonly class CommonBootstrap
         $logger = $mode === ExecutionMode::Test
             ? new NullLogger()
             : new FileLogger($root->join('app', 'logs', $mode->value . '.log'));
-        $errorHandler = new CentralErrorHandler($logger, $mode, $configuration->application->debug);
+        $errorResponseContext = new ErrorResponseContext();
+        $errorHandler = new CentralErrorHandler(
+            $logger,
+            $mode,
+            $configuration->application->debug,
+            $errorResponseContext
+        );
+        $services->set(ErrorResponseContext::class, $errorResponseContext);
         $services->set(Logger::class, $logger);
         $services->set(ThrowableHandler::class, $errorHandler);
         $errorHandler->register();

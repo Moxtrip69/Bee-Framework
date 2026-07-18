@@ -189,6 +189,8 @@ $published = exampleArticleModel::published()
 
 El ejemplo está separado del núcleo y puede copiarse, adaptarse o eliminarse sin modificar Bee Framework.
 
+Las excepciones producidas en rutas `/api`, solicitudes que aceptan `application/json` o rutas con middleware `api` se responden como JSON. En producción se ocultan los detalles internos; con `APP_DEBUG=true` se incluye el mensaje y el tipo de excepción para diagnóstico.
+
 ### Actualizaciones seguras
 
 El inspector de paquetes valida manifiestos, compatibilidad, hashes y firmas Ed25519 mediante Sodium antes de aceptar una actualización. La instalación permanece separada de la inspección para reducir efectos laterales y permitir su uso desde HTTP o CLI.

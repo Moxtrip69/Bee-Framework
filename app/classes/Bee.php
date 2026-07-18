@@ -460,6 +460,9 @@ class Bee
     $middleware = $this->registeredRoute->route->middlewareNames();
     $this->is_endpoint = in_array('api', $middleware, true);
     $this->is_ajax = in_array('ajax', $middleware, true);
+    if ($this->is_endpoint) {
+      $application->services->get(\Bee\Core\Error\ErrorResponseContext::class)->expectsJson = true;
+    }
     $this->define_route_constants();
 
     return true;
