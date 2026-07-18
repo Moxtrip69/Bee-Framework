@@ -1,4 +1,9 @@
 {
+	"autoload": {
+		"psr-4": {
+			"Bee\\Updater\\": "src/Updater/"
+		}
+	},
 	"require": {
 		"verot/class.upload.php": "^2.0",
 		"phpmailer/phpmailer": "^6.1",

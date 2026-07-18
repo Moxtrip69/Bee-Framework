@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bee-framework.local/schemas/updater/manifest-v1.schema.json",
+  "title": "Bee update package manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format_version", "package_id", "product_id", "channel",
+    "source_version", "target_version", "bee", "runtime", "created_at",
+    "key_id", "checksums_sha256", "preserve", "delete", "migrations",
+    "health_checks"
+  ],
+  "properties": {
+    "format_version": { "const": 1 },
+    "package_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "product_id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 191,
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)+$"
+    },
+    "channel": { "enum": ["stable", "candidate", "development"] },
+    "source_version": { "$ref": "#/$defs/version" },
+    "target_version": { "$ref": "#/$defs/version" },
+    "bee": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min", "max_exclusive"],
+      "properties": {
+        "min": { "$ref": "#/$defs/semver" },
+        "max_exclusive": { "$ref": "#/$defs/semver" }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["php_min", "extensions"],
+      "properties": {
+        "php_min": { "$ref": "#/$defs/semver" },
+        "extensions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }
+        }
+      }
+    },
+    "created_at": { "$ref": "#/$defs/dateTime" },
+    "expires_at": { "oneOf": [{ "$ref": "#/$defs/dateTime" }, { "type": "null" }] },
+    "key_id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$" },
+    "checksums_sha256": { "$ref": "#/$defs/sha256" },
+    "preserve": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/packagePathPattern" }
+    },
+    "delete": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/packagePath" }
+    },
+    "migrations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pre", "post"],
+      "properties": {
+        "pre": { "$ref": "#/$defs/migrationList" },
+        "post": { "$ref": "#/$defs/migrationList" }
+      }
+    },
+    "health_checks": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9._-]{0,127}$" }
+    }
+  },
+  "$defs": {
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "version": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[0-9A-Za-z][0-9A-Za-z.+_-]*$" },
+    "dateTime": { "type": "string", "format": "date-time" },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "packagePath": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "packagePathPattern": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "migrationList": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/migration" }
+    },
+    "migration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "engine", "path", "rollback_path"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$" },
+        "engine": { "enum": ["mysql", "mariadb"] },
+        "path": { "type": "string", "pattern": "^migrations/(pre|post)/.+\\.sql$" },
+        "rollback_path": {
+          "oneOf": [
+            { "type": "string", "pattern": "^migrations/rollback/.+\\.sql$" },
+            { "type": "null" }
+          ]
+        }
+      }
+    }
+  }
+}
