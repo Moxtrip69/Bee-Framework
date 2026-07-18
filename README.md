@@ -208,6 +208,8 @@ Las plantillas cargan exclusivamente `assets/css/main.min.css`; los cambios en p
 
 Las vistas locales incluidas con `beeController` comparten esta identidad visual: inicio, generador de contraseñas, perfil, diagnósticos, demos de Vue y Twig, así como las pantallas generales de error. Sus estilos viven en `assets/scss/_bee.scss`; las demos conservan sus puntos de montaje (`#mainApp` y `#testApp`) y los valores variables se escapan antes de renderizarse.
 
+La navegación y el footer compartidos también usan componentes Bee adaptables, estados de ruta activos, enlaces de herramientas y datos de versión. La regla web de `.htaccess` reserva `/bee` y `/bee/*` para `beeController`, aunque exista el ejecutable CLI `bee` en la raíz; esto no altera el uso de `php bee <comando>` desde terminal.
+
 Ejemplo de consulta:
 
 ```php
@@ -245,6 +247,7 @@ composer --working-dir=app audit
 ## Changelog
 ### v 1.6.0
 
+- Compatibilidad simultánea entre las rutas web de `beeController` y el ejecutable CLI `bee`, más navbar y footer renovados.
 - Rediseño integral y adaptable de las vistas locales de `beeController`, navegación Bee, herramientas, demos, diagnóstico y errores.
 - Núcleo compartido con bootstraps independientes para HTTP, CLI, cron, pruebas y updater.
 - Configuración tipada, servicios reutilizables, logging estándar y manejo centralizado de errores.

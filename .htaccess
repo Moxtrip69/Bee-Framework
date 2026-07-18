@@ -5,6 +5,11 @@
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
+
+  # La ruta web /bee comparte nombre con el ejecutable CLI ubicado en la raíz.
+  # Debe llegar al front controller antes de excluir archivos físicos.
+  RewriteRule ^(bee(?:/.*)?)$ index.php?uri=$1 [QSA,L,NC]
+
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteRule  ^(.+)$ index.php?uri=$1 [QSA,L]
