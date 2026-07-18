@@ -188,7 +188,7 @@ GET /examples/article/{slug}
 
 Esta página consume los endpoints anteriores mediante `fetch`, `async/await` y formularios codificados como `URLSearchParams`. Incluye creación, listado paginado, filtro por estado, edición, eliminación, estados de carga y presentación segura de errores JSON. El JavaScript se encuentra en `assets/js/examples/articlesCrud.js` y genera contenido dinámico con `textContent` para evitar inyectar HTML recibido desde la API.
 
-El slug se genera automáticamente desde el título cuando no se envía uno. Si ya existe, el modelo añade sufijos incrementales (`mi-articulo-2`, `mi-articulo-3`). Los títulos del listado enlazan a `/examples/article/{slug}`; esa página solo muestra artículos con estado `published` y responde con HTTP 404 cuando el slug no existe o sigue como borrador.
+El slug se genera automáticamente desde el título cuando no se envía uno. Si ya existe, el modelo añade sufijos incrementales (`mi-articulo-2`, `mi-articulo-3`). Los títulos y el botón `Ver` del listado enlazan a `/examples/article/{slug}`; ambos aparecen únicamente para artículos con estado `published`. La página responde con HTTP 404 cuando el slug no existe o sigue como borrador.
 
 Los archivos del ejemplo usan caracteres UTF-8 reales, sin entidades HTML ni escapes Unicode para los acentos. Una prueba automática detecta texto doblemente codificado antes de publicar cambios.
 

@@ -86,6 +86,14 @@
     return button;
   };
 
+  const actionLink = (label, className, href) => {
+    const link = document.createElement('a');
+    link.className = className;
+    link.href = href;
+    link.textContent = label;
+    return link;
+  };
+
   const renderRows = () => {
     elements.tableBody.replaceChildren();
     elements.empty.classList.toggle('d-none', state.articles.length !== 0);
@@ -107,6 +115,13 @@
       status.textContent = article.status;
       views.textContent = article.views;
       actions.className = 'text-end text-nowrap';
+      if (article.status === 'published') {
+        actions.append(actionLink(
+          'Ver',
+          'btn btn-sm btn-primary me-2',
+          articleUrlTemplate.replace('article-slug', encodeURIComponent(article.slug)),
+        ));
+      }
       actions.append(
         actionButton('Editar', 'btn btn-sm btn-outline-primary me-2', () => startEditing(article)),
         actionButton('Eliminar', 'btn btn-sm btn-outline-danger', () => removeArticle(article)),
