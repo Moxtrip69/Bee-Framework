@@ -182,24 +182,12 @@ class Bee
    */
   private function init_load_config()
   {
-    // Carga del archivo de settings inicialmente para establecer las constantes personalizadas
-    // desde un comienzo en la ejecución del sitio
-    $file = 'bee_config.php';
-    if (!is_file('app/config/' . $file)) {
-      die(sprintf('El archivo %s no se encuentra, es requerido para que el sitio funcione.', $file));
+    $application = $GLOBALS['bee.application'] ?? null;
+    if (!$application instanceof \Bee\Core\Foundation\ApplicationContext) {
+      throw new \Bee\Core\Exception\ConfigurationException('Bee Core bootstrap has not been initialized.');
     }
 
-    // Cargando el archivo de configuración
-    require_once 'app/config/' . $file;
-
-    // @deprecated 1.6.0
-    // $file = 'settings.php';
-    // if (!is_file('app/core/' . $file)) {
-    //   die(sprintf('El archivo %s no se encuentra, es requerido para que el sitio funcione.', $file));
-    // }
-
-    // // Cargando el archivo de configuración
-    // require_once 'app/core/' . $file;
+    $this->settings = $application->configuration->environment();
   }
 
   /**
@@ -215,13 +203,13 @@ class Bee
     $this->logo      = 'bee_logo.png';
     $this->lng       = 'es';
 
-    define('BEE_NAME'      , $this->framework);
-    define('BEE_VERSION'   , $this->version);
-    define('BEE_LOGO'      , $this->logo);
-    define('BEE_DEVS'      , 'J. Roberto Orozco Aviles');
-    define('BEE_SUPPORT'   , 'soporte@joystick.com.mx');
-    define('BEE_DONATIONS' , 'https://buymeacoffee.com/joystickmx');
-    define('BEE_URL'       , 'https://github.com/Moxtrip69/Bee-Framework');
+    if (!defined('BEE_NAME')) define('BEE_NAME', $this->framework);
+    if (!defined('BEE_VERSION')) define('BEE_VERSION', $this->version);
+    if (!defined('BEE_LOGO')) define('BEE_LOGO', $this->logo);
+    if (!defined('BEE_DEVS')) define('BEE_DEVS', 'J. Roberto Orozco Aviles');
+    if (!defined('BEE_SUPPORT')) define('BEE_SUPPORT', 'soporte@joystick.com.mx');
+    if (!defined('BEE_DONATIONS')) define('BEE_DONATIONS', 'https://buymeacoffee.com/joystickmx');
+    if (!defined('BEE_URL')) define('BEE_URL', 'https://github.com/Moxtrip69/Bee-Framework');
   }
 
   /**
@@ -253,7 +241,7 @@ class Bee
    */
   private function init_load_composer()
   {
-    $file = 'app/vendor/autoload.php';
+    $file = APP . 'vendor' . DS . 'autoload.php';
     if (!is_file($file)) {
       die(sprintf('El archivo %s no se encuentra, es requerido para que el sitio funcione.', $file));
     }
@@ -580,6 +568,12 @@ class Bee
    */
   public static function fly()
   {
+    if (!(($GLOBALS['bee.application'] ?? null) instanceof \Bee\Core\Foundation\ApplicationContext)) {
+      $applicationRoot = dirname(__DIR__, 2);
+      $server = $_SERVER;
+      require $applicationRoot . '/app/bootstrap/http.php';
+    }
+
     $bee = new self();
     $bee->init();
     return;

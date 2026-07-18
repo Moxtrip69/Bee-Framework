@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Bee\Updater\Bootstrap;
 
+use Bee\Core\Foundation\ApplicationContext;
+
 final readonly class UpdaterContext
 {
     public function __construct(
         private ApplicationRoot $applicationRoot,
-        private RuntimeEnvironment $runtime
+        private RuntimeEnvironment $runtime,
+        private ApplicationContext $application
     ) {
     }
 
@@ -20,5 +23,10 @@ final readonly class UpdaterContext
     public function runtime(): RuntimeEnvironment
     {
         return $this->runtime;
+    }
+
+    public function application(): ApplicationContext
+    {
+        return $this->application;
     }
 }

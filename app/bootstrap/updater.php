@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-use Bee\Updater\Bootstrap\ApplicationRoot;
+use Bee\Core\Foundation\ExecutionMode;
+use Bee\Updater\Bootstrap\ApplicationRoot as UpdaterApplicationRoot;
 use Bee\Updater\Bootstrap\RuntimeEnvironment;
 use Bee\Updater\Bootstrap\UpdaterContext;
 
@@ -25,6 +26,8 @@ if (!is_file($autoloadPath)) {
 
 require_once $autoloadPath;
 
-$root = ApplicationRoot::fromPath($resolvedRoot);
+$executionMode = ExecutionMode::Updater;
+$application = require __DIR__ . '/common.php';
+$root = UpdaterApplicationRoot::fromPath($resolvedRoot);
 
-return new UpdaterContext($root, RuntimeEnvironment::detect());
+return new UpdaterContext($root, RuntimeEnvironment::detect(), $application);

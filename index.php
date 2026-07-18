@@ -17,8 +17,13 @@
  * Julio 2019 - Septiembre 2023 y actualizando
  */
 
-// Requerir el archivo de la clase Bee.php
-require_once 'app/classes/Bee.php';
+$applicationRoot = __DIR__;
+$server = $_SERVER;
+$application = require __DIR__ . '/app/bootstrap/http.php';
+
+// Capa heredada de despacho HTTP. La configuración y los servicios comunes
+// ya fueron inicializados por el bootstrap independiente de Bee::fly().
+require_once __DIR__ . '/app/classes/Bee.php';
 
 // Ejecutar el framework bee
 Bee::fly();

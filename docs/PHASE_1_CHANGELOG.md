@@ -31,10 +31,33 @@ Este documento registra los cambios realizados para que HTTP, CLI, cron, pruebas
 - Esquemas JSON parseados correctamente.
 - Autoload optimizado correctamente con Composer.
 
+## Incremento 2 — Bootstrap y configuración compartida
+
+### Añadido
+
+- Raíz canónica `ApplicationRoot`, resuelta desde el directorio del bootstrap y no desde el CWD.
+- Modos de ejecución tipados para HTTP, CLI, cron, pruebas y updater.
+- Bootstraps separados `common.php`, `http.php`, `cli.php` y `testing.php`.
+- Objetos tipados para aplicación, bases de datos, identidad y contexto HTTP.
+- Contenedor mínimo de servicios compartido por todos los modos.
+- Archivo autoritativo `app/config/identity.php` para identidad y versiones.
+- Capa `LegacyConstants` para conservar las constantes globales durante la migración.
+
+### Cambiado
+
+- `index.php` ejecuta primero el bootstrap HTTP y deja `Bee::fly()` como adaptador heredado de despacho.
+- `bee_config.php` es ahora un shim de compatibilidad sobre la configuración tipada.
+- El updater reutiliza el bootstrap común y conserva su contexto especializado.
+- Composer carga componentes nuevos de Core mediante `Bee\\Core\\`.
+
+### Verificación
+
+- CLI carga raíz, configuración y servicios desde un CWD distinto sin sesión ni constantes HTTP.
+- HTTP deriva su configuración exclusivamente de un contexto de servidor explícito.
+- El bootstrap de pruebas admite overrides sin simular una petición.
+- La suite hostil del updater continúa aprobando sus 19 escenarios.
+
 ## Incrementos pendientes
 
-- Raíz autoritativa y bootstraps común, HTTP, CLI y pruebas.
-- Configuración tipada y compatibilidad mediante constantes.
-- Identidad y versiones centralizadas.
 - Logging estándar y manejo centralizado de errores.
 - Entrada CLI y prueba integral del criterio de salida.

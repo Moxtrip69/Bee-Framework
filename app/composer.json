@@ -1,6 +1,7 @@
 {
 	"autoload": {
 		"psr-4": {
+			"Bee\\Core\\": "src/Core/",
 			"Bee\\Updater\\": "src/Updater/"
 		}
 	},

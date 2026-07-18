@@ -32,7 +32,8 @@ $tests['bootstrap uses an explicit root and is independent of cwd'] = static fun
 
     assertTrue($context instanceof UpdaterContext, 'Bootstrap must return an updater context.');
     assertSame(realpath($projectRoot), $context->applicationRoot()->path(), 'Root must be canonical.');
-    assertTrue(!defined('ROOT'), 'Updater bootstrap must not load Bee HTTP configuration.');
+    assertTrue(!defined('REQUEST_URI'), 'Updater bootstrap must not load Bee HTTP configuration.');
+    assertTrue(session_status() === PHP_SESSION_NONE, 'Updater bootstrap must not start a session.');
 };
 
 $tests['runtime detects updater extensions'] = static function (): void {
