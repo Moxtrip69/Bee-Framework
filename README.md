@@ -21,16 +21,6 @@ La rama actual estabiliza el núcleo para que HTTP, CLI, cron, pruebas y el actu
 - Extensiones PHP: `json`, `mbstring`, `openssl`, `pdo`, `pdo_mysql`, `session`, `fileinfo`, `hash`, `sodium` y `zip`.
 - Composer para desarrollo, actualización del autoload en `app/` y ejecución de las herramientas del proyecto.
 
-### Documentación técnica
-
-- [Estabilización del núcleo — Fase 1](docs/PHASE_1_CORE_STABILIZATION.md)
-- [Changelog de la Fase 1](docs/PHASE_1_CHANGELOG.md)
-- [Router moderno y migración](docs/ROUTING.md)
-- [Changelog del router](docs/ROUTING_CHANGELOG.md)
-- [Arquitectura del actualizador](docs/UPDATER_ARCHITECTURE.md)
-- [Especificación de paquetes](docs/UPDATE_PACKAGE_SPEC.md)
-- [Seguridad del actualizador](docs/UPDATE_SECURITY.md)
-
 ### Bootstraps por contexto
 
 Cada punto de entrada carga primero el bootstrap común y después únicamente la capa que necesita:
@@ -107,7 +97,7 @@ composer --working-dir=app audit
 - Autoload PSR-4 para componentes nuevos, manteniendo constantes y APIs globales como compatibilidad temporal.
 - Router moderno con fachada `Route`, verbos HTTP, parámetros, nombres, grupos, middleware y fallback al router heredado.
 - Comando CLI de diagnóstico y base segura para el sistema de actualizaciones.
-- Documentación técnica y changelogs específicos enlazados desde este README.
+- Documentación de uso actualizada para el núcleo, el router, CLI y actualizaciones.
 
 ### v 1.5.8
 - Revisa el curso oficial sobre esta versión de **Bee framework 1.5.8** dando clic [aquí](https://www.academy.joystick.com.mx/courses/novedades-bee-framework-1-5-8-mejoras-y-actualizaciones).
