@@ -36,6 +36,7 @@ $router = new Router();
 Route::useRouter($router);
 try {
     require $applicationRoot . '/app/routes/api.php';
+    require $applicationRoot . '/app/routes/web.php';
     $router->finalize();
 } finally {
     Route::clearRouter();
@@ -45,5 +46,8 @@ $show = $router->resolve('GET', '/api/examples/articles/15')->match;
 coreAssert($show instanceof RouteMatch && $show->parameters['id'] === '15', 'Example show route must bind a numeric ID.');
 coreAssert($router->resolve('PATCH', '/api/examples/articles/15')->match instanceof RouteMatch, 'Example update route must accept PATCH.');
 coreAssert($router->resolve('DELETE', '/api/examples/articles/abc')->match === null, 'Example routes must reject nonnumeric IDs.');
+$web = $router->resolve('GET', '/examples/articles')->match;
+coreAssert($web instanceof RouteMatch, 'Example web CRUD route must be registered when examples are enabled.');
+coreAssert($web->route->routeName() === 'examples.articles.index', 'Example web route must have a stable name.');
 
 echo "PASS: modern controller, model and route examples work\n";

@@ -179,6 +179,14 @@ PUT|PATCH     /api/examples/articles/{id}
 DELETE        /api/examples/articles/{id}
 ```
 
+La interfaz web del CRUD está disponible en:
+
+```text
+GET /examples/articles
+```
+
+Esta página consume los endpoints anteriores mediante `fetch`, `async/await` y formularios codificados como `URLSearchParams`. Incluye creación, listado paginado, filtro por estado, edición, eliminación, estados de carga y presentación segura de errores JSON. El JavaScript se encuentra en `assets/js/examples/articlesCrud.js` y genera contenido dinámico con `textContent` para evitar inyectar HTML recibido desde la API.
+
 Ejemplo de consulta:
 
 ```php
