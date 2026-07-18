@@ -154,6 +154,41 @@ También están disponibles `whereIn()`, `whereNull()`, `first()`, `value()`, `c
 
 Los métodos históricos `fetchAll()`, `find(array)`, `first(array)`, `column()` y `query()` permanecen compatibles.
 
+### Ejemplo completo: rutas, controlador y modelo
+
+El repositorio incluye un ejemplo REST funcional compuesto por:
+
+- `app/routes/api.php`: rutas agrupadas y nombradas con distintos verbos HTTP.
+- `app/controllers/exampleArticleController.php`: inyección de configuración, request tipado, sanitización, validación y respuestas JSON.
+- `app/models/exampleArticleModel.php`: asignación masiva, casts, timestamps y consultas fluidas.
+- `database/migrations/20260718_create_example_articles.sql`: esquema reversible de la tabla utilizada.
+
+Las rutas están desactivadas de manera predeterminada. Después de ejecutar la migración, se habilitan localmente agregando lo siguiente a `app/config/.env`:
+
+```dotenv
+BEE_ENABLE_EXAMPLE_ROUTES=true
+```
+
+Al habilitarlas están disponibles estas rutas:
+
+```text
+GET           /api/examples/articles
+GET           /api/examples/articles/{id}
+POST          /api/examples/articles
+PUT|PATCH     /api/examples/articles/{id}
+DELETE        /api/examples/articles/{id}
+```
+
+Ejemplo de consulta:
+
+```php
+$published = exampleArticleModel::published()
+    ->orderBy('created_at', 'desc')
+    ->paginate(10, 1);
+```
+
+El ejemplo está separado del núcleo y puede copiarse, adaptarse o eliminarse sin modificar Bee Framework.
+
 ### Actualizaciones seguras
 
 El inspector de paquetes valida manifiestos, compatibilidad, hashes y firmas Ed25519 mediante Sodium antes de aceptar una actualización. La instalación permanece separada de la inspección para reducir efectos laterales y permitir su uso desde HTTP o CLI.
@@ -165,6 +200,7 @@ php tests/Core/services.php
 php tests/Core/configuration_access.php
 php tests/Core/sanitizers.php
 php tests/Core/bee_model.php
+php tests/Core/modern_examples.php
 php tests/Core/routing.php
 php tests/Core/route_facade.php
 php tests/Core/route_dispatcher.php
