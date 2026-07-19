@@ -295,6 +295,7 @@ composer --working-dir=app audit
 ## Changelog
 ### v 1.6.0
 
+- `bee/info` presenta un diagnóstico agrupado y adaptable con resumen de runtime, navegación por secciones y secretos siempre ocultos.
 - El selector de tipo de controlador en Creator mejora contraste, lectura, adaptación móvil y estados seleccionado/focus con identidad Bee.
 - Las tarjetas de “Tu espacio de trabajo” conservan su presentación limpia en hover mediante utilidades nativas de Bootstrap 5.
 - Tema simplificado a una sola configuración y personalidad Bee aplicada a enlaces, botones, tabs, nav-pills y badges nativos de Bootstrap.

@@ -29,6 +29,13 @@
 .bee-data-list dt { color: var(--bee-muted); font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
 .bee-data-list dd { min-width: 0; margin: 0; overflow-wrap: anywhere; }
 .bee-info-list code { color: var(--bee-ink); white-space: pre-wrap; }
+.bee-info-page { scroll-behavior: smooth; }
+.bee-info-summary { background: linear-gradient(145deg, var(--bee-surface), var(--bee-honey-soft)); }
+.bee-info-icon { display: grid; width: 2.75rem; height: 2.75rem; place-items: center; color: var(--bee-ink); background: var(--bee-honey); border-radius: .8rem; box-shadow: inset 0 0 0 1px rgb(25 26 29 / 8%); }
+.bee-info-section { overflow: hidden; scroll-margin-top: 6rem; }
+.bee-info-section .list-group-item { background: transparent; border-color: var(--bee-border); }
+.bee-info-row { grid-template-columns: minmax(9rem, 32%) minmax(0, 1fr); align-items: start; }
+.bee-info-row code { color: var(--bee-ink-soft); white-space: pre-wrap; }
 .bee-card-actions { display: flex; justify-content: space-between; gap: .75rem; padding-top: 1.5rem; }
 .bee-demo-stage { min-height: 18rem; padding: clamp(1rem, 4vw, 2.5rem); background: linear-gradient(145deg, #fff, var(--bee-surface)); border: 1px solid var(--bee-border); border-radius: var(--bee-radius-lg); box-shadow: var(--bee-shadow); }
 .bee-message-card { max-width: 48rem; margin: 8vh auto 0; padding: clamp(2rem, 7vw, 5rem); text-align: center; background: #fff; border: 1px solid var(--bee-border); border-radius: var(--bee-radius-lg); box-shadow: var(--bee-shadow); }
@@ -91,6 +98,7 @@ input:checked + .bee-method-option { color: var(--bee-ink) !important; backgroun
 
 @media (max-width: 575.98px) {
   .bee-data-list > div { grid-template-columns: 1fr; gap: .35rem; }
+  .bee-info-row { grid-template-columns: 1fr; }
   .bee-card-actions { align-items: stretch; flex-direction: column; }
   .bee-footer-links { grid-template-columns: repeat(2, 1fr); }
   .bee-footer-bottom { flex-direction: column; }

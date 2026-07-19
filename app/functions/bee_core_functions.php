@@ -2019,7 +2019,7 @@ function get_bee_info()
 			'URL de recursos'      => ASSETS,
 			'URL de subidas'       => UPLOADED,
 			'URL de imágenes'      => IMAGES,
-			'Sal de seguridad'     => IS_LOCAL ? AUTH_SALT : '*****',
+			'Sal de seguridad'     => '••••••••',
 			'DB Engine (local)'    => LDB_ENGINE,
 			'DB Host (local)'      => LDB_HOST,
 			'DB Nombre (local)'    => LDB_NAME,
