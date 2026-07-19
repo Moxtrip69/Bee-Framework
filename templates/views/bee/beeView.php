@@ -6,19 +6,19 @@
     <div class="container">
       <div class="row align-items-center g-5">
         <div class="col-12 col-lg-7">
-          <span class="bee-eyebrow"><span class="bee-status-dot"></span> Bee Framework <?= htmlspecialchars(get_bee_version()) ?></span>
+          <span class="d-inline-flex align-items-center gap-2 text-uppercase small fw-bold text-secondary"><span class="bee-status-dot"></span> Bee Framework <?= htmlspecialchars(get_bee_version()) ?></span>
           <h1>Construye productos claros.<br><span class="text-bee">Hazlos volar.</span></h1>
           <p class="bee-hero-copy">Un framework PHP ligero y modular para aplicaciones web, APIs, CLI y procesos programados, con una arquitectura que puede crecer contigo.</p>
           <?= Flasher::flash(); ?>
-          <div class="d-flex flex-wrap gap-2 mt-4">
+          <div class="d-flex flex-wrap align-items-center gap-2 mt-4">
             <a href="documentacion" class="btn btn-primary">Explorar documentación</a>
             <a href="creator" class="btn btn-outline-secondary">Crear componente</a>
             <a href="https://github.com/Moxtrip69/Bee-Framework/tree/<?= rawurlencode(get_bee_version()) ?>" class="btn btn-link" target="_blank" rel="noopener noreferrer">Ver en GitHub ↗</a>
           </div>
-          <dl class="bee-stats mt-5">
-            <div><dt>PHP</dt><dd>8.2+</dd></div>
-            <div><dt>Core</dt><dd><?= htmlspecialchars(get_core_version()) ?></dd></div>
-            <div><dt>Arquitectura</dt><dd>Modular</dd></div>
+          <dl class="bee-stats row row-cols-2 row-cols-sm-3 g-3 mt-4 mb-0">
+            <div class="col"><dt>PHP</dt><dd>8.2+</dd></div>
+            <div class="col"><dt>Core</dt><dd><?= htmlspecialchars(get_core_version()) ?></dd></div>
+            <div class="col"><dt>Arquitectura</dt><dd>Modular</dd></div>
           </dl>
         </div>
         <div class="col-12 col-lg-5">
@@ -32,7 +32,7 @@
 
   <section class="container bee-section">
     <div class="bee-section-heading">
-      <span class="bee-eyebrow">Tu espacio de trabajo</span>
+      <span class="d-inline-block text-uppercase small fw-bold text-secondary mb-2">Tu espacio de trabajo</span>
       <h2>Todo lo necesario, sin ruido.</h2>
       <p>Accede a las herramientas principales y ejemplos incluidos en esta instalación.</p>
     </div>
@@ -48,10 +48,10 @@
       ];
       foreach ($items as [$title, $description, $href, $icon]): ?>
         <div class="col-12 col-md-6 col-xl-4">
-          <a class="bee-tool-card" href="<?= htmlspecialchars($href, ENT_QUOTES, 'UTF-8') ?>">
-            <span class="bee-tool-icon"><i class="fas <?= htmlspecialchars($icon) ?>"></i></span>
-            <span><strong><?= htmlspecialchars($title) ?></strong><small><?= htmlspecialchars($description) ?></small></span>
-            <span class="bee-tool-arrow">→</span>
+          <a class="bee-tool-card d-flex align-items-center gap-3 h-100" href="<?= htmlspecialchars($href, ENT_QUOTES, 'UTF-8') ?>">
+            <span class="bee-tool-icon flex-shrink-0"><i class="fas <?= htmlspecialchars($icon) ?>"></i></span>
+            <span class="flex-grow-1"><strong><?= htmlspecialchars($title) ?></strong><small><?= htmlspecialchars($description) ?></small></span>
+            <span class="bee-tool-arrow ms-auto flex-shrink-0">→</span>
           </a>
         </div>
       <?php endforeach; ?>

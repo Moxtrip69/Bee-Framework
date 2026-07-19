@@ -238,6 +238,8 @@ Cuando las vistas viven en una carpeta distinta a la inferida desde el nombre de
 
 Creator dispone de una interfaz local renovada para generar controladores modernos o legacy, vistas PHP/Twig y modelos ORM con campos fillable, casts y timestamps. También muestra todas las rutas cargadas; las rutas creadas desde la interfaz se administran de forma segura en `app/routes/creator.json`, sin reescribir `web.php` o `api.php`.
 
+El constructor visual de modelos permite añadir columnas una por una y seleccionar su cast desde una lista, revisar la estructura resultante y retirar columnas antes de generar el archivo. El editor de rutas incluye restricciones habituales para parámetros —numérico, letras, alfanumérico, slug y UUID— además de una expresión personalizada cuando sea necesaria.
+
 La misma API de generación se utiliza desde terminal:
 
 ```bash
@@ -286,6 +288,7 @@ composer --working-dir=app audit
 ## Changelog
 ### v 1.6.0
 
+- Creator prioriza componentes y utilidades Bootstrap 5, incorpora un constructor visual de columnas y presets estandarizados para parámetros de ruta.
 - Bee Creator rediseñado con controladores modernos/legacy, modelos ORM configurables, vistas, rutas administradas y comandos CLI `create:*` reutilizando una API común.
 - El CRUD web de artículos ahora demuestra el flujo estándar de `Controller` y `View`, incluyendo carpeta de vistas configurable e includes compartidos.
 - Renderizador de vistas reutilizable y seguro con `renderToString()`, excepciones específicas, rutas protegidas y autoescape de Twig.

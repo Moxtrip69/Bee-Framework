@@ -23,7 +23,10 @@ final class creatorController extends Controller implements ControllerInterface
 
     public function index(): void
     {
-        register_scripts([JS . 'creator.js'], 'Bee Creator interface');
+        register_scripts(
+            [JS . 'creator.js?v=' . rawurlencode((string) get_asset_version())],
+            'Bee Creator interface'
+        );
         $controllers = [];
         foreach (glob(CONTROLLERS . '*Controller.php') ?: [] as $file) {
             $controllers[] = str_replace('Controller.php', '', basename($file));
@@ -95,9 +98,11 @@ final class creatorController extends Controller implements ControllerInterface
     public function post_model(): void
     {
         $this->runCreatorAction(function (): string {
-            $fields = $this->creator->parseFields(
-                preg_split('/\s*,\s*/', (string) ($_POST['fields'] ?? ''), -1, PREG_SPLIT_NO_EMPTY) ?: []
-            );
+            $fieldInput = $_POST['fields'] ?? [];
+            $fieldDefinitions = is_array($fieldInput)
+                ? array_map('strval', $fieldInput)
+                : (preg_split('/\s*,\s*/', (string) $fieldInput, -1, PREG_SPLIT_NO_EMPTY) ?: []);
+            $fields = $this->creator->parseFields($fieldDefinitions);
             $result = $this->creator->createModel(
                 (string) ($_POST['filename'] ?? ''),
                 trim((string) ($_POST['table'] ?? '')) ?: null,
@@ -133,7 +138,17 @@ final class creatorController extends Controller implements ControllerInterface
             $middleware = preg_split('/\s*,\s*/', (string) ($_POST['middleware'] ?? ''), -1, PREG_SPLIT_NO_EMPTY) ?: [];
             $constraints = [];
             $parameter = trim((string) ($_POST['constraint_parameter'] ?? ''));
-            $expression = trim((string) ($_POST['constraint_expression'] ?? ''));
+            $preset = (string) ($_POST['constraint_preset'] ?? '');
+            $presets = [
+                'numeric' => '\\d+',
+                'alpha' => '[A-Za-z]+',
+                'alphanumeric' => '[A-Za-z0-9]+',
+                'slug' => '[a-z0-9]+(?:-[a-z0-9]+)*',
+                'uuid' => '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}',
+            ];
+            $expression = $preset === 'custom'
+                ? trim((string) ($_POST['constraint_expression'] ?? ''))
+                : ($presets[$preset] ?? '');
             if ($parameter !== '' && $expression !== '') {
                 $constraints[$parameter] = $expression;
             }
