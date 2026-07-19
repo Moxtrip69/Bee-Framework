@@ -48,7 +48,7 @@
       ];
       foreach ($items as [$title, $description, $href, $icon]): ?>
         <div class="col-12 col-md-6 col-xl-4">
-          <a class="bee-tool-card d-flex align-items-center gap-3 h-100" href="<?= htmlspecialchars($href, ENT_QUOTES, 'UTF-8') ?>">
+          <a class="bee-tool-card d-flex align-items-center gap-3 h-100 text-decoration-none text-reset" href="<?= htmlspecialchars($href, ENT_QUOTES, 'UTF-8') ?>">
             <span class="bee-tool-icon flex-shrink-0"><i class="fas <?= htmlspecialchars($icon) ?>"></i></span>
             <span class="flex-grow-1"><strong><?= htmlspecialchars($title) ?></strong><small><?= htmlspecialchars($description) ?></small></span>
             <span class="bee-tool-arrow ms-auto flex-shrink-0">→</span>

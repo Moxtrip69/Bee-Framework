@@ -295,6 +295,7 @@ composer --working-dir=app audit
 ## Changelog
 ### v 1.6.0
 
+- Las tarjetas de “Tu espacio de trabajo” conservan su presentación limpia en hover mediante utilidades nativas de Bootstrap 5.
 - Tema simplificado a una sola configuración y personalidad Bee aplicada a enlaces, botones, tabs, nav-pills y badges nativos de Bootstrap.
 - Tema Bee autónomo y escalable: Bootstrap 5 se compila localmente, `_theme-settings.scss` centraliza la personalización y `main.min.css` deja de depender del CSS de Bootstrap servido por CDN.
 - Creator prioriza componentes y utilidades Bootstrap 5, incorpora un constructor visual de columnas y presets estandarizados para parámetros de ruta.
