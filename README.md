@@ -234,6 +234,21 @@ También está disponible `View::renderToString($view, $data, $engine, $controll
 
 Cuando las vistas viven en una carpeta distinta a la inferida desde el nombre del controlador, puede declararse con `$this->setViewDirectory('examples/articles')`. `exampleArticlePageController` muestra el flujo completo: extiende `Controller`, recibe `Configuration` por inyección, establece título, vista y datos, y retorna el HTML mediante `renderToString()`; sus plantillas consumen `$d` y reutilizan header, navbar y footer.
 
+### Bee Creator y generación por CLI
+
+Creator dispone de una interfaz local renovada para generar controladores modernos o legacy, vistas PHP/Twig y modelos ORM con campos fillable, casts y timestamps. También muestra todas las rutas cargadas; las rutas creadas desde la interfaz se administran de forma segura en `app/routes/creator.json`, sin reescribir `web.php` o `api.php`.
+
+La misma API de generación se utiliza desde terminal:
+
+```bash
+php bee create:controller Articles --view
+php bee create:controller Reports --type=legacy --view
+php bee create:model Article --table=articles --fields=title:string,views:int,metadata:json
+php bee create:view articles/show
+```
+
+Creator nunca sobrescribe archivos existentes. Los casts admitidos son `string`, `int`, `float`, `bool`, `array` y `json`; las rutas del manifiesto se validan antes de entrar al router y las rutas declaradas directamente en PHP permanecen de solo lectura desde la interfaz.
+
 Ejemplo de consulta:
 
 ```php
@@ -271,6 +286,7 @@ composer --working-dir=app audit
 ## Changelog
 ### v 1.6.0
 
+- Bee Creator rediseñado con controladores modernos/legacy, modelos ORM configurables, vistas, rutas administradas y comandos CLI `create:*` reutilizando una API común.
 - El CRUD web de artículos ahora demuestra el flujo estándar de `Controller` y `View`, incluyendo carpeta de vistas configurable e includes compartidos.
 - Renderizador de vistas reutilizable y seguro con `renderToString()`, excepciones específicas, rutas protegidas y autoescape de Twig.
 - Compatibilidad simultánea entre las rutas web de `beeController` y el ejecutable CLI `bee`, más navbar y footer renovados.
