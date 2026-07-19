@@ -283,6 +283,17 @@ class Controller {
   {
     View::render($this->viewName, $this->data, $this->engine);
   }
+
+  /**
+   * Genera la vista como texto sin enviarla directamente al cliente.
+   * Es útil para controladores del router moderno que retornan una respuesta.
+   *
+   * @return string
+   */
+  function renderToString(): string
+  {
+    return View::renderToString($this->viewName, $this->data, $this->engine);
+  }
   
   /**
    * Regresa la petición procesada

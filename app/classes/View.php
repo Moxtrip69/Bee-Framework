@@ -1,289 +1,237 @@
-<?php 
+<?php
 
-use Twig\Loader\FilesystemLoader;
+use Bee\Core\View\Exception\InvalidViewException;
+use Bee\Core\View\Exception\ViewNotFoundException;
 use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
-use Twig\Error\SyntaxError;
-use Twig\Error\LoaderError;
 
-class View {
+class View
+{
+    private const ENGINE_BEE = 'bee';
+    private const ENGINE_TWIG = 'twig';
 
-  /**
-   * El path a la carpeta de vistas del controlador actual
-   *
-   * @var string
-   */
-  private $path           = null;
+    private string $baseDir;
+    private string $viewsDir;
+    private string $controller;
+    private string $templateEngine;
+    private ?Environment $twigInstance = null;
+    private bool $twigExtensionsRegistered = false;
 
-  /**
-   * El directorio base para el cargador de recursos
-   *
-   * @var string
-   */
-  private $baseDir        = TEMPLATES;
+    public function __construct(?string $engine = null, ?string $controller = null)
+    {
+        $this->baseDir = rtrim((string) TEMPLATES, '/\\') . DIRECTORY_SEPARATOR;
+        $this->viewsDir = rtrim((string) VIEWS, '/\\') . DIRECTORY_SEPARATOR;
+        $this->controller = $this->normalizeIdentifier(
+            $controller ?? (defined('CONTROLLER') ? (string) CONTROLLER : ''),
+            'controller'
+        );
+        $configuredEngine = defined('USE_TWIG') && USE_TWIG === true
+            ? self::ENGINE_TWIG
+            : self::ENGINE_BEE;
+        $this->templateEngine = $this->normalizeEngine($engine ?? $configuredEngine);
 
-  /**
-   * El directorio base para el directorio de las vistas
-   *
-   * @var string
-   */
-  private $viewsDir       = VIEWS;
-
-  /**
-   * El controlador actual cargado
-   *
-   * @var string
-   */
-  private $controller     = CONTROLLER;
-
-  /**
-   * Separador de directorios \
-   *
-   * @var string
-   */
-  private $DS             = DS;
-
-  /**
-   * Cargador de recursos de twig
-   *
-   * @var FilesystemLoader
-   */
-  private $twigLoader     = null;
-
-  /**
-   * Instancia del moto twig
-   *
-   * @var Environment
-   */
-  private $twigIntance    = null;
-
-  /**
-   * El motor de plantillas a ser utilizado
-   *
-   * @var string
-   */
-  private $templateEngine = 'bee';
-
-  /**
-   * La vista a ser renderizada
-   *
-   * @var string
-   */
-  private $currentView    = null;
-  
-  function __construct($engine = null)
-  {
-    if ($engine !== null) {
-      $this->templateEngine = $engine;
+        if ($this->templateEngine === self::ENGINE_TWIG) {
+            $this->setUpTwigTemplateEngine();
+        }
     }
 
-    // Inicializar los servicios del motor de plantillas
-    $this->setUpTwigTemplateEngine();
-    
-    // Definimos el path directo a la carpeta de vistas de la instancia de la clase
-    $this->path = 'views' . $this->DS . $this->controller . $this->DS;
-  }
+    public function setUpTwigTemplateEngine(): void
+    {
+        if ($this->twigInstance instanceof Environment) {
+            return;
+        }
 
-  /**
-   * Establece los valores por defecto del path de recursos y templates de twig
-   *
-   * @return void
-   */
-  function setUpTwigTemplateEngine()
-  {
-    if ((defined('USE_TWIG') && USE_TWIG === true) || $this->templateEngine == 'twig') {
-      $this->templateEngine = 'twig';
-      $this->twigLoader     = new FilesystemLoader($this->baseDir);
-      $this->twigIntance    = new Environment($this->twigLoader);
-      $this->registerFunctions();
-    }
-  }
-
-  /**
-   * Registra todas las funciones creadas por el usuario
-   *
-   * @return void
-   */
-  private function registerFunctions()
-  {
-    // Todas las funciones definidas y cargadas en Bee framework
-    $functions = get_defined_functions();
-    foreach ($functions['user'] as $function) {
-      $twigFunction = new TwigFunction($function, $function);
-      $this->twigIntance->addFunction($twigFunction);
-    }
-  }
-
-  /**
-   * Renderiza una vista con el motor de bee regular
-   *
-   * @param string $view
-   * @param array $data
-   * @return void
-   */
-  function renderBeeTemplate(string $view, array $data = [])
-  {
-    // Vista actual a renderizar
-    $this->currentView = sprintf('%sView.php', $view);
-
-    // Validar si existe el folder del controlador
-    if (!is_dir($this->viewsDir . $this->controller)) {
-      die(sprintf('No existe la carpeta de vistas del controlador "%s".', $this->controller));
+        $this->twigInstance = new Environment(
+            new FilesystemLoader($this->baseDir),
+            [
+                'autoescape' => 'html',
+                'charset' => 'UTF-8',
+                'strict_variables' => false,
+            ]
+        );
+        $this->registerFunctions();
     }
 
-    // Validar si existe la vista solicitada
-    if (!is_file($this->viewsDir . $this->DS . $this->controller . $this->DS . $this->currentView)) {
-      die(sprintf('No existe la vista "%sView" en la carpeta "%s".', $view, $this->controller));
+    /** @deprecated Prefer renderToString() when the generated HTML must be returned. */
+    public function renderBeeTemplate(string $view, array $data = []): void
+    {
+        echo $this->renderBeeTemplateToString($view, $data);
     }
 
-    // Convertir el array asociativo en objeto
-    if (is_array($data) && !is_object($data)) {
-      $d = to_object($data); // $data en array assoc o $d en objectos
+    /** @param array<string, mixed> $data */
+    public function renderBeeTemplateToString(string $view, array $data = []): string
+    {
+        $filename = $this->resolveNativeView($view);
+
+        ob_start();
+        try {
+            $d = function_exists('to_object') ? to_object($data) : (object) $data;
+            require $filename;
+
+            return (string) ob_get_clean();
+        } catch (Throwable $throwable) {
+            ob_end_clean();
+            throw $throwable;
+        }
     }
 
-    require_once $this->viewsDir . $this->DS . $this->controller . $this->DS . $this->currentView;
-  }
-
-  /**
-   * Renderiza una vista de twig
-   *
-   * @param string $view
-   * @param array $data
-   * @return void
-   */
-  function renderTwigTemplate(string $view, array $data = [])
-  {
-    // TODO: Implementar que si es pasado un path completo a una vista, se busque dentro del directorio de vistas y no sólo en la carpeta del controlador
-    try {
-      // Vista actual a renderizar
-      $this->currentView = sprintf('%sView.twig', $view);
-
-      // Validar si existe el folder del controlador
-      if (!is_dir($this->viewsDir . $this->controller)) {
-        die(sprintf('No existe la carpeta de vistas del controlador "%s".', $this->controller));
-      }
-  
-      // Validar si existe la vista solicitada
-      if (!is_file($this->viewsDir . $this->controller . $this->DS . $this->currentView)) {
-        die(sprintf('No existe la vista "%s" en la carpeta "%s".', $view, $this->controller));
-      }
-
-      // Carga de todos los filtros y funciones añadidas
-      $this->getTwigFilters();
-      $this->getTwigFunctions();
-
-      echo $this->twigIntance->render(sprintf('%s%s', $this->path, $this->currentView), $data);
-
-    } catch (LoaderError $e) {
-      die("Hay un error del cargador: " . $e->getMessage());
-    } catch (Error $e) {
-      die("Hay un error fatal: " . $e->getMessage());
-    } catch (SyntaxError $e) {
-      die("Hay un error de sintaxis: " . $e->getMessage());
-    } catch (LogicException $e) {
-      die("Hay un error de lógica: " . $e->getMessage());
+    /** @deprecated Prefer renderToString() when the generated HTML must be returned. */
+    public function renderTwigTemplate(string $view, array $data = []): void
+    {
+        echo $this->renderTwigTemplateToString($view, $data);
     }
-  }
 
-  private function viewExists()
-  {
-    // Validar si existe la vista pasada con el PATH completo
-    // Validar si existe la vista dentro del folder de vistas
-    // Validar si exista la vista dentro de su carpeta de controlador
-    if (is_file($this->currentView)) {
-      return $this->currentView;
-    } else if (is_file($this->viewsDir . $this->currentView)) {
-      return $this->viewsDir . $this->currentView;
-    } else if (is_file($this->viewsDir . $this->controller . $this->DS . $this->currentView)) {
-      return $this->viewsDir . $this->controller . $this->DS . $this->currentView;
-    } else {
-      return false;
+    /** @param array<string, mixed> $data */
+    public function renderTwigTemplateToString(string $view, array $data = []): string
+    {
+        $this->setUpTwigTemplateEngine();
+        $this->registerTwigExtensions();
+        $template = $this->resolveTwigView($view);
+
+        return $this->twigInstance->render($template, $data);
     }
-  }
 
-  /**
-   * Carga los filtros registros para usar dentro de twig
-   *
-   * @return void
-   */
-  function getTwigFilters()
-  {
-    BeeHookManager::runHook('on_get_twig_filters', $this->twigIntance); // Permite registrar nuevos filtros
-    
-    // Regresa el hash md5 del string pasado
-    $this->twigIntance->addFilter(
-      new TwigFilter('md5', function($arg) { 
-        return md5($arg); 
-      })
-    );
-  }
-
-  /**
-   * Carga las funciones registradas para usar dentro de twig
-   *
-   * @return void
-   */
-  function getTwigFunctions()
-  {
-    BeeHookManager::runHook('on_get_twig_functions', $this->twigIntance); // Permite registrar nuevas funciones
-
-    // $this->twigIntance->addFunction(
-    //   new TwigFunction('get_base_url', 'get_base_url')
-    // );
-
-    // $this->twigIntance->addFunction(
-    //   new TwigFunction('money', 'money')
-    // );
-
-    // $this->twigIntance->addFunction(
-    //   new TwigFunction('basepath', function() {
-    //     return BASEPATH;
-    //   })
-    // );
-  }
-
-  /**
-   * Renderiza una vista con el motor por defecto configurado o también
-   * usando twig de forma explícita
-   *
-   * @param string $view
-   * @param array $data
-   * @param string $templateEngine
-   * @return mixed
-   */
-  public static function render(string $view, array $data = [], ?string $templateEngine = null)
-  {
-    // Inicializar la instancia de nuestra clase
-    $engine = new self($templateEngine);
-
-    // Verificar que motor de templates usamos
-    switch ($engine->templateEngine) {
-      case 'twig':
-        $engine->renderTwigTemplate($view, $data);
-        break;
-      
-      case 'bee':
-        $engine->renderBeeTemplate($view, $data);
-        break;
-
-      default:
-        die("Motor de plantillas no válido");
-        break;
+    public function getTwigFilters(): void
+    {
+        $this->setUpTwigTemplateEngine();
+        BeeHookManager::runHook('on_get_twig_filters', $this->twigInstance);
+        $this->twigInstance->addFilter(
+            new TwigFilter('md5', static fn (mixed $value): string => md5((string) $value))
+        );
     }
-  }
 
-  /**
-   * Renderiza una vista usando el motor twig
-   *
-   * @param string $view
-   * @param array $data
-   * @return mixed
-   */
-  public static function render_twig(string $view, array $data = [])
-  {
-    // Inicializar la instancia de nuestra clase
-    $engine = new self('twig');
-    $engine->renderTwigTemplate($view, $data);
-  }
+    public function getTwigFunctions(): void
+    {
+        $this->setUpTwigTemplateEngine();
+        BeeHookManager::runHook('on_get_twig_functions', $this->twigInstance);
+    }
+
+    /** @param array<string, mixed> $data */
+    public static function render(string $view, array $data = [], ?string $templateEngine = null): void
+    {
+        echo self::renderToString($view, $data, $templateEngine);
+    }
+
+    /** @param array<string, mixed> $data */
+    public static function renderToString(
+        string $view,
+        array $data = [],
+        ?string $templateEngine = null,
+        ?string $controller = null
+    ): string {
+        $renderer = new self($templateEngine, $controller);
+
+        return $renderer->templateEngine === self::ENGINE_TWIG
+            ? $renderer->renderTwigTemplateToString($view, $data)
+            : $renderer->renderBeeTemplateToString($view, $data);
+    }
+
+    /** @param array<string, mixed> $data */
+    public static function render_twig(string $view, array $data = []): void
+    {
+        self::render($view, $data, self::ENGINE_TWIG);
+    }
+
+    private function registerFunctions(): void
+    {
+        $functions = get_defined_functions()['user'] ?? [];
+        foreach ($functions as $function) {
+            if (is_callable($function)) {
+                $this->twigInstance->addFunction(new TwigFunction($function, $function));
+            }
+        }
+    }
+
+    private function registerTwigExtensions(): void
+    {
+        if ($this->twigExtensionsRegistered) {
+            return;
+        }
+
+        $this->getTwigFilters();
+        $this->getTwigFunctions();
+        $this->twigExtensionsRegistered = true;
+    }
+
+    private function resolveNativeView(string $view): string
+    {
+        $relativeView = $this->normalizeIdentifier($view, 'view') . 'View.php';
+        $controllerDirectory = $this->controllerDirectory();
+        $filename = $controllerDirectory . str_replace('/', DIRECTORY_SEPARATOR, $relativeView);
+        $resolved = realpath($filename);
+
+        if ($resolved === false || !$this->isInsideDirectory($resolved, $controllerDirectory)) {
+            throw new ViewNotFoundException(sprintf(
+                'View "%s" was not found for controller "%s".',
+                $view,
+                $this->controller
+            ));
+        }
+
+        return $resolved;
+    }
+
+    private function resolveTwigView(string $view): string
+    {
+        $relativeView = $this->normalizeIdentifier($view, 'view') . 'View.twig';
+        $controllerDirectory = $this->controllerDirectory();
+        $filename = $controllerDirectory . str_replace('/', DIRECTORY_SEPARATOR, $relativeView);
+        $resolved = realpath($filename);
+
+        if ($resolved === false || !$this->isInsideDirectory($resolved, $controllerDirectory)) {
+            throw new ViewNotFoundException(sprintf(
+                'Twig view "%s" was not found for controller "%s".',
+                $view,
+                $this->controller
+            ));
+        }
+
+        return 'views/' . $this->controller . '/' . $relativeView;
+    }
+
+    private function controllerDirectory(): string
+    {
+        $directory = $this->viewsDir
+            . str_replace('/', DIRECTORY_SEPARATOR, $this->controller)
+            . DIRECTORY_SEPARATOR;
+        $resolved = realpath($directory);
+
+        if ($resolved === false || !is_dir($resolved)) {
+            throw new ViewNotFoundException(sprintf(
+                'View directory was not found for controller "%s".',
+                $this->controller
+            ));
+        }
+
+        return rtrim($resolved, '/\\') . DIRECTORY_SEPARATOR;
+    }
+
+    private function normalizeEngine(string $engine): string
+    {
+        $engine = strtolower(trim($engine));
+        if (!in_array($engine, [self::ENGINE_BEE, self::ENGINE_TWIG], true)) {
+            throw new InvalidViewException(sprintf('Unsupported template engine: "%s".', $engine));
+        }
+
+        return $engine;
+    }
+
+    private function normalizeIdentifier(string $value, string $type): string
+    {
+        $value = trim(str_replace('\\', '/', $value), '/');
+        if ($value === '' || preg_match('#^[a-zA-Z0-9_-]+(?:/[a-zA-Z0-9_-]+)*$#', $value) !== 1) {
+            throw new InvalidViewException(sprintf('Invalid %s identifier: "%s".', $type, $value));
+        }
+
+        return $value;
+    }
+
+    private function isInsideDirectory(string $filename, string $directory): bool
+    {
+        $directory = rtrim(realpath($directory) ?: $directory, '/\\') . DIRECTORY_SEPARATOR;
+
+        return str_starts_with(strtolower($filename), strtolower($directory));
+    }
 }

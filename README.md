@@ -210,6 +210,28 @@ Las vistas locales incluidas con `beeController` comparten esta identidad visual
 
 La navegación y el footer compartidos también usan componentes Bee adaptables, estados de ruta activos, enlaces de herramientas y datos de versión. La regla web de `.htaccess` reserva `/bee` y `/bee/*` para `beeController`, aunque exista el ejecutable CLI `bee` en la raíz; esto no altera el uso de `php bee <comando>` desde terminal.
 
+### Renderizado de vistas
+
+Los controladores tradicionales conservan `setTitle()`, `setData()`, `addToData()`, `setView()`, `setEngine()` y `render()`. El renderizador valida que la plantilla permanezca dentro de la carpeta del controlador, utiliza excepciones específicas en lugar de terminar el proceso con `die()` y mantiene `$d` para las vistas PHP.
+
+El nuevo método `renderToString()` permite integrar el mismo flujo con respuestas del router moderno:
+
+```php
+final class articlesController extends Controller
+{
+    public function index(): string
+    {
+        $this->setTitle('Artículos');
+        $this->setView('index');
+        $this->addToData('articles', exampleArticleModel::all());
+
+        return $this->renderToString();
+    }
+}
+```
+
+También está disponible `View::renderToString($view, $data, $engine, $controller)`. Twig utiliza UTF-8 y escape HTML automático; el filtro `raw` debe reservarse para contenido confiable. `View::render()` y `View::render_twig()` continúan emitiendo directamente para mantener compatibilidad.
+
 Ejemplo de consulta:
 
 ```php
@@ -247,6 +269,7 @@ composer --working-dir=app audit
 ## Changelog
 ### v 1.6.0
 
+- Renderizador de vistas reutilizable y seguro con `renderToString()`, excepciones específicas, rutas protegidas y autoescape de Twig.
 - Compatibilidad simultánea entre las rutas web de `beeController` y el ejecutable CLI `bee`, más navbar y footer renovados.
 - Rediseño integral y adaptable de las vistas locales de `beeController`, navegación Bee, herramientas, demos, diagnóstico y errores.
 - Núcleo compartido con bootstraps independientes para HTTP, CLI, cron, pruebas y updater.
