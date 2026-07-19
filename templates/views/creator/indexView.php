@@ -32,8 +32,8 @@
           <fieldset class="border-0 p-0 mt-3">
             <legend class="form-label">Tipo de controlador</legend>
             <div class="row g-2">
-              <div class="col-6"><input class="btn-check" id="controller-modern" type="radio" name="type" value="modern" checked><label class="btn btn-outline-secondary text-start h-100 w-100" for="controller-modern"><strong class="d-block">Moderno</strong><small class="d-block mt-1 text-secondary">DI, rutas y renderToString</small></label></div>
-              <div class="col-6"><input class="btn-check" id="controller-legacy" type="radio" name="type" value="legacy"><label class="btn btn-outline-secondary text-start h-100 w-100" for="controller-legacy"><strong class="d-block">Legacy</strong><small class="d-block mt-1 text-secondary">Resolución automática por URL</small></label></div>
+              <div class="col-12 col-sm-6"><input class="btn-check" id="controller-modern" type="radio" name="type" value="modern" checked><label class="btn bee-choice-option text-start h-100 w-100" for="controller-modern"><strong class="d-flex align-items-center justify-content-between gap-2">Moderno <i class="fas fa-circle-check bee-choice-check" aria-hidden="true"></i></strong><small class="d-block mt-2">DI, rutas y renderToString</small></label></div>
+              <div class="col-12 col-sm-6"><input class="btn-check" id="controller-legacy" type="radio" name="type" value="legacy"><label class="btn bee-choice-option text-start h-100 w-100" for="controller-legacy"><strong class="d-flex align-items-center justify-content-between gap-2">Legacy <i class="fas fa-circle-check bee-choice-check" aria-hidden="true"></i></strong><small class="d-block mt-2">Resolución automática por URL</small></label></div>
             </div>
           </fieldset>
           <div class="row g-2 mt-2" data-modern-route-fields>
