@@ -18,6 +18,8 @@ require_once dirname(__DIR__, 2) . '/app/controllers/exampleArticleController.ph
 foreach ([
     '/app/controllers/exampleArticlePageController.php',
     '/templates/views/examples/articles/indexView.php',
+    '/templates/views/examples/articles/showView.php',
+    '/templates/views/examples/articles/notFoundView.php',
     '/assets/js/examples/articlesCrud.js',
 ] as $relativePath) {
     $contents = file_get_contents(dirname(__DIR__, 2) . $relativePath);
@@ -27,6 +29,17 @@ foreach ([
         'Example UI files must not contain double-encoded UTF-8 text.'
     );
 }
+
+$pageControllerSource = file_get_contents(
+    dirname(__DIR__, 2) . '/app/controllers/exampleArticlePageController.php'
+);
+coreAssert(
+    is_string($pageControllerSource)
+        && str_contains($pageControllerSource, 'extends Controller')
+        && str_contains($pageControllerSource, '$this->renderToString()')
+        && !str_contains($pageControllerSource, 'private function render('),
+    'The example page controller must demonstrate the standard Controller and View flow.'
+);
 
 $applicationRoot = dirname(__DIR__, 2);
 $executionMode = 'test';

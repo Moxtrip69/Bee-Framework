@@ -31,6 +31,13 @@ class Controller {
   protected string $viewName      = 'index';
 
   /**
+   * Carpeta de vistas alternativa a la inferida desde el controlador.
+   *
+   * @var string|null
+   */
+  protected ?string $viewDirectory = null;
+
+  /**
    * El motor de renderizado, puede ser bee o twig
    *
    * @var string
@@ -273,6 +280,17 @@ class Controller {
   {
     $this->viewName = $viewName;
   }
+
+  /**
+   * Define una carpeta de vistas relativa a templates/views.
+   *
+   * @param string $viewDirectory
+   * @return void
+   */
+  function setViewDirectory(string $viewDirectory): void
+  {
+    $this->viewDirectory = $viewDirectory;
+  }
   
   /**
    * Realiza el renderizado de la vista
@@ -281,7 +299,7 @@ class Controller {
    */
   function render()
   {
-    View::render($this->viewName, $this->data, $this->engine);
+    View::render($this->viewName, $this->data, $this->engine, $this->viewDirectory);
   }
 
   /**
@@ -292,7 +310,12 @@ class Controller {
    */
   function renderToString(): string
   {
-    return View::renderToString($this->viewName, $this->data, $this->engine);
+    return View::renderToString(
+      $this->viewName,
+      $this->data,
+      $this->engine,
+      $this->viewDirectory
+    );
   }
   
   /**

@@ -9,7 +9,11 @@
   <meta charset="<?php echo get_site_charset(); ?>">
 
   <!-- Título general del sitio -->
-  <title><?php echo isset($d->title) ? $d->title . ' - ' . get_sitename() : 'Bienvenido - ' . get_sitename(); ?></title>
+  <title><?= htmlspecialchars(
+    (isset($d->title) ? (string) $d->title : 'Bienvenido') . ' - ' . get_sitename(),
+    ENT_QUOTES | ENT_SUBSTITUTE,
+    'UTF-8'
+  ) ?></title>
 
   <!-- Meta viewport requerido para responsividad -->
   <meta name="viewport" content="width=device-width, initial-scale=1">

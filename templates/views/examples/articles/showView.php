@@ -2,33 +2,25 @@
 
 declare(strict_types=1);
 
-/** @var array{title: string, applicationName: string, article: array<string, mixed>, indexUrl: string} $data */
+/** @var object{title: string, applicationName: string, article: array<string, mixed>, indexUrl: string} $d */
 $escape = static fn (mixed $value): string => htmlspecialchars(
     (string) $value,
     ENT_QUOTES | ENT_SUBSTITUTE,
     'UTF-8'
 );
+require_once INCLUDES . 'header.php';
+require_once INCLUDES . 'bee_navbar.php';
 ?>
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><?= $escape($data['title']) ?> - <?= $escape($data['applicationName']) ?></title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="<?= $escape(CSS . 'main.min.css?v=' . get_asset_version()) ?>" rel="stylesheet">
-</head>
-<body>
-  <main class="container py-5">
+  <main class="container bee-section main-wrapper">
     <article class="bee-card bee-article">
-      <a class="bee-eyebrow text-decoration-none" href="<?= $escape($data['indexUrl']) ?>">← Volver a artículos</a>
-      <p class="text-uppercase small fw-bold text-bee mb-2"><?= $escape($data['article']['status'] ?? '') ?></p>
-      <h1 class="display-5 mb-3"><?= $escape($data['article']['title'] ?? '') ?></h1>
-      <?php if (!empty($data['article']['excerpt'])): ?>
-        <p class="lead mb-4"><?= $escape($data['article']['excerpt']) ?></p>
+      <a class="bee-eyebrow text-decoration-none" href="<?= $escape($d->indexUrl) ?>">← Volver a artículos</a>
+      <p class="text-uppercase small fw-bold text-bee mb-2"><?= $escape($d->article['status'] ?? '') ?></p>
+      <h1 class="display-5 mb-3"><?= $escape($d->article['title'] ?? '') ?></h1>
+      <?php if (!empty($d->article['excerpt'])): ?>
+        <p class="lead mb-4"><?= $escape($d->article['excerpt']) ?></p>
       <?php endif; ?>
-      <div class="nl2br"><?= $escape($data['article']['content'] ?? '') ?></div>
+      <div class="nl2br"><?= $escape($d->article['content'] ?? '') ?></div>
     </article>
   </main>
-</body>
-</html>
+
+<?php require_once INCLUDES . 'footer.php'; ?>

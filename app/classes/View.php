@@ -109,9 +109,13 @@ class View
     }
 
     /** @param array<string, mixed> $data */
-    public static function render(string $view, array $data = [], ?string $templateEngine = null): void
-    {
-        echo self::renderToString($view, $data, $templateEngine);
+    public static function render(
+        string $view,
+        array $data = [],
+        ?string $templateEngine = null,
+        ?string $controller = null
+    ): void {
+        echo self::renderToString($view, $data, $templateEngine, $controller);
     }
 
     /** @param array<string, mixed> $data */

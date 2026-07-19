@@ -232,6 +232,8 @@ final class articlesController extends Controller
 
 También está disponible `View::renderToString($view, $data, $engine, $controller)`. Twig utiliza UTF-8 y escape HTML automático; el filtro `raw` debe reservarse para contenido confiable. `View::render()` y `View::render_twig()` continúan emitiendo directamente para mantener compatibilidad.
 
+Cuando las vistas viven en una carpeta distinta a la inferida desde el nombre del controlador, puede declararse con `$this->setViewDirectory('examples/articles')`. `exampleArticlePageController` muestra el flujo completo: extiende `Controller`, recibe `Configuration` por inyección, establece título, vista y datos, y retorna el HTML mediante `renderToString()`; sus plantillas consumen `$d` y reutilizan header, navbar y footer.
+
 Ejemplo de consulta:
 
 ```php
@@ -269,6 +271,7 @@ composer --working-dir=app audit
 ## Changelog
 ### v 1.6.0
 
+- El CRUD web de artículos ahora demuestra el flujo estándar de `Controller` y `View`, incluyendo carpeta de vistas configurable e includes compartidos.
 - Renderizador de vistas reutilizable y seguro con `renderToString()`, excepciones específicas, rutas protegidas y autoescape de Twig.
 - Compatibilidad simultánea entre las rutas web de `beeController` y el ejecutable CLI `bee`, más navbar y footer renovados.
 - Rediseño integral y adaptable de las vistas locales de `beeController`, navegación Bee, herramientas, demos, diagnóstico y errores.
