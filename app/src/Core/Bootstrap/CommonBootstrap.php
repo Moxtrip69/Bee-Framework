@@ -16,6 +16,8 @@ use Bee\Core\Error\ThrowableHandler;
 use Bee\Core\Logging\FileLogger;
 use Bee\Core\Logging\Logger;
 use Bee\Core\Logging\NullLogger;
+use Bee\Core\Creator\ComponentScaffolder;
+use Bee\Core\Creator\RouteRepository;
 
 final readonly class CommonBootstrap
 {
@@ -35,6 +37,8 @@ final readonly class CommonBootstrap
         $services = new ServiceContainer();
         $services->set(ApplicationRoot::class, $root);
         $services->set(\Bee\Core\Config\Configuration::class, $configuration);
+        $services->set(ComponentScaffolder::class, new ComponentScaffolder($root));
+        $services->set(RouteRepository::class, new RouteRepository($root));
 
         $logger = $mode === ExecutionMode::Test
             ? new NullLogger()

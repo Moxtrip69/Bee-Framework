@@ -21,6 +21,8 @@ use Bee\Core\Routing\RouteDispatcher;
 use Bee\Core\Routing\Router;
 use Bee\Core\Routing\UrlGenerator;
 use LogicException;
+use Bee\Core\Creator\CreatorRouteLoader;
+use Bee\Core\Creator\RouteRepository;
 
 final readonly class HttpBootstrap
 {
@@ -78,6 +80,7 @@ final readonly class HttpBootstrap
                     require $path;
                 }
             }
+            (new CreatorRouteLoader($application->services->get(RouteRepository::class)))->load($router);
             $router->finalize();
         } finally {
             Route::clearRouter();

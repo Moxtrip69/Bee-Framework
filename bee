@@ -5,6 +5,10 @@ declare(strict_types=1);
 
 use Bee\Core\Cli\CliApplication;
 use Bee\Core\Cli\CoreStatusCommand;
+use Bee\Core\Cli\CreateControllerCommand;
+use Bee\Core\Cli\CreateModelCommand;
+use Bee\Core\Cli\CreateViewCommand;
+use Bee\Core\Creator\ComponentScaffolder;
 
 $arguments = array_slice($argv ?? [], 1);
 $applicationRoot = __DIR__;
@@ -20,5 +24,9 @@ $arguments = array_values($arguments);
 $application = require $applicationRoot . '/app/bootstrap/cli.php';
 $cli = new CliApplication();
 $cli->add(new CoreStatusCommand($application));
+$creator = $application->services->get(ComponentScaffolder::class);
+$cli->add(new CreateControllerCommand($creator));
+$cli->add(new CreateModelCommand($creator));
+$cli->add(new CreateViewCommand($creator));
 
 exit($cli->run($arguments));

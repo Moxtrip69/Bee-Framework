@@ -1,0 +1,25 @@
+<?php
+
+declare(strict_types=1);
+
+use Bee\Core\Config\Configuration;
+
+final class [[CLASS]] extends Controller
+{
+    public function __construct(private readonly Configuration $configuration)
+    {
+        parent::__construct();
+        $this->setViewDirectory('[[VIEW_DIRECTORY]]');
+    }
+
+    public function index(): string
+    {
+        $this->setTitle('[[REPLACE]]');
+        $this->setView('index');
+        $this->setEngine('[[ENGINE]]');
+        $this->addToData('applicationName', $this->configuration->application->name);
+        $this->addToData('message', 'Controlador moderno creado con Bee Creator.');
+
+        return $this->renderToString();
+    }
+}
