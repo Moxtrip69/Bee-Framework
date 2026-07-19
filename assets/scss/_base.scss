@@ -17,7 +17,14 @@ body {
 button, input, select, textarea { font: inherit; }
 h1, h2, h3, h4, h5, h6 { color: var(--bee-ink); font-weight: $headings-font-weight; letter-spacing: $bee-heading-letter-spacing; }
 p { color: var(--bee-ink-soft); }
-a { color: inherit; text-decoration-color: rgb(246 185 0 / 70%); text-underline-offset: .18em; }
+a:not([class]) {
+  color: var(--bs-link-color);
+  text-decoration-color: rgb(217 155 0 / 55%);
+  text-decoration-thickness: .1em;
+  text-underline-offset: .22em;
+  transition: color var(--bee-transition), text-decoration-color var(--bee-transition);
+}
+a:not([class]):hover { color: var(--bs-link-hover-color); text-decoration-color: currentcolor; }
 img, svg { max-width: 100%; }
 ::selection { background: var(--bee-honey); color: var(--bee-ink); }
 :focus-visible { outline: 3px solid rgb(246 185 0 / 45%); outline-offset: 2px; }

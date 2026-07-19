@@ -1,16 +1,30 @@
 .btn {
   --bs-btn-padding-x: 1.05rem; --bs-btn-padding-y: .65rem;
-  border-radius: var(--bee-radius-sm); font-size: .9rem; font-weight: 700;
-  transition: transform var(--bee-transition), box-shadow var(--bee-transition), background var(--bee-transition);
+  position: relative; border-radius: var(--bee-radius-sm); font-size: .9rem; font-weight: 700; letter-spacing: .01em;
+  transition: transform var(--bee-transition), box-shadow var(--bee-transition), background-color var(--bee-transition), border-color var(--bee-transition), color var(--bee-transition);
 }
-.btn:hover { transform: translateY(-1px); }
+.btn:hover { transform: translateY(-2px); }
+.btn:active, .btn.active { transform: translateY(0); }
+.btn:focus-visible { outline: 0; box-shadow: 0 0 0 .22rem rgb(246 185 0 / 28%); }
 .btn-primary {
   --bs-btn-bg: var(--bee-ink); --bs-btn-border-color: var(--bee-ink);
   --bs-btn-hover-bg: var(--bee-honey); --bs-btn-hover-border-color: var(--bee-honey);
-  --bs-btn-hover-color: var(--bee-ink); box-shadow: 0 .45rem 1rem rgb(25 26 29 / 14%);
+  --bs-btn-hover-color: var(--bee-ink); --bs-btn-active-bg: var(--bee-honey-strong); --bs-btn-active-border-color: var(--bee-honey-strong); --bs-btn-active-color: var(--bee-ink);
+  box-shadow: 0 .45rem 1rem rgb(25 26 29 / 14%);
 }
-.btn-outline-primary { --bs-btn-color: var(--bee-ink); --bs-btn-border-color: var(--bee-ink); --bs-btn-hover-bg: var(--bee-ink); }
-.btn-outline-secondary { --bs-btn-color: var(--bee-ink-soft); --bs-btn-border-color: var(--bee-border); --bs-btn-hover-bg: var(--bee-honey-soft); --bs-btn-hover-color: var(--bee-ink); }
+.btn-warning { --bs-btn-color: var(--bee-ink); --bs-btn-hover-color: var(--bee-ink); --bs-btn-active-color: var(--bee-ink); }
+.btn-outline-primary { --bs-btn-color: var(--bee-ink); --bs-btn-border-color: var(--bee-ink); --bs-btn-hover-bg: var(--bee-ink); --bs-btn-hover-border-color: var(--bee-ink); }
+.btn-outline-secondary { --bs-btn-color: var(--bee-ink-soft); --bs-btn-border-color: var(--bee-border); --bs-btn-hover-bg: var(--bee-honey-soft); --bs-btn-hover-border-color: var(--bee-honey); --bs-btn-hover-color: var(--bee-ink); }
+.btn-link { --bs-btn-color: var(--bee-ink); --bs-btn-hover-color: var(--bee-honey-strong); text-decoration-color: rgb(217 155 0 / 55%); text-underline-offset: .2em; }
+
+.nav-tabs { --bs-nav-tabs-border-color: var(--bee-border); gap: .35rem; }
+.nav-tabs .nav-link { color: var(--bee-muted); border-width: 0 0 .18rem; border-radius: 0; font-weight: 700; }
+.nav-tabs .nav-link:hover { color: var(--bee-ink); border-color: transparent transparent var(--bee-honey); }
+.nav-tabs .nav-link.active { color: var(--bee-ink); background: transparent; border-color: var(--bee-honey); }
+.nav-pills { --bs-nav-pills-border-radius: var(--bee-radius-sm); }
+.nav-pills .nav-link { color: var(--bee-ink-soft); font-weight: 700; }
+.nav-pills .nav-link:hover { color: var(--bee-ink); background: var(--bee-honey-soft); }
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link { color: var(--bee-ink); background: var(--bee-honey); box-shadow: 0 .35rem .9rem rgb(217 155 0 / 18%); }
 
 .card { --bs-card-border-color: var(--bee-border); --bs-card-border-radius: var(--bee-radius-lg); background: rgb(255 255 255 / 94%); box-shadow: var(--bee-shadow-sm); }
 .card-body { padding: clamp(1.25rem, 3vw, 2rem); }
@@ -28,7 +42,10 @@ textarea.form-control { min-height: 7rem; resize: vertical; }
 .table thead th { color: var(--bee-muted); font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 
 .alert { border: 1px solid currentcolor; border-radius: var(--bee-radius); }
-.badge { padding: .42rem .65rem; border-radius: 999px; font-weight: 750; }
+.badge { padding: .42rem .65rem; border: 1px solid rgb(25 26 29 / 8%); border-radius: 999px; font-weight: 750; letter-spacing: .025em; }
+.badge.text-bg-primary { color: var(--bee-honey) !important; background: var(--bee-ink) !important; }
+.badge.text-bg-warning { color: var(--bee-ink) !important; background: var(--bee-honey) !important; }
+.badge.text-bg-light { color: var(--bee-ink-soft) !important; background: var(--bee-honey-soft) !important; border-color: var(--bee-border); }
 #toast-container .toast { background: var(--bee-ink); border: 1px solid rgb(255 255 255 / 12%); border-radius: var(--bee-radius); box-shadow: var(--bee-shadow); opacity: .96; }
 #toast-container .toast-success { background: var(--bee-success); }
 #toast-container .toast-error { background: var(--bee-danger); }

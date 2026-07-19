@@ -196,14 +196,14 @@ Los archivos del ejemplo usan caracteres UTF-8 reales, sin entidades HTML ni esc
 
 El tema Bee es un bundle autónomo: compila Bootstrap 5 desde `assets/scss/bootstrap/` y, a continuación, incorpora tokens, base tipográfica, layout, componentes, páginas y utilidades propias. Para `CSS_FRAMEWORK=bs5` o `bs` no se descarga otra hoja de Bootstrap, por lo que las variables Sass controlan realmente todos sus componentes y se evita CSS duplicado.
 
-`assets/scss/_theme-settings.scss` es el punto de personalización público. Ahí pueden modificarse paleta semántica, tipografía, espaciado, contenedores, bordes, radios, sombras, formularios, botones, tarjetas, navegación, tablas y opciones de compilación. No es necesario editar las fuentes de `assets/scss/bootstrap/`. Los valores Bee se trasladan además a custom properties como `--bee-honey`, de modo que los componentes propios y Bootstrap comparten la misma fuente visual.
+`assets/scss/_theme-settings.scss` es el único punto de personalización público. Ahí se definen tanto las variables Sass como las custom properties Bee; no existe una segunda capa de tokens. Pueden modificarse paleta semántica, tipografía, espaciado, contenedores, bordes, radios, sombras, formularios, botones, tarjetas, navegación, tablas y opciones de compilación sin editar las fuentes de `assets/scss/bootstrap/`.
 
 El orden de compilación de `assets/scss/main.scss` es deliberado:
 
 1. Funciones de Bootstrap.
 2. Variables configurables del tema Bee.
 3. Componentes y utilidades de Bootstrap.
-4. Tokens y capas visuales propias de Bee.
+4. Capas visuales propias de Bee.
 
 Para compilar el CSS minificado:
 
@@ -295,6 +295,7 @@ composer --working-dir=app audit
 ## Changelog
 ### v 1.6.0
 
+- Tema simplificado a una sola configuración y personalidad Bee aplicada a enlaces, botones, tabs, nav-pills y badges nativos de Bootstrap.
 - Tema Bee autónomo y escalable: Bootstrap 5 se compila localmente, `_theme-settings.scss` centraliza la personalización y `main.min.css` deja de depender del CSS de Bootstrap servido por CDN.
 - Creator prioriza componentes y utilidades Bootstrap 5, incorpora un constructor visual de columnas y presets estandarizados para parámetros de ruta.
 - Bee Creator rediseñado con controladores modernos/legacy, modelos ORM configurables, vistas, rutas administradas y comandos CLI `create:*` reutilizando una API común.

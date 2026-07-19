@@ -135,3 +135,26 @@ $bee-page-gradient-enabled: true !default;
 $bee-page-gradient: radial-gradient(circle at 95% 0%, rgba($bee-honey, .09), transparent 28rem) !default;
 $bee-heading-letter-spacing: -.025em !default;
 $bee-transition: 180ms ease !default;
+
+// Runtime custom properties used by Bee components. They are generated from
+// the settings above, so Sass and CSS always share one source of truth.
+:root {
+  --bee-honey: #{$bee-honey};
+  --bee-honey-strong: #{$bee-honey-strong};
+  --bee-honey-soft: #{$bee-honey-soft};
+  --bee-ink: #{$bee-ink};
+  --bee-ink-soft: #{$bee-ink-soft};
+  --bee-muted: #{$bee-muted};
+  --bee-canvas: #{$bee-canvas};
+  --bee-surface: #{$bee-surface};
+  --bee-border: #{$bee-border};
+  --bee-success: #{$success};
+  --bee-danger: #{$danger};
+  --bee-warning: #{$bee-honey-strong};
+  --bee-radius-sm: #{$border-radius-sm};
+  --bee-radius: #{$border-radius};
+  --bee-radius-lg: #{$border-radius-lg};
+  --bee-shadow-sm: #{$box-shadow-sm};
+  --bee-shadow: #{$box-shadow};
+  --bee-transition: #{$bee-transition};
+}

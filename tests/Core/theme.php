@@ -23,8 +23,14 @@ coreAssert(
     'The public theme settings must expose Bootstrap semantic colors.'
 );
 coreAssert(
-    str_contains($compiled, '--bee-honey: #f6b900') && str_contains($compiled, '.container'),
+    str_contains($settings, '--bee-honey: #{$bee-honey}')
+        && str_contains($compiled, '--bee-honey: #f6b900')
+        && str_contains($compiled, '.container'),
     'The compiled bundle must contain Bee tokens and Bootstrap components.'
+);
+coreAssert(
+    !is_file($root . '/assets/scss/_tokens.scss') && !str_contains($entrypoint, "@import 'tokens';"),
+    'Theme settings must be the only source of Bee design tokens.'
 );
 coreAssert(
     str_contains($coreFunctions, '<!-- Bee Bootstrap theme: assets/css/main.min.css -->'),
