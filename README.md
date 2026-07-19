@@ -194,9 +194,16 @@ Los archivos del ejemplo usan caracteres UTF-8 reales, sin entidades HTML ni esc
 
 ### Identidad visual y estilos
 
-Los estilos propios están modularizados en `assets/scss/`: tokens de marca, base tipográfica, layout, componentes, páginas y utilidades. `assets/css/` contiene únicamente el archivo compilado y las hojas de terceros que se conservan aisladas.
+El tema Bee es un bundle autónomo: compila Bootstrap 5 desde `assets/scss/bootstrap/` y, a continuación, incorpora tokens, base tipográfica, layout, componentes, páginas y utilidades propias. Para `CSS_FRAMEWORK=bs5` o `bs` no se descarga otra hoja de Bootstrap, por lo que las variables Sass controlan realmente todos sus componentes y se evita CSS duplicado.
 
-La interfaz usa la identidad Bee —miel, carbón y superficies cálidas— sobre Bootstrap como base funcional, reduciendo su apariencia predeterminada mediante botones, tarjetas, formularios, tablas, navegación y estados propios.
+`assets/scss/_theme-settings.scss` es el punto de personalización público. Ahí pueden modificarse paleta semántica, tipografía, espaciado, contenedores, bordes, radios, sombras, formularios, botones, tarjetas, navegación, tablas y opciones de compilación. No es necesario editar las fuentes de `assets/scss/bootstrap/`. Los valores Bee se trasladan además a custom properties como `--bee-honey`, de modo que los componentes propios y Bootstrap comparten la misma fuente visual.
+
+El orden de compilación de `assets/scss/main.scss` es deliberado:
+
+1. Funciones de Bootstrap.
+2. Variables configurables del tema Bee.
+3. Componentes y utilidades de Bootstrap.
+4. Tokens y capas visuales propias de Bee.
 
 Para compilar el CSS minificado:
 
@@ -204,7 +211,7 @@ Para compilar el CSS minificado:
 npx sass assets/scss/main.scss assets/css/main.min.css --style=compressed --no-source-map
 ```
 
-Las plantillas cargan exclusivamente `assets/css/main.min.css`; los cambios en parciales nunca deben editar directamente el archivo compilado.
+Las plantillas cargan exclusivamente `assets/css/main.min.css`; los cambios en parciales nunca deben editar directamente el archivo compilado. Los avisos de deprecación que pueda emitir Sass proceden de la sintaxis interna de Bootstrap 5.3 y no impiden generar el bundle.
 
 Las vistas locales incluidas con `beeController` comparten esta identidad visual: inicio, generador de contraseñas, perfil, diagnósticos, demos de Vue y Twig, así como las pantallas generales de error. Sus estilos viven en `assets/scss/_bee.scss`; las demos conservan sus puntos de montaje (`#mainApp` y `#testApp`) y los valores variables se escapan antes de renderizarse.
 
@@ -288,6 +295,7 @@ composer --working-dir=app audit
 ## Changelog
 ### v 1.6.0
 
+- Tema Bee autónomo y escalable: Bootstrap 5 se compila localmente, `_theme-settings.scss` centraliza la personalización y `main.min.css` deja de depender del CSS de Bootstrap servido por CDN.
 - Creator prioriza componentes y utilidades Bootstrap 5, incorpora un constructor visual de columnas y presets estandarizados para parámetros de ruta.
 - Bee Creator rediseñado con controladores modernos/legacy, modelos ORM configurables, vistas, rutas administradas y comandos CLI `create:*` reutilizando una API común.
 - El CRUD web de artículos ahora demuestra el flujo estándar de `Controller` y `View`, incluyendo carpeta de vistas configurable e includes compartidos.

@@ -1,7 +1,13 @@
-@use 'tokens';
-@use 'base';
-@use 'layout';
-@use 'components';
-@use 'pages';
-@use 'bee';
-@use 'utilities';
+// Build order is intentional: settings override Bootstrap defaults, then Bee
+// components extend the generated framework without requiring a CDN stylesheet.
+@import 'bootstrap/functions';
+@import 'theme-settings';
+@import 'bootstrap/bootstrap';
+
+@import 'tokens';
+@import 'base';
+@import 'layout';
+@import 'components';
+@import 'pages';
+@import 'bee';
+@import 'utilities';

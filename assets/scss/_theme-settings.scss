@@ -1,0 +1,137 @@
+// Bee Framework theme settings
+// -----------------------------------------------------------------------------
+// This is the only file applications need to edit to create their own theme.
+// Bootstrap consumes these values before it generates components and utilities.
+
+// Brand palette
+$bee-honey: #f6b900 !default;
+$bee-honey-strong: #d99b00 !default;
+$bee-honey-soft: #fff6d8 !default;
+$bee-ink: #191a1d !default;
+$bee-ink-soft: #3d3f45 !default;
+$bee-muted: #73757d !default;
+$bee-canvas: #f7f6f2 !default;
+$bee-surface: #fff !default;
+$bee-border: #e8e5dc !default;
+
+// Bootstrap semantic colors
+$primary: $bee-ink !default;
+$secondary: #686b73 !default;
+$success: #18865b !default;
+$info: #247e9a !default;
+$warning: $bee-honey !default;
+$danger: #c43d3d !default;
+$light: $bee-canvas !default;
+$dark: $bee-ink !default;
+$min-contrast-ratio: 4.5 !default;
+
+// Document and typography
+$body-bg: $bee-canvas !default;
+$body-color: $bee-ink !default;
+$body-secondary-color: $bee-muted !default;
+$body-tertiary-bg: #efede6 !default;
+$font-family-sans-serif: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !default;
+$font-family-monospace: "SFMono-Regular", Consolas, "Liberation Mono", monospace !default;
+$font-size-base: 1rem !default;
+$line-height-base: 1.6 !default;
+$headings-font-family: $font-family-sans-serif !default;
+$headings-font-weight: 700 !default;
+$headings-line-height: 1.15 !default;
+$headings-color: $bee-ink !default;
+$display-font-weight: 750 !default;
+$lead-font-weight: 400 !default;
+
+// Links and focus
+$link-color: $bee-ink !default;
+$link-hover-color: $bee-honey-strong !default;
+$link-decoration: underline !default;
+$link-hover-decoration: underline !default;
+$focus-ring-width: .2rem !default;
+$focus-ring-opacity: .28 !default;
+$focus-ring-color: rgba($bee-honey, $focus-ring-opacity) !default;
+
+// Spacing and layout
+$spacer: 1rem !default;
+$grid-gutter-width: 1.5rem !default;
+$container-padding-x: 1.5rem !default;
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px
+) !default;
+
+// Shape, borders and elevation
+$border-width: 1px !default;
+$border-color: $bee-border !default;
+$border-radius-sm: .55rem !default;
+$border-radius: .9rem !default;
+$border-radius-lg: 1.35rem !default;
+$border-radius-xl: 1.75rem !default;
+$border-radius-pill: 50rem !default;
+$box-shadow-sm: 0 .3rem 1.2rem rgba($bee-ink, .06) !default;
+$box-shadow: 0 1rem 3rem rgba($bee-ink, .09) !default;
+$box-shadow-lg: 0 1.5rem 4rem rgba($bee-ink, .14) !default;
+$transition-base: all 180ms ease !default;
+
+// Controls and buttons
+$input-bg: $bee-surface !default;
+$input-color: $bee-ink !default;
+$input-border-color: $bee-border !default;
+$input-focus-border-color: $bee-honey !default;
+$input-focus-box-shadow: 0 0 0 $focus-ring-width $focus-ring-color !default;
+$input-placeholder-color: #96989f !default;
+$input-btn-padding-y: .7rem !default;
+$input-btn-padding-x: 1rem !default;
+$input-btn-border-width: $border-width !default;
+$btn-font-weight: 650 !default;
+$btn-border-radius: $border-radius-sm !default;
+$btn-border-radius-sm: .45rem !default;
+$btn-border-radius-lg: $border-radius !default;
+$btn-box-shadow: none !default;
+$btn-focus-box-shadow: $input-focus-box-shadow !default;
+
+// Components
+$card-bg: $bee-surface !default;
+$card-border-color: $bee-border !default;
+$card-border-radius: $border-radius-lg !default;
+$card-box-shadow: $box-shadow-sm !default;
+$dropdown-bg: $bee-surface !default;
+$dropdown-border-color: $bee-border !default;
+$dropdown-border-radius: $border-radius !default;
+$dropdown-box-shadow: $box-shadow !default;
+$modal-content-bg: $bee-surface !default;
+$modal-content-border-color: $bee-border !default;
+$modal-content-border-radius: $border-radius-lg !default;
+$navbar-light-color: $bee-ink-soft !default;
+$navbar-light-hover-color: $bee-ink !default;
+$navbar-light-active-color: $bee-ink !default;
+$nav-pills-border-radius: $border-radius-sm !default;
+$table-bg: transparent !default;
+$table-border-color: $bee-border !default;
+$table-striped-bg-factor: .025 !default;
+$pagination-border-radius: $border-radius-sm !default;
+
+// Feature switches. Disable unused output here when creating a lean theme.
+$enable-caret: true !default;
+$enable-rounded: true !default;
+$enable-shadows: false !default;
+$enable-gradients: false !default;
+$enable-transitions: true !default;
+$enable-reduced-motion: true !default;
+$enable-smooth-scroll: true !default;
+$enable-grid-classes: true !default;
+$enable-container-classes: true !default;
+$enable-cssgrid: false !default;
+$enable-negative-margins: false !default;
+$enable-validation-icons: true !default;
+$enable-important-utilities: true !default;
+$enable-dark-mode: true !default;
+$color-mode-type: data !default;
+
+// Bee-only visual behavior
+$bee-page-gradient-enabled: true !default;
+$bee-page-gradient: radial-gradient(circle at 95% 0%, rgba($bee-honey, .09), transparent 28rem) !default;
+$bee-heading-letter-spacing: -.025em !default;
+$bee-transition: 180ms ease !default;

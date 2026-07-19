@@ -1726,6 +1726,10 @@ function get_css_framework()
 
 		case 'bs':
 		case 'bs5':
+			// Bootstrap is compiled locally into assets/css/main.min.css so the
+			// Bee theme can override Sass variables without loading duplicate CSS.
+			return '<!-- Bee Bootstrap theme: assets/css/main.min.css -->';
+
 		default:
 			$cdn = 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css';
 			break;
