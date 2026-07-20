@@ -47,7 +47,8 @@
 .bee-auth .input-group-text { min-width: 3rem; justify-content: center; color: var(--bee-honey-strong); background: var(--bee-honey-soft); border-color: var(--bee-border); }
 .bee-auth .input-group:focus-within .input-group-text { border-color: var(--bee-honey); }
 .bee-admin-shell { min-height: 100vh; background: var(--bee-canvas); }
-.bee-admin-sidebar { --bs-offcanvas-width: 17rem; color: rgb(255 255 255 / 82%); background: var(--bee-ink); border-right: 1px solid rgb(246 185 0 / 16%) !important; }
+.bee-admin-sidebar { --bs-offcanvas-width: 17rem; --bs-offcanvas-color: rgb(255 255 255 / 82%); --bs-offcanvas-bg: var(--bee-ink); color: var(--bs-offcanvas-color); background-color: var(--bee-ink) !important; border-right: 1px solid rgb(246 185 0 / 16%) !important; }
+.bee-admin-sidebar .offcanvas-header, .bee-admin-sidebar .offcanvas-body { color: inherit; background-color: var(--bee-ink) !important; }
 .bee-admin-sidebar .bee-brand-symbol { border-color: var(--bee-honey); }
 .bee-admin-sidebar .bee-brand-symbol::before, .bee-admin-sidebar .bee-brand-symbol::after { border-color: var(--bee-honey); background: rgb(255 255 255 / 9%); }
 .bee-admin-sidebar-caption { color: rgb(255 255 255 / 68%); }
