@@ -26,6 +26,7 @@ class documentacionController extends Controller implements ControllerInterface
   
   function index()
   {
+    register_scripts([JS . 'documentation.js'], 'Interacciones de la documentación');
     $this->setTitle('Documentación');
     $this->setView('guide');
     $this->render();

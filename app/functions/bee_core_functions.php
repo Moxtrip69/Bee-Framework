@@ -2689,10 +2689,26 @@ function is_logged()
  * @param string $snippet
  * @return string
  */
-function code_block($snippet)
+function code_block(string $snippet, string $language = 'text'): string
 {
-	$snippet = htmlentities($snippet);
-	return "<pre class='code-block'><code>$snippet</code></pre>";
+	$allowedLanguages = ['text', 'php', 'javascript', 'shell', 'env'];
+	if ($language === 'text') {
+		$language = match (true) {
+			str_contains($snippet, 'const response'), str_contains($snippet, 'await fetch') => 'javascript',
+			str_starts_with($snippet, 'composer '), str_starts_with($snippet, 'php bee ') => 'shell',
+			str_contains($snippet, '$'), str_contains($snippet, 'Route::'), str_contains($snippet, 'final class') => 'php',
+			default => 'text',
+		};
+	}
+	$language = in_array($language, $allowedLanguages, true) ? $language : 'text';
+	$escapedSnippet = htmlspecialchars($snippet, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+	$escapedLanguage = htmlspecialchars($language, ENT_QUOTES, 'UTF-8');
+
+	return sprintf(
+		'<div class="bee-code-block" data-code-block><div class="bee-code-toolbar"><span>%1$s</span><button class="btn btn-sm bee-code-copy" type="button" data-copy-code aria-label="Copiar código"><i class="far fa-copy" aria-hidden="true"></i><span>Copiar</span></button></div><pre class="code-block"><code data-language="%1$s">%2$s</code></pre></div>',
+		$escapedLanguage,
+		$escapedSnippet
+	);
 }
 
 /**
