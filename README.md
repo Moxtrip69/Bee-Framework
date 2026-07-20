@@ -73,7 +73,9 @@ php bee core:status
 
 ### Configuración en aplicaciones
 
-Las variables propias de cada proyecto se agregan a `app/config/.env` y pueden consultarse sin modificar el núcleo:
+Bee expone una sola configuración con precedencia clara: `app/config/defaults.php` contiene defaults versionados, `app/config/.env` conserva secretos y diferencias por instalación, y `app/config/identity.php` contiene exclusivamente la identidad y versiones del producto. Los valores de `.env` sobrescriben los defaults sin modificar el núcleo.
+
+Las variables propias de cada proyecto pueden agregarse a `.env` y consultarse directamente:
 
 ```php
 $apiKey = config('NOTIFICATIONS_API_KEY');
@@ -295,6 +297,7 @@ composer --working-dir=app audit
 ## Changelog
 ### v 1.6.0
 
+- La configuración queda centralizada con precedencia explícita: defaults versionados en `app/config/defaults.php`, identidad en `identity.php` y únicamente secretos o diferencias por instalación en `.env`; los archivos existentes conservan compatibilidad como overrides.
 - Los proyectos pueden generar de forma segura <code>AUTH_SALT</code>, <code>NONCE_SALT</code> y las API keys con <code>php bee security:keys</code>; la rotación exige <code>--force</code>, crea un respaldo ignorado por Git y nunca imprime secretos.
 - La vista pública del artículo usa correctamente el contrato de datos por objetos de <code>View</code>, evitando el error <code>Cannot use object of type stdClass as array</code> en <code>examples/article/{slug}</code>.
 - La guía integrada incorpora scroll spy responsive, estado activo accesible y bloques de código con detección de lenguaje, resaltado de sintaxis y botón para copiar.

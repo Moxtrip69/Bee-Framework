@@ -16,10 +16,10 @@ final class ConfigurationLoader
         $configDirectory = $root->join('app', 'config');
         Dotenv::createImmutable($configDirectory)->safeLoad();
 
-        $environment = [];
+        $environment = $this->defaults($root);
         foreach (array_replace($_ENV, $overrides) as $key => $value) {
             if (is_scalar($value)) {
-                $environment[(string) $key] = (string) $value;
+                $environment[(string) $key] = $this->normalizeScalar($value);
             }
         }
 
@@ -53,6 +53,31 @@ final class ConfigurationLoader
             $identity,
             $environment
         );
+    }
+
+    /** @return array<string, string> */
+    private function defaults(ApplicationRoot $root): array
+    {
+        $defaults = require $root->join('app', 'config', 'defaults.php');
+        if (!is_array($defaults)) {
+            throw new ConfigurationException('app/config/defaults.php must return an array.');
+        }
+
+        $normalized = [];
+        foreach ($defaults as $key => $value) {
+            if (!is_string($key) || $key === '' || !is_scalar($value)) {
+                throw new ConfigurationException('app/config/defaults.php contains an invalid entry.');
+            }
+
+            $normalized[$key] = $this->normalizeScalar($value);
+        }
+
+        return $normalized;
+    }
+
+    private function normalizeScalar(string|int|float|bool $value): string
+    {
+        return is_bool($value) ? ($value ? 'true' : 'false') : (string) $value;
     }
 
     /** @param array<string, string> $environment */
