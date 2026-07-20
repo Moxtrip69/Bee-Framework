@@ -11,7 +11,7 @@
 Mini framework desarrollado por la Academia de Joystick.
 Puedes hacer uso de el para tus proyectos personales o comerciales, es ligero y fácil de implementar para proyectos tanto pequeños como aquellos que requieren escalabilidad y visión a futuro.
 
-## Estado actual — Bee Framework 1.6.0
+## Estado actual — Bee Framework 2.0.0
 
 La rama actual estabiliza el núcleo para que HTTP, CLI, cron, pruebas y el actualizador puedan compartir configuración y servicios sin simular una petición web. El sistema heredado continúa disponible como capa de compatibilidad mientras las aplicaciones migran gradualmente.
 
@@ -295,7 +295,7 @@ composer --working-dir=app audit
 ```
 
 ## Changelog
-### v 1.6.0
+### v 2.0.0
 
 - `product_version` en `app/config/identity.php` es la única versión autoritativa de la aplicación; el antiguo `APP_VERSION` local fue migrado y retirado, y `get_product_version()` ofrece un acceso explícito manteniendo `get_version()` como alias.
 - `.env.example` y el `.env` local usan ahora una estructura canónica por secciones; la reorganización conserva valores existentes y coloca automáticamente las variables no reconocidas en la configuración propia del proyecto.
@@ -304,7 +304,7 @@ composer --working-dir=app audit
 - La vista pública del artículo usa correctamente el contrato de datos por objetos de <code>View</code>, evitando el error <code>Cannot use object of type stdClass as array</code> en <code>examples/article/{slug}</code>.
 - La guía integrada incorpora scroll spy responsive, estado activo accesible y bloques de código con detección de lenguaje, resaltado de sintaxis y botón para copiar.
 - Los enlaces internos <code>href="#seccion"</code> se normalizan automáticamente contra la URL actual para que la etiqueta <code>&lt;base&gt;</code> de compatibilidad no los redirija a la raíz; las vistas PHP también pueden usar <code>new_anchor()</code>.
-- La documentación integrada fue rediseñada como una guía práctica y responsive de Bee 1.6.0; reúne instalación, arquitectura, configuración, routing, MVC, ORM, API, CLI, seguridad, migración y novedades, y debe mantenerse al día con cada mejora pública.
+- La documentación integrada fue rediseñada como una guía práctica y responsive de Bee 2.0.0; reúne instalación, arquitectura, configuración, routing, MVC, ORM, API, CLI, seguridad, migración y novedades, y debe mantenerse al día con cada mejora pública.
 - El panel administrativo incorpora un botón accesible para abrir y cerrar el sidebar en escritorio, recordando la preferencia local del usuario; en móvil conserva el offcanvas nativo de Bootstrap 5.
 - El sidebar administrativo conserva el fondo carbón de Bee tanto en modo offcanvas móvil como en escritorio, evitando que las reglas responsive de Bootstrap reduzcan el contraste del texto.
 - Sidebar administrativa con contraste reforzado, iconos miel, estados activo/hover/focus claramente diferenciados y etiqueta semántica de sección.
