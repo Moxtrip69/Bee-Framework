@@ -1,6 +1,9 @@
 <nav class="navbar navbar-expand bg-body border-bottom sticky-top bee-admin-topbar">
   <div class="container-fluid px-3 px-md-4">
     <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" aria-controls="adminSidebar" aria-label="Abrir navegación"><span class="navbar-toggler-icon"></span></button>
+    <button class="btn btn-light d-none d-lg-inline-flex align-items-center justify-content-center bee-admin-sidebar-toggle" type="button" data-bee-sidebar-toggle aria-controls="adminSidebar" aria-expanded="true" aria-label="Cerrar navegación" title="Cerrar navegación">
+      <i class="fas fa-angles-left" aria-hidden="true"></i>
+    </button>
     <div class="ms-auto dropdown">
       <button class="btn btn-light d-flex align-items-center gap-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
         <span class="bee-admin-avatar" aria-hidden="true"><?= htmlspecialchars(strtoupper(substr((string) get_user('username'), 0, 1)), ENT_QUOTES, 'UTF-8') ?></span>

@@ -3,5 +3,6 @@
   </div>
 </div>
 <?php require_once INCLUDES . 'scripts.php'; ?>
+<script src="<?php echo JS . 'admin.js?v=' . get_asset_version(); ?>"></script>
 </body>
 </html>

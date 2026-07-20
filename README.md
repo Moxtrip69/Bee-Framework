@@ -295,6 +295,7 @@ composer --working-dir=app audit
 ## Changelog
 ### v 1.6.0
 
+- El panel administrativo incorpora un botón accesible para abrir y cerrar el sidebar en escritorio, recordando la preferencia local del usuario; en móvil conserva el offcanvas nativo de Bootstrap 5.
 - El sidebar administrativo conserva el fondo carbón de Bee tanto en modo offcanvas móvil como en escritorio, evitando que las reglas responsive de Bootstrap reduzcan el contraste del texto.
 - Sidebar administrativa con contraste reforzado, iconos miel, estados activo/hover/focus claramente diferenciados y etiqueta semántica de sección.
 - Nuevo backend administrativo Bee sin SB Admin 2: shell responsive Bootstrap 5, dashboard útil, navegación extensible y gestor seguro de usuarios preparado para sumar nuevos CRUDs.
