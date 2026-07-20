@@ -295,6 +295,7 @@ composer --working-dir=app audit
 ## Changelog
 ### v 1.6.0
 
+- Los enlaces internos <code>href="#seccion"</code> se normalizan automáticamente contra la URL actual para que la etiqueta <code>&lt;base&gt;</code> de compatibilidad no los redirija a la raíz; las vistas PHP también pueden usar <code>new_anchor()</code>.
 - La documentación integrada fue rediseñada como una guía práctica y responsive de Bee 1.6.0; reúne instalación, arquitectura, configuración, routing, MVC, ORM, API, CLI, seguridad, migración y novedades, y debe mantenerse al día con cada mejora pública.
 - El panel administrativo incorpora un botón accesible para abrir y cerrar el sidebar en escritorio, recordando la preferencia local del usuario; en móvil conserva el offcanvas nativo de Bootstrap 5.
 - El sidebar administrativo conserva el fondo carbón de Bee tanto en modo offcanvas móvil como en escritorio, evitando que las reglas responsive de Bootstrap reduzcan el contraste del texto.
