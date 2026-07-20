@@ -27,7 +27,7 @@ class documentacionController extends Controller implements ControllerInterface
   function index()
   {
     $this->setTitle('Documentación');
-    $this->setView('index'); // por defecto es index
+    $this->setView('guide');
     $this->render();
   }
 
