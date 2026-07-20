@@ -8,7 +8,9 @@ use Bee\Core\Cli\CoreStatusCommand;
 use Bee\Core\Cli\CreateControllerCommand;
 use Bee\Core\Cli\CreateModelCommand;
 use Bee\Core\Cli\CreateViewCommand;
+use Bee\Core\Cli\GenerateInstanceKeysCommand;
 use Bee\Core\Creator\ComponentScaffolder;
+use Bee\Core\Security\InstanceKeyManager;
 
 $arguments = array_slice($argv ?? [], 1);
 $applicationRoot = __DIR__;
@@ -28,5 +30,6 @@ $creator = $application->services->get(ComponentScaffolder::class);
 $cli->add(new CreateControllerCommand($creator));
 $cli->add(new CreateModelCommand($creator));
 $cli->add(new CreateViewCommand($creator));
+$cli->add(new GenerateInstanceKeysCommand($application->root, new InstanceKeyManager()));
 
 exit($cli->run($arguments));
