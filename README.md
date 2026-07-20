@@ -295,6 +295,7 @@ composer --working-dir=app audit
 ## Changelog
 ### v 1.6.0
 
+- La vista pública del artículo usa correctamente el contrato de datos por objetos de <code>View</code>, evitando el error <code>Cannot use object of type stdClass as array</code> en <code>examples/article/{slug}</code>.
 - La guía integrada incorpora scroll spy responsive, estado activo accesible y bloques de código con detección de lenguaje, resaltado de sintaxis y botón para copiar.
 - Los enlaces internos <code>href="#seccion"</code> se normalizan automáticamente contra la URL actual para que la etiqueta <code>&lt;base&gt;</code> de compatibilidad no los redirija a la raíz; las vistas PHP también pueden usar <code>new_anchor()</code>.
 - La documentación integrada fue rediseñada como una guía práctica y responsive de Bee 1.6.0; reúne instalación, arquitectura, configuración, routing, MVC, ORM, API, CLI, seguridad, migración y novedades, y debe mantenerse al día con cada mejora pública.
