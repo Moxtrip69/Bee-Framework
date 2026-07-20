@@ -297,6 +297,7 @@ composer --working-dir=app audit
 ## Changelog
 ### v 1.6.0
 
+- `.env.example` y el `.env` local usan ahora una estructura canónica por secciones; la reorganización conserva valores existentes y coloca automáticamente las variables no reconocidas en la configuración propia del proyecto.
 - La configuración queda centralizada con precedencia explícita: defaults versionados en `app/config/defaults.php`, identidad en `identity.php` y únicamente secretos o diferencias por instalación en `.env`; los archivos existentes conservan compatibilidad como overrides.
 - Los proyectos pueden generar de forma segura <code>AUTH_SALT</code>, <code>NONCE_SALT</code> y las API keys con <code>php bee security:keys</code>; la rotación exige <code>--force</code>, crea un respaldo ignorado por Git y nunca imprime secretos.
 - La vista pública del artículo usa correctamente el contrato de datos por objetos de <code>View</code>, evitando el error <code>Cannot use object of type stdClass as array</code> en <code>examples/article/{slug}</code>.
