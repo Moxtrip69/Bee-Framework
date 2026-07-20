@@ -295,6 +295,8 @@ composer --working-dir=app audit
 ## Changelog
 ### v 1.6.0
 
+- Nuevo backend administrativo Bee sin SB Admin 2: shell responsive Bootstrap 5, dashboard útil, navegación extensible y gestor seguro de usuarios preparado para sumar nuevos CRUDs.
+- La pantalla de ingreso abandona SB Admin 2 y Bootstrap 4: ahora utiliza exclusivamente el tema Bee, componentes Bootstrap 5, campos accesibles y un layout responsive independiente.
 - `bee/info` presenta un diagnóstico agrupado y adaptable con resumen de runtime, navegación por secciones y secretos siempre ocultos.
 - El selector de tipo de controlador en Creator mejora contraste, lectura, adaptación móvil y estados seleccionado/focus con identidad Bee.
 - Las tarjetas de “Tu espacio de trabajo” conservan su presentación limpia en hover mediante utilidades nativas de Bootstrap 5.

@@ -1,27 +1,10 @@
 <?php require_once INCLUDES . 'admin/header.php'; ?>
-
-<body id="page-top">
-
-  <!-- Page Wrapper -->
-  <div id="wrapper">
-
-    <?php require_once INCLUDES . 'admin/sidebar.php'; ?>
-
-    <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
-
-      <!-- Main Content -->
-      <div id="content">
-
-        <?php require_once INCLUDES . 'admin/topbar.php'; ?>
-
-        <!-- Begin Page Content -->
-        <div class="container-fluid px-4">
-
-          <!-- Page Heading -->
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800"><?php echo $d->title; ?></h1>
-            <?php require_once INCLUDES . 'admin/dashboardButtons.php'; ?>
-          </div>
-
-          <?php echo Flasher::flash(); ?>
+<div class="bee-admin-shell">
+  <?php require_once INCLUDES . 'admin/sidebar.php'; ?>
+  <div class="bee-admin-main">
+    <?php require_once INCLUDES . 'admin/topbar.php'; ?>
+    <main class="container-fluid p-3 p-md-4 p-xl-5">
+      <header class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+        <div><span class="text-uppercase small fw-bold text-secondary">Administración</span><h1 class="h2 mb-0 mt-1"><?= htmlspecialchars((string) $d->title, ENT_QUOTES, 'UTF-8') ?></h1></div>
+      </header>
+      <?= Flasher::flash(); ?>

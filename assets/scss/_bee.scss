@@ -36,6 +36,30 @@
 .bee-info-section .list-group-item { background: transparent; border-color: var(--bee-border); }
 .bee-info-row { grid-template-columns: minmax(9rem, 32%) minmax(0, 1fr); align-items: start; }
 .bee-info-row code { color: var(--bee-ink-soft); white-space: pre-wrap; }
+.bee-auth { position: relative; overflow: hidden; }
+.bee-auth::before { position: absolute; z-index: -1; top: -12rem; right: -10rem; width: 32rem; height: 32rem; background: var(--bee-honey-soft); border-radius: 42% 58% 65% 35%; content: ''; transform: rotate(18deg); }
+.bee-auth-card { box-shadow: var(--bee-shadow); }
+.bee-auth-story { min-height: 42rem; color: rgb(255 255 255 / 72%); background: var(--bee-ink); }
+.bee-auth-story p { color: rgb(255 255 255 / 78%); }
+.bee-auth-story .bee-brand-symbol { border-color: var(--bee-honey); }
+.bee-auth-story .bee-brand-symbol::before, .bee-auth-story .bee-brand-symbol::after { border-color: var(--bee-honey); background: rgb(255 255 255 / 10%); }
+.bee-auth-form { max-width: 29rem; }
+.bee-auth .input-group-text { min-width: 3rem; justify-content: center; color: var(--bee-honey-strong); background: var(--bee-honey-soft); border-color: var(--bee-border); }
+.bee-auth .input-group:focus-within .input-group-text { border-color: var(--bee-honey); }
+.bee-admin-shell { min-height: 100vh; background: var(--bee-canvas); }
+.bee-admin-sidebar { --bs-offcanvas-width: 17rem; color: rgb(255 255 255 / 72%); background: var(--bee-ink); }
+.bee-admin-sidebar .bee-brand-symbol { border-color: var(--bee-honey); }
+.bee-admin-sidebar .bee-brand-symbol::before, .bee-admin-sidebar .bee-brand-symbol::after { border-color: var(--bee-honey); background: rgb(255 255 255 / 9%); }
+.bee-admin-sidebar .nav-link { padding: .8rem 1rem; color: rgb(255 255 255 / 68%); }
+.bee-admin-sidebar .nav-link:hover { color: #fff; background: rgb(255 255 255 / 7%); }
+.bee-admin-sidebar .nav-link.active { color: var(--bee-ink); background: var(--bee-honey); }
+.bee-admin-main { display: flex; min-width: 0; min-height: 100vh; flex-direction: column; }
+.bee-admin-topbar { min-height: 4.75rem; box-shadow: 0 .35rem 1.5rem rgb(25 26 29 / 4%); }
+.bee-admin-avatar { display: grid; flex: 0 0 2.35rem; width: 2.35rem; height: 2.35rem; place-items: center; color: var(--bee-ink); background: var(--bee-honey); border-radius: .7rem; font-size: .85rem; font-weight: 800; }
+.bee-admin-avatar-lg { width: 5rem; height: 5rem; font-size: 1.75rem; }
+.bee-admin-stat { background: linear-gradient(145deg, var(--bee-surface), var(--bee-honey-soft)); }
+.bee-admin-create-card { top: 6rem; }
+@media (min-width: 992px) { .bee-admin-shell { display: grid; grid-template-columns: 17rem minmax(0, 1fr); } .bee-admin-sidebar { position: sticky; top: 0; display: flex !important; width: 17rem !important; height: 100vh; visibility: visible !important; transform: none !important; } .bee-admin-sidebar .offcanvas-header { display: none; } }
 .bee-card-actions { display: flex; justify-content: space-between; gap: .75rem; padding-top: 1.5rem; }
 .bee-demo-stage { min-height: 18rem; padding: clamp(1rem, 4vw, 2.5rem); background: linear-gradient(145deg, #fff, var(--bee-surface)); border: 1px solid var(--bee-border); border-radius: var(--bee-radius-lg); box-shadow: var(--bee-shadow); }
 .bee-message-card { max-width: 48rem; margin: 8vh auto 0; padding: clamp(2rem, 7vw, 5rem); text-align: center; background: #fff; border: 1px solid var(--bee-border); border-radius: var(--bee-radius-lg); box-shadow: var(--bee-shadow); }

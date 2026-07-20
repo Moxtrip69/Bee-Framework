@@ -1,116 +1,30 @@
-<!-- Sidebar -->
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-  <!-- Sidebar - Brand -->
-  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?php echo get_base_url(); ?>">
-    <img src="<?php echo get_bee_logo(); ?>" alt="<?php echo get_bee_name(); ?>" width="100px">
-  </a>
-
-  <!-- Divider -->
-  <hr class="sidebar-divider my-0">
-
-  <!-- Nav Item - Dashboard -->
-  <li class="nav-item active">
-    <a class="nav-link" href="admin">
-      <i class="fas fa-fw fa-tachometer"></i>
-      <span>Dashboard</span>
-    </a>
-  </li>
-
-  <!-- Divider -->
-  <hr class="sidebar-divider">
-
-  <!-- Heading -->
-  <div class="sidebar-heading">
-    Bee framework
+<?php
+$adminPath = trim((string) parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
+$adminNavigation = [
+  ['label' => 'Resumen', 'href' => 'admin', 'icon' => 'fa-table-columns'],
+  ['label' => 'Usuarios', 'href' => 'admin/usuarios', 'icon' => 'fa-users'],
+];
+?>
+<aside class="offcanvas-lg offcanvas-start bee-admin-sidebar" tabindex="-1" id="adminSidebar" aria-labelledby="admin-sidebar-title">
+  <div class="offcanvas-header border-bottom border-secondary">
+    <h2 class="offcanvas-title h5 text-white mb-0" id="admin-sidebar-title">Administración</h2>
+    <button class="btn-close btn-close-white" type="button" data-bs-dismiss="offcanvas" data-bs-target="#adminSidebar" aria-label="Cerrar navegación"></button>
   </div>
-
-  <li class="nav-item">
-    <a class="nav-link" href="creator">
-      <i class="fas fa-fw fa-pen"></i>
-      <span>Creator</span>
+  <div class="offcanvas-body d-flex flex-column p-3">
+    <a class="d-flex align-items-center gap-3 px-2 py-3 mb-4 text-white text-decoration-none" href="bee">
+      <span class="bee-brand-symbol" aria-hidden="true"></span>
+      <span><strong class="d-block">Bee Framework</strong><small class="text-white-50">Panel de administración</small></span>
     </a>
-  </li>
-
-  <!-- Nav Item - Pages Collapse Menu -->
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-      <i class="fas fa-fw fa-cog"></i>
-      <span>Componentes</span>
-    </a>
-    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-      <div class="bg-white py-2 collapse-inner rounded">
-        <h6 class="collapse-header">SB Admin 2</h6>
-        <a class="collapse-item" href="https://startbootstrap.com/theme/sb-admin-2" target="_blank">Template original</a>
-        <a class="collapse-item" href="admin/botones">Botones</a>
-        <a class="collapse-item" href="admin/cartas">Cartas</a>
-      </div>
+    <nav class="nav nav-pills flex-column gap-2" aria-label="Administración">
+      <?php foreach ($adminNavigation as $item): ?>
+        <?php $active = $item['href'] === 'admin' ? str_ends_with($adminPath, '/admin') : str_contains($adminPath, '/' . $item['href']); ?>
+        <a class="nav-link d-flex align-items-center gap-3 <?= $active ? 'active' : '' ?>" href="<?= htmlspecialchars($item['href'], ENT_QUOTES, 'UTF-8') ?>" <?= $active ? 'aria-current="page"' : '' ?>>
+          <i class="fas <?= htmlspecialchars($item['icon'], ENT_QUOTES, 'UTF-8') ?> fa-fw" aria-hidden="true"></i><span><?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?></span>
+        </a>
+      <?php endforeach; ?>
+    </nav>
+    <div class="mt-auto pt-4">
+      <a class="btn btn-outline-light w-100" href="creator"><i class="fas fa-wand-magic-sparkles me-2" aria-hidden="true"></i>Bee Creator</a>
     </div>
-  </li>
-
-  <!-- Divider -->
-  <hr class="sidebar-divider">
-
-  <!-- Heading -->
-  <div class="sidebar-heading">
-    Gestión
   </div>
-
-  <li class="nav-item">
-    <a class="nav-link" href="admin/usuarios">
-      <i class="fas fa-fw fa-users"></i>
-      <span>Usuarios</span>
-    </a>
-  </li>
-
-  <li class="nav-item">
-    <a class="nav-link" href="admin/productos">
-      <i class="fas fa-fw fa-tag"></i>
-      <span>Productos</span>
-    </a>
-  </li>
-
-  <!-- Divider -->
-  <hr class="sidebar-divider">
-
-
-  <!-- Heading -->
-  <div class="sidebar-heading">
-    Addons
-  </div>
-
-  <!-- Nav Item - Pages Collapse Menu -->
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-      <i class="fas fa-fw fa-folder"></i>
-      <span>Páginas</span>
-    </a>
-    <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-      <div class="bg-white py-2 collapse-inner rounded">
-        <a class="collapse-item" href="login">Login</a>
-        <a class="collapse-item" href="registro">Registro</a>
-        <a class="collapse-item" href="admin/perfil">Perfil</a>
-        <a class="collapse-item" href="vuejs">Vue3</a>
-      </div>
-    </div>
-  </li>
-
-  <!-- Divider -->
-  <hr class="sidebar-divider d-none d-md-block">
-
-  <!-- Sidebar Toggler (Sidebar) -->
-  <div class="text-center d-none d-md-inline">
-    <button class="rounded-circle border-0" id="sidebarToggle"></button>
-  </div>
-
-  <!-- Sidebar Message 
-  <div class="sidebar-card d-none d-lg-flex">
-    <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
-    <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components,
-      and more!</p>
-    <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to
-      Pro!</a>
-  </div>-->
-
-</ul>
-<!-- End of Sidebar -->
+</aside>

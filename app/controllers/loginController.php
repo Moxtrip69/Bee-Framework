@@ -23,14 +23,13 @@ class loginController extends Controller implements ControllerInterface
   function post_login()
   {
     try {
-      if (!Csrf::validate($_POST['csrf']) || !check_posted_data(['usuario','csrf','password'], $_POST)) {
+      if (!check_posted_data(['usuario', 'csrf', 'password'], $_POST) || !Csrf::validate($_POST['csrf'])) {
         throw new Exception(get_bee_message(0));
       }
   
       // Data pasada del formulario
-      array_map('sanitize_input', $_POST);
-      $usuario  = $_POST['usuario'];
-      $password = $_POST['password'];
+      $usuario  = sanitize_string($_POST['usuario'], 120);
+      $password = (string) $_POST['password'];
   
       // Verificar información del usuario
       if (!$user = Model::list(BEE_USERS_TABLE, ['username' => $usuario], 1)) {

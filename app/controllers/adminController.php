@@ -24,49 +24,35 @@ class adminController extends Controller implements ControllerInterface
   
   function index()
   {
-    register_scripts([JS . 'admin/demo.js'], 'Chartjs gráficas para administración');
-
     $this->setTitle('Administración');
-    $buttons =
-    [
-      [
-        'url'   => 'admin',
-        'class' => 'btn-danger text-white',
-        'id'    => '',
-        'icon'  => 'fas fa-download',
-        'text'  => 'Descargar'
-      ],
-      [
-        'url'   => 'admin',
-        'class' => 'btn-success text-white',
-        'id'    => '',
-        'icon'  => 'fas fa-file-pdf',
-        'text'  => 'Exportar'
-      ]
-    ];
-    $this->addToData('buttons', $buttons);
+    $users = userModel::all();
+    $activeSessions = array_filter($users, static function (object|array $user): bool {
+      return !empty(is_object($user) ? $user->auth_token : $user['auth_token']);
+    });
+    $this->addToData('usersCount', count($users));
+    $this->addToData('activeSessions', count($activeSessions));
+    $this->addToData('recentUsers', array_slice($users, 0, 5));
+    $this->setView('dashboard');
     $this->render();
   }
 
   function perfil()
   {
     $this->setTitle('Perfil de usuario');
-    $this->setView('perfil');
+    $this->setView('account');
     $this->render();
   }
 
   function botones()
   {
-    $this->setTitle('Botones');
-    $this->setView('botones');
-    $this->render();
+    Flasher::info('El nuevo panel incluye únicamente módulos administrativos activos.');
+    Redirect::to('admin');
   }
 
   function cartas()
   {
-    $this->setTitle('Cartas');
-    $this->setView('cartas');
-    $this->render();
+    Flasher::info('El nuevo panel incluye únicamente módulos administrativos activos.');
+    Redirect::to('admin');
   }
 
   ////////////////////////////////////////////////////
@@ -78,17 +64,18 @@ class adminController extends Controller implements ControllerInterface
   ////////////////////////////////////////////////////
   function usuarios()
   {
+    register_scripts([JS . 'admin/users.js?v=' . rawurlencode((string) get_asset_version())], 'Administración de usuarios');
     $this->setTitle('Usuarios');
     $this->addToData('users', userModel::all_paginated());
     $this->addToData('slug' , 'usuarios');
-    $this->setView('usuarios/usuarios');
+    $this->setView('users');
     $this->render();
   }
 
   function post_usuarios()
   {
     try {
-      if (!check_posted_data(['username','email','password'], $_POST)) {
+      if (!check_posted_data(['username', 'email', 'password', 'csrf'], $_POST)) {
         throw new Exception('Por favor completa el formulario.');
       }
 
@@ -97,15 +84,14 @@ class adminController extends Controller implements ControllerInterface
       }
 
       // Definición de variables
-      array_map('sanitize_input', $_POST);
-      $username     = $_POST['username'];
-      $email        = $_POST['email'];
-      $password     = $_POST['password'];
+      $username     = sanitize_string($_POST['username'], 20);
+      $email        = sanitize_email($_POST['email']);
+      $password     = (string) $_POST['password'];
       $errorMessage = '';
       $errors       = 0;
 
       // Verificar que no exista ya un usuario con ese username o correo electrónico
-      $sql = 'SELECT * FROM bee_users WHERE username = :username OR email = :email';
+      $sql = sprintf('SELECT * FROM %s WHERE username = :username OR email = :email', userModel::$t1);
       if (userModel::query($sql, ['username' => $username, 'email' => $email])) {
         throw new Exception('Ya existe un usuario registrado con ese nombre de usuario o correo electrónico.');
       }
@@ -116,18 +102,18 @@ class adminController extends Controller implements ControllerInterface
         $errors++;
       }
 
-      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      if ($email === null) {
         $errorMessage .= '- El correo electrónico no es válido.<br>';
         $errors++;
       }
 
-      if (is_temporary_email($email)) {
+      if ($email !== null && is_temporary_email($email)) {
         $errorMessage .= '- El dominio del correo electrónico no está autorizado.<br>';
         $errors++;
       }
 
-      if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*_-])[A-Za-z\d!@#$%^&*_-]{5,20}$/', $password)) {
-        $errorMessage .= '- La contraseña debe ser de entre 5 y 20 caracteres, por lo menos debe contar con: 1 letra minúscula, 1 letra mayúscula, 1 digito y 1 caracter especial de entre <b>!@#$%^&*_-</b>';
+      if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*_-])[A-Za-z\d!@#$%^&*_-]{8,72}$/', $password)) {
+        $errorMessage .= '- La contraseña debe tener entre 8 y 72 caracteres, incluyendo mayúscula, minúscula, número y un carácter especial de <b>!@#$%^&*_-</b>.';
         $errors++;
       }
 
@@ -149,7 +135,7 @@ class adminController extends Controller implements ControllerInterface
         throw new Exception('Hubo un problema al agregar el usuario.');
       }
 
-      Flasher::success(sprintf('Nuevo usuario agregado con éxito:<br>Usuario: <b>%s</b><br>Contraseña: <b>%s</b>', $user['username'], $password));
+      Flasher::success(sprintf('El usuario <b>%s</b> fue agregado correctamente.', htmlspecialchars($user['username'], ENT_QUOTES, 'UTF-8')));
       Redirect::back();
 
     } catch (Exception $e) {
@@ -161,7 +147,7 @@ class adminController extends Controller implements ControllerInterface
   function borrar_usuario($id = null)
   {
     try {
-      if (!Csrf::validate($_GET['_t'])) {
+      if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !Csrf::validate($_POST['csrf'] ?? null)) {
         throw new Exception(get_bee_message(0));
       }
 
@@ -171,7 +157,7 @@ class adminController extends Controller implements ControllerInterface
       }
 
       // Validar que no sea el propio usuario que está solicitando la petición
-      if ($id == get_user('id')) {
+      if ((int) $id === (int) get_user('id')) {
         throw new Exception('No puedes realizar esta acción sobre ti mismo.');
       }
 
@@ -180,7 +166,7 @@ class adminController extends Controller implements ControllerInterface
         throw new Exception('Hubo un problema al borrar el usuario.');
       }
 
-      Flasher::success(sprintf('Usuario <b>%s</b> borrado con éxito.', $user['username']));
+      Flasher::success(sprintf('El usuario <b>%s</b> fue eliminado.', htmlspecialchars((string) $user['username'], ENT_QUOTES, 'UTF-8')));
       Redirect::back();
 
     } catch (Exception $e) {
@@ -192,7 +178,7 @@ class adminController extends Controller implements ControllerInterface
   function destruir_sesion($id = null)
   {
     try {
-      if (!Csrf::validate($_GET['_t'])) {
+      if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !Csrf::validate($_POST['csrf'] ?? null)) {
         throw new Exception(get_bee_message(0));
       }
 
@@ -202,7 +188,7 @@ class adminController extends Controller implements ControllerInterface
       }
 
       // Validar que no sea el propio usuario que está solicitando la petición
-      if ($id == get_user('id')) {
+      if ((int) $id === (int) get_user('id')) {
         throw new Exception('No puedes realizar esta acción sobre ti mismo.');
       }
 
@@ -216,7 +202,7 @@ class adminController extends Controller implements ControllerInterface
         throw new Exception('Hubo un problema al actualizar el usuario.');
       }
 
-      Flasher::success(sprintf('La sesión de <b>%s</b> ha sido cerrada con éxito.', $user['username']));
+      Flasher::success(sprintf('La sesión de <b>%s</b> fue cerrada.', htmlspecialchars((string) $user['username'], ENT_QUOTES, 'UTF-8')));
       Redirect::back();
 
     } catch (Exception $e) {
@@ -234,6 +220,10 @@ class adminController extends Controller implements ControllerInterface
   ////////////////////////////////////////////////////
   function productos()
   {
+    Flasher::info('El módulo de productos no está habilitado en este panel.');
+    Redirect::to('admin');
+    return;
+
     // Formulario para agregar nuevo registro
     $form = new BeeFormBuilder('agregar-producto', 'agregar-producto', ['needs-validation'], 'admin/post_productos', true, true);
     
@@ -264,6 +254,10 @@ class adminController extends Controller implements ControllerInterface
 
   function post_productos()
   {
+    Flasher::info('El módulo de productos no está habilitado en este panel.');
+    Redirect::to('admin');
+    return;
+
     try {
       if (!check_posted_data(['nombre','sku','descripcion','precio','precio_comparacion','stock'], $_POST)) {
         throw new Exception('Por favor completa el formulario.');
