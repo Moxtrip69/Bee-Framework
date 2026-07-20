@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Bee\Core\Routing\Route;
 
-if (filter_var(config('BEE_ENABLE_EXAMPLE_ROUTES', 'false'), FILTER_VALIDATE_BOOLEAN)) {
+if (filter_var(config('BEE_ENABLE_EXAMPLE_ROUTES', 'true'), FILTER_VALIDATE_BOOLEAN)) {
     Route::prefix('/api/examples')
         ->name('api.examples.')
         ->middleware('api')
