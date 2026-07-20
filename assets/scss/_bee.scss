@@ -47,12 +47,18 @@
 .bee-auth .input-group-text { min-width: 3rem; justify-content: center; color: var(--bee-honey-strong); background: var(--bee-honey-soft); border-color: var(--bee-border); }
 .bee-auth .input-group:focus-within .input-group-text { border-color: var(--bee-honey); }
 .bee-admin-shell { min-height: 100vh; background: var(--bee-canvas); }
-.bee-admin-sidebar { --bs-offcanvas-width: 17rem; color: rgb(255 255 255 / 72%); background: var(--bee-ink); }
+.bee-admin-sidebar { --bs-offcanvas-width: 17rem; color: rgb(255 255 255 / 82%); background: var(--bee-ink); border-right: 1px solid rgb(246 185 0 / 16%) !important; }
 .bee-admin-sidebar .bee-brand-symbol { border-color: var(--bee-honey); }
 .bee-admin-sidebar .bee-brand-symbol::before, .bee-admin-sidebar .bee-brand-symbol::after { border-color: var(--bee-honey); background: rgb(255 255 255 / 9%); }
-.bee-admin-sidebar .nav-link { padding: .8rem 1rem; color: rgb(255 255 255 / 68%); }
-.bee-admin-sidebar .nav-link:hover { color: #fff; background: rgb(255 255 255 / 7%); }
-.bee-admin-sidebar .nav-link.active { color: var(--bee-ink); background: var(--bee-honey); }
+.bee-admin-sidebar-caption { color: rgb(255 255 255 / 68%); }
+.bee-admin-sidebar-label { color: rgb(255 255 255 / 52%); font-size: .68rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.bee-admin-sidebar .nav-link { padding: .8rem 1rem; color: rgb(255 255 255 / 78%); font-weight: 650; }
+.bee-admin-sidebar .nav-link i { color: var(--bee-honey); opacity: .9; }
+.bee-admin-sidebar .nav-link:hover { color: #fff; background: rgb(255 255 255 / 9%); }
+.bee-admin-sidebar .nav-link:focus-visible { color: #fff; outline: 3px solid rgb(246 185 0 / 48%); outline-offset: 2px; }
+.bee-admin-sidebar .nav-link.active { color: var(--bee-ink); background: var(--bee-honey); box-shadow: 0 .45rem 1.2rem rgb(0 0 0 / 18%); }
+.bee-admin-sidebar .nav-link.active i { color: var(--bee-ink); opacity: 1; }
+.bee-admin-sidebar .btn-outline-light { --bs-btn-color: #fff; --bs-btn-border-color: rgb(255 255 255 / 42%); --bs-btn-hover-color: var(--bee-ink); --bs-btn-hover-bg: var(--bee-honey); --bs-btn-hover-border-color: var(--bee-honey); }
 .bee-admin-main { display: flex; min-width: 0; min-height: 100vh; flex-direction: column; }
 .bee-admin-topbar { min-height: 4.75rem; box-shadow: 0 .35rem 1.5rem rgb(25 26 29 / 4%); }
 .bee-admin-avatar { display: grid; flex: 0 0 2.35rem; width: 2.35rem; height: 2.35rem; place-items: center; color: var(--bee-ink); background: var(--bee-honey); border-radius: .7rem; font-size: .85rem; font-weight: 800; }

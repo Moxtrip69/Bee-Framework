@@ -13,8 +13,9 @@ $adminNavigation = [
   <div class="offcanvas-body d-flex flex-column p-3">
     <a class="d-flex align-items-center gap-3 px-2 py-3 mb-4 text-white text-decoration-none" href="bee">
       <span class="bee-brand-symbol" aria-hidden="true"></span>
-      <span><strong class="d-block">Bee Framework</strong><small class="text-white-50">Panel de administración</small></span>
+      <span><strong class="d-block">Bee Framework</strong><small class="bee-admin-sidebar-caption">Panel de administración</small></span>
     </a>
+    <span class="bee-admin-sidebar-label px-3 mb-2">Gestión</span>
     <nav class="nav nav-pills flex-column gap-2" aria-label="Administración">
       <?php foreach ($adminNavigation as $item): ?>
         <?php $active = $item['href'] === 'admin' ? str_ends_with($adminPath, '/admin') : str_contains($adminPath, '/' . $item['href']); ?>
