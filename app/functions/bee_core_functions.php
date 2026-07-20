@@ -34,6 +34,14 @@ function get_sitename()
  */
 function get_version()
 {
+	return get_product_version();
+}
+
+/**
+ * Regresa la versión autoritativa del producto construido con Bee.
+ */
+function get_product_version(): string
+{
 	return SITE_VERSION;
 }
 
